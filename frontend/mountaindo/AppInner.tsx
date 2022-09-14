@@ -5,7 +5,6 @@ import Main from './src/pages/Main';
 import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
-import {useState} from 'react';
 
 export type LoggedInParamList = {
   Main: undefined;
@@ -22,7 +21,6 @@ export type RootStackParamList = {
 const Tab = createBottomTabNavigator();
 
 function AppInner() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Tab.Navigator>
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
