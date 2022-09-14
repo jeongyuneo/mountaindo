@@ -1,16 +1,11 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-// import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useSelector} from 'react-redux';
-import {RootState} from './src/store/reducer';
 
 import Main from './src/pages/Main';
 import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
-
-// import SignIn from './src/pages/SignIn';
-// import SignUp from './src/pages/SignUp';
+import {useState} from 'react';
 
 export type LoggedInParamList = {
   Main: undefined;
@@ -25,12 +20,9 @@ export type RootStackParamList = {
 };
 
 const Tab = createBottomTabNavigator();
-// const Stack = createNativeStackNavigator();
 
 function AppInner() {
-  const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  console.log('isLoggedIn', isLoggedIn);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Tab.Navigator>
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
