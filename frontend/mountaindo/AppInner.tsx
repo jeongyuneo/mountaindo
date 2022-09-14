@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-// import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
 
@@ -9,29 +9,33 @@ import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
 
-// import SignIn from './src/pages/SignIn';
-// import SignUp from './src/pages/SignUp';
+import SignIn from './src/pages/SignIn';
+import SignUp from './src/pages/SignUp';
+import FindId from './src/pages/FindId';
+import FindPassword from './src/pages/FindPassword';
 
 export type LoggedInParamList = {
-  Main: undefined;
-  Completed: undefined;
-  Hiking: undefined;
-  Mountain: undefined;
+  Main: any;
+  Completed: any;
+  Hiking: any;
+  Mountain: any;
 };
 
 export type RootStackParamList = {
-  SignIn: undefined;
-  SignUp: undefined;
+  SignIn: any;
+  SignUp: any;
+  FindId: any;
+  FindPassword: any;
 };
 
 const Tab = createBottomTabNavigator();
-// const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
   console.log('isLoggedIn', isLoggedIn);
 
-  return (
+  return isLoggedIn ? (
     <Tab.Navigator>
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
       <Tab.Screen
@@ -50,6 +54,29 @@ function AppInner() {
         options={{title: 'Completed'}}
       />
     </Tab.Navigator>
+  ) : (
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{title: '로그인'}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{title: '회원가입'}}
+      />
+      <Stack.Screen
+        name="FindId"
+        component={FindId}
+        options={{title: '아이디찾기'}}
+      />
+      <Stack.Screen
+        name="FindPassword"
+        component={FindPassword}
+        options={{title: '비밀번호찾기'}}
+      />
+    </Stack.Navigator>
   );
 }
 
