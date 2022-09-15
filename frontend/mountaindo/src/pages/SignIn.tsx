@@ -38,7 +38,7 @@ function SignIn({navigation}: SignInScreenProps) {
   }, [email, password]);
 
   useEffect(() => {
-    if (email.length == 0) {
+    if (email.length === 0) {
       setEmailCheck(' ');
     } else if (
       !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
@@ -121,7 +121,7 @@ function SignIn({navigation}: SignInScreenProps) {
         <View style={styles.buttonZone}>
           <Pressable
             style={
-              goNext && emailCheck.length == 0
+              goNext && emailCheck.length === 0
                 ? StyleSheet.compose(
                     styles.loginButton,
                     styles.loginButtonActive,

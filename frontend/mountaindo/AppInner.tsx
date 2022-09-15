@@ -11,6 +11,8 @@ import Completed from './src/pages/Completed';
 
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
+import FindId from './src/pages/FindId';
+import FindPassword from './src/pages/FindPassword';
 
 export type LoggedInParamList = {
   Main: any;
@@ -63,6 +65,16 @@ function AppInner() {
         name="SignUp"
         component={SignUp}
         options={{title: '회원가입'}}
+      />
+      <Stack.Screen
+        name="FindId"
+        component={FindId}
+        options={{title: '아이디찾기'}}
+      />
+      <Stack.Screen
+        name="FindPassword"
+        component={FindPassword}
+        options={{title: '비밀번호찾기'}}
       />
     </Stack.Navigator>
   );
