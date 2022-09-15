@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
-function SignIn({navigation}: any) {
+function SignIn({}: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailCheck, setEmailCheck] = useState('');
