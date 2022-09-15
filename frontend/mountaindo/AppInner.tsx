@@ -8,6 +8,7 @@ import Main from './src/pages/Main';
 import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
+import MyPage from './src/pages/MyPage';
 
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
@@ -19,6 +20,7 @@ export type LoggedInParamList = {
   Completed: any;
   Hiking: any;
   Mountain: any;
+  MyPage: any;
 };
 
 export type RootStackParamList = {
@@ -36,8 +38,13 @@ function AppInner() {
   console.log('isLoggedIn', isLoggedIn);
 
   return isLoggedIn ? (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="MyPage">
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
+      <Tab.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{headerShown: false}} // Header 제거
+      />
       <Tab.Screen
         name="Hiking"
         component={Hiking}
