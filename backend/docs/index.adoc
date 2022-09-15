@@ -42,3 +42,9 @@ include::{snippets}/get-hikings-success/http-request.adoc[]
 
 .response
 include::{snippets}/get-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-fail/http-response.adoc[]
