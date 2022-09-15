@@ -13,12 +13,20 @@ import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import FindId from './src/pages/FindId';
 import FindPassword from './src/pages/FindPassword';
+import PasswordChange from './src/pages/PasswordChange';
+import UserInfoChange from './src/pages/UserInfoChange';
+import NicknameChangeForm from './src/pages/NicknameChangeForm';
+import PhoneNumberChangeForm from './src/pages/PhoneNumberChangeForm';
 
 export type LoggedInParamList = {
   Main: any;
   Completed: any;
   Hiking: any;
   Mountain: any;
+  UserInfoChange: any;
+  PasswordChange: any;
+  NicknameChangeForm: any;
+  PhoneNumberChangeForm: any;
 };
 
 export type RootStackParamList = {
@@ -31,11 +39,8 @@ export type RootStackParamList = {
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function AppInner() {
-  const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  console.log('isLoggedIn', isLoggedIn);
-
-  return isLoggedIn ? (
+function BottomTab() {
+  return (
     <Tab.Navigator>
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
       <Tab.Screen
@@ -54,28 +59,70 @@ function AppInner() {
         options={{title: 'Completed'}}
       />
     </Tab.Navigator>
-  ) : (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen
-        name="SignIn"
-        component={SignIn}
-        options={{title: '로그인'}}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUp}
-        options={{title: '회원가입'}}
-      />
-      <Stack.Screen
-        name="FindId"
-        component={FindId}
-        options={{title: '아이디찾기'}}
-      />
-      <Stack.Screen
-        name="FindPassword"
-        component={FindPassword}
-        options={{title: '비밀번호찾기'}}
-      />
+  );
+}
+
+function AppInner() {
+  const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
+
+  return (
+    <Stack.Navigator>
+      {isLoggedIn ? (
+        <>
+          <Stack.Group screenOptions={{headerShown: false}}>
+            <Stack.Screen name="BottomTab" component={BottomTab} />
+          </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen
+              name="UserInfoChange"
+              component={UserInfoChange}
+              options={{title: '개인 정보 수정'}}
+            />
+            <Stack.Screen
+              name="PasswordChange"
+              component={PasswordChange}
+              options={{title: '비밀번호 변경'}}
+            />
+            <Stack.Screen
+              name="NicknameChangeForm"
+              component={NicknameChangeForm}
+              options={{title: '닉네임 변경'}}
+            />
+            <Stack.Screen
+              name="PhoneNumberChangeForm"
+              component={PhoneNumberChangeForm}
+              options={{title: '전화번호 변경'}}
+            />
+          </Stack.Group>
+        </>
+      ) : (
+        <>
+          <Stack.Group screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{title: '로그인'}}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{title: '회원가입'}}
+            />
+          </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen
+              name="FindId"
+              component={FindId}
+              options={{title: '아이디찾기'}}
+            />
+            <Stack.Screen
+              name="FindPassword"
+              component={FindPassword}
+              options={{title: '비밀번호찾기'}}
+            />
+          </Stack.Group>
+        </>
+      )}
     </Stack.Navigator>
   );
 }
