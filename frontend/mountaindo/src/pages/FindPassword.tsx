@@ -37,12 +37,12 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
   }, []);
 
   // 비밀번호 input 변경 시 password1에 저장
-  const onChangPassword1 = useCallback((text: string) => {
+  const onChangePassword1 = useCallback((text: string) => {
     setPassword1(text.trim());
   }, []);
 
   // 비밀번호 확인 input 변경 시 password2에 저장
-  const onChangPassword2 = useCallback((text: string) => {
+  const onChangePassword2 = useCallback((text: string) => {
     setPassword2(text.trim());
   }, []);
 
@@ -176,7 +176,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
-            onChangeText={onChangPassword1}
+            onChangeText={onChangePassword1}
             placeholder="새 비밀번호를 입력해주세요"
             placeholderTextColor="#666"
             importantForAutofill="yes"
@@ -193,7 +193,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
-            onChangeText={onChangPassword2}
+            onChangeText={onChangePassword2}
             placeholder="새 비밀번호를 다시 입력해주세요"
             placeholderTextColor="#666"
             importantForAutofill="yes"
