@@ -107,7 +107,7 @@ function SignIn({}: any) {
           </View>
         </View>
 
-        <View style={styles.userInfocreate}>
+        <View style={styles.userInfoCreate}>
           <Text style={styles.userInfoText}>회원 가입</Text>
           <Text style={styles.userInfoText}>|</Text>
           <Text style={styles.userInfoText}>아이디 찾기</Text>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Campton-Bold',
     fontWeight: 'normal',
   },
-  userInfocreate: {
+  userInfoCreate: {
     marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-around',
