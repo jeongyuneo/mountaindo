@@ -1,5 +1,3 @@
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
 import {
@@ -59,18 +57,6 @@ function FindId({navigation}: FindIdScreenProps) {
   const canGoNext = name && phoneNumber && !!check; // 버튼 disabled 확인할 변수
   return (
     <DismissKeyboardView>
-      <View>
-        <Pressable onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            size={30}
-            style={styles.backIcon}
-          />
-        </Pressable>
-      </View>
-      <View style={styles.titleView}>
-        <Text style={styles.title}>아이디 찾기</Text>
-      </View>
       {visibleId ? (
         <View>
           <View style={styles.findIdView}>
@@ -147,24 +133,12 @@ function FindId({navigation}: FindIdScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  backIcon: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  titleView: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   findIdView: {
     backgroundColor: '#dadada',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 5,
-    marginVertical: 10,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   findIdText: {
@@ -176,7 +150,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   inputGroup: {
-    marginVertical: 10,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   inputView: {
