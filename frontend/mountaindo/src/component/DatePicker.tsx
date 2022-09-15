@@ -31,7 +31,7 @@ function DatePicker({setCheck}: Props) {
   };
 
   return (
-    <View style={styles.chooseDate}>
+    <View>
       <Pressable onPress={showDatePicker} style={styles.dateButton}>
         <Text
           style={
@@ -54,7 +54,6 @@ function DatePicker({setCheck}: Props) {
 }
 
 const styles = StyleSheet.create({
-  chooseDate: {},
   dateButton: {
     borderBottomWidth: 1,
   },
