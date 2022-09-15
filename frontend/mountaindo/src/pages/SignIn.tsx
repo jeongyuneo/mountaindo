@@ -1,3 +1,4 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -8,8 +9,10 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
+import {RootStackParamList} from '../../AppInner';
+type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-function SignIn({}: any) {
+function SignIn({navigation}: SignInScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailCheck, setEmailCheck] = useState('');
