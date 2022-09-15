@@ -51,7 +51,7 @@ function SignIn({}: any) {
   const goNext = email && password;
   return (
     <View style={styles.container}>
-      <View style={styles.titlesettings}>
+      <View style={styles.titleSettings}>
         <View>
           <Text style={styles.mountainTitle}>MountainDo</Text>
           <Text style={styles.mountainText}>건강한 삶의 친구!</Text>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  titlesettings: {
+  titleSettings: {
     flex: 1,
     justifyContent: 'center',
     marginLeft: 10,
