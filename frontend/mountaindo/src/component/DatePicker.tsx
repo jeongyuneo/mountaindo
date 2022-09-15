@@ -23,11 +23,11 @@ function DatePicker({setCheck}: Props) {
   };
 
   // 날짜를 저장할 함수
-  const handleConfirm = (date: any) => {
+  const handleConfirm = (checked: any) => {
     hideDatePicker(); // 달력을 화면에서 없애줌
-    onChangeDate(date); // 날짜 데이터 저장
+    onChangeDate(checked); // 날짜 데이터 저장
     setCheck((curr: number) => curr + 1); // props를 변경시켜 FindId 컴포넌트에서 날짜를 체크했는지 확인
-    setSelectedDate(JSON.stringify(date).split('T')[0].replace('"', '')); // 날짜 데이터를 문자열로 가공
+    setSelectedDate(JSON.stringify(checked).split('T')[0].replace('"', '')); // 날짜 데이터를 문자열로 가공
   };
 
   return (
