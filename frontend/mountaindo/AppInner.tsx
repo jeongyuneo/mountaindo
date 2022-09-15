@@ -10,8 +10,6 @@ import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
 import {NavigationContainer} from '@react-navigation/native';
 
-
-// import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import Agreement from './src/pages/Agreement';
 import Welcome from './src/pages/Welcome';
@@ -25,7 +23,6 @@ export type LoggedInParamList = {
 };
 
 export type RootStackParamList = {
-  // SignIn: undefined;
   SignUp: undefined;
 };
 
@@ -34,7 +31,6 @@ const Stack = createNativeStackNavigator();
 
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  // console.log('isLoggedIn', isLoggedIn);
 
   return (
     <NavigationContainer>

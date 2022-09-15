@@ -64,7 +64,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={emailRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
         <Pressable style={styles.checkEmail}>
@@ -82,7 +81,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={passwordRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -97,7 +95,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={passwordCheckRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -112,7 +109,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={nameRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -127,7 +123,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={nickNameRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -142,7 +137,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={phoneNumberRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -157,7 +151,6 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={birthDayRef}
-          // onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>

@@ -13,14 +13,6 @@ function Agreement({navigation}: Props) {
   const [isSelected1, setSelection1] = useState(false);
   const [isSelected2, setSelection2] = useState(false);
   const [isSelected3, setSelection3] = useState(false);
-  // const [isSelectedAll, setSelectionAll] = useState({
-  //   isSelected1: false,
-  //   isSelected2: false,
-  //   isSelected3: false,
-  // });
-
-  // const {isSelected1, isSelected2, isSelected3} = isSelectedAll;
-
   const [visibleModal1, setVisibleModal1] = useState(false);
   const [visibleModal2, setVisibleModal2] = useState(false);
   const [visibleModal3, setVisibleModal3] = useState(false);
@@ -100,11 +92,7 @@ function Agreement({navigation}: Props) {
         </View>
       </View>
       <View style={styles.agreeAll}>
-        <CheckBox
-          disabled={false}
-          // value={isSelectedAll}
-          // onValueChange={newValue => setSelectionAll(newValue)}
-        />
+        <CheckBox disabled={false} />
         <Text style={styles.agreeAllText}>모두 동의합니다.</Text>
       </View>
       <View style={styles.buttonZone}>

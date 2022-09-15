@@ -1,6 +1,3 @@
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-// import {library} from '@fortawesome/fontawesome-svg-core';
-// import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 
@@ -9,8 +6,6 @@ interface Props {
 }
 
 function Welcome({navigation}: Props) {
-  // library.add(faArrowRight);
-
   return (
     <View>
       <View style={styles.contentWrapper}>
@@ -22,8 +17,6 @@ function Welcome({navigation}: Props) {
         <Pressable
           style={styles.arrowButton}
           onPress={() => navigation.navigate('Survey1')}>
-          {/* <FontAwesomeIcon icon="fa-solid fa-arrow-right" /> */}
-          {/* <FontAwesomeIcon icon={faArrowRight} /> */}
           <Text>go</Text>
         </Pressable>
       </View>
