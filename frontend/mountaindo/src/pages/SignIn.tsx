@@ -61,7 +61,7 @@ function SignIn({}: any) {
         </View>
       </View>
 
-      <View style={{flex: 2}}>
+      <View style={styles.containerSession}>
         <View>
           <View style={styles.textPadding}>
             <KeyboardAvoidingView>
@@ -138,6 +138,9 @@ function SignIn({}: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  containerSession: {
+    flex: 2,
   },
   titleSettings: {
     flex: 1,
