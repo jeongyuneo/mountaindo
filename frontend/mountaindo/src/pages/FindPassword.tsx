@@ -31,19 +31,6 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
   const password1Ref = useRef<TextInput | null>(null); // 비밀번호 input의 값 가져오기
   const password2Ref = useRef<TextInput | null>(null); // 비밀번호 확인 input의 값 가져오기
 
-  // 이메일 input 변경 시 email에 저장 및 유효성 검사
-  const onChangeEmail = useCallback(
-    (text: string) => {
-      setEmail(text.trim());
-      if (checkEmail(text.trim())) {
-        setEmailValid(true);
-      } else {
-        setEmailValid(false);
-      }
-    },
-    [email],
-  );
-
   // 이메일 인증번호 input 변경 시 email에 저장
   const onChangeCode = useCallback((text: string) => {
     setCode(text.trim());
@@ -78,6 +65,19 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
     }
     return true;
   }, []);
+
+  // 이메일 input 변경 시 email에 저장 및 유효성 검사
+  const onChangeEmail = useCallback(
+    (text: string) => {
+      setEmail(text.trim());
+      if (checkEmail(text.trim())) {
+        setEmailValid(true);
+      } else {
+        setEmailValid(false);
+      }
+    },
+    [checkEmail],
+  );
 
   // 이메일 인증코드 전송 함수
   const sendCode = () => {
@@ -114,7 +114,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
       );
     }
     return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
-  }, [email, code, password1, password2]);
+  }, [email, code, password1, password2, checkEmail, checkPassword]);
 
   const canGoNext = email && code && password1 && password2 && emailValid; // 버튼 disabled 확인할 변수
   return (
