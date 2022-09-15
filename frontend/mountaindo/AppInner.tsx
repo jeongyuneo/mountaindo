@@ -17,6 +17,7 @@ import PasswordChange from './src/pages/PasswordChange';
 import UserInfoChange from './src/pages/UserInfoChange';
 import NicknameChangeForm from './src/pages/NicknameChangeForm';
 import PhoneNumberChangeForm from './src/pages/PhoneNumberChangeForm';
+import MyPage from './src/pages/MyPage';
 
 export type LoggedInParamList = {
   Main: any;
@@ -27,6 +28,7 @@ export type LoggedInParamList = {
   PasswordChange: any;
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
+  MyPage: any;
 };
 
 export type RootStackParamList = {
@@ -57,6 +59,11 @@ function BottomTab() {
         name="Completed"
         component={Completed}
         options={{title: 'Completed'}}
+      />
+      <Tab.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{headerShown: false}} // Header 제거
       />
     </Tab.Navigator>
   );
