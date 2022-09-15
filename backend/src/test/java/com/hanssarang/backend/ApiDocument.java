@@ -24,8 +24,8 @@ public class ApiDocument {
     protected OperationRequestPreprocessor getDocumentRequest() {
         return preprocessRequest(
                 modifyUris()
-                        .scheme("http")
-                        .host("localhost")
+                        .scheme("https")
+                        .host("mountaindo.ssafy.io")
                         .removePort(),
                 prettyPrint());
     }
