@@ -97,7 +97,8 @@ function FindId({navigation}: FindIdScreenProps) {
               returnKeyType="next"
               clearButtonMode="while-editing"
               ref={nameRef}
-              blurOnSubmit={false}></TextInput>
+              blurOnSubmit={false}
+            />
           </View>
           <View>
             <DatePicker setCheck={setCheck} />
@@ -116,7 +117,8 @@ function FindId({navigation}: FindIdScreenProps) {
               clearButtonMode="while-editing"
               ref={phoneNumberRef}
               onSubmitEditing={onSubmit}
-              blurOnSubmit={false}></TextInput>
+              blurOnSubmit={false}
+            />
           </View>
           <View style={styles.findPasswordButton}>
             <Pressable onPress={() => navigation.push('FindPassword')}>

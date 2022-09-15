@@ -146,7 +146,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={emailRef}
             onSubmitEditing={() => codeRef.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
           <Pressable
             onPress={sendCode}
             style={
@@ -171,7 +172,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={codeRef}
             onSubmitEditing={() => password1Ref.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -188,7 +190,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={password1Ref}
             onSubmitEditing={() => password2Ref.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -205,7 +208,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={password2Ref}
             onSubmitEditing={onSubmit}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('FindId')}>
