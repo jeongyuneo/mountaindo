@@ -1,6 +1,7 @@
 package com.hanssarang.backend.hiking.controller;
 
 import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
+import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
 import com.hanssarang.backend.hiking.service.HikingService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class HikingController {
     @GetMapping("/2")
     public ResponseEntity<List<HikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(hikingService.getCompletedHikings(1));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createHiking(@RequestHeader("Authorization") String token, @RequestBody HikingRequest hikingRequest) {
+        hikingService.createHiking(1, hikingRequest);
+        return ResponseEntity.ok().build();
     }
 }
