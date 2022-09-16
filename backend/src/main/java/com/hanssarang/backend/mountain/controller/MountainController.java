@@ -26,4 +26,10 @@ public class MountainController {
         return ResponseEntity.ok()
                 .body(mountainService.getMountain(mountainId));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<MountainResponse> getMountainByName(@RequestHeader("Authorization") String token, @RequestParam String name) {
+        return ResponseEntity.ok()
+                .body(mountainService.getMountainByName(name));
+    }
 }
