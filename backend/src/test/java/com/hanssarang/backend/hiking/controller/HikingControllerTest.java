@@ -111,6 +111,17 @@ public class HikingControllerTest extends ApiDocument {
         등산상세_조회_실패(resultActions, new Message(NOT_FOUND_HIKING));
     }
 
+    @DisplayName("완등 목록 조회 - 성공")
+    @Test
+    void getCompletedHikingsSuccess() throws Exception {
+        // given
+        willReturn(hikingListResponse).given(hikingService).getCompletedHikings(anyInt());
+        // when
+        ResultActions resultActions = 완등목록_조회_요청();
+        // then
+        완등목록_조회_성공(resultActions, hikingListResponse);
+    }
+
     private ResultActions 등산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/hikings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -147,5 +158,17 @@ public class HikingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-hiking-fail"));
+    }
+
+    private ResultActions 완등목록_조회_요청() throws Exception {
+        return mockMvc.perform(get("/api/v1/hikings/2")
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 완등목록_조회_성공(ResultActions resultActions, List<HikingListResponse> hikingListResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(hikingListResponse)))
+                .andDo(print())
+                .andDo(toDocument("get-completed-hikings-success"));
     }
 }
