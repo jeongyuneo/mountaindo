@@ -131,7 +131,7 @@ public class HikingControllerTest extends ApiDocument {
     }
 
     private ResultActions 등산상세_조회_요청(int hikingId) throws Exception {
-        return mockMvc.perform(get("/api/v1/hikings/" + hikingId)
+        return mockMvc.perform(get("/api/v1/hikings/1/" + hikingId)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
