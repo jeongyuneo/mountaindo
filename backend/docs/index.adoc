@@ -70,3 +70,9 @@ include::{snippets}/get-completed-hikings-success/http-request.adoc[]
 
 .response
 include::{snippets}/get-completed-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-completed-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
