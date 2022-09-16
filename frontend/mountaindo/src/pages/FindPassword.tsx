@@ -1,5 +1,3 @@
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
 import {
@@ -25,6 +23,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
   const [password1, setPassword1] = useState(''); // 비밀번호 저장할 변수
   const [password2, setPassword2] = useState(''); // 비밀번호 확인을 저장할 변수
   const [emailValid, setEmailValid] = useState(false); // 이메일 유효성 검사를 확인할 변수
+  const [emailVerify, setEmailVerify] = useState(false); // 이메일 인증 확인을 위한 변수
 
   const emailRef = useRef<TextInput | null>(null); // 사용자 이메일 input의 값 가져오기
   const codeRef = useRef<TextInput | null>(null); // 이메일 인증번호 input의 값 가져오기
@@ -82,13 +81,15 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
   // 이메일 인증코드 전송 함수
   const sendCode = () => {
     if (emailValid) {
-      return Alert.alert('알림', '인증번호를 전송했습니다..');
+      setEmailVerify(true);
+      return Alert.alert('알림', '인증번호를 전송했습니다.');
     }
+    setEmailVerify(false);
     return Alert.alert('알림', '인증번호를 전송하지 못했습니다.');
   };
 
   // 비밀번호 찾기 버튼 클릭 시 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
     }
@@ -107,6 +108,9 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
     if (!checkEmail(email)) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
+    if (!emailVerify) {
+      return Alert.alert('알림', '이메일 인증이 되지 않았습니다.');
+    }
     if (!checkPassword(password1)) {
       return Alert.alert(
         '알림',
@@ -114,23 +118,20 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
       );
     }
     return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
-  }, [email, code, password1, password2, checkEmail, checkPassword]);
+  }, [
+    email,
+    code,
+    password1,
+    password2,
+    checkEmail,
+    emailVerify,
+    checkPassword,
+  ]);
 
-  const canGoNext = email && code && password1 && password2 && emailValid; // 버튼 disabled 확인할 변수
+  const canGoNext =
+    email && code && password1 && password2 && emailValid && emailVerify; // 버튼 disabled 확인할 변수
   return (
     <DismissKeyboardView>
-      <View>
-        <Pressable onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            size={30}
-            style={styles.backIcon}
-          />
-        </Pressable>
-      </View>
-      <View style={styles.titleView}>
-        <Text style={styles.title}>비밀번호 찾기</Text>
-      </View>
       <View style={styles.inputGroup}>
         <View style={styles.emailInputView}>
           <TextInput
@@ -146,7 +147,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={emailRef}
             onSubmitEditing={() => codeRef.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
           <Pressable
             onPress={sendCode}
             style={
@@ -171,7 +173,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={codeRef}
             onSubmitEditing={() => password1Ref.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -188,7 +191,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={password1Ref}
             onSubmitEditing={() => password2Ref.current?.focus()}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -205,7 +209,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             ref={password2Ref}
             onSubmitEditing={onSubmit}
-            blurOnSubmit={false}></TextInput>
+            blurOnSubmit={false}
+          />
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('FindId')}>
@@ -238,36 +243,8 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  backIcon: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  titleView: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  findIdView: {
-    backgroundColor: '#dadada',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  findIdText: {
-    textAlign: 'center',
-  },
-  toLoginButton: {
-    alignItems: 'flex-end',
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
   inputGroup: {
-    marginVertical: 10,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   emailInput: {

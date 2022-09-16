@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {RootStackParamList} from '../../AppInner';
+
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 function SignIn({navigation}: SignInScreenProps) {
@@ -111,11 +112,23 @@ function SignIn({navigation}: SignInScreenProps) {
         </View>
 
         <View style={styles.userInfoCreate}>
-          <Text style={styles.userInfoText}>회원 가입</Text>
+          <Text
+            style={styles.userInfoText}
+            onPress={() => navigation.push('SignUp')}>
+            회원 가입
+          </Text>
           <Text style={styles.userInfoText}>|</Text>
-          <Text style={styles.userInfoText}>아이디 찾기</Text>
+          <Text
+            style={styles.userInfoText}
+            onPress={() => navigation.push('FindId')}>
+            아이디 찾기
+          </Text>
           <Text style={styles.userInfoText}>|</Text>
-          <Text style={styles.userInfoText}>비밀 번호 찾기</Text>
+          <Text
+            style={styles.userInfoText}
+            onPress={() => navigation.push('FindPassword')}>
+            비밀 번호 찾기
+          </Text>
         </View>
 
         <View style={styles.buttonZone}>

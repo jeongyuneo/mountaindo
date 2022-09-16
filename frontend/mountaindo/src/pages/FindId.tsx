@@ -1,5 +1,3 @@
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
 import {
@@ -37,7 +35,7 @@ function FindId({navigation}: FindIdScreenProps) {
   }, []);
 
   // 아아디 찾기 버튼을 눌렀을 때 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!name || !name.trim()) {
       return Alert.alert('알림', '이름을 입력해주세요.');
     }
@@ -59,18 +57,6 @@ function FindId({navigation}: FindIdScreenProps) {
   const canGoNext = name && phoneNumber && !!check; // 버튼 disabled 확인할 변수
   return (
     <DismissKeyboardView>
-      <View>
-        <Pressable onPress={() => navigation.goBack()}>
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            size={30}
-            style={styles.backIcon}
-          />
-        </Pressable>
-      </View>
-      <View style={styles.titleView}>
-        <Text style={styles.title}>아이디 찾기</Text>
-      </View>
       {visibleId ? (
         <View>
           <View style={styles.findIdView}>
@@ -97,7 +83,8 @@ function FindId({navigation}: FindIdScreenProps) {
               returnKeyType="next"
               clearButtonMode="while-editing"
               ref={nameRef}
-              blurOnSubmit={false}></TextInput>
+              blurOnSubmit={false}
+            />
           </View>
           <View>
             <DatePicker setCheck={setCheck} />
@@ -116,7 +103,8 @@ function FindId({navigation}: FindIdScreenProps) {
               clearButtonMode="while-editing"
               ref={phoneNumberRef}
               onSubmitEditing={onSubmit}
-              blurOnSubmit={false}></TextInput>
+              blurOnSubmit={false}
+            />
           </View>
           <View style={styles.findPasswordButton}>
             <Pressable onPress={() => navigation.push('FindPassword')}>
@@ -145,24 +133,12 @@ function FindId({navigation}: FindIdScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  backIcon: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  titleView: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   findIdView: {
     backgroundColor: '#dadada',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 5,
-    marginVertical: 10,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   findIdText: {
@@ -174,7 +150,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   inputGroup: {
-    marginVertical: 10,
+    marginTop: 30,
     marginHorizontal: 20,
   },
   inputView: {
