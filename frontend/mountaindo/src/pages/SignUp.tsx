@@ -1,12 +1,12 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
+import {RootStackParamList} from '../../AppInner';
 import DismissKeyboardView from '../components/DismissKeyboardView';
 
-interface Props {
-  navigation: any;
-}
+type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
-function SignUp({navigation}: Props) {
+function SignUp({navigation}: SignUpScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -64,6 +64,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={emailRef}
+          onSubmitEditing={() => passwordRef.current?.focus()}
           blurOnSubmit={false}
         />
         <Pressable style={styles.checkEmail}>
@@ -81,6 +82,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={passwordRef}
+          onSubmitEditing={() => passwordCheckRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -95,6 +97,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={passwordCheckRef}
+          onSubmitEditing={() => nameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -109,6 +112,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={nameRef}
+          onSubmitEditing={() => nickNameRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -123,6 +127,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={nickNameRef}
+          onSubmitEditing={() => phoneNumberRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
@@ -137,6 +142,7 @@ function SignUp({navigation}: Props) {
           returnKeyType="next"
           clearButtonMode="while-editing"
           ref={phoneNumberRef}
+          onSubmitEditing={() => birthDayRef.current?.focus()}
           blurOnSubmit={false}
         />
       </View>
