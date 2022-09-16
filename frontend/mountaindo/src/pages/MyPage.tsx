@@ -4,9 +4,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../AppInner';
+import {LoggedInParamList} from '../../AppInner';
 
-type MyPageScreenProps = NativeStackScreenProps<RootStackParamList, 'MyPage'>;
+type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   return (
     <View style={styles.container}>
