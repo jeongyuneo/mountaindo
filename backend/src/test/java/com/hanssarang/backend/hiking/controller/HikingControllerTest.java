@@ -40,6 +40,8 @@ public class HikingControllerTest extends ApiDocument {
     private static final String LEVEL = "중";
     private static final int HEIGHT = 1930;
     private static final String TRAIL_NAME = "A코스";
+    private static final double X = 30.0312;
+    private static final double Y = 500.1937;
 
     private List<HikingListResponse> hikingListResponse;
     private HikingResponse hikingResponse;
@@ -49,6 +51,9 @@ public class HikingControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
+        List<HikingPath> hikingPath = IntStream.range(1, 6)
+                .mapToObj(n -> HikingPath.builder().x(n * X).y((n / 2.0) * Y).build())
+                .collect(Collectors.toList());
         hikingListResponse = IntStream.range(0, 3)
                 .mapToObj(n -> HikingListResponse.builder()
                         .name(MOUNTAIN_NAME)
@@ -61,9 +66,7 @@ public class HikingControllerTest extends ApiDocument {
                 .address(ADDRESS)
                 .height(HEIGHT)
                 .trailName(TRAIL_NAME)
-                .path(IntStream.range(1, 6)
-                        .mapToObj(n -> HikingPath.builder().x(n * 30.0312).y((n / 2.0) * 500.1937).build())
-                        .collect(Collectors.toList()))
+                .path(hikingPath)
                 .build();
     }
 
