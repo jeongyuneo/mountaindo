@@ -16,4 +16,8 @@ public class HikingService {
     public HikingResponse getHiking(int hikingId) {
         return null;
     }
+
+    public List<HikingListResponse> getCompletedHikings(int memberId) {
+        return null;
+    }
 }
