@@ -62,3 +62,11 @@ include::{snippets}/get-hiking-fail/http-request.adoc[]
 
 .response
 include::{snippets}/get-hiking-fail/http-response.adoc[]
+
+==== 완등 목록 조회
+===== 성공
+.request
+include::{snippets}/get-completed-hikings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-completed-hikings-success/http-response.adoc[]
