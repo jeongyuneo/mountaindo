@@ -15,13 +15,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.UnexpectedRollbackException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_HIKING;
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -158,6 +158,17 @@ public class HikingControllerTest extends ApiDocument {
         등산기록_저장_성공(resultActions);
     }
 
+    @DisplayName("등산 기록 저장 - 실패")
+    @Test
+    void createHikingFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_HIKING)).given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
+        // when
+        ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
+        // then
+        등산기록_저장_실패(resultActions, new Message(FAIL_TO_CREATE_HIKING));
+    }
+
     private ResultActions 등산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/hikings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -226,5 +237,12 @@ public class HikingControllerTest extends ApiDocument {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("create-hiking-success"));
+    }
+
+    private void 등산기록_저장_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("create-hiking-fail"));
     }
 }
