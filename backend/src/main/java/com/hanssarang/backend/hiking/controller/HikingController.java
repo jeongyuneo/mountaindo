@@ -21,7 +21,7 @@ public class HikingController {
         return ResponseEntity.ok(hikingService.getHikings(1));
     }
 
-    @GetMapping("/{hikingId}")
+    @GetMapping("/1/{hikingId}")
     public ResponseEntity<HikingResponse> getHiking(@RequestHeader("Authorization") String token, @PathVariable int hikingId) {
         return ResponseEntity.ok(hikingService.getHiking(1));
     }
