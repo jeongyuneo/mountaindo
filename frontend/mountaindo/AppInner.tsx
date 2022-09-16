@@ -14,6 +14,10 @@ import SignUp from './src/pages/SignUp';
 import Agreement from './src/pages/Agreement';
 import Welcome from './src/pages/Welcome';
 import Survey1 from './src/pages/Survey1';
+import Survey2 from './src/pages/Survey2';
+import Survey3 from './src/pages/Survey3';
+import Survey4 from './src/pages/Survey4';
+import Survey5 from './src/pages/Survey5';
 
 export type LoggedInParamList = {
   Main: undefined;
@@ -24,6 +28,7 @@ export type LoggedInParamList = {
 
 export type RootStackParamList = {
   SignUp: undefined;
+  Welcome: undefined;
 };
 
 const Tab = createBottomTabNavigator();
@@ -74,6 +79,26 @@ function AppInner() {
             name="Survey1"
             component={Survey1}
             options={{title: '설문조사1'}}
+          />
+          <Stack.Screen
+            name="Survey2"
+            component={Survey2}
+            options={{title: '설문조사2'}}
+          />
+          <Stack.Screen
+            name="Survey3"
+            component={Survey3}
+            options={{title: '설문조사3'}}
+          />
+          <Stack.Screen
+            name="Survey4"
+            component={Survey4}
+            options={{title: '설문조사4'}}
+          />
+          <Stack.Screen
+            name="Survey5"
+            component={Survey5}
+            options={{title: '설문조사5'}}
           />
         </Stack.Navigator>
       )}
