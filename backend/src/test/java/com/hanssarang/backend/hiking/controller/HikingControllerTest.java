@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,7 +41,7 @@ public class HikingControllerTest extends ApiDocument {
     private static final int HEIGHT = 1930;
     private static final String TRAIL_NAME = "A코스";
 
-    private HikingListResponse hikingListResponse;
+    private List<HikingListResponse> hikingListResponse;
     private HikingResponse hikingResponse;
 
     @MockBean
@@ -48,11 +49,13 @@ public class HikingControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        hikingListResponse = HikingListResponse.builder()
-                .name(MOUNTAIN_NAME)
-                .address(ADDRESS)
-                .level(LEVEL)
-                .build();
+        hikingListResponse = IntStream.range(0, 3)
+                .mapToObj(n -> HikingListResponse.builder()
+                        .name(MOUNTAIN_NAME)
+                        .address(ADDRESS)
+                        .level(LEVEL)
+                        .build())
+                .collect(Collectors.toList());
         hikingResponse = HikingResponse.builder()
                 .mountainName(MOUNTAIN_NAME)
                 .address(ADDRESS)
@@ -113,7 +116,7 @@ public class HikingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private ResultActions 등산목록_조회_성공(ResultActions resultActions, HikingListResponse hikingListResponse) throws Exception {
+    private ResultActions 등산목록_조회_성공(ResultActions resultActions, List<HikingListResponse> hikingListResponse) throws Exception {
         return resultActions.andExpect(status().isOk())
                 .andExpect(content().json(toJson(hikingListResponse)))
                 .andDo(print())
