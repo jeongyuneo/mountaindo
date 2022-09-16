@@ -1,10 +1,12 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {Text, View} from 'react-native';
-
-function Main() {
+import {LoggedInParamList} from '../../AppInner';
+type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, 'Main'>;
+function Main({navigation}: MainInScreenProps) {
   return (
     <View>
-      <Text>Test</Text>
+      <Text onPress={() => navigation.navigate('MyPage')}>Test</Text>
     </View>
   );
 }

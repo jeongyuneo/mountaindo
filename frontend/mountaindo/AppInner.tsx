@@ -8,6 +8,7 @@ import Main from './src/pages/Main';
 import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
+import MyPage from './src/pages/MyPage';
 import Agreement from './src/pages/Agreement';
 import Welcome from './src/pages/Welcome';
 import Survey1 from './src/pages/Survey1';
@@ -25,6 +26,7 @@ export type LoggedInParamList = {
   Completed: any;
   Hiking: any;
   Mountain: any;
+  MyPage: any;
 };
 
 export type RootStackParamList = {
@@ -47,8 +49,13 @@ function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
 
   return isLoggedIn ? (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="MyPage">
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
+      <Tab.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{headerShown: false}} // Header 제거
+      />
       <Tab.Screen
         name="Hiking"
         component={Hiking}
