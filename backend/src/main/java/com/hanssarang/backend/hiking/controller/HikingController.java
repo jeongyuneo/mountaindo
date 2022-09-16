@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/hikings")
@@ -15,7 +17,7 @@ public class HikingController {
     private final HikingService hikingService;
 
     @GetMapping
-    public ResponseEntity<HikingListResponse> getHikings(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<HikingListResponse>> getHikings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(hikingService.getHikings(1));
     }
 
