@@ -56,3 +56,9 @@ include::{snippets}/get-hiking-success/http-request.adoc[]
 
 .response
 include::{snippets}/get-hiking-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hiking-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hiking-fail/http-response.adoc[]
