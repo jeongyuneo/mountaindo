@@ -37,16 +37,16 @@ function MyPage({navigation}: MyPageScreenProps) {
           <View style={styles.containerRank}>
             <View style={styles.userRank}>
               <View>
-                <Text style={styles.rankTitle}>총 고도</Text>
-                <Text style={styles.rankInfo}>1823m</Text>
+                <Text style={styles.title}>총 고도</Text>
+                <Text style={styles.info}>1823m</Text>
               </View>
               <View>
-                <Text style={styles.rankTitle}>전체 랭킹</Text>
-                <Text style={styles.rankInfo}>2위</Text>
+                <Text style={styles.title}>전체 랭킹</Text>
+                <Text style={styles.info}>2위</Text>
               </View>
               <View>
-                <Text style={styles.rankTitle}>최근 등반한 산</Text>
-                <Text style={styles.rankInfo}>계룡산</Text>
+                <Text style={styles.title}>최근 등반한 산</Text>
+                <Text style={styles.info}>계룡산</Text>
               </View>
             </View>
           </View>
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  rankInfo: {
+  info: {
     fontSize: 15,
     fontWeight: 'bold',
     color: '#57AAFF',
   },
-  rankTitle: {
+  title: {
     fontWeight: 'bold',
     color: 'black',
   },
