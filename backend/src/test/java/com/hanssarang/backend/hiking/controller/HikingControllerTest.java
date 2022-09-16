@@ -116,8 +116,8 @@ public class HikingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private ResultActions 등산목록_조회_성공(ResultActions resultActions, List<HikingListResponse> hikingListResponse) throws Exception {
-        return resultActions.andExpect(status().isOk())
+    private void 등산목록_조회_성공(ResultActions resultActions, List<HikingListResponse> hikingListResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
                 .andExpect(content().json(toJson(hikingListResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-hikings-success"));
