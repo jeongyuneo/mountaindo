@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {RootStackParamList} from '../../AppInner';
+import DismissKeyboardView from '../component/DismissKeyboardView';
 
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
@@ -68,7 +69,7 @@ function SignIn({navigation}: SignInScreenProps) {
       <View style={styles.containerSession}>
         <View>
           <View style={styles.textPadding}>
-            <KeyboardAvoidingView>
+            <DismissKeyboardView>
               <TextInput
                 style={styles.textInput}
                 onChangeText={onChangeEmail}
@@ -84,7 +85,7 @@ function SignIn({navigation}: SignInScreenProps) {
                 onSubmitEditing={() => passwordRef.current?.focus()}
                 blurOnSubmit={false}
               />
-            </KeyboardAvoidingView>
+            </DismissKeyboardView>
           </View>
           <View style={styles.emailInfoCheck}>
             <Text style={styles.emailInfoText}>{emailCheck}</Text>

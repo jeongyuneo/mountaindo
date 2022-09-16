@@ -24,6 +24,8 @@ import PasswordChange from './src/pages/PasswordChange';
 import UserInfoChange from './src/pages/UserInfoChange';
 import NicknameChangeForm from './src/pages/NicknameChangeForm';
 import PhoneNumberChangeForm from './src/pages/PhoneNumberChangeForm';
+import Notice from './src/pages/Notice';
+import ContactUs from './src/pages/ContactUs';
 
 export type LoggedInParamList = {
   Main: any;
@@ -35,6 +37,8 @@ export type LoggedInParamList = {
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
   MyPage: any;
+  Notice: any;
+  ContactUs: any;
 };
 
 export type RootStackParamList = {
@@ -78,7 +82,7 @@ function BottomTab() {
         options={{headerShown: false}} // Header 제거
       />
     </Tab.Navigator>
-  )
+  );
 }
 
 function AppInner() {
@@ -112,6 +116,16 @@ function AppInner() {
               component={PhoneNumberChangeForm}
               options={{title: '전화번호 변경'}}
             />
+            <Stack.Screen
+              name="Notice"
+              component={Notice}
+              options={{title: '공지사항'}}
+            />
+            <Stack.Screen
+              name="ContactUs"
+              component={ContactUs}
+              options={{title: '문의하기'}}
+            />
           </Stack.Group>
         </>
       ) : (
@@ -131,11 +145,6 @@ function AppInner() {
               name="Agreement"
               component={Agreement}
               options={{title: '약관동의서'}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{title: '회원가입'}}
             />
             <Stack.Screen
               name="Welcome"
