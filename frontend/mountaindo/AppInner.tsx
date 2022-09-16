@@ -20,20 +20,20 @@ import Survey4 from './src/pages/Survey4';
 import Survey5 from './src/pages/Survey5';
 
 export type LoggedInParamList = {
-  Main: undefined;
-  Completed: undefined;
-  Hiking: undefined;
-  Mountain: undefined;
+  Main: any;
+  Completed: any;
+  Hiking: any;
+  Mountain: any;
 };
 
 export type RootStackParamList = {
-  SignUp: undefined;
-  Welcome: undefined;
-  Survey1: undefined;
-  Survey2: undefined;
-  Survey3: undefined;
-  Survey4: undefined;
-  Survey5: undefined;
+  SignUp: any;
+  Welcome: any;
+  Survey1: any;
+  Survey2: any;
+  Survey3: any;
+  Survey4: any;
+  Survey5: any;
 };
 
 const Tab = createBottomTabNavigator();
