@@ -5,6 +5,7 @@ import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.HikingPath;
+import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
 import com.hanssarang.backend.hiking.service.HikingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
@@ -21,9 +23,9 @@ import java.util.stream.IntStream;
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_HIKING;
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +44,10 @@ public class HikingControllerTest extends ApiDocument {
     private static final String TRAIL_NAME = "A코스";
     private static final double X = 30.0312;
     private static final double Y = 500.1937;
+    private static final double ACCUMULATED_HEIGHT = 320.45;
+    private static final String USE_TIME = "16:40:20";
 
+    private HikingRequest hikingRequest;
     private List<HikingListResponse> hikingListResponse;
     private HikingResponse hikingResponse;
 
@@ -54,6 +59,12 @@ public class HikingControllerTest extends ApiDocument {
         List<HikingPath> hikingPath = IntStream.range(1, 6)
                 .mapToObj(n -> HikingPath.builder().x(n * X).y((n / 2.0) * Y).build())
                 .collect(Collectors.toList());
+        hikingRequest = HikingRequest.builder()
+                .path(hikingPath)
+                .endPoint(HikingPath.builder().x(X).y(Y).build())
+                .accumulatedHeight(ACCUMULATED_HEIGHT)
+                .useTime(USE_TIME)
+                .build();
         hikingListResponse = IntStream.range(0, 3)
                 .mapToObj(n -> HikingListResponse.builder()
                         .name(MOUNTAIN_NAME)
@@ -136,6 +147,17 @@ public class HikingControllerTest extends ApiDocument {
         완등목록_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
     }
 
+    @DisplayName("등산 기록 저장 - 성공")
+    @Test
+    void createHikingSuccess() throws Exception {
+        // given
+        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
+        // when
+        ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
+        // then
+        등산기록_저장_성공(resultActions);
+    }
+
     private ResultActions 등산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/hikings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -191,5 +213,18 @@ public class HikingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-completed-hikings-fail"));
+    }
+
+    private ResultActions 등산기록_저장_요청(HikingRequest hikingRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/hikings")
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(hikingRequest)));
+    }
+
+    private void 등산기록_저장_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("create-hiking-success"));
     }
 }
