@@ -25,4 +25,9 @@ public class HikingController {
     public ResponseEntity<HikingResponse> getHiking(@RequestHeader("Authorization") String token, @PathVariable int hikingId) {
         return ResponseEntity.ok(hikingService.getHiking(1));
     }
+
+    @GetMapping("/2")
+    public ResponseEntity<List<HikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(hikingService.getCompletedHikings(1));
+    }
 }
