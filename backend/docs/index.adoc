@@ -48,3 +48,11 @@ include::{snippets}/get-hikings-fail/http-request.adoc[]
 
 .response
 include::{snippets}/get-hikings-fail/http-response.adoc[]
+
+==== 등산 상세 조회
+===== 성공
+.request
+include::{snippets}/get-hiking-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-hiking-success/http-response.adoc[]
