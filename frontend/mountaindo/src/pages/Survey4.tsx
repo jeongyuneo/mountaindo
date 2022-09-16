@@ -3,19 +3,20 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../AppInner';
 
-type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
+type Survey4ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey4'>;
 
-function Survey1({navigation}: Survey1ScreenProps) {
+function Survey4({navigation}: Survey4ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
+  const [isChecked4, setChecked4] = useState(false);
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산레벨</Text>
+        <Text style={styles.title}>선호하는 등산 소요시간 </Text>
         <Text style={styles.subTitle}>
-          내가 생각하는 나의 등산 레벨은 어느 정도인가요?
+          등산하는데 어느 정도의 시간을 소요하시나요?
         </Text>
       </View>
       <View>
@@ -23,69 +24,66 @@ function Survey1({navigation}: Survey1ScreenProps) {
           <Pressable
             style={styles.checkedBox}
             onPress={() => setChecked1(false)}>
-            <Text style={styles.checkedBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            <Text style={styles.checkedBoxText}>1시간 이내</Text>
           </Pressable>
-        ) : !isChecked2 && !isChecked3 ? (
+        ) : !isChecked2 && !isChecked3 && !isChecked4 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked1(true)}>
-            <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
           </Pressable>
         )}
         {isChecked2 ? (
           <Pressable
             style={styles.checkedBox}
             onPress={() => setChecked2(false)}>
-            <Text style={styles.checkedBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            <Text style={styles.checkedBoxText}>1시간 이상 2시간 이내</Text>
           </Pressable>
-        ) : !isChecked1 && !isChecked3 ? (
+        ) : !isChecked1 && !isChecked3 && !isChecked4 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked2(true)}>
-            <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
           </Pressable>
         )}
         {isChecked3 ? (
           <Pressable
             style={styles.checkedBox}
             onPress={() => setChecked3(false)}>
-            <Text style={styles.checkedBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            <Text style={styles.checkedBoxText}>2시간 이상 3시간 이내</Text>
           </Pressable>
-        ) : !isChecked1 && !isChecked2 ? (
+        ) : !isChecked1 && !isChecked2 && !isChecked4 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked3(true)}>
-            <Text style={styles.answerBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+        )}
+        {isChecked4 ? (
+          <Pressable
+            style={styles.checkedBox}
+            onPress={() => setChecked4(false)}>
+            <Text style={styles.checkedBoxText}>3시간 이상</Text>
+          </Pressable>
+        ) : !isChecked1 && !isChecked2 && !isChecked3 ? (
+          <Pressable style={styles.answerBox} onPress={() => setChecked4(true)}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.answerBox}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
           </Pressable>
         )}
       </View>
       <Pressable
         style={styles.nextButton}
-        onPress={() => navigation.navigate('Survey2')}>
+        onPress={() => navigation.navigate('Survey5')}>
         <Text>Next</Text>
       </Pressable>
     </View>
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
   answerBox: {
     padding: 20,
     marginHorizontal: 20,
-    marginTop: 30,
+    marginTop: 20,
     color: 'black',
     backgroundColor: 'white',
     height: 60,
@@ -124,11 +122,12 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
+    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
     marginHorizontal: 20,
-    marginTop: 30,
+    marginTop: 20,
     color: 'black',
     backgroundColor: 'grey',
     height: 60,
@@ -141,6 +140,7 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 13,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Survey1;
+export default Survey4;

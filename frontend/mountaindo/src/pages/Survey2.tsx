@@ -3,20 +3,17 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../AppInner';
 
-type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
+type Survey2ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey2'>;
 
-function Survey1({navigation}: Survey1ScreenProps) {
+function Survey2({navigation}: Survey2ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
-  const [isChecked3, setChecked3] = useState(false);
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산레벨</Text>
-        <Text style={styles.subTitle}>
-          내가 생각하는 나의 등산 레벨은 어느 정도인가요?
-        </Text>
+        <Text style={styles.title}>등산지역 선호도 </Text>
+        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
       </View>
       <View>
         {isChecked1 ? (
@@ -24,19 +21,19 @@ function Survey1({navigation}: Survey1ScreenProps) {
             style={styles.checkedBox}
             onPress={() => setChecked1(false)}>
             <Text style={styles.checkedBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
             </Text>
           </Pressable>
-        ) : !isChecked2 && !isChecked3 ? (
+        ) : !isChecked2 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked1(true)}>
             <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
             </Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
             <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
             </Text>
           </Pressable>
         )}
@@ -45,47 +42,26 @@ function Survey1({navigation}: Survey1ScreenProps) {
             style={styles.checkedBox}
             onPress={() => setChecked2(false)}>
             <Text style={styles.checkedBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
+              지역 - 저의 주변을 주로 선호해요!
             </Text>
           </Pressable>
-        ) : !isChecked1 && !isChecked3 ? (
+        ) : !isChecked1 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked2(true)}>
             <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
+              지역 - 저의 주변을 주로 선호해요!
             </Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
             <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
-          </Pressable>
-        )}
-        {isChecked3 ? (
-          <Pressable
-            style={styles.checkedBox}
-            onPress={() => setChecked3(false)}>
-            <Text style={styles.checkedBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
-          </Pressable>
-        ) : !isChecked1 && !isChecked2 ? (
-          <Pressable style={styles.answerBox} onPress={() => setChecked3(true)}>
-            <Text style={styles.answerBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
-          </Pressable>
-        ) : (
-          <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>
-              등른이 - 등산이면 가파르고 높아야죠!
+              지역 - 저의 주변을 주로 선호해요!
             </Text>
           </Pressable>
         )}
       </View>
       <Pressable
         style={styles.nextButton}
-        onPress={() => navigation.navigate('Survey2')}>
+        onPress={() => navigation.navigate('Survey3')}>
         <Text>Next</Text>
       </Pressable>
     </View>
@@ -124,6 +100,7 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
+    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
@@ -141,6 +118,7 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 13,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -152,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Survey1;
+export default Survey2;
