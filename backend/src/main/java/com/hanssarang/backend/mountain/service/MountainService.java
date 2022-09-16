@@ -27,4 +27,19 @@ public class MountainService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public MountainResponse getMountain(int mountainId) {
+        MountainResponse mountainResponse = MountainResponse.builder()
+                .mountainId(1)
+                .name("북한산")
+                .height(836)
+                .address("서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시")
+                .imageUrl("http://www.forest.go.kr/newkfsweb/cmm/fms/getImage.do?fileSn=1&atchFileId=FILE_000000000424203")
+                .build();
+        return mountainResponse;
+    }
+
+    public MountainResponse getMountainByName(String name) {
+        return null;
+    }
 }
