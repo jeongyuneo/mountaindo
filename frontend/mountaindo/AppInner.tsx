@@ -9,7 +9,13 @@ import Hiking from './src/pages/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
 import MyPage from './src/pages/MyPage';
-
+import Agreement from './src/pages/Agreement';
+import Welcome from './src/pages/Welcome';
+import Survey1 from './src/pages/Survey1';
+import Survey2 from './src/pages/Survey2';
+import Survey3 from './src/pages/Survey3';
+import Survey4 from './src/pages/Survey4';
+import Survey5 from './src/pages/Survey5';
 import SignIn from './src/pages/SignIn';
 import SignUp from './src/pages/SignUp';
 import FindId from './src/pages/FindId';
@@ -24,6 +30,12 @@ export type LoggedInParamList = {
 };
 
 export type RootStackParamList = {
+  Welcome: any;
+  Survey1: any;
+  Survey2: any;
+  Survey3: any;
+  Survey4: any;
+  Survey5: any;
   SignIn: any;
   SignUp: any;
   FindId: any;
@@ -35,7 +47,6 @@ const Stack = createNativeStackNavigator();
 
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-  console.log('isLoggedIn', isLoggedIn);
 
   return isLoggedIn ? (
     <Tab.Navigator initialRouteName="MyPage">
@@ -82,6 +93,46 @@ function AppInner() {
         name="FindPassword"
         component={FindPassword}
         options={{title: '비밀번호찾기'}}
+      />
+      <Stack.Screen
+        name="Agreement"
+        component={Agreement}
+        options={{title: '약관동의서'}}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{title: '회원가입'}}
+      />
+      <Stack.Screen
+        name="Welcome"
+        component={Welcome}
+        options={{title: '가입환영'}}
+      />
+      <Stack.Screen
+        name="Survey1"
+        component={Survey1}
+        options={{title: '설문조사1'}}
+      />
+      <Stack.Screen
+        name="Survey2"
+        component={Survey2}
+        options={{title: '설문조사2'}}
+      />
+      <Stack.Screen
+        name="Survey3"
+        component={Survey3}
+        options={{title: '설문조사3'}}
+      />
+      <Stack.Screen
+        name="Survey4"
+        component={Survey4}
+        options={{title: '설문조사4'}}
+      />
+      <Stack.Screen
+        name="Survey5"
+        component={Survey5}
+        options={{title: '설문조사5'}}
       />
     </Stack.Navigator>
   );
