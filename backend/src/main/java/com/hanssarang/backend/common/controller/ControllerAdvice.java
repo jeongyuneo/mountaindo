@@ -18,4 +18,11 @@ public class ControllerAdvice {
         log.info("NotFoundException: {}", exception.getMessage());
         return new Message(exception.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public Message InternalServerException(Exception exception) {
+        log.info("InternalServerException: {}", exception.getMessage(), exception);
+        return new Message(exception.getMessage());
+    }
 }
