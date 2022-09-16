@@ -76,4 +76,29 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(print())
                 .andDo(toDocument("get-mountains-success"));
     }
+
+    @DisplayName("산 검색 성공")
+    @Test
+    void getMountainByNameSuccess() throws Exception {
+        // given
+        willReturn(mountainResponse).given(mountainService).getMountainByName(NAME);
+        // when
+        ResultActions resultActions = 산_검색_요청(NAME);
+        // then
+        산_검색_요청_성공(resultActions, mountainResponse);
+    }
+
+    private ResultActions 산_검색_요청(String name) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search?name=" + name)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer {Access Token}")
+        );
+    }
+
+    private void 산_검색_요청_성공(ResultActions resultActions, MountainResponse mountainResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(mountainResponse)))
+                .andDo(print())
+                .andDo(toDocument("get-mountain-by-name-success"));
+    }
 }
