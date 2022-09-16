@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_HIKING;
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.willReturn;
@@ -96,6 +97,17 @@ public class HikingControllerTest extends ApiDocument {
         등산상세_조회_성공(resultActions, hikingResponse);
     }
 
+    @DisplayName("등산 상세 조회 - 실패")
+    @Test
+    void getHikingFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_HIKING)).given(hikingService).getHiking(anyInt());
+        // when
+        ResultActions resultActions = 등산상세_조회_요청(ID);
+        // then
+        등산상세_조회_실패(resultActions, new Message(NOT_FOUND_HIKING));
+    }
+
     private ResultActions 등산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/hikings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -125,5 +137,12 @@ public class HikingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(hikingResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-hiking-success"));
+    }
+
+    private void 등산상세_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-hiking-fail"));
     }
 }
