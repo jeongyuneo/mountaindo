@@ -29,6 +29,11 @@ export type LoggedInParamList = {
 export type RootStackParamList = {
   SignUp: undefined;
   Welcome: undefined;
+  Survey1: undefined;
+  Survey2: undefined;
+  Survey3: undefined;
+  Survey4: undefined;
+  Survey5: undefined;
 };
 
 const Tab = createBottomTabNavigator();

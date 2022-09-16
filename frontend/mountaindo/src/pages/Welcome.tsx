@@ -1,11 +1,11 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {RootStackParamList} from '../../AppInner';
 
-interface Props {
-  navigation: any;
-}
+type WelcomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Welcome'>;
 
-function Welcome({navigation}: Props) {
+function Welcome({navigation}: WelcomeScreenProps) {
   return (
     <View>
       <View style={styles.contentWrapper}>
