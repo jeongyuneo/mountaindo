@@ -35,7 +35,7 @@ function FindId({navigation}: FindIdScreenProps) {
   }, []);
 
   // 아아디 찾기 버튼을 눌렀을 때 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!name || !name.trim()) {
       return Alert.alert('알림', '이름을 입력해주세요.');
     }

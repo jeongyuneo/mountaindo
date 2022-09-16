@@ -32,7 +32,7 @@ function PhoneNumberChangeForm({
   }, []);
 
   // 전화번호 변경 버튼을 눌렀을 때 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!/^[0-9]{3}-[0-9]{3,4}-[0-9]{4}/.test(phoneNumber)) {
       return Alert.alert(
         '알림',

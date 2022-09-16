@@ -89,7 +89,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
   };
 
   // 비밀번호 찾기 버튼 클릭 시 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
     }

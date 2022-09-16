@@ -50,7 +50,7 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
   }, []);
 
   // 비밀번호 찾기 버튼 클릭 시 유효성 검사
-  const onSubmit = useCallback(async () => {
+  const onSubmit = useCallback(() => {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '기존 비밀번호를 입력해주세요.');
     }
