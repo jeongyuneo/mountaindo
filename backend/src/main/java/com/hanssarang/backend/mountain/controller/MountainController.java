@@ -20,4 +20,10 @@ public class MountainController {
         return ResponseEntity.ok()
                 .body(mountainService.getMountains());
     }
+
+    @GetMapping("/{mountainId}")
+    public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
+        return ResponseEntity.ok()
+                .body(mountainService.getMountain(mountainId));
+    }
 }
