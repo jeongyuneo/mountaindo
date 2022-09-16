@@ -4,7 +4,7 @@ import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingPathResponse;
+import com.hanssarang.backend.hiking.controller.dto.HikingPath;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
 import com.hanssarang.backend.hiking.service.HikingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,7 +62,7 @@ public class HikingControllerTest extends ApiDocument {
                 .height(HEIGHT)
                 .trailName(TRAIL_NAME)
                 .path(IntStream.range(1, 6)
-                        .mapToObj(n -> HikingPathResponse.builder().x(n * 30.0312).y((n / 2.0) * 500.1937).build())
+                        .mapToObj(n -> HikingPath.builder().x(n * 30.0312).y((n / 2.0) * 500.1937).build())
                         .collect(Collectors.toList()))
                 .build();
     }

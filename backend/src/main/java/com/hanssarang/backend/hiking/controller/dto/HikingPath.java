@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HikingPathResponse {
+public class HikingPath {
 
     private double x;
     private double y;
