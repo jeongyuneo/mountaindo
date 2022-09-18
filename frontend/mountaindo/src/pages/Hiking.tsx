@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import NaverMapView, {LayerGroup, Marker, Path} from 'react-native-nmap';
 import Geolocation from '@react-native-community/geolocation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -52,13 +52,10 @@ function Hiking({navigation}: HikingScreenProps) {
     <View>
       <View
         // 화면 전체를 차지하도록 설정
-        style={{
-          width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
-        }}>
+        style={styles.mapContainer}>
         <NaverMapView
           ref={mapView}
-          style={{width: '100%', height: '100%'}}
+          style={styles.mapView}
           zoomControl={false}
           // 지도의 label 설정 -> 등산로 정보 보이도록 설정
           onInitialized={() => {
@@ -135,5 +132,16 @@ function Hiking({navigation}: HikingScreenProps) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  mapContainer: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  mapView: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default Hiking;
