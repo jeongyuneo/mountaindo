@@ -1,8 +1,12 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+// react import
 import React from 'react';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+
+// component import
 import {LoggedInParamList} from '../../AppInner';
 
+// 공지사항 더미 데이터
 const contentList = [
   {
     id: 1,
@@ -26,6 +30,7 @@ const contentList = [
   },
 ];
 
+// Navigation 사용
 type NoticeScreenProps = NativeStackScreenProps<LoggedInParamList, 'Notice'>;
 function Notice({navigation}: NoticeScreenProps) {
   return (
@@ -41,6 +46,7 @@ function Notice({navigation}: NoticeScreenProps) {
       </View>
       <View style={styles.line} />
       <View style={styles.noticeList}>
+        {/* 반복문을 활용하여 공지사항 리스트 제공 */}
         {contentList.map(item => (
           <View style={styles.noticeContent}>
             <Pressable

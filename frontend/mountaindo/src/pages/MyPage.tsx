@@ -1,11 +1,17 @@
+// react import
 import React from 'react';
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+// fontawesom import
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+// component import
 import {LoggedInParamList} from '../../AppInner';
 
+// Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   return (
