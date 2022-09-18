@@ -25,7 +25,7 @@ function ContactUs() {
           <TextInput
             multiline={true}
             numberOfLines={10}
-            style={{height: 200, textAlignVertical: 'top', borderWidth: 0.5}}
+            style={styles.contactContents}
           />
         </View>
         <View>
@@ -67,6 +67,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     color: 'white',
+  },
+  contactContents: {
+    height: 200,
+    textAlignVertical: 'top',
+    borderWidth: 0.5,
   },
 });
 export default ContactUs;
