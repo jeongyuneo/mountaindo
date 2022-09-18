@@ -64,6 +64,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NMFClientId</key>
-	<string>YOUR_CLIENT_ID_HERE</string>
+	<string>@string/NAVER_MAP_KEY</string>
 </dict>
 </plist>
