@@ -63,21 +63,21 @@ function SignIn({navigation}: SignInScreenProps) {
 
   const goNext = email && password;
   return (
-    <View style={styles.container}>
-      <View style={styles.titleSettings}>
-        <View>
-          <Text style={styles.mountainTitle}>MountainDo</Text>
-          <Text style={styles.mountainText}>건강한 삶의 친구!</Text>
-          <Text style={styles.mountainText}>
-            등산로 추천으로 재밌는 코스를 즐겨보세요!
-          </Text>
+    <DismissKeyboardView>
+      <View style={styles.container}>
+        <View style={styles.titleSettings}>
+          <View>
+            <Text style={styles.mountainTitle}>MountainDo</Text>
+            <Text style={styles.mountainText}>건강한 삶의 친구!</Text>
+            <Text style={styles.mountainText}>
+              등산로 추천으로 재밌는 코스를 즐겨보세요!
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <View style={styles.containerSession}>
-        <View>
-          <View style={styles.textPadding}>
-            <DismissKeyboardView>
+        <View style={styles.containerSession}>
+          <View>
+            <View style={styles.textPadding}>
               <TextInput
                 style={styles.textInput}
                 onChangeText={onChangeEmail}
@@ -93,70 +93,70 @@ function SignIn({navigation}: SignInScreenProps) {
                 onSubmitEditing={() => passwordRef.current?.focus()}
                 blurOnSubmit={false}
               />
-            </DismissKeyboardView>
-          </View>
-          <View style={styles.emailInfoCheck}>
-            <Text style={styles.emailInfoText}>{emailCheck}</Text>
+            </View>
+            <View style={styles.emailInfoCheck}>
+              <Text style={styles.emailInfoText}>{emailCheck}</Text>
+            </View>
+
+            <View style={styles.textPadding}>
+              <KeyboardAvoidingView>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
+                  placeholderTextColor="#666"
+                  importantForAutofill="yes"
+                  onChangeText={onChangePassword}
+                  value={password}
+                  autoComplete="password"
+                  textContentType="password"
+                  secureTextEntry
+                  returnKeyType="send"
+                  clearButtonMode="while-editing"
+                  ref={passwordRef}
+                  onSubmitEditing={onSubmit}
+                />
+              </KeyboardAvoidingView>
+            </View>
           </View>
 
-          <View style={styles.textPadding}>
-            <KeyboardAvoidingView>
-              <TextInput
-                style={styles.textInput}
-                placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
-                placeholderTextColor="#666"
-                importantForAutofill="yes"
-                onChangeText={onChangePassword}
-                value={password}
-                autoComplete="password"
-                textContentType="password"
-                secureTextEntry
-                returnKeyType="send"
-                clearButtonMode="while-editing"
-                ref={passwordRef}
-                onSubmitEditing={onSubmit}
-              />
-            </KeyboardAvoidingView>
+          <View style={styles.userInfoCreate}>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('SignUp')}>
+              회원 가입
+            </Text>
+            <Text style={styles.userInfoText}>|</Text>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('FindId')}>
+              아이디 찾기
+            </Text>
+            <Text style={styles.userInfoText}>|</Text>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('FindPassword')}>
+              비밀 번호 찾기
+            </Text>
           </View>
-        </View>
 
-        <View style={styles.userInfoCreate}>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('SignUp')}>
-            회원 가입
-          </Text>
-          <Text style={styles.userInfoText}>|</Text>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('FindId')}>
-            아이디 찾기
-          </Text>
-          <Text style={styles.userInfoText}>|</Text>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('FindPassword')}>
-            비밀 번호 찾기
-          </Text>
-        </View>
-
-        <View style={styles.buttonZone}>
-          <Pressable
-            style={
-              goNext && emailCheck.length === 0
-                ? StyleSheet.compose(
-                    styles.loginButton,
-                    styles.loginButtonActive,
-                  )
-                : styles.loginButton
-            }
-            disabled={!goNext}
-            onPress={onSubmit}>
-            <Text style={styles.loginText}>로그인</Text>
-          </Pressable>
+          <View style={styles.buttonZone}>
+            <Pressable
+              style={
+                goNext && emailCheck.length === 0
+                  ? StyleSheet.compose(
+                      styles.loginButton,
+                      styles.loginButtonActive,
+                    )
+                  : styles.loginButton
+              }
+              disabled={!goNext}
+              onPress={onSubmit}>
+              <Text style={styles.loginText}>로그인</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
-    </View>
+    </DismissKeyboardView>
   );
 }
 
