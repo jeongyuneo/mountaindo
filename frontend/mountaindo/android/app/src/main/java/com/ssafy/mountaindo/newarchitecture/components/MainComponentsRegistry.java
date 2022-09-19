@@ -1,4 +1,4 @@
-package com.mountaindo.newarchitecture.components;
+package com.ssafy.mountaindo.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

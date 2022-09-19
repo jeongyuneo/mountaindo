@@ -51,5 +51,8 @@ allprojects {
         }
         google()
         maven { url 'https://www.jitpack.io' }
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
     }
 }

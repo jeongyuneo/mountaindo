@@ -1,4 +1,4 @@
-package com.mountaindo;
+package com.ssafy.mountaindo;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
