@@ -11,7 +11,7 @@ import Completed from './src/pages/Completed';
 import MyPage from './src/pages/MyPage';
 import Agreement from './src/pages/Agreement';
 import Welcome from './src/pages/Welcome';
-import Survey1 from './src/pages/Survey1';
+import Survey from './src/pages/Survey';
 import Survey2 from './src/pages/Survey2';
 import Survey3 from './src/pages/Survey3';
 import Survey4 from './src/pages/Survey4';
@@ -42,14 +42,15 @@ export type LoggedInParamList = {
 };
 
 export type RootStackParamList = {
+  SignIn: any;
+  Agreement: any;
+  SignUp: any;
   Welcome: any;
-  Survey1: any;
+  Survey: any;
   Survey2: any;
   Survey3: any;
   Survey4: any;
   Survey5: any;
-  SignIn: any;
-  SignUp: any;
   FindId: any;
   FindPassword: any;
 };
@@ -137,11 +138,6 @@ function AppInner() {
               options={{title: '로그인'}}
             />
             <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{title: '회원가입'}}
-            />
-            <Stack.Screen
               name="Agreement"
               component={Agreement}
               options={{title: '약관동의서'}}
@@ -152,8 +148,8 @@ function AppInner() {
               options={{title: '가입환영'}}
             />
             <Stack.Screen
-              name="Survey1"
-              component={Survey1}
+              name="Survey"
+              component={Survey}
               options={{title: '설문조사1'}}
             />
             <Stack.Screen
