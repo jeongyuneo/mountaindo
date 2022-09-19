@@ -1,6 +1,8 @@
 package com.hanssarang.backend.hiking.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
@@ -14,8 +16,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -67,6 +71,17 @@ public class RankingControllerTest extends ApiDocument {
         전체랭킹_조회_성공(resultActions, rankingResponse);
     }
 
+    @DisplayName("전체 랭킹 조회 - 실패")
+    @Test
+    void getRankingsFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).getRankings(anyInt());
+        // when
+        ResultActions resultActions = 전체랭킹_조회_요청(ID);
+        // then
+        전체랭킹_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+    }
+
     private ResultActions 전체랭킹_조회_요청(int memberId) throws Exception {
         return mockMvc.perform(get("/api/v1/rankings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -77,5 +92,12 @@ public class RankingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(rankingResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-rankings-success"));
+    }
+
+    private void 전체랭킹_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-rankings-fail"));
     }
 }
