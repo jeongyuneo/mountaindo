@@ -12,8 +12,8 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // component import
-import {RootStackParamList} from '../../AppInner';
-import DismissKeyboardView from '../component/DismissKeyboardView';
+import {RootStackParamList} from '../../../../AppInner';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
 
 // Navigation 사용
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
@@ -119,25 +119,25 @@ function SignIn({navigation}: SignInScreenProps) {
             </View>
           </View>
 
-        <View style={styles.userInfoCreate}>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('Agreement')}>
-            회원 가입
-          </Text>
-          <Text style={styles.userInfoText}>|</Text>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('FindId')}>
-            아이디 찾기
-          </Text>
-          <Text style={styles.userInfoText}>|</Text>
-          <Text
-            style={styles.userInfoText}
-            onPress={() => navigation.push('FindPassword')}>
-            비밀 번호 찾기
-          </Text>
-        </View>
+          <View style={styles.userInfoCreate}>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('Agreement')}>
+              회원 가입
+            </Text>
+            <Text style={styles.userInfoText}>|</Text>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('FindId')}>
+              아이디 찾기
+            </Text>
+            <Text style={styles.userInfoText}>|</Text>
+            <Text
+              style={styles.userInfoText}
+              onPress={() => navigation.push('FindPassword')}>
+              비밀 번호 찾기
+            </Text>
+          </View>
 
           <View style={styles.buttonZone}>
             <Pressable
