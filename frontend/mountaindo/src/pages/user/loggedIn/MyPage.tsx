@@ -30,11 +30,10 @@ function MyPage({navigation}: MyPageScreenProps) {
             <Text style={styles.myPageText}>마이 페이지</Text>
           </View>
         </View>
-
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
             <Image
-              source={require('../assets/user.png')}
+              source={require('../../../assets/user.png')}
               style={styles.userImg}
             />
             <Text style={styles.userName}>등산짱님</Text>
