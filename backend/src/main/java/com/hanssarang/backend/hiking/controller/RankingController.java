@@ -23,4 +23,9 @@ public class RankingController {
     public ResponseEntity<RankingSearchResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
         return ResponseEntity.ok(rankingService.searchRanking(nickname));
     }
+
+    @GetMapping("/2/{mountainId}")
+    public ResponseEntity<RankingResponse> getRankingsOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
+        return ResponseEntity.ok(rankingService.getRankingsOfMountain(1, mountainId));
+    }
 }
