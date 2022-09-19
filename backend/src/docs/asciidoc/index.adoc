@@ -108,7 +108,7 @@ include::{snippets}/get-rankings-fail/http-response.adoc[]
 
 ==== 전체 랭킹 내 사용자 검색
 
-[cols=2*]
+[%header, cols=2*]
 |===
 |Parameter
 |Type
