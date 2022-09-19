@@ -42,8 +42,7 @@ public class MemberControllerTest extends ApiDocument {
 
     private MemberEmailResponse memberEmailResponse;
     private MemberSignUpRequest memberSignUpRequest;
-//    private MemberRequest memberRequest;
-//    private MemberResponse memberResponse;
+
     @MockBean
     private MemberService memberService;
 
