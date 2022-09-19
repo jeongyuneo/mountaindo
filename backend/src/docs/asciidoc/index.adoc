@@ -171,3 +171,10 @@ include::{snippets}/search-ranking-of-mountain-success/http-request.adoc[]
 
 .response
 include::{snippets}/search-ranking-of-mountain-success/http-response.adoc[]
+
+===== 실패
+.request
+include::{snippets}/search-ranking-of-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-of-mountain-fail/http-response.adoc[]
