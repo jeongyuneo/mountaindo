@@ -8,9 +8,9 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
-import {RootStackParamList} from '../../AppInner';
-import DismissKeyboardView from '../components/DismissKeyboardView';
-import DatePicker from '../components/user/DatePicker';
+import {RootStackParamList} from '../../../../AppInner';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import DatePicker from '../../../components/user/DatePicker';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
