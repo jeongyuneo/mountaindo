@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HikingListResponse {
 
-    private String name;
-    private String address;
-    private String level;
+    private String mountainName;
+    private String lastHikingDate;
+    private String lastHikingTrailName;
 }
