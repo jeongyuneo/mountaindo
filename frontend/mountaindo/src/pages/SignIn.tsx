@@ -114,7 +114,7 @@ function SignIn({navigation}: SignInScreenProps) {
         <View style={styles.userInfoCreate}>
           <Text
             style={styles.userInfoText}
-            onPress={() => navigation.push('SignUp')}>
+            onPress={() => navigation.push('Agreement')}>
             회원 가입
           </Text>
           <Text style={styles.userInfoText}>|</Text>
