@@ -37,6 +37,8 @@ public class RankingControllerTest extends ApiDocument {
     private static final String NICKNAME = "김마운";
     private static final int ACCUMULATED_HEIGHT = 1000;
 
+    private RankingResponse rankingResponse;
+
     @MockBean
     private RankingService rankingService;
 
