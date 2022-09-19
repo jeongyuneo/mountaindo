@@ -3,10 +3,7 @@ package com.hanssarang.backend.hiking.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingPath;
-import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
-import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
+import com.hanssarang.backend.hiking.controller.dto.*;
 import com.hanssarang.backend.hiking.service.HikingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,6 +48,7 @@ public class HikingControllerTest extends ApiDocument {
 
     private HikingRequest hikingRequest;
     private List<HikingListResponse> hikingListResponse;
+    private List<CompletedHikingListResponse> completedHikingListResponse;
     private HikingResponse hikingResponse;
 
     @MockBean
@@ -72,6 +70,15 @@ public class HikingControllerTest extends ApiDocument {
                         .mountainName(MOUNTAIN_NAME)
                         .lastHikingDate(LAST_HIKING_DATE)
                         .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
+                        .build())
+                .collect(Collectors.toList());
+        completedHikingListResponse = IntStream.range(0, 3)
+                .mapToObj(n -> CompletedHikingListResponse.builder()
+                        .mountainName(MOUNTAIN_NAME)
+                        .lastHikingDate(LAST_HIKING_DATE)
+                        .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
+                        .x(X)
+                        .y(Y)
                         .build())
                 .collect(Collectors.toList());
         hikingResponse = HikingResponse.builder()
@@ -132,7 +139,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getCompletedHikingsSuccess() throws Exception {
         // given
-        willReturn(hikingListResponse).given(hikingService).getCompletedHikings(anyInt());
+        willReturn(completedHikingListResponse).given(hikingService).getCompletedHikings(anyInt());
         // when
         ResultActions resultActions = 완등목록_조회_요청();
         // then
