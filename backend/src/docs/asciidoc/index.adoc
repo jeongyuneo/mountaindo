@@ -130,3 +130,11 @@ include::{snippets}/search-ranking-fail/http-request.adoc[]
 
 .response
 include::{snippets}/search-ranking-fail/http-response.adoc[]
+
+==== 전체 랭킹 조회
+===== 성공
+.request
+include::{snippets}/get-rankings-of-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-of-mountain-success/http-response.adoc[]
