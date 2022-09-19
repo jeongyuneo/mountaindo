@@ -1,3 +1,5 @@
+import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
@@ -8,6 +10,8 @@ type Survey3ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey3'>;
 function Survey3({navigation}: Survey3ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
+
+  const canGoNext = isChecked1 || isChecked2;
 
   return (
     <View>
@@ -48,9 +52,14 @@ function Survey3({navigation}: Survey3ScreenProps) {
         )}
       </View>
       <Pressable
-        style={styles.nextButton}
+        style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
+        disabled={!canGoNext}
         onPress={() => navigation.navigate('Survey4')}>
-        <Text>Next</Text>
+        <FontAwesomeIcon
+          icon={faArrowRight}
+          size={30}
+          style={canGoNext ? styles.arrowIconActive : styles.arrowIcon}
+        />
       </Pressable>
     </View>
   );
@@ -111,10 +120,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nextButton: {
+  arrowButton: {
+    width: 50,
+    height: 50,
     marginTop: 50,
-    marginRight: 20,
+    marginLeft: 280,
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: 'grey',
     alignItems: 'flex-end',
+  },
+  arrowIcon: {
+    color: 'white',
+  },
+  arrowButtonActive: {
+    width: 50,
+    height: 50,
+    marginTop: 50,
+    marginLeft: 280,
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: 'black',
+    alignItems: 'flex-end',
+  },
+  arrowIconActive: {
+    color: 'white',
   },
 });
 
