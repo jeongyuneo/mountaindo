@@ -3,9 +3,9 @@ package com.hanssarang.backend.hiking.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
+import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -102,6 +102,17 @@ public class RankingControllerTest extends ApiDocument {
         랭킹내_사용자_검색_성공(resultActions, rankingSearchResponse);
     }
 
+    @DisplayName("랭킹 내 사용자 검색 - 실패")
+    @Test
+    void searchRankingFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).searchRanking(anyString());
+        // when
+        ResultActions resultActions = 랭킹내_사용자_검색_요청(NICKNAME);
+        // then
+        랭킹내_사용자_검색_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+    }
+
     private ResultActions 전체랭킹_조회_요청(int memberId) throws Exception {
         return mockMvc.perform(get("/api/v1/rankings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -131,5 +142,12 @@ public class RankingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(rankingSearchResponse)))
                 .andDo(print())
                 .andDo(toDocument("search-ranking-success"));
+    }
+
+    private void 랭킹내_사용자_검색_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("search-ranking-fail"));
     }
 }
