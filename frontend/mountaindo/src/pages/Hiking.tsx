@@ -38,7 +38,7 @@ function Hiking({navigation}: HikingScreenProps) {
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
     return (
-      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      <View style={styles.mapLoading}>
         <Text>내 위치를 로딩 중입니다. 권한을 허용했는지 확인해주세요.</Text>
       </View>
     );
@@ -141,6 +141,11 @@ const styles = StyleSheet.create({
   mapView: {
     width: '100%',
     height: '100%',
+  },
+  mapLoading: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
 
