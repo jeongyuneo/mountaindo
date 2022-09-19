@@ -5,52 +5,78 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
 
-type Survey5ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey5'>;
+type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
 
-function Survey3({navigation}: Survey5ScreenProps) {
+function Survey3({navigation}: Survey1ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
-
+  const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 산 종류 </Text>
+        <Text style={styles.title}>선호하는 산 종류</Text>
         <Text style={styles.subTitle}>어떤 산의 지형을 좋아하시나요?</Text>
       </View>
-      <View>
-        {isChecked1 ? (
+      {isChecked === 0 ? (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
+            <Text style={styles.answerBoxText}>돌산</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
+            <Text style={styles.answerBoxText}>흙산</Text>
+          </Pressable>
+        </View>
+      ) : isChecked === 1 ? (
+        <View>
           <Pressable
             style={styles.checkedBox}
-            onPress={() => setChecked1(false)}>
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
             <Text style={styles.checkedBoxText}>돌산</Text>
           </Pressable>
-        ) : !isChecked2 ? (
-          <Pressable style={styles.answerBox} onPress={() => setChecked1(true)}>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
+            <Text style={styles.answerBoxText}>흙산</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
             <Text style={styles.answerBoxText}>돌산</Text>
           </Pressable>
-        ) : (
-          <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>돌산</Text>
-          </Pressable>
-        )}
-        {isChecked2 ? (
           <Pressable
             style={styles.checkedBox}
-            onPress={() => setChecked2(false)}>
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
             <Text style={styles.checkedBoxText}>흙산</Text>
           </Pressable>
-        ) : !isChecked1 ? (
-          <Pressable style={styles.answerBox} onPress={() => setChecked2(true)}>
-            <Text style={styles.answerBoxText}>흙산</Text>
-          </Pressable>
-        ) : (
-          <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>흙산</Text>
-          </Pressable>
-        )}
-      </View>
+        </View>
+      )}
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
@@ -97,7 +123,6 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 15,
   },
   checkedBox: {
     padding: 20,
@@ -115,10 +140,14 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  nextButton: {
+    marginTop: 50,
+    marginRight: 20,
+    alignItems: 'flex-end',
   },
   arrowButton: {
     width: 50,
