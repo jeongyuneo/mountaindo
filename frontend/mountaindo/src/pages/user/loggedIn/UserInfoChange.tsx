@@ -3,8 +3,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {LoggedInParamList} from '../../AppInner';
-import DismissKeyboardView from '../components/DismissKeyboardView';
+import {LoggedInParamList} from '../../../../AppInner';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
 
 // navigation을 사용하기 위해 type 설정
 type UserInfoChangeScreenProps = NativeStackScreenProps<
