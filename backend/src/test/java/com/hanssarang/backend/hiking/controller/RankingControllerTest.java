@@ -124,6 +124,17 @@ public class RankingControllerTest extends ApiDocument {
         산랭킹_조회_성공(resultActions, rankingResponse);
     }
 
+    @DisplayName("산 랭킹 조회 - 실패")
+    @Test
+    void getRankingsOfMountainFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).getRankingsOfMountain(anyInt(), anyInt());
+        // when
+        ResultActions resultActions = 산랭킹_조회_요청(ID);
+        // then
+        산랭킹_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+    }
+
     private ResultActions 전체랭킹_조회_요청(int memberId) throws Exception {
         return mockMvc.perform(get("/api/v1/rankings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -172,5 +183,12 @@ public class RankingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(rankingResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-rankings-of-mountain-success"));
+    }
+
+    private void 산랭킹_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-rankings-of-mountain-fail"));
     }
 }
