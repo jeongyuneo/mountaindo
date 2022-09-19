@@ -34,7 +34,7 @@ function MyPage({navigation}: MyPageScreenProps) {
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
             <Image
-              source={require('../assets/user.png')}
+              source={require('../../../assets/user.png')}
               style={styles.userImg}
             />
             <Text style={styles.userName}>등산짱님</Text>
