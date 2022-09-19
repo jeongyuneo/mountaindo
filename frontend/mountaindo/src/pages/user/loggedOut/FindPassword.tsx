@@ -8,8 +8,8 @@ import {
   Alert,
   StyleSheet,
 } from 'react-native';
-import {RootStackParamList} from '../../AppInner';
-import DismissKeyboardView from '../components/DismissKeyboardView';
+import {RootStackParamList} from '../../../../AppInner';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
 
 // navigation을 사용하기 위해 type 설정
 type FindPasswordScreenProps = NativeStackScreenProps<

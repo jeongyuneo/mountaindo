@@ -4,7 +4,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 
 // component import
-import {LoggedInParamList} from '../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 
 // 공지사항 더미 데이터
 const contentList = [
