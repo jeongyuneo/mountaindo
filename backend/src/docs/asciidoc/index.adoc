@@ -123,3 +123,10 @@ include::{snippets}/search-ranking-success/http-request.adoc[]
 
 .response
 include::{snippets}/search-ranking-success/http-response.adoc[]
+
+===== 실패
+.request
+include::{snippets}/search-ranking-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-fail/http-response.adoc[]
