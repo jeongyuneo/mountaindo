@@ -30,7 +30,6 @@ function SignUp({navigation}: SignUpScreenProps) {
   const nameRef = useRef<TextInput | null>(null);
   const nickNameRef = useRef<TextInput | null>(null);
   const phoneNumberRef = useRef<TextInput | null>(null);
-  const birthDayRef = useRef<TextInput | null>(null);
   const canGoNext =
     email &&
     certification &&
@@ -273,7 +272,6 @@ function SignUp({navigation}: SignUpScreenProps) {
             returnKeyType="next"
             clearButtonMode="while-editing"
             ref={phoneNumberRef}
-            onSubmitEditing={() => birthDayRef.current?.focus()}
             blurOnSubmit={false}
           />
         </View>
