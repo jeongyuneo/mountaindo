@@ -79,6 +79,7 @@ public class HikingControllerTest extends ApiDocument {
                 .address(ADDRESS)
                 .height(HEIGHT)
                 .trailName(TRAIL_NAME)
+                .level(LEVEL)
                 .path(hikingPath)
                 .build();
     }
