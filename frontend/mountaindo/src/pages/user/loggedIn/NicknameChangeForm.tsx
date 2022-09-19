@@ -8,7 +8,7 @@ import {
   Text,
   Alert,
 } from 'react-native';
-import {LoggedInParamList} from '../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 
 // navigation을 사용하기 위해 type 설정
 type NicknameChangeFormScreenProps = NativeStackScreenProps<

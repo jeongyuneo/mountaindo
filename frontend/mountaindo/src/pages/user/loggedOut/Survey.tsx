@@ -4,7 +4,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {RootStackParamList} from '../../AppInner';
-import Survey1 from '../components/Survey1';
+import Survey1 from '../components/user/Survey1';
 
 type SurveyScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey'>;
 

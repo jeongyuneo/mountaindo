@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
-import DismissKeyboardView from '../component/DismissKeyboardView';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
 
 function ContactUs() {
   return (
