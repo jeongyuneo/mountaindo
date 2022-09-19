@@ -5,6 +5,7 @@ import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
+import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +19,7 @@ import java.util.stream.IntStream;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -38,11 +40,10 @@ public class RankingControllerTest extends ApiDocument {
     private static final int ACCUMULATED_HEIGHT = 1000;
 
     private RankingResponse rankingResponse;
+    private RankingSearchResponse rankingSearchResponse;
 
     @MockBean
     private RankingService rankingService;
-
-    private RankingResponse rankingResponse;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +60,12 @@ public class RankingControllerTest extends ApiDocument {
                                 .accumulatedHeight(ACCUMULATED_HEIGHT * 100 / n)
                                 .build())
                         .collect(Collectors.toList()))
+                .build();
+        rankingSearchResponse = RankingSearchResponse.builder()
+                .imageUrl(IMAGE_URL)
+                .ranking(RANKING)
+                .nickname(NICKNAME)
+                .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .build();
     }
 
@@ -84,6 +91,28 @@ public class RankingControllerTest extends ApiDocument {
         전체랭킹_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
     }
 
+    @DisplayName("전체 랭킹 내 사용자 검색 - 성공")
+    @Test
+    void searchRankingSuccess() throws Exception {
+        // given
+        willReturn(rankingSearchResponse).given(rankingService).searchRanking(anyString());
+        // when
+        ResultActions resultActions = 전체랭킹내_사용자_검색_요청(NICKNAME);
+        // then
+        전체랭킹내_사용자_검색_성공(resultActions, rankingSearchResponse);
+    }
+
+    @DisplayName("전체 랭킹 내 사용자 검색 - 실패")
+    @Test
+    void searchRankingFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).searchRanking(anyString());
+        // when
+        ResultActions resultActions = 전체랭킹내_사용자_검색_요청(NICKNAME);
+        // then
+        전체랭킹내_사용자_검색_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+    }
+
     private ResultActions 전체랭킹_조회_요청(int memberId) throws Exception {
         return mockMvc.perform(get("/api/v1/rankings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -101,5 +130,24 @@ public class RankingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-rankings-fail"));
+    }
+
+    private ResultActions 전체랭킹내_사용자_검색_요청(String nickname) throws Exception {
+        return mockMvc.perform(get("/api/v1/rankings/1?nickname=" + nickname)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 전체랭킹내_사용자_검색_성공(ResultActions resultActions, RankingSearchResponse rankingSearchResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(rankingSearchResponse)))
+                .andDo(print())
+                .andDo(toDocument("search-ranking-success"));
+    }
+
+    private void 전체랭킹내_사용자_검색_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("search-ranking-fail"));
     }
 }
