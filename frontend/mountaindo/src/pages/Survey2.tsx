@@ -16,8 +16,10 @@ function Survey2({navigation}: Survey2ScreenProps) {
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산지역 선호도 </Text>
-        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
+        <Text style={styles.title}>등산 레벨 </Text>
+        <Text style={styles.subTitle}>
+          내가 생각하는 나의 등산 레벨은 어느 정도인가요?
+        </Text>
       </View>
       <View>
         {isChecked1 ? (
@@ -25,19 +27,19 @@ function Survey2({navigation}: Survey2ScreenProps) {
             style={styles.checkedBox}
             onPress={() => setChecked1(false)}>
             <Text style={styles.checkedBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+              등린이 - 낮고 완만한 산이 좋아요!
             </Text>
           </Pressable>
         ) : !isChecked2 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked1(true)}>
             <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+              등린이 - 낮고 완만한 산이 좋아요!
             </Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
             <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+              등린이 - 낮고 완만한 산이 좋아요!
             </Text>
           </Pressable>
         )}
@@ -46,19 +48,19 @@ function Survey2({navigation}: Survey2ScreenProps) {
             style={styles.checkedBox}
             onPress={() => setChecked2(false)}>
             <Text style={styles.checkedBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
+              등소년 - 등산이면 적당한 운동이 좋아요!
             </Text>
           </Pressable>
         ) : !isChecked1 ? (
           <Pressable style={styles.answerBox} onPress={() => setChecked2(true)}>
             <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
+              등소년 - 등산이면 적당한 운동이 좋아요!
             </Text>
           </Pressable>
         ) : (
           <Pressable style={styles.answerBox}>
             <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
+              등소년 - 등산이면 적당한 운동이 좋아요!
             </Text>
           </Pressable>
         )}
