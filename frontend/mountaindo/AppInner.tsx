@@ -26,6 +26,9 @@ import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import TrackingRoute from './src/pages/hiking/TrackingRoute';
+import TrackingEnd from './src/pages/hiking/TrackingEnd';
 
 export type LoggedInParamList = {
   Main: any;
@@ -39,6 +42,8 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
+  TrackingRoute: any;
+  TrackingEnd: any;
 };
 
 export type RootStackParamList = {
@@ -56,7 +61,30 @@ export type RootStackParamList = {
 };
 
 const Tab = createBottomTabNavigator();
+const Top = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
+
+function TopTab() {
+  return (
+    <Top.Navigator>
+      <Top.Screen
+        name="Hiking"
+        component={Hiking}
+        options={{title: '등산 시작'}}
+      />
+      <Top.Screen
+        name="TrackingRoute"
+        component={TrackingRoute}
+        options={{title: '등산 기록'}}
+      />
+      <Top.Screen
+        name="TrackingEnd"
+        component={TrackingEnd}
+        options={{title: '등산 종료'}}
+      />
+    </Top.Navigator>
+  );
+}
 
 function BottomTab() {
   return (
@@ -64,8 +92,8 @@ function BottomTab() {
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
       <Tab.Screen
         name="Hiking"
-        component={Hiking}
-        options={{title: ' Hiking'}}
+        component={TopTab}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="Mountain"
@@ -97,6 +125,7 @@ function AppInner() {
         <>
           <Stack.Group screenOptions={{headerShown: false}}>
             <Stack.Screen name="BottomTab" component={BottomTab} />
+            {/* <Stack.Screen name="Topab" component={TopTab} /> */}
           </Stack.Group>
           <Stack.Group>
             <Stack.Screen
