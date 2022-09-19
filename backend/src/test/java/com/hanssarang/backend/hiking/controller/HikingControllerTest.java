@@ -47,8 +47,8 @@ public class HikingControllerTest extends ApiDocument {
     private static final String USE_TIME = "16:40:20";
 
     private HikingRequest hikingRequest;
-    private List<HikingListResponse> hikingListResponse;
-    private List<CompletedHikingListResponse> completedHikingListResponse;
+    private List<HikingListResponse> hikingListResponses;
+    private List<CompletedHikingListResponse> completedHikingListResponses;
     private HikingResponse hikingResponse;
 
     @MockBean
@@ -65,14 +65,14 @@ public class HikingControllerTest extends ApiDocument {
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .useTime(USE_TIME)
                 .build();
-        hikingListResponse = IntStream.range(0, 3)
+        hikingListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> HikingListResponse.builder()
                         .mountainName(MOUNTAIN_NAME)
                         .lastHikingDate(LAST_HIKING_DATE)
                         .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
                         .build())
                 .collect(Collectors.toList());
-        completedHikingListResponse = IntStream.range(0, 3)
+        completedHikingListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> CompletedHikingListResponse.builder()
                         .mountainName(MOUNTAIN_NAME)
                         .lastHikingDate(LAST_HIKING_DATE)
@@ -95,11 +95,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getHikingsSuccess() throws Exception {
         // given
-        willReturn(hikingListResponse).given(hikingService).getHikings(anyInt());
+        willReturn(hikingListResponses).given(hikingService).getHikings(anyInt());
         // when
         ResultActions resultActions = 등산목록_조회_요청();
         // then
-        등산목록_조회_성공(resultActions, hikingListResponse);
+        등산목록_조회_성공(resultActions, hikingListResponses);
     }
 
     @DisplayName("등산 목록 조회 - 사용자 조회 실패")
@@ -139,11 +139,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getCompletedHikingsSuccess() throws Exception {
         // given
-        willReturn(completedHikingListResponse).given(hikingService).getCompletedHikings(anyInt());
+        willReturn(completedHikingListResponses).given(hikingService).getCompletedHikings(anyInt());
         // when
         ResultActions resultActions = 완등목록_조회_요청();
         // then
-        완등목록_조회_성공(resultActions, hikingListResponse);
+        완등목록_조회_성공(resultActions, hikingListResponses);
     }
 
     @DisplayName("완등 목록 조회 - 사용자 조회 실패")
