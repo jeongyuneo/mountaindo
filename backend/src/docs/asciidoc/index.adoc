@@ -90,3 +90,12 @@ include::{snippets}/create-hiking-fail/http-request.adoc[]
 
 .response
 include::{snippets}/create-hiking-fail/http-response.adoc[]
+
+=== 랭킹 관련 기능
+==== 전체 랭킹 조회
+===== 성공
+.request
+include::{snippets}/get-rankings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-success/http-response.adoc[]
