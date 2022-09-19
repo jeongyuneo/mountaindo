@@ -8,9 +8,9 @@ import {
   Alert,
   StyleSheet,
 } from 'react-native';
-import {RootStackParamList} from '../../AppInner';
-import DatePicker from '../component/DatePicker';
-import DismissKeyboardView from '../component/DismissKeyboardView';
+import {RootStackParamList} from '../../../../AppInner';
+import DatePicker from '../../../components/user/DatePicker';
+import DismissKeyboardView from '../../../components/DismissKeyboardView';
 
 // navigation을 사용하기 위해 type 설정
 type FindIdScreenProps = NativeStackScreenProps<RootStackParamList, 'FindId'>;

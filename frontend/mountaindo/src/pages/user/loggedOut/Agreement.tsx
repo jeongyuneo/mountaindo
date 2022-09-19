@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import AgreementModal1 from '../components/AgreementModal1';
-import AgreementModal2 from '../components/AgreementModal2';
-import AgreementModal3 from '../components/AgreementModal3';
+import AgreementModal1 from '../../../components/user/AgreementModal1';
+import AgreementModal2 from '../../../components/user/AgreementModal2';
+import AgreementModal3 from '../../../components/user/AgreementModal3';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../../AppInner';
+import {RootStackParamList} from '../../../../AppInner';
 
 type AgreementScreenProps = NativeStackScreenProps<
   RootStackParamList,

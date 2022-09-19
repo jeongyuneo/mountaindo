@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import {LoggedInParamList} from '../../AppInner';
-import DismissKeyboardView from '../component/DismissKeyboardView';
+import DismissKeyboardView from '../components/DismissKeyboardView';
 
 // navigation을 사용하기 위해 type 설정
 type PasswordChangeScreenProps = NativeStackScreenProps<

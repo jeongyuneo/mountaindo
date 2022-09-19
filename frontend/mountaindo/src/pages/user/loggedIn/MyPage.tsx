@@ -9,7 +9,7 @@ import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
 
 // component import
-import {LoggedInParamList} from '../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
