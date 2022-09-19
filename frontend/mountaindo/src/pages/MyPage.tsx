@@ -1,11 +1,17 @@
+// react import
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+// fontawesom import
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
+// component import
 import {LoggedInParamList} from '../../AppInner';
 
+// Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   return (
@@ -56,32 +62,38 @@ function MyPage({navigation}: MyPageScreenProps) {
       <View style={styles.containerBottom}>
         <View style={styles.mentStart}>
           <View style={styles.line} />
-          <View style={styles.menuStyle}>
-            <Text style={styles.goMenuText}>개인 정보 수정</Text>
-            <FontAwesomeIcon
-              icon={faAngleRight}
-              size={15}
-              style={styles.angleIcon}
-            />
-          </View>
+          <Pressable onPress={() => navigation.push('UserInfoChange')}>
+            <View style={styles.menuStyle}>
+              <Text style={styles.goMenuText}>개인 정보 수정</Text>
+              <FontAwesomeIcon
+                icon={faAngleRight}
+                size={15}
+                style={styles.angleIcon}
+              />
+            </View>
+          </Pressable>
 
-          <View style={styles.menuStyle}>
-            <Text style={styles.goMenuText}>비밀번호 변경</Text>
-            <FontAwesomeIcon
-              icon={faAngleRight}
-              size={15}
-              style={styles.angleIcon}
-            />
-          </View>
+          <Pressable onPress={() => navigation.push('PasswordChange')}>
+            <View style={styles.menuStyle}>
+              <Text style={styles.goMenuText}>비밀번호 변경</Text>
+              <FontAwesomeIcon
+                icon={faAngleRight}
+                size={15}
+                style={styles.angleIcon}
+              />
+            </View>
+          </Pressable>
 
-          <View style={styles.menuStyle}>
-            <Text style={styles.goMenuText}>공지사항</Text>
-            <FontAwesomeIcon
-              icon={faAngleRight}
-              size={15}
-              style={styles.angleIcon}
-            />
-          </View>
+          <Pressable onPress={() => navigation.push('Notice')}>
+            <View style={styles.menuStyle}>
+              <Text style={styles.goMenuText}>공지사항</Text>
+              <FontAwesomeIcon
+                icon={faAngleRight}
+                size={15}
+                style={styles.angleIcon}
+              />
+            </View>
+          </Pressable>
 
           <View style={styles.menuStyle}>
             <Text style={styles.goMenuText}>로그아웃</Text>
