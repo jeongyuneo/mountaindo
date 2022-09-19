@@ -144,3 +144,30 @@ include::{snippets}/get-rankings-of-mountain-fail/http-request.adoc[]
 
 .response
 include::{snippets}/get-rankings-of-mountain-fail/http-response.adoc[]
+
+==== 랭킹 내 사용자 검색
+
+[%header, cols=2*]
+|===
+|PathVariable
+|Type
+
+|mountainId
+|int
+|===
+
+[%header, cols=2*]
+|===
+|Parameter
+|Type
+
+|nickname
+|String
+|===
+
+===== 성공
+.request
+include::{snippets}/search-ranking-of-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-of-mountain-success/http-response.adoc[]
