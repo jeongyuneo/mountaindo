@@ -4,18 +4,75 @@ import CheckBox from '@react-native-community/checkbox';
 import AgreementModal1 from '../components/AgreementModal1';
 import AgreementModal2 from '../components/AgreementModal2';
 import AgreementModal3 from '../components/AgreementModal3';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../AppInner';
 
-interface Props {
-  navigation: any;
-}
+type AgreementScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Agreement'
+>;
 
-function Agreement({navigation}: Props) {
+function Agreement({navigation}: AgreementScreenProps) {
   const [isSelected1, setSelection1] = useState(false);
   const [isSelected2, setSelection2] = useState(false);
   const [isSelected3, setSelection3] = useState(false);
+  const [isSelectedAll, setSelectionAll] = useState(false);
+
+  const checkBox = [{id: 0}, {id: 1}, {id: 2}];
+  const [checkItems, setCheckItems] = useState<number[]>([]); // 체크된 아이템을 담을 배열
   const [visibleModal1, setVisibleModal1] = useState(false);
   const [visibleModal2, setVisibleModal2] = useState(false);
   const [visibleModal3, setVisibleModal3] = useState(false);
+
+  const canGoNext = isSelected1 && isSelected2 && isSelected3 && isSelectedAll;
+
+  // 체크박스 단일 선택
+  const singleCheck = (checked: boolean, id: number) => {
+    if (checked) {
+      setCheckItems(prev => [...prev, id]);
+      if (id === 0) {
+        setSelection1(checked);
+      } else if (id === 1) {
+        setSelection2(checked);
+      } else {
+        setSelection3(checked);
+      }
+      if (checkItems.length === 2) {
+        setSelectionAll(checked);
+      }
+    } else {
+      setCheckItems(checkItems.filter(el => el !== id));
+      if (id === 0) {
+        setSelection1(checked);
+      } else if (id === 1) {
+        setSelection2(checked);
+      } else {
+        setSelection3(checked);
+      }
+      if (checkItems.length < 4) {
+        setSelectionAll(checked);
+      }
+    }
+  };
+
+  // 체크박스 전체 선택
+  const allCheck = (checked: boolean) => {
+    if (checked) {
+      const idArray: number[] | ((prevState: never[]) => never[]) = [];
+      checkBox.forEach(el => idArray.push(el.id));
+      setCheckItems(idArray);
+      setSelection1(checked);
+      setSelection2(checked);
+      setSelection3(checked);
+      setSelectionAll(checked);
+    } else {
+      setCheckItems([]);
+      setSelection1(checked);
+      setSelection2(checked);
+      setSelection3(checked);
+      setSelectionAll(checked);
+    }
+  };
 
   return (
     <View>
@@ -37,7 +94,7 @@ function Agreement({navigation}: Props) {
             <CheckBox
               disabled={false}
               value={isSelected1}
-              onValueChange={newValue => setSelection1(newValue)}
+              onValueChange={checked => singleCheck(checked, 0)}
             />
           </Pressable>
           {visibleModal1 && (
@@ -57,7 +114,7 @@ function Agreement({navigation}: Props) {
             <CheckBox
               disabled={false}
               value={isSelected2}
-              onValueChange={newValue => setSelection2(newValue)}
+              onValueChange={checked => singleCheck(checked, 1)}
             />
           </Pressable>
           {visibleModal2 && (
@@ -77,7 +134,7 @@ function Agreement({navigation}: Props) {
             <CheckBox
               disabled={false}
               value={isSelected3}
-              onValueChange={newValue => setSelection3(newValue)}
+              onValueChange={checked => singleCheck(checked, 2)}
             />
           </Pressable>
           {visibleModal3 && (
@@ -92,12 +149,17 @@ function Agreement({navigation}: Props) {
         </View>
       </View>
       <View style={styles.agreeAll}>
-        <CheckBox disabled={false} />
+        <CheckBox
+          disabled={false}
+          value={isSelectedAll}
+          onValueChange={checked => allCheck(checked)}
+        />
         <Text style={styles.agreeAllText}>모두 동의합니다.</Text>
       </View>
       <View style={styles.buttonZone}>
         <Pressable
-          style={styles.startButton}
+          style={canGoNext ? styles.startButtonActive : styles.startButton}
+          disabled={!canGoNext}
           onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.startButtonText}>시작하기</Text>
         </Pressable>
@@ -166,6 +228,13 @@ const styles = StyleSheet.create({
   },
   startButtonText: {
     color: 'white',
+  },
+  startButtonActive: {
+    backgroundColor: 'black',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 10,
   },
 });
 
