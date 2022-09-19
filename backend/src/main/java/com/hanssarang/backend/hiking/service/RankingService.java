@@ -14,4 +14,8 @@ public class RankingService {
     public RankingSearchResponse searchRanking(String nickname) {
         return null;
     }
+
+    public RankingResponse getRankingsOfMountain(int memberId, int mountainId) {
+        return null;
+    }
 }
