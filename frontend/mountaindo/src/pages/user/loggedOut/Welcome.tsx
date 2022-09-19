@@ -19,7 +19,7 @@ function Welcome({navigation}: WelcomeScreenProps) {
 
         <Pressable
           style={styles.arrowButton}
-          onPress={() => navigation.navigate('Survey')}>
+          onPress={() => navigation.navigate('Survey1')}>
           <FontAwesomeIcon
             icon={faArrowRight}
             size={30}
