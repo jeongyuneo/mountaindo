@@ -8,7 +8,7 @@ endif::[]
 :toc: left
 :toclevels: 4
 :author: MountainDo
-:email: https://github.com/Team-Minionz/springboot-study-project-qrna
+:email: https://mountaindo.ssafy.io
 
 == Common Responses
 === Common Status Codes
