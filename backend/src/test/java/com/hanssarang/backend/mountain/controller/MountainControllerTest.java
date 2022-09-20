@@ -58,7 +58,7 @@ class MountainControllerTest extends ApiDocument {
                 .collect(Collectors.toList());
     }
 
-    @DisplayName("산 전체 목록 조회 - 성공")
+    @DisplayName("산 목록 조회 - 성공")
     @Test
     void getMountainsSuccess() throws Exception {
         // given
@@ -69,7 +69,7 @@ class MountainControllerTest extends ApiDocument {
         산목록_조회_성공(resultActions, mountainResponses);
     }
 
-    @DisplayName("산 전체 목록 조회 -실패")
+    @DisplayName("산 목록 조회 - 실패")
     @Test
     void getMountainsFail() throws Exception {
         // given
