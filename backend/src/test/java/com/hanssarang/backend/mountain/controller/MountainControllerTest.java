@@ -156,6 +156,17 @@ class MountainControllerTest extends ApiDocument {
         등산로검색_성공(resultActions, mountainListResponses);
     }
 
+    @DisplayName("등산로 검색 - 실패")
+    @Test
+    void searchTrailFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(FAIL_TO_SEARCH_TRAIL)).given(mountainService).searchTrail(anyString());
+        // when
+        ResultActions resultActions = 등산로검색_요청(TRAIL_NAME);
+        // then
+        등산로검색_실패(resultActions, new Message(FAIL_TO_SEARCH_TRAIL));
+    }
+
     private ResultActions 산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/mountains")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -223,5 +234,12 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(mountainListResponses)))
                 .andDo(print())
                 .andDo(toDocument("search-trail-success"));
+    }
+
+    private void 등산로검색_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("search-trail-fail"));
     }
 }
