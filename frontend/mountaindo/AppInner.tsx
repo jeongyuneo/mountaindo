@@ -3,10 +3,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
-
 import Main from './src/pages/Main';
 import Hiking from './src/pages/Hiking';
-import Mountain from './src/pages/Mountain';
+import Mountain from './src/pages/mountain/Mountain';
+import MountainDetail from './src/pages/mountain/MountainDetail';
 import Completed from './src/pages/Completed';
 import MyPage from './src/pages/user/loggedIn/MyPage';
 import Agreement from './src/pages/user/loggedOut/Agreement';
@@ -40,6 +40,7 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
+  MountainDetail: any;
 };
 
 export type RootStackParamList = {
@@ -129,6 +130,11 @@ function AppInner() {
               name="ContactUs"
               component={ContactUs}
               options={{title: '문의하기'}}
+            />
+            <Stack.Screen
+              name="MountainDetail"
+              component={MountainDetail}
+              options={{title: '산 상세 정보', headerShown: false}}
             />
           </Stack.Group>
         </>
