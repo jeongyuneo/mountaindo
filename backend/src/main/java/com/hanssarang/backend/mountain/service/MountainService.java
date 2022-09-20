@@ -17,6 +17,10 @@ public class MountainService {
         return null;
     }
 
+    public List<MountainListResponse> searchMountainOrTrail(String name) {
+        return null;
+    }
+
     public List<MountainListResponse> searchMountain(String name) {
         return null;
     }
