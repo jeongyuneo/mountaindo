@@ -218,7 +218,7 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private void 산검색_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isNotFound())
+        resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("search-mountain-fail"));
