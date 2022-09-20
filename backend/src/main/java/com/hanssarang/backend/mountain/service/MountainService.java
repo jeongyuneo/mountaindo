@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class MountainService {
 
-    public List<MountainListResponse> getMountains() {
+    public List<MountainListResponse> getMountains(String sort) {
         return null;
     }
 
