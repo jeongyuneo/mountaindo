@@ -9,27 +9,11 @@ import java.util.List;
 public class MountainService {
 
     public List<MountainResponse> getMountains() {
-        List<Mountain> mountains = mountainRepository.findAll();
-        return mountains.stream()
-                .map(mountain -> MountainResponse.builder()
-                        .mountainId(mountain.getMountainId())
-                        .name(mountain.getName())
-                        .height(mountain.getHeight())
-                        .address(mountain.getAddress())
-                        .imageUrl(mountain.getImageUrl())
-                        .build())
-                .collect(Collectors.toList());
+        return null;
     }
 
     public MountainResponse getMountain(int mountainId) {
-        MountainResponse mountainResponse = MountainResponse.builder()
-                .mountainId(1)
-                .name("북한산")
-                .height(836)
-                .address("서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시")
-                .imageUrl("http://www.forest.go.kr/newkfsweb/cmm/fms/getImage.do?fileSn=1&atchFileId=FILE_000000000424203")
-                .build();
-        return mountainResponse;
+        return null;
     }
 
     public MountainResponse searchMountain(String name) {
