@@ -1,5 +1,6 @@
 package com.hanssarang.backend.mountain.controller;
 
+import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class MountainController {
     private final MountainService mountainService;
 
     @GetMapping
-    public ResponseEntity<List<MountainResponse>> getMountains(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<MountainListResponse>> getMountains(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(mountainService.getMountains());
     }
 
@@ -26,7 +27,7 @@ public class MountainController {
     }
 
     @GetMapping("/2")
-    public ResponseEntity<MountainResponse> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
+    public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
         return ResponseEntity.ok(mountainService.searchMountain(name));
     }
 }
