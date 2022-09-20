@@ -13,4 +13,5 @@ public class MountainListResponse {
     private int height;
     private String address;
     private String imageUrl;
+    private boolean isHot;
 }
