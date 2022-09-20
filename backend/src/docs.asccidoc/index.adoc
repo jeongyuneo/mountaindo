@@ -84,7 +84,7 @@ include::{snippets}/get-mountain-fail/http-response.adoc[]
 ==== 산 검색
 .uri
 ----
-/api/vi/mountains/search
+/api/vi/mountains/search/2
 ----
 
 [%header, cols=2*]
