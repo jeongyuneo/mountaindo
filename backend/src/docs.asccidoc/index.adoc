@@ -48,3 +48,11 @@ include::{snippets}/get-mountains-fail/http-request.adoc[]
 
 .response
 include::{snippets}/get-mountains-fail/http-response.adoc[]
+
+==== 산 검색
+===== 성공
+.request
+include::{snippets}/search-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-mountain-success/http-response.adoc[]
