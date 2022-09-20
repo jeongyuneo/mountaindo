@@ -26,11 +26,6 @@ function MountainDetail({navigation}: MountainScreenProps) {
         getWeatherByCurrentLocation(latitude, longitude);
       },
       err => Alert.alert(err.message),
-      // {
-      //   enableHighAccuracy: true,
-      //   timeout: 20000,
-      //   maximumAge: 1000,
-      // },
     );
   };
 
@@ -40,8 +35,6 @@ function MountainDetail({navigation}: MountainScreenProps) {
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       console.log('data', data);
-      // let parsedData = JSON.parse(data);
-      // console.log('parsedData', parsedData);
       let mainWeather = JSON.parse(data).data.weather[0].description;
       console.log('mainWeather', mainWeather);
       setCurrentWeather(mainWeather);
