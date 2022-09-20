@@ -102,6 +102,12 @@ include::{snippets}/search-mountain-or-trail-success/http-request.adoc[]
 
 .response
 include::{snippets}/search-mountain-or-trail-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/search-mountain-or-trail-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-mountain-or-trail-fail/http-response.adoc[]
 
 ==== 산 검색
 .uri
