@@ -27,17 +27,17 @@ public class MountainController {
     }
 
     @GetMapping("/search/1")
-    public ResponseEntity<List<MountainListResponse>> searchMountainOrTrail(@RequestHeader("Authorization") String token, @RequestParam String name) {
-        return ResponseEntity.ok(mountainService.searchMountainOrTrail(name));
+    public ResponseEntity<List<MountainListResponse>> searchMountainOrTrail(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+        return ResponseEntity.ok(mountainService.searchMountainOrTrail(keyword));
     }
 
     @GetMapping("/search/2")
-    public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
-        return ResponseEntity.ok(mountainService.searchMountain(name));
+    public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+        return ResponseEntity.ok(mountainService.searchMountain(keyword));
     }
 
     @GetMapping("/search/3")
-    public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader("Authorization") String token, @RequestParam String name) {
-        return ResponseEntity.ok(mountainService.searchTrail(name));
+    public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+        return ResponseEntity.ok(mountainService.searchTrail(keyword));
     }
 }
