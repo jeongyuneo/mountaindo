@@ -17,19 +17,16 @@ public class MountainController {
 
     @GetMapping
     public ResponseEntity<List<MountainResponse>> getMountains(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok()
-                .body(mountainService.getMountains());
+        return ResponseEntity.ok(mountainService.getMountains());
     }
 
     @GetMapping("/1/{mountainId}")
     public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
-        return ResponseEntity.ok()
-                .body(mountainService.getMountain(mountainId));
+        return ResponseEntity.ok(mountainService.getMountain(mountainId));
     }
 
     @GetMapping("/2")
     public ResponseEntity<MountainResponse> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
-        return ResponseEntity.ok()
-                .body(mountainService.getMountainByName(name));
+        return ResponseEntity.ok(mountainService.searchMountain(name));
     }
 }
