@@ -166,7 +166,7 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 산검색_요청(String name) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/2?name=" + name)
+        return mockMvc.perform(get("/api/v1/mountains/search?name=" + name)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
@@ -185,7 +185,7 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 산상세_조회_요청(int mountainId) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/1/" + mountainId)
+        return mockMvc.perform(get("/api/v1/mountains/" + mountainId)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
