@@ -44,6 +44,7 @@ class MountainControllerTest extends ApiDocument {
     private static final String TRAIL_NAME = "A코스";
     private static final String LENGTH = "1km";
     private static final String LEVEL = "하";
+    private static final String NAME_ORDER = "name";
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
@@ -83,7 +84,7 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsSuccess() throws Exception {
         // given
-        willReturn(mountainListResponses).given(mountainService).getMountains();
+        willReturn(mountainListResponses).given(mountainService).getMountains(NAME_ORDER);
         // when
         ResultActions resultActions = 산목록_조회_요청();
         // then
@@ -94,7 +95,7 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains();
+        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains(NAME_ORDER);
         // when
         ResultActions resultActions = 산목록_조회_요청();
         // then
