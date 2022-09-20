@@ -2,6 +2,8 @@ package com.hanssarang.backend.hiking.controller.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -12,4 +14,5 @@ public class RankingListResponse {
     private int ranking;
     private String nickname;
     private int accumulatedHeight;
+    private List<RankingResponse> rankings;
 }
