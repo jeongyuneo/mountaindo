@@ -66,6 +66,12 @@ include::{snippets}/get-mountain-success/http-request.adoc[]
 
 .response
 include::{snippets}/get-mountain-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountain-fail/http-response.adoc[]
 
 ==== 산 검색
 ===== 성공
