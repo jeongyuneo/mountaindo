@@ -49,6 +49,24 @@ include::{snippets}/get-mountains-fail/http-request.adoc[]
 .response
 include::{snippets}/get-mountains-fail/http-response.adoc[]
 
+==== 산 상세 조회
+
+[%header, cols=2*]
+|===
+|PathVariable
+|Type
+
+|mountainId
+|int
+|===
+
+===== 성공
+.request
+include::{snippets}/get-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountain-success/http-response.adoc[]
+
 ==== 산 검색
 ===== 성공
 .request
