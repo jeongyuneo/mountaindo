@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.rmi.UnexpectedException;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_CHECK_EMAIL;
-import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SIGNUP;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,6 +38,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NAME = "이재용";
     private static final String BIRTH = "1968.06.23";
     private static final String PHONENUMBER = "010-3333-3333";
+    private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
     private static final String NICKNAME = "나는 부회장";
 
     private MemberEmailResponse memberEmailResponse;
@@ -58,7 +58,16 @@ public class MemberControllerTest extends ApiDocument {
                 .name(NAME)
                 .birth(BIRTH)
                 .phoneNumber(PHONENUMBER)
+                .address(ADDRESS)
                 .nickName(NICKNAME)
+                .build();
+        memberSurveyRequest = MemberSurveyRequest.builder()
+                .myLevel("등린이")
+                .visitedMountain("없음")
+                .mountainLocation("내 주변")
+                .mountainStyle("무리없는 등산")
+                .climbingTime("1 ~ 2시간")
+                .mountainType("흙산")
                 .build();
     }
 
@@ -119,13 +128,13 @@ public class MemberControllerTest extends ApiDocument {
 
     @DisplayName("사전 설문조사 - 실패")
     @Test
-    void surveyUpFail() throws Exception {
+    void surveyFail() throws Exception {
         // given
-        willThrow(new UnexpectedException(FAIL_TO_SIGNUP)).given(memberService).signUpNormal(any(MemberSignUpRequest.class));
+        willThrow(new UnexpectedException(FAIL_TO_SURVEY)).given(memberService).preSurvey(any(MemberSurveyRequest.class));
         // when
-        ResultActions resultActions = 일반_회원가입_요청(memberSignUpRequest);
+        ResultActions resultActions = 사전_설문조사_요청(memberSurveyRequest);
         // then
-        일반_회원가입_실패(new Message(FAIL_TO_SIGNUP), resultActions);
+        사전_설문조사_실패(new Message(FAIL_TO_SURVEY), resultActions);
     }
 
     private ResultActions 이메일_중복체크_요청() throws Exception {
@@ -151,7 +160,7 @@ public class MemberControllerTest extends ApiDocument {
         return mockMvc.perform(post("/api/v1/members/signup")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(this.memberSignUpRequest)));
+                .content(toJson(memberSignUpRequest)));
     }
 
     private void 일반_회원가입_성공(ResultActions resultActions) throws Exception {
@@ -167,16 +176,22 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 사전_설문조사_요청(MemberSurveyRequest memberSurveyRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/members/presurvey")
+        return mockMvc.perform(post("/api/v1/members/survey")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(this.memberSurveyRequest)));
+                .content(toJson(memberSurveyRequest)));
     }
 
     private void 사전_설문조사_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("pre-survey-success"));
+    }
+
+    private void 사전_설문조사_실패(Message message, ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andDo(print())
+                .andDo(toDocument("pre-survey-fail"));
     }
 
 
