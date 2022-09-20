@@ -1,7 +1,7 @@
 package com.hanssarang.backend.hiking.controller;
 
+import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
-import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +15,22 @@ public class RankingController {
     private final RankingService rankingService;
 
     @GetMapping
-    public ResponseEntity<RankingResponse> getRankings(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<RankingListResponse> getRankings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(rankingService.getRankings(1));
     }
 
     @GetMapping("/1")
-    public ResponseEntity<RankingSearchResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
+    public ResponseEntity<RankingResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
         return ResponseEntity.ok(rankingService.searchRanking(nickname));
     }
 
     @GetMapping("/2/{mountainId}")
-    public ResponseEntity<RankingResponse> getRankingsOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
+    public ResponseEntity<RankingListResponse> getRankingsOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
         return ResponseEntity.ok(rankingService.getRankingsOfMountain(1, mountainId));
     }
 
     @GetMapping("/3/{mountainId}")
-    public ResponseEntity<RankingSearchResponse> searchRankingOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId, @RequestParam String nickname) {
+    public ResponseEntity<RankingResponse> searchRankingOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId, @RequestParam String nickname) {
         return ResponseEntity.ok(rankingService.searchRankingOfMountain(mountainId, nickname));
     }
 }

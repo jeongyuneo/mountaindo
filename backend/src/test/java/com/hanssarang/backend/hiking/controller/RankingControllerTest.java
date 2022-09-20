@@ -3,9 +3,8 @@ package com.hanssarang.backend.hiking.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
-import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
+import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,21 +38,21 @@ public class RankingControllerTest extends ApiDocument {
     private static final String NICKNAME = "김마운";
     private static final int ACCUMULATED_HEIGHT = 1000;
 
+    private RankingListResponse rankingListResponse;
     private RankingResponse rankingResponse;
-    private RankingSearchResponse rankingSearchResponse;
 
     @MockBean
     private RankingService rankingService;
 
     @BeforeEach
     void setUp() {
-        rankingResponse = RankingResponse.builder()
+        rankingListResponse = RankingListResponse.builder()
                 .imageUrl(IMAGE_URL)
                 .ranking(RANKING)
                 .nickname(NICKNAME)
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .rankings(IntStream.range(1, 4)
-                        .mapToObj(n -> RankingListResponse.builder()
+                        .mapToObj(n -> RankingResponse.builder()
                                 .imageUrl(IMAGE_URL)
                                 .ranking(n)
                                 .nickname(NICKNAME)
@@ -61,7 +60,7 @@ public class RankingControllerTest extends ApiDocument {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
-        rankingSearchResponse = RankingSearchResponse.builder()
+        rankingResponse = RankingResponse.builder()
                 .imageUrl(IMAGE_URL)
                 .ranking(RANKING)
                 .nickname(NICKNAME)
@@ -73,11 +72,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void getRankingsSuccess() throws Exception {
         // given
-        willReturn(rankingResponse).given(rankingService).getRankings(anyInt());
+        willReturn(rankingListResponse).given(rankingService).getRankings(anyInt());
         // when
         ResultActions resultActions = 전체랭킹_조회_요청(ID);
         // then
-        전체랭킹_조회_성공(resultActions, rankingResponse);
+        전체랭킹_조회_성공(resultActions, rankingListResponse);
     }
 
     @DisplayName("전체 랭킹 조회 - 실패")
@@ -95,11 +94,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void searchRankingSuccess() throws Exception {
         // given
-        willReturn(rankingSearchResponse).given(rankingService).searchRanking(anyString());
+        willReturn(rankingResponse).given(rankingService).searchRanking(anyString());
         // when
         ResultActions resultActions = 전체랭킹내_사용자_검색_요청(NICKNAME);
         // then
-        전체랭킹내_사용자_검색_성공(resultActions, rankingSearchResponse);
+        전체랭킹내_사용자_검색_성공(resultActions, rankingResponse);
     }
 
     @DisplayName("전체 랭킹 내 사용자 검색 - 실패")
@@ -117,11 +116,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void getRankingsOfMountainSuccess() throws Exception {
         // given
-        willReturn(rankingResponse).given(rankingService).getRankingsOfMountain(anyInt(), anyInt());
+        willReturn(rankingListResponse).given(rankingService).getRankingsOfMountain(anyInt(), anyInt());
         // when
         ResultActions resultActions = 산랭킹_조회_요청(ID);
         // then
-        산랭킹_조회_성공(resultActions, rankingResponse);
+        산랭킹_조회_성공(resultActions, rankingListResponse);
     }
 
     @DisplayName("산 랭킹 조회 - 실패")
@@ -139,11 +138,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void searchRankingOfRankingSuccess() throws Exception {
         // given
-        willReturn(rankingSearchResponse).given(rankingService).searchRankingOfMountain(anyInt(), anyString());
+        willReturn(rankingResponse).given(rankingService).searchRankingOfMountain(anyInt(), anyString());
         // when
         ResultActions resultActions = 산랭킹내_사용자_검색_요청(ID, NICKNAME);
         // then
-        산랭킹내_사용자_검색_성공(resultActions, rankingSearchResponse);
+        산랭킹내_사용자_검색_성공(resultActions, rankingResponse);
     }
 
     @DisplayName("산 랭킹 내 사용자 검색 - 실패")
@@ -162,9 +161,9 @@ public class RankingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 전체랭킹_조회_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
+    private void 전체랭킹_조회_성공(ResultActions resultActions, RankingListResponse rankingListResponse) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(rankingResponse)))
+                .andExpect(content().json(toJson(rankingListResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-rankings-success"));
     }
@@ -181,9 +180,9 @@ public class RankingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 전체랭킹내_사용자_검색_성공(ResultActions resultActions, RankingSearchResponse rankingSearchResponse) throws Exception {
+    private void 전체랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(rankingSearchResponse)))
+                .andExpect(content().json(toJson(rankingResponse)))
                 .andDo(print())
                 .andDo(toDocument("search-ranking-success"));
     }
@@ -200,9 +199,9 @@ public class RankingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 산랭킹_조회_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
+    private void 산랭킹_조회_성공(ResultActions resultActions, RankingListResponse rankingListResponse) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(rankingResponse)))
+                .andExpect(content().json(toJson(rankingListResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-rankings-of-mountain-success"));
     }
@@ -219,9 +218,9 @@ public class RankingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 산랭킹내_사용자_검색_성공(ResultActions resultActions, RankingSearchResponse rankingSearchResponse) throws Exception {
+    private void 산랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(rankingSearchResponse)))
+                .andExpect(content().json(toJson(rankingResponse)))
                 .andDo(print())
                 .andDo(toDocument("search-ranking-of-mountain-success"));
     }

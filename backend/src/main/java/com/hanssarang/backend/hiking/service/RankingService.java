@@ -1,25 +1,25 @@
 package com.hanssarang.backend.hiking.service;
 
+import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
-import com.hanssarang.backend.hiking.controller.dto.RankingSearchResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RankingService {
 
-    public RankingResponse getRankings(int memberId) {
+    public RankingListResponse getRankings(int memberId) {
         return null;
     }
 
-    public RankingSearchResponse searchRanking(String nickname) {
+    public RankingResponse searchRanking(String nickname) {
         return null;
     }
 
-    public RankingResponse getRankingsOfMountain(int memberId, int mountainId) {
+    public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
         return null;
     }
 
-    public RankingSearchResponse searchRankingOfMountain(int mountainId, String nickname) {
+    public RankingResponse searchRankingOfMountain(int mountainId, String nickname) {
         return null;
     }
 }
