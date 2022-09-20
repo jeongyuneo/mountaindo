@@ -130,3 +130,9 @@ include::{snippets}/search-trail-success/http-request.adoc[]
 
 .response
 include::{snippets}/search-trail-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/search-trail-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-trail-fail/http-response.adoc[]
