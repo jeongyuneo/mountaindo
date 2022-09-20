@@ -3,7 +3,9 @@ package com.hanssarang.backend.mountain.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
+import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
+import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +40,7 @@ class MountainControllerTest extends ApiDocument {
     private static final String ADDRESS = "서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시";
     private static final String IMAGE_URL = "{imge url}";
 
-    private List<MountainResponse> mountainResponses;
+    private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
 
     @MockBean
@@ -46,27 +48,41 @@ class MountainControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
+        mountainListResponses = IntStream.range(0, 3)
+                .mapToObj(n -> MountainListResponse.builder()
+                        .mountainId(ID)
+                        .name(NAME)
+                        .height(HEIGHT)
+                        .address(ADDRESS)
+                        .imageUrl(IMAGE_URL)
+                        .isHot(IS_HOT)
+                        .build())
+                .collect(Collectors.toList());
         mountainResponse = MountainResponse.builder()
-                .mountainId(ID)
                 .name(NAME)
                 .height(HEIGHT)
                 .address(ADDRESS)
                 .imageUrl(IMAGE_URL)
+                .trails(IntStream.range(0, 3)
+                        .mapToObj(n -> TrailListResponse.builder()
+                                .name(TRAIL_NAME)
+                                .length(LENGTH)
+                                .level(LEVEL)
+                                .imageUrl(IMAGE_URL)
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
-        mountainResponses = IntStream.range(0, 3)
-                .mapToObj(n -> mountainResponse)
-                .collect(Collectors.toList());
     }
 
     @DisplayName("산 목록 조회 - 성공")
     @Test
     void getMountainsSuccess() throws Exception {
         // given
-        willReturn(mountainResponses).given(mountainService).getMountains();
+        willReturn(mountainListResponses).given(mountainService).getMountains();
         // when
         ResultActions resultActions = 산목록_조회_요청();
         // then
-        산목록_조회_성공(resultActions, mountainResponses);
+        산목록_조회_성공(resultActions, mountainListResponses);
     }
 
     @DisplayName("산 목록 조회 - 실패")
@@ -84,11 +100,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainSuccess() throws Exception {
         // given
-        willReturn(mountainResponse).given(mountainService).searchMountain(anyString());
+        willReturn(mountainListResponses).given(mountainService).searchMountain(anyString());
         // when
         ResultActions resultActions = 산검색_요청(NAME);
         // then
-        산검색_성공(resultActions, mountainResponse);
+        산검색_성공(resultActions, mountainListResponses);
     }
 
     @DisplayName("산 검색 - 실패")
@@ -107,7 +123,7 @@ class MountainControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 산목록_조회_성공(ResultActions resultActions, List<MountainResponse> mountains) throws Exception {
+    private void 산목록_조회_성공(ResultActions resultActions, List<MountainListResponse> mountains) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andExpect(content().json(toJson(mountains)))
                 .andDo(print())
@@ -126,9 +142,9 @@ class MountainControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 산검색_성공(ResultActions resultActions, MountainResponse mountainResponse) throws Exception {
+    private void 산검색_성공(ResultActions resultActions, List<MountainListResponse> mountainResponses) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(mountainResponse)))
+                .andExpect(content().json(toJson(mountainResponses)))
                 .andDo(print())
                 .andDo(toDocument("search-mountain-success"));
     }
