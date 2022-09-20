@@ -164,25 +164,6 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("get-mountains-fail"));
     }
 
-    private ResultActions 산검색_요청(String name) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search?name=" + name)
-                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
-    }
-
-    private void 산검색_성공(ResultActions resultActions, List<MountainListResponse> mountainResponses) throws Exception {
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(mountainResponses)))
-                .andDo(print())
-                .andDo(toDocument("search-mountain-success"));
-    }
-
-    private void 산검색_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isNotFound())
-                .andExpect(content().json(toJson(message)))
-                .andDo(print())
-                .andDo(toDocument("search-mountain-fail"));
-    }
-
     private ResultActions 산상세_조회_요청(int mountainId) throws Exception {
         return mockMvc.perform(get("/api/v1/mountains/" + mountainId)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -200,5 +181,24 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-mountain-fail"));
+    }
+
+    private ResultActions 산검색_요청(String name) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/2?name=" + name)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 산검색_성공(ResultActions resultActions, List<MountainListResponse> mountainResponses) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(mountainResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-mountain-success"));
+    }
+
+    private void 산검색_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("search-mountain-fail"));
     }
 }
