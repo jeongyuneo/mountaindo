@@ -74,6 +74,16 @@ include::{snippets}/get-mountain-fail/http-request.adoc[]
 include::{snippets}/get-mountain-fail/http-response.adoc[]
 
 ==== 산 검색
+
+[%header, cols=2*]
+|===
+|Parameter
+|Type
+
+|name
+|String
+|===
+
 ===== 성공
 .request
 include::{snippets}/search-mountain-success/http-request.adoc[]
