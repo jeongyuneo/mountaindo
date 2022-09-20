@@ -39,7 +39,7 @@ public class MountainService {
         return mountainResponse;
     }
 
-    public MountainResponse getMountainByName(String name) {
+    public MountainResponse searchMountain(String name) {
         return null;
     }
 }
