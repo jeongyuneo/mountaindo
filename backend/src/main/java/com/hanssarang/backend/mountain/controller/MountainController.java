@@ -30,4 +30,9 @@ public class MountainController {
     public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
         return ResponseEntity.ok(mountainService.searchMountain(name));
     }
+
+    @GetMapping("/search/3")
+    public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader("Authorization") String token, @RequestParam String name) {
+        return ResponseEntity.ok(mountainService.searchTrail(name));
+    }
 }
