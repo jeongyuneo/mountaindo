@@ -21,13 +21,13 @@ public class MountainController {
                 .body(mountainService.getMountains());
     }
 
-    @GetMapping("/{mountainId}")
+    @GetMapping("/1/{mountainId}")
     public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
         return ResponseEntity.ok()
                 .body(mountainService.getMountain(mountainId));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/2")
     public ResponseEntity<MountainResponse> getMountainByName(@RequestHeader("Authorization") String token, @RequestParam String name) {
         return ResponseEntity.ok()
                 .body(mountainService.getMountainByName(name));
