@@ -6,6 +6,7 @@ import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotfoundException;
 import com.hanssarang.backend.member.controller.dto.MemberEmailResponse;
 import com.hanssarang.backend.member.controller.dto.MemberSignUpRequest;
+import com.hanssarang.backend.member.controller.dto.MemberSurveyRequest;
 import com.hanssarang.backend.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,7 @@ public class MemberControllerTest extends ApiDocument {
 
     private MemberEmailResponse memberEmailResponse;
     private MemberSignUpRequest memberSignUpRequest;
-
+    private MemberSurveyRequest memberSurveyRequest;
     @MockBean
     private MemberService memberService;
 
@@ -105,20 +106,20 @@ public class MemberControllerTest extends ApiDocument {
         일반_회원가입_실패(new Message(FAIL_TO_SIGNUP), resultActions);
     }
 
-    @DisplayName("간편 회원가입 - 성공")
+    @DisplayName("사전 설문조사 - 성공")
     @Test
-    void simpleSignUpSuccess() throws Exception {
+    void surveySuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).signUpNormal(any(MemberSignUpRequest.class));
+        willDoNothing().given(memberService).preSurvey(any(MemberSurveyRequest.class));
         // when
-        ResultActions resultActions = 일반_회원가입_요청(memberSignUpRequest);
+        ResultActions resultActions = 사전_설문조사_요청(memberSurveyRequest);
         // then
-        일반_회원가입_성공(resultActions);
+        사전_설문조사_성공(resultActions);
     }
 
-    @DisplayName("간편 회원가입 - 실패")
+    @DisplayName("사전 설문조사 - 실패")
     @Test
-    void simpleSignUpFail() throws Exception {
+    void surveyUpFail() throws Exception {
         // given
         willThrow(new UnexpectedException(FAIL_TO_SIGNUP)).given(memberService).signUpNormal(any(MemberSignUpRequest.class));
         // when
@@ -158,12 +159,25 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(print())
                 .andDo(toDocument("create-signup-success"));
     }
+
     private void 일반_회원가입_실패(Message message, ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isInternalServerError())
                 .andDo(print())
                 .andDo(toDocument("create-signup-fail"));
     }
 
+    private ResultActions 사전_설문조사_요청(MemberSurveyRequest memberSurveyRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/presurvey")
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(this.memberSurveyRequest)));
+    }
+
+    private void 사전_설문조사_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("pre-survey-success"));
+    }
 
 
 //    @Autowired
