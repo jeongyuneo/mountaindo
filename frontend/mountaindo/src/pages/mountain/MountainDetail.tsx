@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, Image, Alert} from 'react-native';
 import {LoggedInParamList} from '../../../AppInner';
 import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
+import Config from 'react-native-config';
 
 type MountainScreenProps = NativeStackScreenProps<
   LoggedInParamList,
@@ -15,7 +16,7 @@ function MountainDetail({navigation}: MountainScreenProps) {
   const [currentWeather, setCurrentWeather] = useState('');
   const [error, setError] = useState(false);
 
-  const API_KEY = '94fb8c5e2e359a1c237e3815cb16306b';
+  const API_KEY = Config.WEATHER_API_KEY;
 
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
