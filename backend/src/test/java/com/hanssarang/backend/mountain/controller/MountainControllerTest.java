@@ -2,6 +2,7 @@ package com.hanssarang.backend.mountain.controller;
 
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_GET_MOUNTAINS;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
@@ -90,6 +91,17 @@ class MountainControllerTest extends ApiDocument {
         산검색_성공(resultActions, mountainResponse);
     }
 
+    @DisplayName("산 검색 - 실패")
+    @Test
+    void getMountainByNameFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MOUNTAIN)).given(mountainService).searchMountain(anyString());
+        // when
+        ResultActions resultActions = 산검색_요청(NAME);
+        // then
+        산검색_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
+    }
+
     private ResultActions 산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/mountains")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -119,5 +131,12 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(mountainResponse)))
                 .andDo(print())
                 .andDo(toDocument("search-mountain-success"));
+    }
+
+    private void 산검색_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("search-mountain-fail"));
     }
 }
