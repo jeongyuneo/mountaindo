@@ -108,3 +108,25 @@ include::{snippets}/search-mountain-fail/http-request.adoc[]
 
 .response
 include::{snippets}/search-mountain-fail/http-response.adoc[]
+
+==== 등산로 검색
+.uri
+----
+/api/vi/mountains/search/3
+----
+
+[%header, cols=2*]
+|===
+|Parameter
+|Type
+
+|name
+|String
+|===
+
+===== 성공
+.request
+include::{snippets}/search-trail-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-trail-success/http-response.adoc[]
