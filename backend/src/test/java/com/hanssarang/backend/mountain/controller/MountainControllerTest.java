@@ -39,6 +39,7 @@ class MountainControllerTest extends ApiDocument {
     private static final int HEIGHT = 836;
     private static final String ADDRESS = "서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시";
     private static final String IMAGE_URL = "{imge url}";
+    private static final boolean IS_HOT = true;
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
