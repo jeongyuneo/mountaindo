@@ -19,8 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_GET_MOUNTAINS;
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
@@ -139,11 +138,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MOUNTAIN)).given(mountainService).searchMountain(anyString());
+        willThrow(new UnexpectedRollbackException(FAIL_TO_SEARCH_MOUNTAIN)).given(mountainService).searchMountain(anyString());
         // when
         ResultActions resultActions = 산검색_요청(NAME);
         // then
-        산검색_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
+        산검색_실패(resultActions, new Message(FAIL_TO_SEARCH_MOUNTAIN));
     }
 
     private ResultActions 산목록_조회_요청() throws Exception {
