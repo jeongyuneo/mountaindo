@@ -1,6 +1,7 @@
 package com.hanssarang.backend.mountain.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,13 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.UnexpectedRollbackException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_GET_MOUNTAINS;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -64,6 +68,17 @@ class MountainControllerTest extends ApiDocument {
         산목록_조회_성공(resultActions, mountainResponses);
     }
 
+    @DisplayName("산 전체 목록 조회 -실패")
+    @Test
+    void getMountainsFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains();
+        // when
+        ResultActions resultActions = 산목록_조회_요청();
+        // then
+        산목록_조회_실패(resultActions, new Message(FAIL_TO_GET_MOUNTAINS));
+    }
+
     private ResultActions 산목록_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/mountains")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -74,6 +89,13 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(mountains)))
                 .andDo(print())
                 .andDo(toDocument("get-mountains-success"));
+    }
+
+    private void 산목록_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-mountains-fail"));
     }
 
     @DisplayName("산 검색 - 성공")
