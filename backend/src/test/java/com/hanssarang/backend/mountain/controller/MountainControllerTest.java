@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.*;
+import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_GET_MOUNTAINS;
+import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
@@ -112,6 +113,17 @@ class MountainControllerTest extends ApiDocument {
         산상세_조회_성공(resultActions, mountainResponse);
     }
 
+    @DisplayName("산 상세 조회 - 실패")
+    @Test
+    void getMountainFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_MOUNTAIN)).given(mountainService).getMountain(anyInt());
+        // when
+        ResultActions resultActions = 산상세_조회_요청(ID);
+        // then
+        산상세_조회_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
+    }
+
     @DisplayName("산 검색 - 성공")
     @Test
     void searchMountainSuccess() throws Exception {
@@ -182,5 +194,12 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(mountainResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-mountain-success"));
+    }
+
+    private void 산상세_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-mountain-fail"));
     }
 }
