@@ -1,0 +1,44 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+= MountainDo Api Specification
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:author: MountainDo
+:email: https://mountaindo.ssafy.io
+
+== Common Responses
+=== Common Status Codes
+```java
+# 성공
+status code: 200
+```
+
+=== Common Exceptions
+
+```java
+# 클라이언트 입력 예외
+status code: 400
+
+# 인증 예외
+status code: 401
+
+# NotFound 예외
+status code: 404
+
+# 서버 내부 예외
+status code: 500
+```
+
+== 기능
+=== 산/등산로 관련 기능
+==== 산 목록 조회
+===== 성공
+.request
+include::{snippets}/get-mountains-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountains-success/http-response.adoc[]
