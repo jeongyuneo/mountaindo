@@ -2,23 +2,26 @@ import React, {useEffect, useState} from 'react';
 import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {LoggedInParamList} from '../../AppInner';
-import Map from '../components/hiking/Map';
+import {LoggedInParamList} from '../../../AppInner';
+import Map from '../../components/hiking/Map';
+import TrackingRoute from '../../components/hiking/TrackingRoute';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
 function Hiking({navigation}: HikingScreenProps) {
+  // 내 현재 경도, 위도 값을 저장할 변수
   const [myPosition, setMyPosition] = useState<{
     latitude: number;
     longitude: number;
   } | null>(null);
-  const [currentLocation, setCurrentLocation] = useState(0);
+  const [currentLocation, setCurrentLocation] = useState(0); // 내 위치 버튼 클릭 시 재렌더링을 위한 변수
+  const [isTracking, setIsTracking] = useState(false); // 등산 기록 여부 확인 변수
 
+  const array: ({latitude: number; longitude: number} | null)[] = []; // 경도, 위도값을 저장할 리스트
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
 
+  // 현재 위치 받아오기
   useEffect(() => {
-    // watchPosition 사용자의 위치를 지속적으로 tracking
-    // getCurrentPosition 사용자의 현재 위치
     Geolocation.watchPosition(
       info => {
         setMyPosition({
@@ -30,11 +33,11 @@ function Hiking({navigation}: HikingScreenProps) {
       {
         enableHighAccuracy: true,
         timeout: 20000,
-        // 몇 미터마다 사용자의 위치를 체크할 것인지 설정
-        distanceFilter: 50,
+        distanceFilter: 10, // 몇 미터마다 사용자의 위치를 체크할 것인지 설정
       },
     );
-  }, [currentLocation]);
+    array.push(myPosition);
+  }, [myPosition, currentLocation]);
 
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
@@ -45,7 +48,14 @@ function Hiking({navigation}: HikingScreenProps) {
     );
   }
 
-  return (
+  // 기록 종료 시 TrackingEnd 페이지로 이동 함수
+  const moveToTrackingEnd = (timer: any) => {
+    navigation.navigate('TrackingEnd', {timer: timer});
+  };
+
+  // isTracking이 false면 기본 정보와 지도 렌더링
+  // true면 TrackingRoute 화면 렌더링
+  return !isTracking ? (
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
@@ -59,15 +69,13 @@ function Hiking({navigation}: HikingScreenProps) {
           <Text>계룡산</Text>
         </View>
       </View>
-      <View
-        // 화면 전체를 차지하도록 설정
-        style={styles.mapContainer}>
+      <View style={styles.mapContainer}>
         <Map myPosition={myPosition} />
       </View>
       <View style={styles.startButtonView}>
         <Pressable
           style={styles.startButton}
-          onPress={() => navigation.navigate('TrackingRoute')}>
+          onPress={() => setIsTracking(!isTracking)}>
           <Text style={styles.buttonText}>등산 시작</Text>
         </Pressable>
       </View>
@@ -79,6 +87,11 @@ function Hiking({navigation}: HikingScreenProps) {
         </Pressable>
       </View>
     </View>
+  ) : (
+    <TrackingRoute
+      moveToTrackingEnd={moveToTrackingEnd}
+      setIsTracking={setIsTracking}
+    />
   );
 }
 
@@ -100,7 +113,7 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 230,
+    height: Dimensions.get('window').height,
   },
   mapLoading: {
     alignItems: 'center',
@@ -110,12 +123,12 @@ const styles = StyleSheet.create({
   startButtonView: {
     position: 'absolute',
     left: Dimensions.get('window').width / 2 - 100,
-    top: Dimensions.get('window').height - 180,
+    top: Dimensions.get('window').height - 150,
   },
   myLocationButtonView: {
     position: 'absolute',
     left: Dimensions.get('window').width - 70,
-    top: Dimensions.get('window').height - 180,
+    top: Dimensions.get('window').height - 150,
   },
   startButton: {
     backgroundColor: 'green',

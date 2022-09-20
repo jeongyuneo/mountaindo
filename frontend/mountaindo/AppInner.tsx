@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
 
 import Main from './src/pages/Main';
-import Hiking from './src/pages/Hiking';
+import Hiking from './src/pages/hiking/Hiking';
 import Mountain from './src/pages/Mountain';
 import Completed from './src/pages/Completed';
 import MyPage from './src/pages/user/loggedIn/MyPage';
@@ -27,7 +27,6 @@ import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import TrackingRoute from './src/pages/hiking/TrackingRoute';
 import TrackingEnd from './src/pages/hiking/TrackingEnd';
 
 export type LoggedInParamList = {
@@ -42,7 +41,6 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
-  TrackingRoute: any;
   TrackingEnd: any;
 };
 
@@ -61,30 +59,7 @@ export type RootStackParamList = {
 };
 
 const Tab = createBottomTabNavigator();
-const Top = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
-
-function TopTab() {
-  return (
-    <Top.Navigator>
-      <Top.Screen
-        name="Hiking"
-        component={Hiking}
-        options={{title: '등산 시작'}}
-      />
-      <Top.Screen
-        name="TrackingRoute"
-        component={TrackingRoute}
-        options={{title: '등산 기록'}}
-      />
-      <Top.Screen
-        name="TrackingEnd"
-        component={TrackingEnd}
-        options={{title: '등산 종료'}}
-      />
-    </Top.Navigator>
-  );
-}
 
 function BottomTab() {
   return (
@@ -92,7 +67,7 @@ function BottomTab() {
       <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
       <Tab.Screen
         name="Hiking"
-        component={TopTab}
+        component={Hiking}
         options={{headerShown: false}}
       />
       <Tab.Screen
@@ -125,7 +100,6 @@ function AppInner() {
         <>
           <Stack.Group screenOptions={{headerShown: false}}>
             <Stack.Screen name="BottomTab" component={BottomTab} />
-            {/* <Stack.Screen name="Topab" component={TopTab} /> */}
           </Stack.Group>
           <Stack.Group>
             <Stack.Screen
@@ -157,6 +131,11 @@ function AppInner() {
               name="ContactUs"
               component={ContactUs}
               options={{title: '문의하기'}}
+            />
+            <Stack.Screen
+              name="TrackingEnd"
+              component={TrackingEnd}
+              options={{headerShown: false}}
             />
           </Stack.Group>
         </>

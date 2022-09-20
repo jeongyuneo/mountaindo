@@ -31,9 +31,9 @@ function Map({myPosition}: Props) {
       }}
       center={{
         zoom: 15,
-        tilt: 50,
-        latitude: (start.latitude + end.latitude) / 2,
-        longitude: (start.longitude + end.longitude) / 2,
+        tilt: 0,
+        latitude: myPosition.latitude,
+        longitude: myPosition.longitude,
       }}>
       {myPosition?.latitude && (
         <Marker
@@ -46,18 +46,6 @@ function Map({myPosition}: Props) {
           anchor={{x: 0.5, y: 0.5}}
           caption={{text: '나'}}
           image={require('../../assets/red-dot.png')}
-        />
-      )}
-      {myPosition?.latitude && (
-        <Path
-          coordinates={[
-            {
-              latitude: myPosition.latitude,
-              longitude: myPosition.longitude,
-            },
-            {latitude: start.latitude, longitude: start.longitude},
-          ]}
-          color="orange"
         />
       )}
       <Marker
