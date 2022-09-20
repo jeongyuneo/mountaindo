@@ -123,6 +123,17 @@ class MountainControllerTest extends ApiDocument {
         산상세_조회_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
     }
 
+    @DisplayName("산/등산로 검색 - 성공")
+    @Test
+    void searchMountainOrTrailSuccess() throws Exception {
+        // given
+        willReturn(mountainListResponses).given(mountainService).searchMountainOrTrail(anyString());
+        // when
+        ResultActions resultActions = 산_또는_등산로_검색_요청(NAME);
+        // then
+        산_또는_등산로_검색_성공(resultActions, mountainListResponses);
+    }
+
     @DisplayName("산 검색 - 성공")
     @Test
     void searchMountainSuccess() throws Exception {
@@ -203,6 +214,18 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-mountain-fail"));
+    }
+
+    private ResultActions 산_또는_등산로_검색_요청(String name) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/1?name=" + name)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 산_또는_등산로_검색_성공(ResultActions resultActions, List<MountainListResponse> mountainListResponses) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(mountainListResponses)))
+                .andDo(print())
+                .andDo(toDocument("search-mountain-or-trail-success"));
     }
 
     private ResultActions 산검색_요청(String name) throws Exception {
