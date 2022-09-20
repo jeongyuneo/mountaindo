@@ -21,12 +21,12 @@ public class MountainController {
         return ResponseEntity.ok(mountainService.getMountains());
     }
 
-    @GetMapping("/1/{mountainId}")
+    @GetMapping("/{mountainId}")
     public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
         return ResponseEntity.ok(mountainService.getMountain(mountainId));
     }
 
-    @GetMapping("/2")
+    @GetMapping("/search")
     public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String name) {
         return ResponseEntity.ok(mountainService.searchMountain(name));
     }
