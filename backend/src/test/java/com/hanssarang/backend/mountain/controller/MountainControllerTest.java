@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.BDDMockito.willThrow;
@@ -40,6 +41,9 @@ class MountainControllerTest extends ApiDocument {
     private static final String ADDRESS = "서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시";
     private static final String IMAGE_URL = "{imge url}";
     private static final boolean IS_HOT = true;
+    private static final String TRAIL_NAME = "A코스";
+    private static final String LENGTH = "1km";
+    private static final String LEVEL = "하";
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
@@ -95,6 +99,17 @@ class MountainControllerTest extends ApiDocument {
         ResultActions resultActions = 산목록_조회_요청();
         // then
         산목록_조회_실패(resultActions, new Message(FAIL_TO_GET_MOUNTAINS));
+    }
+
+    @DisplayName("산 상세 조회 - 성공")
+    @Test
+    void getMountainSuccess() throws Exception {
+        // given
+        willReturn(mountainResponse).given(mountainService).getMountain(anyInt());
+        // when
+        ResultActions resultActions = 산상세_조회_요청(ID);
+        // then
+        산상세_조회_성공(resultActions, mountainResponse);
     }
 
     @DisplayName("산 검색 - 성공")
@@ -155,5 +170,17 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("search-mountain-fail"));
+    }
+
+    private ResultActions 산상세_조회_요청(int mountainId) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/1/" + mountainId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 산상세_조회_성공(ResultActions resultActions, MountainResponse mountainResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(mountainResponse)))
+                .andDo(print())
+                .andDo(toDocument("get-mountain-success"));
     }
 }
