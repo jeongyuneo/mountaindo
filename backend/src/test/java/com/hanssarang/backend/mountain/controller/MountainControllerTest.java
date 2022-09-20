@@ -228,8 +228,8 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("get-mountain-fail"));
     }
 
-    private ResultActions 산_또는_등산로_검색_요청(String name) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/1?name=" + name)
+    private ResultActions 산_또는_등산로_검색_요청(String keyword) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/1?keyword=" + keyword)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
@@ -247,8 +247,8 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("search-mountain-or-trail-fail"));
     }
 
-    private ResultActions 산검색_요청(String name) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/2?name=" + name)
+    private ResultActions 산검색_요청(String keyword) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/2?keyword=" + keyword)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
@@ -266,8 +266,8 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("search-mountain-fail"));
     }
 
-    private ResultActions 등산로검색_요청(String name) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/3?name=" + name)
+    private ResultActions 등산로검색_요청(String keyword) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/3?keyword=" + keyword)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
