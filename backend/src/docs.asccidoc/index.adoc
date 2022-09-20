@@ -81,6 +81,28 @@ include::{snippets}/get-mountain-fail/http-request.adoc[]
 .response
 include::{snippets}/get-mountain-fail/http-response.adoc[]
 
+==== 산/등산로 검색
+.uri
+----
+/api/vi/mountains/search/1
+----
+
+[%header, cols=2*]
+|===
+|Parameter
+|Type
+
+|name
+|String
+|===
+
+===== 성공
+.request
+include::{snippets}/search-mountain-or-trail-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-mountain-or-trail-success/http-response.adoc[]
+
 ==== 산 검색
 .uri
 ----
