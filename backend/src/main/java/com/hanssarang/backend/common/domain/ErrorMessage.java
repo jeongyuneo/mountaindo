@@ -6,4 +6,5 @@ public class ErrorMessage {
     public static final String FAIL_TO_GET_MOUNTAINS = "산 목록 조회에 실패했습니다.";
     public static final String FAIL_TO_SEARCH_MOUNTAIN = "산 검색에 실패했습니다.";
     public static final String FAIL_TO_SEARCH_TRAIL = "등산로 검색에 실패했습니다.";
+    public static final String FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL = "산 또는 등산로 검색에 실패했습니다.";
 }
