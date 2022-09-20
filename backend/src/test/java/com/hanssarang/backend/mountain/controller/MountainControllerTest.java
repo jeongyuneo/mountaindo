@@ -82,7 +82,7 @@ class MountainControllerTest extends ApiDocument {
 
     @DisplayName("산 검색 - 성공")
     @Test
-    void getMountainByNameSuccess() throws Exception {
+    void searchMountainSuccess() throws Exception {
         // given
         willReturn(mountainResponse).given(mountainService).searchMountain(anyString());
         // when
@@ -93,7 +93,7 @@ class MountainControllerTest extends ApiDocument {
 
     @DisplayName("산 검색 - 실패")
     @Test
-    void getMountainByNameFail() throws Exception {
+    void searchMountainFail() throws Exception {
         // given
         willThrow(new NotFoundException(NOT_FOUND_MOUNTAIN)).given(mountainService).searchMountain(anyString());
         // when
