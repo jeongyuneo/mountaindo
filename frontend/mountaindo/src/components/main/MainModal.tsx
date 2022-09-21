@@ -24,55 +24,55 @@ export const dummyUser = [
     id: 1,
     profile: require('../../assets/user.png'),
     name: 'zerojei',
-    metre: 3750,
+    meter: 3750,
   },
   {
     id: 2,
     profile: require('../../assets/jjang.png'),
     name: 'mountainDo',
-    metre: 3720,
+    meter: 3720,
   },
   {
     id: 3,
     profile: require('../../assets/you.png'),
     name: 'mDoGod',
-    metre: 2040,
+    meter: 2040,
   },
   {
     id: 4,
     profile: require('../../assets/user.png'),
     name: 'zerojei',
-    metre: 3750,
+    meter: 3750,
   },
   {
     id: 5,
     profile: require('../../assets/jjang.png'),
     name: 'mountainDo',
-    metre: 3720,
+    meter: 3720,
   },
   {
     id: 6,
     profile: require('../../assets/you.png'),
     name: 'mDoGod',
-    metre: 2040,
+    meter: 2040,
   },
   {
     id: 7,
     profile: require('../../assets/user.png'),
     name: 'zerojei',
-    metre: 3750,
+    meter: 3750,
   },
   {
     id: 8,
     profile: require('../../assets/jjang.png'),
     name: 'mountainDo',
-    metre: 3720,
+    meter: 3720,
   },
   {
     id: 9,
     profile: require('../../assets/you.png'),
     name: 'mDoGod',
-    metre: 2040,
+    meter: 2040,
   },
 ];
 
@@ -130,7 +130,7 @@ function MainModal({isModalVisible, setIsModalVisible, goAllRank}) {
                       </View>
                     </View>
                   </View>
-                  <Text style={styles.meter}>{item.metre}m</Text>
+                  <Text style={styles.meter}>{item.meter}m</Text>
                 </View>
               </View>
             ))}
@@ -153,7 +153,7 @@ function MainModal({isModalVisible, setIsModalVisible, goAllRank}) {
                       </View>
                     </View>
                   </View>
-                  <Text style={styles.meter}>{item.metre}m</Text>
+                  <Text style={styles.meter}>{item.meter}m</Text>
                 </View>
               </View>
             ))}

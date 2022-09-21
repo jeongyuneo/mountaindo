@@ -45,7 +45,7 @@ function MainRankList({goAllRank}) {
                 </View>
               </View>
             </View>
-            <Text style={styles.meter}>{item.metre}m</Text>
+            <Text style={styles.meter}>{item.meter}m</Text>
           </View>
         ))}
       </View>
