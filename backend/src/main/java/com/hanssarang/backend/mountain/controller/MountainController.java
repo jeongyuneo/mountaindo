@@ -2,6 +2,7 @@ package com.hanssarang.backend.mountain.controller;
 
 import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
+import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class MountainController {
     @GetMapping("/{mountainId}")
     public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
         return ResponseEntity.ok(mountainService.getMountain(mountainId));
+    }
+
+    @GetMapping("/trail/{trailId}")
+    public ResponseEntity<TrailResponse> getTrail(@RequestHeader("Authorization") String token, @PathVariable int trailId) {
+        return ResponseEntity.ok(mountainService.getTrail(trailId));
     }
 
     @GetMapping("/search/1")
