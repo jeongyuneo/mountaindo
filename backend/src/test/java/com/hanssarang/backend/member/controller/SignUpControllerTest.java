@@ -36,6 +36,11 @@ public class SignUpControllerTest extends ApiDocument {
     private static final String PHONENUMBER = "010-3333-3333";
     private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
     private static final String NICKNAME = "나는 부회장";
+    private static final String MYLEVEL = "등린이";
+    private static final String VISITEDMOUNAIN = "없음";
+    private static final String MOUNTAINLOCATION = "내 주변";
+    private static final String MOUNTAINSTYLE = "무리없는 등산";
+    private static final String CLIMBINGTIME = "1 ~ 2시간";
 
     private MemberEmailResponse memberEmailResponse;
     private MemberNicknameResponse memberNicknameResponse;
@@ -43,7 +48,6 @@ public class SignUpControllerTest extends ApiDocument {
     private MemberSurveyRequest memberSurveyRequest;
     private MemberGetIdRequest memberGetIdRequest;
     private MemberUpdatePasswordRequest memberUpdatePasswordRequest;
-    private MemberLoginResponse memberLoginResponse;
     private MemberLoginRequest memberLoginRequest;
 
     @MockBean
@@ -67,11 +71,11 @@ public class SignUpControllerTest extends ApiDocument {
                 .nickName(NICKNAME)
                 .build();
         memberSurveyRequest = MemberSurveyRequest.builder()
-                .myLevel("등린이")
-                .visitedMountain("없음")
-                .mountainLocation("내 주변")
-                .mountainStyle("무리없는 등산")
-                .climbingTime("1 ~ 2시간")
+                .myLevel(MYLEVEL)
+                .visitedMountain(VISITEDMOUNAIN)
+                .mountainLocation(MOUNTAINLOCATION)
+                .mountainStyle(MOUNTAINSTYLE)
+                .climbingTime(CLIMBINGTIME)
                 .build();
         memberGetIdRequest = MemberGetIdRequest.builder()
                 .name(NAME)
@@ -81,10 +85,6 @@ public class SignUpControllerTest extends ApiDocument {
         memberUpdatePasswordRequest = MemberUpdatePasswordRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
-                .build();
-        memberLoginResponse = MemberLoginResponse.builder()
-                .bearer(BEARER)
-                .accessToken(ACCESS_TOKEN)
                 .build();
         memberLoginRequest = MemberLoginRequest.builder()
                 .email(EMAIL)
@@ -228,11 +228,22 @@ public class SignUpControllerTest extends ApiDocument {
     @Test
     void loginSuccess() throws Exception {
         // given
-        willReturn(memberLoginResponse).given(memberService).getMemberLogin(any(MemberLoginRequest.class));
+        willDoNothing().given(memberService).login(any(MemberLoginRequest.class));
         // when
         ResultActions resultActions = 로그인_요청(memberLoginRequest);
         // then
-        로그인_성공(memberLoginResponse, resultActions);
+        로그인_성공(resultActions);
+    }
+
+    @DisplayName("로그인 - 실패")
+    @Test
+    void loginFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(FAIL_TO_LOGIN)).given(memberService).login(any(MemberLoginRequest.class));
+        // when
+        ResultActions resultActions = 로그인_요청(memberLoginRequest);
+        // then
+        로그인_실패(resultActions, new Message(FAIL_TO_LOGIN));
     }
 
     private ResultActions 이메일_중복체크_요청(String memberEmail) throws Exception {
@@ -353,9 +364,22 @@ public class SignUpControllerTest extends ApiDocument {
     }
 
     private ResultActions 로그인_요청(MemberLoginRequest memberLoginRequest) throws Exception {
-        return mockMvc.perform(get("/api/v1/members/login"));
+        return mockMvc.perform(post("/api/v1/members/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(memberLoginRequest)));
     }
 
-    private void 로그인_성공(MemberLoginResponse memberLoginResponse, ResultActions resultActions) {
+    private void 로그인_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(header().string(AUTHORIZATION, BEARER + ACCESS_TOKEN))
+                .andDo(print())
+                .andDo(toDocument("login-success"));
+    }
+
+    private void 로그인_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("login-fail"));
     }
 }
