@@ -7,7 +7,7 @@ import Main from './src/pages/Main';
 import Hiking from './src/pages/hiking/Hiking';
 import Mountain from './src/pages/mountain/Mountain';
 import MountainDetail from './src/pages/mountain/MountainDetail';
-import Completed from './src/pages/Completed';
+import Completed from './src/pages/completed/Completed';
 import MyPage from './src/pages/user/loggedIn/MyPage';
 import Agreement from './src/pages/user/loggedOut/Agreement';
 import Welcome from './src/pages/user/loggedOut/Welcome';
@@ -28,6 +28,8 @@ import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeFo
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
 import TrackingEnd from './src/pages/hiking/TrackingEnd';
 import SignUp from './src/pages/user/loggedOut/SignUp';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import Visited from './src/pages/completed/Visited';
 
 export type LoggedInParamList = {
   Main: any;
@@ -43,6 +45,7 @@ export type LoggedInParamList = {
   ContactUs: any;
   TrackingEnd: any;
   MountainDetail: any;
+  Visited: any;
 };
 
 export type RootStackParamList = {
@@ -61,7 +64,24 @@ export type RootStackParamList = {
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Top = createMaterialTopTabNavigator();
 
+function TopTab() {
+  return (
+    <Top.Navigator>
+      <Top.Screen
+        name="Completed"
+        component={Completed}
+        options={{title: '완등한 산'}}
+      />
+      <Top.Screen
+        name="Visited"
+        component={Visited}
+        options={{title: '방문한 산'}}
+      />
+    </Top.Navigator>
+  );
+}
 function BottomTab() {
   return (
     <Tab.Navigator>
@@ -77,9 +97,9 @@ function BottomTab() {
         options={{title: 'Mountain'}}
       />
       <Tab.Screen
-        name="Completed"
-        component={Completed}
-        options={{title: 'Completed'}}
+        name="TopTab"
+        component={TopTab}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="MyPage"
