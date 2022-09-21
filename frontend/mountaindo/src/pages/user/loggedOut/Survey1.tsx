@@ -1,30 +1,18 @@
-import React from 'react';
+import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {RootStackParamList} from '../../../../AppInner';
 
-type Props = {
-  isChecked1: boolean;
-  isChecked2: boolean;
-  isChecked3: boolean;
-  isChecked: number;
-  setChecked1: any;
-  setChecked2: any;
-  setChecked3: any;
-  setChecked: any;
-};
+type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
 
-function Survey1(props: Props) {
-  const {
-    isChecked1,
-    isChecked2,
-    isChecked3,
-    isChecked,
-    setChecked1,
-    setChecked2,
-    setChecked3,
-    setChecked,
-  } = props;
-
-  console.log(isChecked);
+function Survey1({navigation}: Survey1ScreenProps) {
+  const [isChecked1, setChecked1] = useState(false);
+  const [isChecked2, setChecked2] = useState(false);
+  const [isChecked3, setChecked3] = useState(false);
+  const [isChecked, setChecked] = useState(0);
+  const canGoNext = isChecked1 || isChecked2 || isChecked3;
 
   return (
     <View>
@@ -34,7 +22,6 @@ function Survey1(props: Props) {
           내가 생각하는 나의 등산 레벨은 어느 정도인가요?
         </Text>
       </View>
-      {/* <View> */}
       {isChecked === 0 ? (
         <View>
           <Pressable
@@ -168,6 +155,16 @@ function Survey1(props: Props) {
           </Pressable>
         </View>
       )}
+      <Pressable
+        style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
+        disabled={!canGoNext}
+        onPress={() => navigation.navigate('Survey2')}>
+        <FontAwesomeIcon
+          icon={faArrowRight}
+          size={30}
+          style={canGoNext ? styles.arrowIconActive : styles.arrowIcon}
+        />
+      </Pressable>
     </View>
   );
 }
@@ -224,6 +221,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  nextButton: {
+    marginTop: 50,
+    marginRight: 20,
+    alignItems: 'flex-end',
+  },
+  arrowButton: {
+    width: 50,
+    height: 50,
+    marginTop: 50,
+    marginLeft: 280,
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: 'grey',
+    alignItems: 'flex-end',
+  },
+  arrowIcon: {
+    color: 'white',
+  },
+  arrowButtonActive: {
+    width: 50,
+    height: 50,
+    marginTop: 50,
+    marginLeft: 280,
+    padding: 10,
+    borderRadius: 50,
+    backgroundColor: 'black',
+    alignItems: 'flex-end',
+  },
+  arrowIconActive: {
+    color: 'white',
   },
 });
 

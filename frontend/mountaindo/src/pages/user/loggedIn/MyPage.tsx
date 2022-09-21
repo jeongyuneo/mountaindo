@@ -30,7 +30,6 @@ function MyPage({navigation}: MyPageScreenProps) {
             <Text style={styles.myPageText}>마이 페이지</Text>
           </View>
         </View>
-
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
             <Image

@@ -5,66 +5,90 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
 
-type Survey2ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey2'>;
+type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
 
-function Survey2({navigation}: Survey2ScreenProps) {
+function Survey2({navigation}: Survey1ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
-
+  const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산 레벨 </Text>
-        <Text style={styles.subTitle}>
-          내가 생각하는 나의 등산 레벨은 어느 정도인가요?
-        </Text>
+        <Text style={styles.title}>등산지역 선호도</Text>
+        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
       </View>
-      <View>
-        {isChecked1 ? (
+      {isChecked === 0 ? (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
+            <Text style={styles.answerBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
+            <Text style={styles.answerBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
+          </Pressable>
+        </View>
+      ) : isChecked === 1 ? (
+        <View>
           <Pressable
             style={styles.checkedBox}
-            onPress={() => setChecked1(false)}>
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
             <Text style={styles.checkedBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
             </Text>
           </Pressable>
-        ) : !isChecked2 ? (
-          <Pressable style={styles.answerBox} onPress={() => setChecked1(true)}>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
             <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              지역 - 저의 주변을 주로 선호해요!
             </Text>
           </Pressable>
-        ) : (
-          <Pressable style={styles.answerBox}>
+        </View>
+      ) : (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
             <Text style={styles.answerBoxText}>
-              등린이 - 낮고 완만한 산이 좋아요!
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
             </Text>
           </Pressable>
-        )}
-        {isChecked2 ? (
           <Pressable
             style={styles.checkedBox}
-            onPress={() => setChecked2(false)}>
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
             <Text style={styles.checkedBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
+              지역 - 저의 주변을 주로 선호해요!
             </Text>
           </Pressable>
-        ) : !isChecked1 ? (
-          <Pressable style={styles.answerBox} onPress={() => setChecked2(true)}>
-            <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
-          </Pressable>
-        ) : (
-          <Pressable style={styles.answerBox}>
-            <Text style={styles.answerBoxText}>
-              등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
-          </Pressable>
-        )}
-      </View>
+        </View>
+      )}
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
@@ -111,7 +135,6 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
@@ -129,10 +152,14 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 13,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  nextButton: {
+    marginTop: 50,
+    marginRight: 20,
+    alignItems: 'flex-end',
   },
   arrowButton: {
     width: 50,
