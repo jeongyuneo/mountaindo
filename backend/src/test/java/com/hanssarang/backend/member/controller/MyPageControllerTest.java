@@ -3,29 +3,30 @@ package com.hanssarang.backend.member.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
+import com.hanssarang.backend.member.controller.dto.MemberNicknameResponse;
+import com.hanssarang.backend.member.controller.dto.MemberPasswordRequest;
 import com.hanssarang.backend.member.controller.dto.MemberRequest;
 import com.hanssarang.backend.member.controller.dto.MemberResponse;
 import com.hanssarang.backend.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_UPDATE_MEMBER;
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(MemberController.class)
 public class MyPageControllerTest extends ApiDocument {
 
     private static final String AUTHORIZATION = "Authorization";
@@ -39,8 +40,11 @@ public class MyPageControllerTest extends ApiDocument {
     private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
     private static final String NICKNAME = "나는 부회장";
     private static final int ID = 1;
+    private static final String DELETEMESSAGE = "탈퇴하겠습니다.";
     private MemberResponse memberResponse;
     private MemberRequest memberRequest;
+    private MemberPasswordRequest memberPasswordRequest;
+    private MemberNicknameResponse memberNicknameResponse;
 
     @MockBean
     private MemberService memberService;
@@ -62,6 +66,12 @@ public class MyPageControllerTest extends ApiDocument {
                 .address(ADDRESS)
                 .nickName(NICKNAME)
                 .profilePicture("이재용 사진2")
+                .build();
+        memberPasswordRequest = MemberPasswordRequest.builder()
+                .password("1q2w3e4r5t")
+                .build();
+        memberNicknameResponse = MemberNicknameResponse.builder()
+                .nickname(NICKNAME)
                 .build();
     }
     @DisplayName("회원 정보 조회 - 성공")
@@ -92,22 +102,86 @@ public class MyPageControllerTest extends ApiDocument {
         // given
         willDoNothing().given(memberService).updateMember(anyInt(), any(MemberRequest.class));
         // when
-        ResultActions resultActions = 회원정보_수정_요청(memberRequest);
+        ResultActions resultActions = 회원정보_수정_요청(ID, memberRequest);
         // then
         회원정보_수정_성공(resultActions);
     }
 
     @DisplayName("회원정보 수정 - 실패")
     @Test
-    void updateMemeberFail() throws Exception {
+    void updateMemberFail() throws Exception {
         // given
         willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(MemberRequest.class));
         // when
-        ResultActions resultActions = 회원정보_수정_요청(memberRequest);
+        ResultActions resultActions = 회원정보_수정_요청(ID, memberRequest);
         // then
         회원정보_수정_실패(resultActions, new Message(FAIL_TO_UPDATE_MEMBER));
     }
 
+    @DisplayName("마이페이지에서 비밀번호 재설정 - 성공")
+    @Test
+    void updateMyPasswordSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).updateMyPagePassword(anyInt(), any(MemberPasswordRequest.class));
+        // when
+        ResultActions resultActions = 마이페이지_비밀번호_재설정_요청(ID, memberPasswordRequest);
+        // then
+        마이페이지_비밀번호_재설정_성공(resultActions);
+    }
+
+    @DisplayName("마이페이지에서 비밀번호 재설정 - 실패")
+    @Test
+    void updateMyPasswordFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updateMyPagePassword(anyInt(), any(MemberPasswordRequest.class));
+        // when
+        ResultActions resultActions = 마이페이지_비밀번호_재설정_요청(ID, memberPasswordRequest);
+        // then
+        마이페이지_비밀번호_재설정_실패(resultActions, new Message(FAIL_TO_UPDATE_PASSWORD));
+    }
+
+    @DisplayName("회원탈퇴 - 성공")
+    @Test
+    void deleteMemberSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).deleteMember(anyInt(), anyString());
+        // when
+        ResultActions resultActions = 회원탈퇴_요청(ID, DELETEMESSAGE);
+        // then
+        회원탈퇴_성공(resultActions);
+    }
+
+    @DisplayName("회원탈퇴 - 실패")
+    @Test
+    void deleteMemberFail() throws Exception {
+        // give
+        willThrow(new UnexpectedRollbackException(FAIL_TO_DELETE_MEMBER)).given(memberService).deleteMember(anyInt(), anyString());
+        // when
+        ResultActions resultActions = 회원탈퇴_요청(ID, DELETEMESSAGE);
+        // then
+        회원탈퇴_실패(resultActions, new Message(FAIL_TO_DELETE_MEMBER));
+    }
+    @DisplayName("닉네임 중복체크 - 성공")
+    @Test
+    void checkNicknameSuccess() throws Exception {
+        // given
+        willReturn(memberNicknameResponse).given(memberService).checkNickname(anyString());
+        // when
+        ResultActions resultActions = 닉네임_중복체크_요청(NICKNAME);
+        // then
+        닉네임_중복체크_성공(memberNicknameResponse, resultActions);
+    }
+
+    @DisplayName("닉네임 중복체크 - 중복체크 실패")
+    @Test
+    void checkNicknameFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(FAIL_TO_CHECK_NICKNAME)).given(memberService).checkNickname(anyString());
+        // when
+        ResultActions resultActions = 닉네임_중복체크_요청(NICKNAME);
+        // then
+        닉네임_중복체크_실패(new Message(FAIL_TO_CHECK_NICKNAME), resultActions);
+    }
     private ResultActions 회원정보_조회_요청(int memberId) throws Exception {
         return mockMvc.perform(get("/api/v1/members/info/" + memberId)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -118,7 +192,6 @@ public class MyPageControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(memberResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-member-success"));
-
     }
 
     private void 회원정보_조회_실패(ResultActions resultActions, Message message) throws Exception {
@@ -126,22 +199,18 @@ public class MyPageControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-member-fail"));
-
     }
 
-    private ResultActions 회원정보_수정_요청(MemberRequest memberRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/members/update")
+    private ResultActions 회원정보_수정_요청(int memberId, MemberRequest memberRequest) throws Exception {
+        return mockMvc.perform(patch("/api/v1/members/update/" + memberId)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(memberRequest)));
-
     }
-
     private void 회원정보_수정_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
                 .andDo(toDocument("update-member-success"));
-
     }
 
     private void 회원정보_수정_실패(ResultActions resultActions, Message message) throws Exception {
@@ -149,5 +218,64 @@ public class MyPageControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("update-member-fail"));
+    }
+
+    private ResultActions 마이페이지_비밀번호_재설정_요청(int memberId, MemberPasswordRequest memberPasswordRequest) throws Exception {
+        return mockMvc.perform(patch("/api/v1/members/update/mypage/password/" + memberId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(memberPasswordRequest)));
+    }
+
+    private void 마이페이지_비밀번호_재설정_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("update-mypage-password-success"));
+    }
+
+    private void 마이페이지_비밀번호_재설정_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("update-mypage-password-fail"));
+    }
+
+    private ResultActions 회원탈퇴_요청(int memberId, String deleteMessage) throws Exception {
+        return mockMvc.perform(patch("/api/v1/members/delete/" + memberId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .param("deleteMessage", deleteMessage));
+    }
+
+    private void 회원탈퇴_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("delete-member-success"));
+    }
+
+    private void 회원탈퇴_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("delete-member-fail"));
+    }
+
+    private ResultActions 닉네임_중복체크_요청(String nickname) throws Exception {
+        return mockMvc.perform(get("/api/v1/members/nickname")
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .param("nickname", nickname));
+    }
+
+    private void 닉네임_중복체크_성공(MemberNicknameResponse memberNicknameResponse, ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(memberNicknameResponse)))
+                .andDo(print())
+                .andDo(toDocument("check-mypage-nickname-success"));
+    }
+
+    private void 닉네임_중복체크_실패(Message message, ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("check-mypage-nickname-fail"));
     }
 }
