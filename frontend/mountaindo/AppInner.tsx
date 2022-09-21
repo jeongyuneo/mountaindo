@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
 import Main from './src/pages/Main';
-import Hiking from './src/pages/Hiking';
+import Hiking from './src/pages/hiking/Hiking';
 import Mountain from './src/pages/mountain/Mountain';
 import MountainDetail from './src/pages/mountain/MountainDetail';
 import Completed from './src/pages/Completed';
@@ -26,6 +26,7 @@ import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
+import TrackingEnd from './src/pages/hiking/TrackingEnd';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 
 export type LoggedInParamList = {
@@ -40,6 +41,7 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
+  TrackingEnd: any;
   MountainDetail: any;
 };
 
@@ -67,7 +69,7 @@ function BottomTab() {
       <Tab.Screen
         name="Hiking"
         component={Hiking}
-        options={{title: ' Hiking'}}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="Mountain"
@@ -130,6 +132,11 @@ function AppInner() {
               name="ContactUs"
               component={ContactUs}
               options={{title: '문의하기'}}
+            />
+            <Stack.Screen
+              name="TrackingEnd"
+              component={TrackingEnd}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="MountainDetail"
