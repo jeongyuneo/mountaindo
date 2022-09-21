@@ -147,6 +147,17 @@ class MountainControllerTest extends ApiDocument {
         등산로_상세_조회_성공(resultActions, trailResponse);
     }
 
+    @DisplayName("등산로 상세 조회 - 실패")
+    @Test
+    void getTrailFail() throws Exception {
+        // given
+        willThrow(new NotFoundException(NOT_FOUND_TRAIL)).given(mountainService).getTrail(anyInt());
+        // when
+        ResultActions resultActions = 등산로_상세_조회_요청(ID);
+        // then
+        등산로_상세_조회_실패(resultActions, new Message(NOT_FOUND_TRAIL));
+    }
+
     @DisplayName("산/등산로 검색 - 성공")
     @Test
     void searchMountainOrTrailSuccess() throws Exception {
@@ -261,6 +272,13 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(trailResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-trail-success"));
+    }
+
+    private void 등산로_상세_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-trail-fail"));
     }
 
     private ResultActions 산_또는_등산로_검색_요청(String keyword) throws Exception {
