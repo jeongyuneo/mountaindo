@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
+
     public MemberEmailResponse checkEmail(String memberEmail) {
         return null;
     }
@@ -41,7 +42,6 @@ public class MemberService {
     public void deleteMember(int memberId, String deleteMessage) {
     }
 
-    public MemberLoginResponse getMemberLogin(MemberLoginRequest memberLoginRequest) {
-        return null;
+    public void login(MemberLoginRequest memberLoginRequest) {
     }
 }
