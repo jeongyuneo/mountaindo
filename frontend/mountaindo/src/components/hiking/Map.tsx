@@ -22,8 +22,9 @@ function Map({myPosition}: Props) {
       ref={mapView}
       style={styles.mapView}
       zoomControl={false}
-      // 지도의 label 설정 -> 등산로 정보 보이도록 설정
+      useTextureView={true} // 다른 페이지로 이동 후 재접속해도 마커가 사라지지지 않도록 설정
       onInitialized={() => {
+        // 지도의 label 설정 -> 등산로 정보 보이도록 설정
         mapView.current.setLayerGroupEnabled(
           LayerGroup.LAYER_GROUP_MOUNTAIN,
           true,
