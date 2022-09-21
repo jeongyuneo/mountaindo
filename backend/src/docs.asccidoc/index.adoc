@@ -91,6 +91,27 @@ include::{snippets}/get-mountain-fail/http-request.adoc[]
 .response
 include::{snippets}/get-mountain-fail/http-response.adoc[]
 
+==== 등산로 상세 조회
+----
+/api/vi/mountains/trail
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|trailId
+|Integer
+|등산로 아이디
+|===
+
+===== 성공
+.request
+include::{snippets}/get-trail-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-trail-success/http-response.adoc[]
+
 ==== 산/등산로 검색
 ----
 /api/vi/mountains/search/1
