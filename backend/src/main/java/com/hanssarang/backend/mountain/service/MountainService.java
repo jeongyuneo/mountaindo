@@ -2,6 +2,7 @@ package com.hanssarang.backend.mountain.service;
 
 import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
+import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,10 @@ public class MountainService {
     }
 
     public MountainResponse getMountain(int mountainId) {
+        return null;
+    }
+
+    public TrailResponse getTrail(int trailId) {
         return null;
     }
 
