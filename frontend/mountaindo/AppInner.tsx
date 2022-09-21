@@ -3,10 +3,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
-
 import Main from './src/pages/Main';
 import Hiking from './src/pages/hiking/Hiking';
-import Mountain from './src/pages/Mountain';
+import Mountain from './src/pages/mountain/Mountain';
+import MountainDetail from './src/pages/mountain/MountainDetail';
 import Completed from './src/pages/Completed';
 import MyPage from './src/pages/user/loggedIn/MyPage';
 import Agreement from './src/pages/user/loggedOut/Agreement';
@@ -17,7 +17,7 @@ import usePermissions from './src/hooks/usePermissions';
 import ContactUs from './src/pages/user/loggedIn/ContactUs';
 import SignIn from './src/pages/user/loggedOut/SignIn';
 import FindPassword from './src/pages/user/loggedOut/FindPassword';
-import Survey from './src/pages/user/loggedOut/Survey';
+import Survey1 from './src/pages/user/loggedOut/Survey1';
 import Survey2 from './src/pages/user/loggedOut/Survey2';
 import Survey3 from './src/pages/user/loggedOut/Survey3';
 import Survey4 from './src/pages/user/loggedOut/Survey4';
@@ -26,8 +26,8 @@ import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import TrackingEnd from './src/pages/hiking/TrackingEnd';
+import SignUp from './src/pages/user/loggedOut/SignUp';
 
 export type LoggedInParamList = {
   Main: any;
@@ -42,6 +42,7 @@ export type LoggedInParamList = {
   Notice: any;
   ContactUs: any;
   TrackingEnd: any;
+  MountainDetail: any;
 };
 
 export type RootStackParamList = {
@@ -49,7 +50,7 @@ export type RootStackParamList = {
   Agreement: any;
   SignUp: any;
   Welcome: any;
-  Survey: any;
+  Survey1: any;
   Survey2: any;
   Survey3: any;
   Survey4: any;
@@ -137,6 +138,11 @@ function AppInner() {
               component={TrackingEnd}
               options={{headerShown: false}}
             />
+            <Stack.Screen
+              name="MountainDetail"
+              component={MountainDetail}
+              options={{title: '산 상세 정보', headerShown: false}}
+            />
           </Stack.Group>
         </>
       ) : (
@@ -153,13 +159,18 @@ function AppInner() {
               options={{title: '약관동의서'}}
             />
             <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{title: '회원가입'}}
+            />
+            <Stack.Screen
               name="Welcome"
               component={Welcome}
               options={{title: '가입환영'}}
             />
             <Stack.Screen
-              name="Survey"
-              component={Survey}
+              name="Survey1"
+              component={Survey1}
               options={{title: '설문조사1'}}
             />
             <Stack.Screen
