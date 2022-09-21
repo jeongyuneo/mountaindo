@@ -94,7 +94,6 @@ function MainModal({isModalVisible, setIsModalVisible, goAllRank}) {
         visible={isModalVisible}
         onRequestClose={() => {
           setIsModalVisible(!isModalVisible);
-          console.log('modal appearance');
         }}>
         <View style={styles.dummyFlex}></View>
         <View style={styles.mainFlex}>
