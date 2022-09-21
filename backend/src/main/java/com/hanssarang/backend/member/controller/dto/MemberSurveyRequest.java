@@ -13,5 +13,4 @@ public class MemberSurveyRequest {
     private String mountainLocation;
     private String mountainStyle;
     private String climbingTime;
-    private String mountainType;
 }
