@@ -6,6 +6,7 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
 import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
+import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,10 +45,14 @@ class MountainControllerTest extends ApiDocument {
     private static final String TRAIL_NAME = "A코스";
     private static final String LENGTH = "1km";
     private static final String LEVEL = "하";
+    private static final String GOING_UP_TIME = "3시간 30분";
+    private static final String GOING_DOWN_TIME = "2시간";
+    private static final String RISK = "경사가 가파릅니다.";
     private static final String NAME_ORDER = "name";
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
+    private TrailResponse trailResponse;
 
     @MockBean
     private MountainService mountainService;
@@ -77,6 +82,13 @@ class MountainControllerTest extends ApiDocument {
                                 .imageUrl(IMAGE_URL)
                                 .build())
                         .collect(Collectors.toList()))
+                .build();
+        trailResponse = TrailResponse.builder()
+                .name(TRAIL_NAME)
+                .goingUpTime(GOING_UP_TIME)
+                .goingDownTime(GOING_DOWN_TIME)
+                .length(LENGTH)
+                .risk(RISK)
                 .build();
     }
 
@@ -122,6 +134,17 @@ class MountainControllerTest extends ApiDocument {
         ResultActions resultActions = 산_상세_조회_요청(ID);
         // then
         산_상세_조회_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
+    }
+
+    @DisplayName("등산로 상세 조회 - 성공")
+    @Test
+    void getTrailSuccess() throws Exception {
+        // given
+        willReturn(trailResponse).given(mountainService).getTrail(anyInt());
+        // when
+        ResultActions resultActions = 등산로_상세_조회_요청(ID);
+        // then
+        등산로_상세_조회_성공(resultActions, trailResponse);
     }
 
     @DisplayName("산/등산로 검색 - 성공")
@@ -226,6 +249,18 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-mountain-fail"));
+    }
+
+    private ResultActions 등산로_상세_조회_요청(int trailId) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/trail/" + trailId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 등산로_상세_조회_성공(ResultActions resultActions, TrailResponse trailResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(trailResponse)))
+                .andDo(print())
+                .andDo(toDocument("get-trail-success"));
     }
 
     private ResultActions 산_또는_등산로_검색_요청(String keyword) throws Exception {
