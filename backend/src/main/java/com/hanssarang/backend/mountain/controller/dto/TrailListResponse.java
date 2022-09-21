@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TrailListResponse {
 
+    private int trailId;
     private String name;
     private String length;
     private String level;
