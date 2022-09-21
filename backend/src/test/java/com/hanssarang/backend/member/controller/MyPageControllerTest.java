@@ -41,6 +41,7 @@ public class MyPageControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final int ID = 1;
     private static final String DELETEMESSAGE = "탈퇴하겠습니다.";
+
     private MemberResponse memberResponse;
     private MemberRequest memberRequest;
     private MemberPasswordRequest memberPasswordRequest;
