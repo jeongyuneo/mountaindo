@@ -6,9 +6,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberGetIdRequest {
+public class FindingIdRequest {
 
     private String name;
     private String birth;
-    private String phoneNumber;
+    private String phone;
 }
