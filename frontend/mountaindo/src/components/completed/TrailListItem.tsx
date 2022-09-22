@@ -1,23 +1,36 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 
 // TrailList에서 받아온 정보 타입 설정
 interface Props {
   trail: string;
+  trailId: number;
   level: string;
   timeDuration: string;
   location: string;
   visitedDate: string;
+  modalVisible: any;
+  setModalVisible: any;
+  setModalNumber: any;
 }
 function TrailListItem({
   trail,
+  trailId,
   level,
   timeDuration,
   location,
   visitedDate,
+  modalVisible,
+  setModalVisible,
+  setModalNumber,
 }: Props) {
   return (
-    <View style={styles.itemContainer}>
+    <Pressable
+      style={styles.itemContainer}
+      onPress={() => {
+        setModalVisible(!modalVisible);
+        setModalNumber(trailId);
+      }}>
       <View style={styles.titleGroup}>
         <View>
           <Text style={styles.title}>{trail}</Text>
@@ -28,14 +41,14 @@ function TrailListItem({
       </View>
       <View style={styles.item}>
         <View style={styles.labelGroup}>
-          <Text>소요 시간</Text>
-          <Text>난이도</Text>
-          <Text>위치</Text>
+          <Text style={styles.label}>소요 시간</Text>
+          <Text style={styles.label}>난이도</Text>
+          <Text style={styles.label}>위치</Text>
         </View>
         <View style={styles.textGroup}>
-          <Text>{timeDuration}</Text>
-          <Text>{level}</Text>
-          <Text>{location}</Text>
+          <Text style={styles.text}>{timeDuration}</Text>
+          <Text style={styles.text}>{level}</Text>
+          <Text style={styles.text}>{location}</Text>
         </View>
         <View>
           <Image
@@ -44,7 +57,7 @@ function TrailListItem({
           />
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -54,29 +67,37 @@ const styles = StyleSheet.create({
   },
   titleGroup: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
+    alignItems: 'baseline',
+    marginBottom: 15,
   },
   title: {
-    fontSize: 15,
+    fontSize: 20,
+    color: 'black',
     fontWeight: '800',
   },
   date: {
-    flex: 0.5,
+    marginLeft: 10,
   },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   mountainImage: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
   },
   labelGroup: {
     flex: 0.3,
   },
   textGroup: {
-    flex: 0.4,
+    flex: 0.6,
+  },
+  label: {
+    marginBottom: 5,
+  },
+  text: {
+    marginBottom: 5,
+    color: 'black',
   },
 });
 
