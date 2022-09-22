@@ -14,5 +14,5 @@ public class SignUpRequest {
     private String birth;
     private String phone;
     private String address;
-    private String nickName;
+    private String nickname;
 }
