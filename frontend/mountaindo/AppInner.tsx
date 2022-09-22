@@ -30,6 +30,7 @@ import TrackingEnd from './src/pages/hiking/TrackingEnd';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
+import VisitedDetail from './src/pages/completed/VisitedDetail';
 
 export type LoggedInParamList = {
   Main: any;
@@ -46,6 +47,7 @@ export type LoggedInParamList = {
   TrackingEnd: any;
   MountainDetail: any;
   Visited: any;
+  VisitedDetail: any;
 };
 
 export type RootStackParamList = {
@@ -162,6 +164,11 @@ function AppInner() {
               name="MountainDetail"
               component={MountainDetail}
               options={{title: '산 상세 정보', headerShown: false}}
+            />
+            <Stack.Screen
+              name="VisitedDetail"
+              component={VisitedDetail}
+              options={{title: '방문한 산 상세'}}
             />
           </Stack.Group>
         </>
