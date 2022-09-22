@@ -30,13 +30,13 @@ public class MemberController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> signUp(@RequestHeader("Authorization") String token, @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<Void> signUp(@RequestHeader(AUTHORIZATION) String token, @RequestBody SignUpRequest signUpRequest) {
         memberService.signUp(signUpRequest);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/initial-survey")
-    public ResponseEntity<Void> createInitialSurvey(@RequestHeader("Authorization") String token, @RequestBody InitialSurveyRequest initialSurveyRequest) {
+    public ResponseEntity<Void> createInitialSurvey(@RequestHeader(AUTHORIZATION) String token, @RequestBody InitialSurveyRequest initialSurveyRequest) {
         memberService.createInitialSurvey(initialSurveyRequest);
         return ResponseEntity.ok().build();
     }
@@ -47,30 +47,30 @@ public class MemberController {
     }
 
     @GetMapping()
-    public ResponseEntity<MemberResponse> getMember(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<MemberResponse> getMember(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity.ok(memberService.getMember(1));
     }
 
     @PatchMapping()
-    public ResponseEntity<Void> updateMember(@RequestHeader("Authorization") String token, @RequestBody MemberRequest memberRequest) {
-        memberService.updateMember(memberRequest);
+    public ResponseEntity<Void> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody MemberRequest memberRequest) {
+        memberService.updateMember(1, memberRequest);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
-        memberService.updatePassword(passwordUpdateVerificationRequest);
+        memberService.updatePassword(1, passwordUpdateVerificationRequest);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/mypage/password")
-    public ResponseEntity<Void> updatePasswordInMyPage(@RequestHeader("Authorization") String token, @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
-        memberService.updatePasswordInMyPage(passwordUpdateRequest);
+    public ResponseEntity<Void> updatePasswordInMyPage(@RequestHeader(AUTHORIZATION) String token, @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
+        memberService.updatePasswordInMyPage(1, passwordUpdateRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
-    public ResponseEntity<Void> deleteMember(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Void> deleteMember(@RequestHeader(AUTHORIZATION) String token) {
         memberService.deleteMember(1);
         return ResponseEntity.ok().build();
     }
