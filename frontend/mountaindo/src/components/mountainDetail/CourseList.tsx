@@ -28,7 +28,6 @@ function CourseList({CourseListDummy}: Props) {
       <View style={styles.courseListWrapper}>
         {CourseListDummy[0].trailList.map(item => (
           <CourseItem
-            key={item.id}
             trail={item.trail}
             level={item.level}
             timeDuration={item.timeDuration}

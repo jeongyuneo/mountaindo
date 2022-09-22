@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 
 interface Props {
-  key: number;
   trail: string;
   level: string;
   timeDuration: string;
