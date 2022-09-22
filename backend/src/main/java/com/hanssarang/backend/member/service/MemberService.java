@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberService {
 
-    public void checkEmail(String memberEmail) {
+    public void checkEmail(String email) {
     }
 
     public void checkNickname(String nickname) {
@@ -15,27 +15,27 @@ public class MemberService {
     public void signUp(SignUpRequest signUpRequest) {
     }
 
-    public void createInitialSurvey(SurveyRequest surveyRequest) {
+    public void createInitialSurvey(InitialSurveyRequest initialSurveyRequest) {
     }
 
-    public EmailResponse getMemberEmail(FindingIdRequest findingIdRequest) {
+    public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
         return null;
     }
 
-    public MemberResponse getMember() {
+    public MemberResponse getMember(int memberId) {
         return null;
     }
 
-    public void updateMember(int memberId, MemberRequest memberRequest) {
+    public void updateMember(MemberRequest memberRequest) {
     }
 
-    public void updatePassword(int memberId, UpdatePasswordRequest memberUpdatePasswordRequest) {
+    public void updatePassword(PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
     }
 
-    public void updatePasswordInMyPage(int memberId, PasswordRequest passwordRequest) {
+    public void updatePasswordInMyPage(PasswordUpdateRequest passwordUpdateRequest) {
     }
 
-    public void deleteMember() {
+    public void deleteMember(int memberId) {
     }
 
     public void login(LoginRequest loginRequest) {
