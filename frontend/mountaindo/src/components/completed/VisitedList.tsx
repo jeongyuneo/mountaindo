@@ -9,6 +9,8 @@ export type TrailType = {
   timeDuration: string;
   location: string;
   visitedDate: string;
+  totalDistance: number;
+  totalHigh: number;
 };
 
 // Visited 페이지에서 받아온 정보 타입 설정
