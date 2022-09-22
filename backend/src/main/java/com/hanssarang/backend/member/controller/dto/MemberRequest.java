@@ -9,7 +9,7 @@ import lombok.*;
 public class MemberRequest {
 
     private String name;
-    private String phoneNumber;
+    private String phone;
     private String address;
     private String nickName;
     private String profilePicture;
