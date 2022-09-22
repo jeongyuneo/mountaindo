@@ -31,6 +31,7 @@ import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
 import VisitedDetail from './src/pages/completed/VisitedDetail';
+import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 
 export type LoggedInParamList = {
   Main: any;
@@ -48,6 +49,7 @@ export type LoggedInParamList = {
   MountainDetail: any;
   Visited: any;
   VisitedDetail: any;
+  AddressChangeForm: any;
 };
 
 export type RootStackParamList = {
@@ -169,6 +171,11 @@ function AppInner() {
               name="VisitedDetail"
               component={VisitedDetail}
               options={{title: '방문한 산 상세'}}
+            />
+            <Stack.Screen
+              name="AddressChangeForm"
+              component={AddressChangeForm}
+              options={{title: '주소 변경'}}
             />
           </Stack.Group>
         </>

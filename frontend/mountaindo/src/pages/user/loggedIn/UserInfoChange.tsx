@@ -20,6 +20,7 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
     email: 'aaa@aaa.aaa',
     birth: '2022-09-15',
     phoneNumber: '010-0000-0000',
+    address: {value: '충청남도', cityValue: '아산시'},
   });
 
   return (
@@ -32,49 +33,65 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
             <Text style={styles.textLabel}>이메일</Text>
             <Text style={styles.textLabel}>생년월일</Text>
             <Text style={styles.textLabel}>전화번호</Text>
+            <Text style={styles.textLabel}>실 거주지</Text>
           </View>
           <View style={styles.textGroup}>
             <Text style={styles.text}>{userInfo.name}</Text>
-            <View style={styles.goToChangeForm}>
-              <Text style={styles.text}>{userInfo.nickname}</Text>
-              {/* 우측 화살표를 눌러서 닉네임 변경 페이지로 이동
+            {/* 우측 화살표를 눌러서 닉네임 변경 페이지로 이동
                 params로 user정보를 전달
               */}
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('NicknameChangeForm', {
-                    userInfo: userInfo,
-                    setUserInfo: setUserInfo,
-                  })
-                }>
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  size={15}
-                  style={styles.icon}
-                />
-              </Pressable>
-            </View>
+            <Pressable
+              style={styles.goToChangeForm}
+              onPress={() =>
+                navigation.navigate('NicknameChangeForm', {
+                  userInfo: userInfo,
+                  setUserInfo: setUserInfo,
+                })
+              }>
+              <Text style={styles.text}>{userInfo.nickname}</Text>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={15}
+                style={styles.icon}
+              />
+            </Pressable>
             <Text style={styles.text}>{userInfo.email}</Text>
             <Text style={styles.text}>{userInfo.birth}</Text>
-            <View style={styles.goToChangeForm}>
-              <Text style={styles.text}>{userInfo.phoneNumber}</Text>
-              {/* 우측 화살표를 눌러서 전화번호 변경 페이지로 이동
+            {/* 우측 화살표를 눌러서 전화번호 변경 페이지로 이동
                 params로 user정보를 전달
               */}
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('PhoneNumberChangeForm', {
-                    userInfo: userInfo,
-                    setUserInfo: setUserInfo,
-                  })
-                }>
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  size={15}
-                  style={styles.icon}
-                />
-              </Pressable>
-            </View>
+            <Pressable
+              style={styles.goToChangeForm}
+              onPress={() =>
+                navigation.navigate('PhoneNumberChangeForm', {
+                  userInfo: userInfo,
+                  setUserInfo: setUserInfo,
+                })
+              }>
+              <Text style={styles.text}>{userInfo.phoneNumber}</Text>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={15}
+                style={styles.icon}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.goToChangeForm}
+              onPress={() =>
+                navigation.navigate('AddressChangeForm', {
+                  userInfo: userInfo,
+                  setUserInfo: setUserInfo,
+                })
+              }>
+              <Text style={styles.text}>
+                {userInfo.address.value} {userInfo.address.cityValue}
+              </Text>
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={15}
+                style={styles.icon}
+              />
+            </Pressable>
           </View>
         </View>
         <Pressable style={styles.button}>
