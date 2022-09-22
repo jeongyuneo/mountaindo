@@ -6,11 +6,11 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SurveyRequest {
+public class InitialSurveyRequest {
 
     private String myLevel;
     private String visitedMountain;
-    private String mountainLocation;
-    private String mountainStyle;
-    private String climbingTime;
+    private String preferredMountainLocation;
+    private String preferredMountainStyle;
+    private String preferredClimbingTime;
 }
