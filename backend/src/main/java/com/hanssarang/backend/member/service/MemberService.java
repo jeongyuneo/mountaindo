@@ -6,42 +6,38 @@ import org.springframework.stereotype.Service;
 @Service
 public class MemberService {
 
-    public MemberEmailResponse checkEmail(String memberEmail) {
+    public void checkEmail(String memberEmail) {
+    }
+
+    public void checkNickname(String nickname) {
+    }
+
+    public void signUp(SignUpRequest signUpRequest) {
+    }
+
+    public void createInitialSurvey(SurveyRequest surveyRequest) {
+    }
+
+    public EmailResponse getMemberEmail(FindingIdRequest findingIdRequest) {
         return null;
     }
 
-    public MemberNicknameResponse checkNickname(String nickname) {
-        return null;
-    }
-
-    public void signUpNormal(MemberSignUpRequest memberSignUpRequest) {
-
-    }
-
-    public void createPreSurvey(MemberSurveyRequest memberSurveyRequest) {
-
-    }
-
-    public MemberEmailResponse getMemberEmail(MemberGetIdRequest memberGetIdRequest) {
-        return null;
-    }
-
-    public MemberResponse getMemeber(int memberId) {
+    public MemberResponse getMember() {
         return null;
     }
 
     public void updateMember(int memberId, MemberRequest memberRequest) {
     }
 
-    public void updatePassword(int memberId, MemberUpdatePasswordRequest memberUpdatePasswordRequest) {
+    public void updatePassword(int memberId, UpdatePasswordRequest memberUpdatePasswordRequest) {
     }
 
-    public void updateMyPagePassword(int memberId, MemberPasswordRequest memberPasswordRequest) {
+    public void updatePasswordInMyPage(int memberId, PasswordRequest passwordRequest) {
     }
 
-    public void deleteMember(int memberId, String deleteMessage) {
+    public void deleteMember() {
     }
 
-    public void login(MemberLoginRequest memberLoginRequest) {
+    public void login(LoginRequest loginRequest) {
     }
 }
