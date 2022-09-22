@@ -1,58 +1,13 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image, Alert} from 'react-native';
-import {LoggedInParamList} from '../../../AppInner';
-import axios from 'axios';
-import Geolocation from '@react-native-community/geolocation';
-import Config from 'react-native-config';
+import React from 'react';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 
-type MountainScreenProps = NativeStackScreenProps<
-  LoggedInParamList,
-  'Mountain'
->;
+import CourseList from '../../components/mountainDetail/CourseList';
+import CourseListDummy from '../../components/mountainDetail/CourseListDummy';
+import WeatherForecast from '../../components/mountainDetail/WeatherForecast';
 
-function MountainDetail({navigation}: MountainScreenProps) {
-  const [isLoading, setLoading] = useState(true);
-  const [currentWeather, setCurrentWeather] = useState('');
-  const [error, setError] = useState(false);
-
-  const API_KEY = Config.WEATHER_API_KEY;
-
-  const getCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        const longitude = JSON.stringify(position.coords.longitude);
-        const latitude = JSON.stringify(position.coords.latitude);
-        console.log('location: ', latitude, longitude);
-        getWeatherByCurrentLocation(latitude, longitude);
-      },
-      err => Alert.alert(err.message),
-    );
-  };
-
-  const getWeatherByCurrentLocation = async (latitude: any, longitude: any) => {
-    try {
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`;
-      const response = await axios.get(url);
-      let data: any = JSON.stringify(response);
-      console.log('data', data);
-      let mainWeather = JSON.parse(data).data.weather[0].description;
-      console.log('mainWeather', mainWeather);
-      setCurrentWeather(mainWeather);
-    } catch (err) {
-      Alert.alert('날씨 정보를 읽어올 수 없습니다.');
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
+function MountainDetail() {
   return (
-    <View>
+    <ScrollView>
       <Image
         style={styles.mountainImg}
         source={require('../../assets/gyeryongMountain.jpg')}
@@ -64,17 +19,9 @@ function MountainDetail({navigation}: MountainScreenProps) {
         <Text style={styles.locationText}>위치: 대전 광역시 유성구</Text>
         <Text style={styles.altitudeText}>고도: 800m</Text>
       </View>
-      <View style={styles.weatherWrapper}>
-        <Text style={styles.weatherText}>주간 날씨 예보</Text>
-        {isLoading || error ? (
-          <Text>Loading</Text>
-        ) : (
-          <Text>{currentWeather}</Text>
-        )}
-      </View>
-
-      <Text style={styles.courseText}>코스 목록</Text>
-    </View>
+      <WeatherForecast />
+      <CourseList CourseListDummy={CourseListDummy} />
+    </ScrollView>
   );
 }
 
@@ -103,19 +50,16 @@ const styles = StyleSheet.create({
   },
   weatherWrapper: {
     marginTop: 20,
-    marginLeft: 20,
+    marginHorizontal: 20,
   },
   weatherText: {
     fontWeight: 'bold',
     fontSize: 20,
     color: 'black',
   },
-  courseText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: 'black',
-    marginLeft: 20,
-    marginTop: 20,
+  weatherImgWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
