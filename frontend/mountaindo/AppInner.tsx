@@ -99,7 +99,7 @@ function BottomTab() {
         options={{title: 'Mountain'}}
       />
       <Tab.Screen
-        name="TopTab"
+        name="CompletedMountain"
         component={TopTab}
         options={{headerShown: false}}
       />
