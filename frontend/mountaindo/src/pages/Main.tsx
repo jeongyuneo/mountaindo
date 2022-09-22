@@ -9,6 +9,8 @@ import MainModal from '../components/main/MainModal';
 import RankList from '../components/main/RankList';
 import EasyMountain from '../components/main/EasyMountain';
 import Photo from '../components/main/Photo';
+import {dummyEasy, dummyAge} from '../components/main/Dummy';
+import AgeMountain from '../components/main/AgeMountain';
 
 type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, 'Main'>;
 function Main({navigation}: MainInScreenProps) {
@@ -20,25 +22,30 @@ function Main({navigation}: MainInScreenProps) {
 
   return (
     <View style={styles.containerMain}>
-      <MainModal
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        goAllRank={goAllRank}
-      />
-      <View style={styles.photoContainer}>
-        <Photo />
-      </View>
+      <ScrollView>
+        <MainModal
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          goAllRank={goAllRank}
+        />
+        <View style={styles.photoContainer}>
+          <Photo />
+        </View>
 
-      <View style={styles.suggestionContainer}>
-        <ScrollView>
+        <View style={styles.suggestionContainer}>
           <RankList goAllRank={goAllRank} />
-          <EasyMountain />
 
           <View>
-            <Text>20대에게 인기있는 등산 코스</Text>
+            <Text style={styles.easyTitle}>쉬운 난이도의 등산 코스</Text>
+            <EasyMountain dummyEasy={dummyEasy} />
           </View>
-        </ScrollView>
-      </View>
+
+          <View>
+            <Text style={styles.easyTitle}>20대에게 인기있는 등산 코스</Text>
+            <AgeMountain dummyAge={dummyAge} />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -51,6 +58,13 @@ const styles = StyleSheet.create({
   },
   suggestionContainer: {
     flex: 2,
+  },
+  easyTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'black',
+    marginLeft: 3,
+    paddingVertical: 10,
   },
 });
 
