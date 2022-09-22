@@ -73,7 +73,7 @@ public class MemberControllerTest extends ApiDocument {
                 .name(NAME)
                 .phone(PHONE)
                 .address(ADDRESS)
-                .nickName(NICKNAME)
+                .nickname(NICKNAME)
                 .profilePicture(IMAGE_URL)
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
@@ -89,7 +89,7 @@ public class MemberControllerTest extends ApiDocument {
                 .birth(BIRTH)
                 .phone(PHONE)
                 .address(ADDRESS)
-                .nickName(NICKNAME)
+                .nickname(NICKNAME)
                 .build();
         initialSurveyRequest = InitialSurveyRequest.builder()
                 .myLevel(MY_LEVEL)
@@ -139,7 +139,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updateMember(any(MemberRequest.class));
+        willDoNothing().given(memberService).updateMember(anyInt(), any(MemberRequest.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(memberRequest);
         // then
@@ -150,7 +150,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(any(MemberRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(MemberRequest.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(memberRequest);
         // then
@@ -159,9 +159,9 @@ public class MemberControllerTest extends ApiDocument {
 
     @DisplayName("마이페이지에서 비밀번호 재설정 - 성공")
     @Test
-    void updateMyPasswordSuccess() throws Exception {
+    void updatePasswordInMyPageSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updatePasswordInMyPage(any(PasswordUpdateRequest.class));
+        willDoNothing().given(memberService).updatePasswordInMyPage(anyInt(), any(PasswordUpdateRequest.class));
         // when
         ResultActions resultActions = 마이페이지_비밀번호_재설정_요청(passwordUpdateRequest);
         // then
@@ -170,9 +170,9 @@ public class MemberControllerTest extends ApiDocument {
 
     @DisplayName("마이페이지에서 비밀번호 재설정 - 실패")
     @Test
-    void updateMyPasswordFail() throws Exception {
+    void updatePasswordInMyPageFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePasswordInMyPage(any(PasswordUpdateRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePasswordInMyPage(anyInt(), any(PasswordUpdateRequest.class));
         // when
         ResultActions resultActions = 마이페이지_비밀번호_재설정_요청(passwordUpdateRequest);
         // then
@@ -315,7 +315,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
+        willDoNothing().given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
         // when
         ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
         // then
@@ -326,7 +326,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
         // when
         ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
         // then
