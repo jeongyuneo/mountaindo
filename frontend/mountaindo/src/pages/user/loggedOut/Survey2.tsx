@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
 
-type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
+type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey2'>;
 
 function Survey2({navigation}: Survey1ScreenProps) {
   const [isChecked1, setChecked1] = useState(false);
