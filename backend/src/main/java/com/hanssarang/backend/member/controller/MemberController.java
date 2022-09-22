@@ -14,64 +14,66 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/email")
-    public ResponseEntity<MemberEmailResponse> checkEmail(@RequestParam String memberEmail) {
-        return ResponseEntity.ok().body(memberService.checkEmail(memberEmail));
+    public ResponseEntity<Void> checkEmail(@RequestParam String memberEmail) {
+        memberService.checkEmail(memberEmail);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/nickname")
-    public ResponseEntity<MemberNicknameResponse> checkNickname(@RequestParam String nickname) {
-        return ResponseEntity.ok().body(memberService.checkNickname(nickname));
+    public ResponseEntity<Void> checkNickname(@RequestParam String nickname) {
+        memberService.checkNickname(nickname);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<Void> signUpNormal(@RequestHeader("Authorization") String token, @RequestBody MemberSignUpRequest memberSignUpRequest) {
-        memberService.signUpNormal(memberSignUpRequest);
+    @PostMapping
+    public ResponseEntity<Void> signUp(@RequestHeader("Authorization") String token, @RequestBody SignUpRequest signUpRequest) {
+        memberService.signUp(signUpRequest);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/survey")
-    public ResponseEntity<Void> preSurvey(@RequestHeader("Authorization") String token, @RequestBody MemberSurveyRequest memberSurveyRequest) {
-        memberService.createPreSurvey(memberSurveyRequest);
+    public ResponseEntity<Void> createInitialSurvey(@RequestHeader("Authorization") String token, @RequestBody SurveyRequest surveyRequest) {
+        memberService.createInitialSurvey(surveyRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/getid")
-    public ResponseEntity<MemberEmailResponse> getMemberEmail(@RequestBody MemberGetIdRequest memberGetIdRequest) {
-        return ResponseEntity.ok().body(memberService.getMemberEmail(memberGetIdRequest));
+    @PostMapping("/get/email")
+    public ResponseEntity<EmailResponse> getMemberEmail(@RequestBody FindingIdRequest findingIdRequest) {
+        return ResponseEntity.ok().body(memberService.getMemberEmail(findingIdRequest));
     }
 
-    @GetMapping("/info/{memberId}")
-    public ResponseEntity<MemberResponse> getMember(@RequestHeader("Authorization") String token, @PathVariable int memberId) {
-        return ResponseEntity.ok(memberService.getMemeber(memberId));
+    @GetMapping
+    public ResponseEntity<MemberResponse> getMember(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(memberService.getMember());
     }
 
-    @PatchMapping("/update/{memberId}")
-    public ResponseEntity<Void> updateMember(@RequestHeader("Authorization") String token,@PathVariable int memberId, @RequestBody MemberRequest memberRequest) {
+    @PatchMapping("/{memberId}")
+    public ResponseEntity<Void> updateMember(@RequestHeader("Authorization") String token, @PathVariable int memberId, @RequestBody MemberRequest memberRequest) {
         memberService.updateMember(memberId, memberRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/update/password/{memberId}")
-    public ResponseEntity<Void> updatePassword(@PathVariable int memberId, @RequestBody MemberUpdatePasswordRequest memberUpdatePasswordRequest) {
+    @PatchMapping("/password/{memberId}")
+    public ResponseEntity<Void> updatePassword(@PathVariable int memberId, @RequestBody UpdatePasswordRequest memberUpdatePasswordRequest) {
         memberService.updatePassword(memberId, memberUpdatePasswordRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/update/mypage/password/{memberId}")
-    public ResponseEntity<Void> updateMyPagePassword(@PathVariable int memberId, @RequestBody MemberPasswordRequest memberPasswordRequest) {
-        memberService.updateMyPagePassword(memberId, memberPasswordRequest);
+    @PatchMapping("/mypage/password/{memberId}")
+    public ResponseEntity<Void> updatePasswordInMyPage(@PathVariable int memberId, @RequestBody PasswordRequest passwordRequest) {
+        memberService.updatePasswordInMyPage(memberId, passwordRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/delete/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable int memberId, @RequestParam String deleteMessage) {
-        memberService.deleteMember(memberId, deleteMessage);
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody MemberLoginRequest memberLoginRequest) {
-        memberService.login(memberLoginRequest);
+    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+        memberService.login(loginRequest);
         return ResponseEntity.ok().header("Authorization", "Bearer {ACCESS TOKEN generated by JWT}").build();
     }
 }
