@@ -11,7 +11,7 @@ public class MemberResponse {
     private String email;
     private String name;
     private String birth;
-    private String phoneNumber;
+    private String phone;
     private String address;
     private String nickName;
     private String profilePicture;
