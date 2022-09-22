@@ -26,13 +26,13 @@ public class MemberService {
         return null;
     }
 
-    public void updateMember(MemberRequest memberRequest) {
+    public void updateMember(int memberId, MemberRequest memberRequest) {
     }
 
-    public void updatePassword(PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
+    public void updatePassword(int memberId, PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
     }
 
-    public void updatePasswordInMyPage(PasswordUpdateRequest passwordUpdateRequest) {
+    public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
     }
 
     public void deleteMember(int memberId) {
