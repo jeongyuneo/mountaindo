@@ -4,10 +4,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useSelector} from 'react-redux';
 import {RootState} from './src/store/reducer';
 import Main from './src/pages/Main';
-import Hiking from './src/pages/Hiking';
+import Hiking from './src/pages/hiking/Hiking';
 import Mountain from './src/pages/mountain/Mountain';
 import MountainDetail from './src/pages/mountain/MountainDetail';
-import Completed from './src/pages/Completed';
+import Completed from './src/pages/completed/Completed';
 import MyPage from './src/pages/user/loggedIn/MyPage';
 import Agreement from './src/pages/user/loggedOut/Agreement';
 import Welcome from './src/pages/user/loggedOut/Welcome';
@@ -26,7 +26,13 @@ import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
+import TrackingEnd from './src/pages/hiking/TrackingEnd';
 import SignUp from './src/pages/user/loggedOut/SignUp';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import Visited from './src/pages/completed/Visited';
+import VisitedDetail from './src/pages/completed/VisitedDetail';
+import MainDetail from './src/pages/main/MainDetail';
+import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 
 export type LoggedInParamList = {
   Main: any;
@@ -40,7 +46,12 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
+  TrackingEnd: any;
   MountainDetail: any;
+  Visited: any;
+  VisitedDetail: any;
+  MainDetail: any;
+  AddressChangeForm: any;
 };
 
 export type RootStackParamList = {
@@ -59,15 +70,32 @@ export type RootStackParamList = {
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const Top = createMaterialTopTabNavigator();
 
+function TopTab() {
+  return (
+    <Top.Navigator>
+      <Top.Screen
+        name="Completed"
+        component={Completed}
+        options={{title: '완등한 산'}}
+      />
+      <Top.Screen
+        name="Visited"
+        component={Visited}
+        options={{title: '방문한 산'}}
+      />
+    </Top.Navigator>
+  );
+}
 function BottomTab() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
+      <Tab.Screen name="Main" component={Main} options={{headerShown: false}} />
       <Tab.Screen
         name="Hiking"
         component={Hiking}
-        options={{title: ' Hiking'}}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="Mountain"
@@ -75,9 +103,9 @@ function BottomTab() {
         options={{title: 'Mountain'}}
       />
       <Tab.Screen
-        name="Completed"
-        component={Completed}
-        options={{title: 'Completed'}}
+        name="CompletedMountain"
+        component={TopTab}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="MyPage"
@@ -101,6 +129,11 @@ function AppInner() {
             <Stack.Screen name="BottomTab" component={BottomTab} />
           </Stack.Group>
           <Stack.Group>
+            <Stack.Screen
+              name="MainDetail"
+              component={MainDetail}
+              options={{title: '전체 산 목록'}}
+            />
             <Stack.Screen
               name="UserInfoChange"
               component={UserInfoChange}
@@ -132,9 +165,24 @@ function AppInner() {
               options={{title: '문의하기'}}
             />
             <Stack.Screen
+              name="TrackingEnd"
+              component={TrackingEnd}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
               name="MountainDetail"
               component={MountainDetail}
               options={{title: '산 상세 정보', headerShown: false}}
+            />
+            <Stack.Screen
+              name="VisitedDetail"
+              component={VisitedDetail}
+              options={{title: '방문한 산 상세'}}
+            />
+            <Stack.Screen
+              name="AddressChangeForm"
+              component={AddressChangeForm}
+              options={{title: '주소 변경'}}
             />
           </Stack.Group>
         </>
