@@ -85,7 +85,7 @@ function TopTab() {
 function BottomTab() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Main" component={Main} options={{title: 'Main'}} />
+      <Tab.Screen name="Main" component={Main} options={{headerShown: false}} />
       <Tab.Screen
         name="Hiking"
         component={Hiking}

@@ -11,155 +11,101 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
+import {dummyUser, myFilter} from './Dummy';
+import DismissKeyboardView from '../DismissKeyboardView';
 
 interface Props {
-  isModalVisible: boolean;
-  setIsModalVisible: boolean;
+  isModalVisible: any;
+  setIsModalVisible: any;
   goAllRank: any;
 }
 
-// MainPage에서도 사요되는 Dummy이므로 export
-export const dummyUser = [
-  {
-    id: 1,
-    profile: require('../../assets/user.png'),
-    name: 'zerojei',
-    meter: 3750,
-  },
-  {
-    id: 2,
-    profile: require('../../assets/jjang.png'),
-    name: 'mountainDo',
-    meter: 3720,
-  },
-  {
-    id: 3,
-    profile: require('../../assets/you.png'),
-    name: 'mDoGod',
-    meter: 2040,
-  },
-  {
-    id: 4,
-    profile: require('../../assets/user.png'),
-    name: 'zerojei',
-    meter: 3750,
-  },
-  {
-    id: 5,
-    profile: require('../../assets/jjang.png'),
-    name: 'mountainDo',
-    meter: 3720,
-  },
-  {
-    id: 6,
-    profile: require('../../assets/you.png'),
-    name: 'mDoGod',
-    meter: 2040,
-  },
-  {
-    id: 7,
-    profile: require('../../assets/user.png'),
-    name: 'zerojei',
-    meter: 3750,
-  },
-  {
-    id: 8,
-    profile: require('../../assets/jjang.png'),
-    name: 'mountainDo',
-    meter: 3720,
-  },
-  {
-    id: 9,
-    profile: require('../../assets/you.png'),
-    name: 'mDoGod',
-    meter: 2040,
-  },
-];
-
-// MainPage에서도 사요되는 Dummy이므로 export
-export const dummyFilter = dummyUser.filter(item => item.id < 4);
-export const myFilter = dummyFilter.filter(
-  item => item.id === 1 && item.name === 'zerojei',
-);
-
-function MainModal({isModalVisible, setIsModalVisible, goAllRank}) {
+function MainModal({isModalVisible, setIsModalVisible, goAllRank}: Props) {
   let allNum = 1;
   let mynum = 1;
+
+  const searchData = (text: any) => {
+    console.log(text);
+  };
   return (
     <>
-      <Modal
-        style={{}}
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          setIsModalVisible(!isModalVisible);
-        }}>
-        <View style={styles.dummyFlex}></View>
-        <View style={styles.mainFlex}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>MountainDo 전체랭킹</Text>
-            <Pressable onPress={goAllRank}>
-              <Text style={styles.closeModal}>X</Text>
-            </Pressable>
-          </View>
-          <View style={styles.findInput}>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              size={15}
-              style={styles.magnify}
-            />
-            <TextInput
-              placeholder="사용자 검색"
-              style={styles.find}></TextInput>
-          </View>
-          <View>
-            <Text style={styles.myRankTitle}>내 랭킹</Text>
-          </View>
-          <View>
-            {myFilter.map(item => (
-              <View>
-                <View key={item.id} style={styles.myRank}>
-                  <View style={styles.styleRow}>
-                    <Text style={styles.rankNum}>{mynum++}</Text>
+      <DismissKeyboardView>
+        <Modal
+          style={{}}
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={() => {
+            setIsModalVisible(!isModalVisible);
+          }}>
+          <View style={styles.dummyFlex}></View>
+          <View style={styles.mainFlex}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>MountainDo 전체랭킹</Text>
+              <Pressable onPress={goAllRank}>
+                <Text style={styles.closeModal}>X</Text>
+              </Pressable>
+            </View>
+            <View style={styles.findInput}>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                size={15}
+                style={styles.magnify}
+              />
+              <TextInput
+                placeholder="사용자 검색"
+                style={styles.find}
+                onChangeText={text => searchData(text)}
+              />
+            </View>
+            <View>
+              <Text style={styles.myRankTitle}>내 랭킹</Text>
+            </View>
+            <View>
+              {myFilter.map(item => (
+                <View>
+                  <View key={item.id} style={styles.myRank}>
                     <View style={styles.styleRow}>
-                      <Image source={item.profile} style={styles.imgStyle} />
+                      <Text style={styles.rankNum}>{mynum++}</Text>
                       <View style={styles.styleRow}>
-                        <Text style={styles.nameStyle}>{item.name}</Text>
-                        <Text style={styles.namePix}>님</Text>
+                        <Image source={item.profile} style={styles.imgStyle} />
+                        <View style={styles.styleRow}>
+                          <Text style={styles.nameStyle}>{item.name}</Text>
+                          <Text style={styles.namePix}>님</Text>
+                        </View>
                       </View>
                     </View>
+                    <Text style={styles.meter}>{item.meter}m</Text>
                   </View>
-                  <Text style={styles.meter}>{item.meter}m</Text>
                 </View>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
 
-          <View>
-            <Text style={styles.userTitle}>사용자 전체랭킹</Text>
-          </View>
-          <ScrollView>
-            {dummyUser.map(item => (
-              <View>
-                <View key={item.id} style={styles.rankList}>
-                  <View style={styles.styleRow}>
-                    <Text style={styles.rankNum}>{allNum++}</Text>
+            <View>
+              <Text style={styles.userTitle}>사용자 전체랭킹</Text>
+            </View>
+            <ScrollView>
+              {dummyUser.map(item => (
+                <View>
+                  <View key={item.id} style={styles.rankList}>
                     <View style={styles.styleRow}>
-                      <Image source={item.profile} style={styles.imgStyle} />
+                      <Text style={styles.rankNum}>{allNum++}</Text>
                       <View style={styles.styleRow}>
-                        <Text style={styles.nameStyle}>{item.name}</Text>
-                        <Text style={styles.namePix}>님</Text>
+                        <Image source={item.profile} style={styles.imgStyle} />
+                        <View style={styles.styleRow}>
+                          <Text style={styles.nameStyle}>{item.name}</Text>
+                          <Text style={styles.namePix}>님</Text>
+                        </View>
                       </View>
                     </View>
+                    <Text style={styles.meter}>{item.meter}m</Text>
                   </View>
-                  <Text style={styles.meter}>{item.meter}m</Text>
                 </View>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
+              ))}
+            </ScrollView>
+          </View>
+        </Modal>
+      </DismissKeyboardView>
     </>
   );
 }
