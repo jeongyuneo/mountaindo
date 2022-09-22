@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 
 interface Props {
-  dummyEasy: {
+  dummyAge: {
     id: number;
     profile: any;
     course: string;
@@ -11,11 +11,11 @@ interface Props {
   }[];
 }
 
-function EasyMountain({dummyEasy}: Props) {
+function AgeMountain({dummyAge}: Props) {
   return (
     <View>
       <ScrollView horizontal={true}>
-        {dummyEasy.map(item => (
+        {dummyAge.map(item => (
           <View key={item.id}>
             <Text style={styles.mountainCourse}>{item.course}</Text>
             <Image source={item.profile} style={styles.imgStyle} />
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EasyMountain;
+export default AgeMountain;

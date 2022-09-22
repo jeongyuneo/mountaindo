@@ -2,16 +2,16 @@ import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
-import {dummyFilter} from './MainModal';
+import {dummyFilter} from './Dummy';
 
 interface Props {
   goAllRank: any;
 }
-function MainRankList({goAllRank}) {
+function MainRankList({goAllRank}: Props) {
   let num = 1;
   return (
     <View>
-      <View>
+      <View style={styles.rankStart}>
         <View style={styles.rankHeader}>
           <Text style={styles.rankTitle}>MountainDo 전체랭킹</Text>
           <View style={styles.goModal}>
@@ -54,6 +54,10 @@ function MainRankList({goAllRank}) {
 }
 
 const styles = StyleSheet.create({
+  rankStart: {
+    paddingVertical: 10,
+    paddingBottom: 1,
+  },
   angleDown: {
     marginTop: 3,
     marginLeft: 2,
