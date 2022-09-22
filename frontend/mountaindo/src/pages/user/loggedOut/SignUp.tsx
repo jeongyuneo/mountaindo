@@ -11,6 +11,7 @@ import {
 import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import DatePicker from '../../../components/user/DatePicker';
+import LocationPicker from '../../../components/user/LocationPicker';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
@@ -22,6 +23,8 @@ function SignUp({navigation}: SignUpScreenProps) {
   const [name, setName] = useState('');
   const [nickName, setNickName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity2, setSelectedCity2] = useState('');
   const [check, setCheck] = useState(0); // 달력에 날짜를 선택했는지 확인할 변수
   const emailRef = useRef<TextInput | null>(null);
   const certificationRef = useRef<TextInput | null>(null);
@@ -38,7 +41,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     name &&
     nickName &&
     phoneNumber &&
-    !!check;
+    !!check &&
+    selectedCity &&
+    selectedCity2;
 
   const disabledEmail =
     !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
@@ -276,6 +281,13 @@ function SignUp({navigation}: SignUpScreenProps) {
           />
         </View>
         <DatePicker setCheck={setCheck} />
+        <View style={styles.location}>
+          <Text>실 거주지의 주소를 선택해주세요</Text>
+          <LocationPicker
+            setSelectedCity={setSelectedCity}
+            setSelectedCity2={setSelectedCity2}
+          />
+        </View>
       </View>
       <View style={styles.buttonZone}>
         <Pressable
@@ -360,6 +372,9 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: 'white',
+  },
+  location: {
+    marginVertical: 20,
   },
 });
 
