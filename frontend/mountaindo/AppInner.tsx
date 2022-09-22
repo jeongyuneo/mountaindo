@@ -31,6 +31,7 @@ import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
 import VisitedDetail from './src/pages/completed/VisitedDetail';
+import MainDetail from './src/pages/main/MainDetail';
 
 export type LoggedInParamList = {
   Main: any;
@@ -48,6 +49,7 @@ export type LoggedInParamList = {
   MountainDetail: any;
   Visited: any;
   VisitedDetail: any;
+  MainDetail: any;
 };
 
 export type RootStackParamList = {
@@ -125,6 +127,11 @@ function AppInner() {
             <Stack.Screen name="BottomTab" component={BottomTab} />
           </Stack.Group>
           <Stack.Group>
+            <Stack.Screen
+              name="MainDetail"
+              component={MainDetail}
+              options={{title: '전체 산 목록'}}
+            />
             <Stack.Screen
               name="UserInfoChange"
               component={UserInfoChange}
