@@ -41,12 +41,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginBottom: 7,
   },
-  easyTitle: {
-    marginTop: 5,
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: 'black',
-  },
   easyList: {
     fontSize: 20,
   },
