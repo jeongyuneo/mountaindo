@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberEmailResponse {
+public class EmailResponse {
 
     private String email;
 }
