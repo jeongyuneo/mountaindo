@@ -31,8 +31,8 @@ function DetailList({DummyMountain}: Props) {
           }}>
           <View key={item.id} style={styles.listSetting}>
             <View>
-              <View style={{flex: 0.9}}>
-                <View style={{flexDirection: 'row'}}>
+              <View style={styles.container}>
+                <View style={styles.containerRow}>
                   {item.cnt >= 300 ? (
                     <Image source={item.fire} style={styles.imgStyleFire} />
                   ) : (
@@ -57,6 +57,12 @@ function DetailList({DummyMountain}: Props) {
 }
 
 const styles = StyleSheet.create({
+  containerRow: {
+    flexDirection: 'row',
+  },
+  container: {
+    flex: 0.9,
+  },
   imgStyleFire: {
     width: 20,
     height: 20,
