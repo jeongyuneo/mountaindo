@@ -203,9 +203,9 @@ function Visited({navigation}: VisitedScreenProps) {
     location: string,
   ) => {
     navigation.navigate('VisitedDetail', {
-      trails: trails,
-      mountain: mountain,
-      location: location,
+      trails,
+      mountain,
+      location,
     });
   };
   return (
