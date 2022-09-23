@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Alert,
   Button,
@@ -13,12 +13,22 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import DismissKeyboardView from '../DismissKeyboardView';
-import {dummyFiilter} from './Dummy';
+import {dummyFiilter, dummyfamous} from './Dummy';
 
 interface Props {
+  DummyMountain: {
+    id: number;
+    name: string;
+    meter: number;
+    now: string;
+    profile: any;
+    fire: any;
+    cnt: number;
+  }[];
   setLocal: any;
+  setConstructor: any;
 }
-function DeatilFilter({setLocal}: Props) {
+function DeatilFilter({setLocal, setConstructor}: Props) {
   return (
     <DismissKeyboardView>
       <View>
@@ -31,12 +41,26 @@ function DeatilFilter({setLocal}: Props) {
             />
             <TextInput
               placeholder="산 정보 및 등산로 검색"
+              onChangeText={term => setConstructor(term)}
               style={styles.find}
             />
           </View>
         </View>
         <View>
-          <Text style={styles.filterTitle}>원하시는 지역을 선택 해보세요.</Text>
+          <Text style={styles.filterTitle}>원하시는 정보를 선택 해보세요.</Text>
+          <ScrollView horizontal={true}>
+            {dummyfamous.map(item => (
+              <Pressable
+                onPress={() => {
+                  setLocal(item.title);
+                }}
+                style={styles.pressableLocal}>
+                <View key={item.id}>
+                  <Text style={styles.filterLocal}>{item.title}</Text>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
           <ScrollView horizontal={true}>
             {dummyFiilter.map(item => (
               <Pressable
@@ -50,7 +74,6 @@ function DeatilFilter({setLocal}: Props) {
               </Pressable>
             ))}
           </ScrollView>
-          <Text style={styles.filterTitle}>원하시는 지역을 선택 해보세요.</Text>
         </View>
       </View>
     </DismissKeyboardView>
@@ -68,13 +91,14 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   filterLocal: {
-    borderWidth: 1,
-    borderColor: 'green',
-    borderStyle: 'solid',
-    borderRadius: 15,
+    backgroundColor: '#57AAFF',
+    borderRadius: 50,
     marginHorizontal: 5,
-    paddingVertical: 3,
-    paddingHorizontal: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'white',
   },
   find: {
     marginLeft: 3,
