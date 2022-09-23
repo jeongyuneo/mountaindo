@@ -7,7 +7,7 @@ import StopWatch from './StopWatch';
 // moveToTrackingEnd: Hiking 페이지에서 받아오는 TrackingEnd 페이지 이동 함수
 // setIsTracking: Hiking  페이지에서 받아오는 기록 여부 확인 함수
 
-function TrackingRoute({moveToTrackingEnd, setIsTracking}: any) {
+function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
   const [tracking, setTracking] = useState(true); // 등산 기록 중인지 확인하기 위한 변수
   const [timer, setTimer] = useState(0); // 타이머 저장 변수
 
@@ -116,7 +116,7 @@ function TrackingRoute({moveToTrackingEnd, setIsTracking}: any) {
         </View>
       </View>
       <View style={styles.distanceContainer}>
-        <Text style={styles.distanceText}>7.05</Text>
+        <Text style={styles.distanceText}>{totalDist}</Text>
         <Text style={styles.explainText}>킬로미터</Text>
       </View>
       <View style={styles.timeContainer}>

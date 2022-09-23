@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {LoggedInParamList} from '../../../AppInner';
 import Map from '../../components/hiking/Map';
 import TrackingRoute from '../../components/hiking/TrackingRoute';
+import {calDistance} from '../../utils';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
@@ -16,9 +17,58 @@ function Hiking({navigation}: HikingScreenProps) {
   } | null>(null);
   const [currentLocation, setCurrentLocation] = useState(0); // 내 위치 버튼 클릭 시 재렌더링을 위한 변수
   const [isTracking, setIsTracking] = useState(false); // 등산 기록 여부 확인 변수
+  const [totalDist, setTotalDist] = useState(0); // 총 등산 거리를 저장할 변수
+  const [totalHigh, setTotalHigh] = useState(0); // 총 고도를 저정할 변수
+  // 이동한 경로의 위도, 경도 좌표를 저장할 리스트
+  const [coords, setCoords] = useState<
+    {latitude: number | undefined; longitude: number | undefined}[] | []
+  >(myPosition ? [myPosition] : []);
 
-  const array: ({latitude: number; longitude: number} | null)[] = []; // 경도, 위도값을 저장할 리스트
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
+
+  // 위치가 변화했을 때 변경된 좌표 정보를 리스트에 넣고 거리를 증가시킴
+  const locationDataPush = () => {
+    if (myPosition?.latitude && myPosition.longitude) {
+      setCoords([
+        ...coords,
+        {latitude: myPosition.latitude, longitude: myPosition.longitude},
+      ]);
+      getDistance();
+    }
+  };
+
+  // 이전좌표와 현재좌표 값을 비교해서 거리구하기
+  const getDistance = () => {
+    if (coords.length < 2) {
+      return;
+    }
+    setTotalDist(
+      prev =>
+        parseFloat(prev.toString()) +
+        parseFloat(
+          calDistance(
+            coords[coords.length - 1].latitude,
+            coords[coords.length - 1].longitude,
+            myPosition?.latitude,
+            myPosition?.longitude,
+          ),
+        ),
+    );
+  };
+
+  // 등산 시작, 종료 시점의 위치를 기반으로 고도 계산
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(info => {
+      if (!info.coords.altitude) return;
+
+      if (totalHigh > 0) {
+        const high = Math.floor(totalHigh - info.coords.altitude);
+        setTotalHigh(high);
+      } else {
+        setTotalHigh(Math.floor(info.coords.altitude));
+      }
+    });
+  };
 
   // 현재 위치 받아오기
   useEffect(() => {
@@ -33,11 +83,11 @@ function Hiking({navigation}: HikingScreenProps) {
       {
         enableHighAccuracy: true,
         timeout: 20000,
-        distanceFilter: 10, // 몇 미터마다 사용자의 위치를 체크할 것인지 설정
+        distanceFilter: 50,
       },
     );
-    array.push(myPosition);
-  }, [myPosition, currentLocation]);
+    locationDataPush();
+  }, [myPosition, currentLocation, isTracking]);
 
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
@@ -50,7 +100,16 @@ function Hiking({navigation}: HikingScreenProps) {
 
   // 기록 종료 시 TrackingEnd 페이지로 이동 함수
   const moveToTrackingEnd = (timer: any) => {
-    navigation.navigate('TrackingEnd', {timer: timer});
+    getLocation();
+    navigation.navigate('TrackingEnd', {
+      timer,
+      coords: [
+        ...coords,
+        {latitude: myPosition.latitude, longitude: myPosition.longitude},
+      ],
+      totalDist,
+      totalHigh,
+    });
   };
 
   // isTracking이 false면 기본 정보와 지도 렌더링
@@ -75,7 +134,17 @@ function Hiking({navigation}: HikingScreenProps) {
       <View style={styles.startButtonView}>
         <Pressable
           style={styles.startButton}
-          onPress={() => setIsTracking(!isTracking)}>
+          onPress={() => {
+            setIsTracking(!isTracking);
+            getLocation();
+            setCoords([
+              ...coords,
+              {
+                latitude: myPosition?.latitude,
+                longitude: myPosition?.longitude,
+              },
+            ]);
+          }}>
           <Text style={styles.buttonText}>등산 시작</Text>
         </Pressable>
       </View>
@@ -91,6 +160,7 @@ function Hiking({navigation}: HikingScreenProps) {
     <TrackingRoute
       moveToTrackingEnd={moveToTrackingEnd}
       setIsTracking={setIsTracking}
+      totalDist={totalDist}
     />
   );
 }
