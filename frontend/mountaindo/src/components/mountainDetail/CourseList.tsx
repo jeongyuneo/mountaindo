@@ -23,7 +23,7 @@ interface Props {
 
 function CourseList({CourseListDummy}: Props) {
   return (
-    <View>
+    <View style={styles.courseList}>
       <Text style={styles.courseText}>코스 목록</Text>
       <View style={styles.courseListWrapper}>
         {CourseListDummy[0].trailList.map(item => (
@@ -40,6 +40,9 @@ function CourseList({CourseListDummy}: Props) {
 }
 
 const styles = StyleSheet.create({
+  courseList: {
+    marginBottom: 20,
+  },
   courseListWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
