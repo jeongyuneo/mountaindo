@@ -36,9 +36,12 @@ function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
     // 선택된 상위 컴포넌트의 하위 도시 저장
     const selected: RegionType = region.filter(item => item.value === text)[0];
     setCityListTest(selected);
-    // 하위 도시가 없는 경우 임시로 문자열 저장
-    if (!selected.city) {
-      setSelectedCity2('도시 없음');
+
+    // 하위 도시가 없는 경우
+    if (selected.city.length === 0) {
+      setSelectedCity2('없음');
+    } else {
+      setSelectedCity2(selected.city[0].value);
     }
   };
 
@@ -73,6 +76,7 @@ function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
         }}
         style={styles.picker}>
         {cityList?.city &&
+          cityList.city.length > 0 &&
           cityList.city.map(item => (
             <Picker.Item key={item.id} label={item.value} value={item.value} />
           ))}
