@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import {StyleSheet} from 'react-native';
-import NaverMapView, {LayerGroup, Marker, Path} from 'react-native-nmap';
+import NaverMapView, {LayerGroup, Marker} from 'react-native-nmap';
 
 type MyPosition = {
   latitude: number;
@@ -12,10 +12,6 @@ type Props = {
 };
 function Map({myPosition}: Props) {
   const mapView = useRef<any>(null); // NaverMapView의 설정을 바꾸기 위해 ref 설정 변수
-
-  // 시작지점과 도착지점 임의의 경도, 위도 값으로 설정
-  const start = {latitude: 36.354946759143, longitude: 127.29980994578};
-  const end = {latitude: 36.358303220416, longitude: 127.30157350178};
 
   return (
     <NaverMapView
@@ -31,7 +27,7 @@ function Map({myPosition}: Props) {
         );
       }}
       center={{
-        zoom: 15,
+        zoom: 13,
         tilt: 0,
         latitude: myPosition.latitude,
         longitude: myPosition.longitude,
@@ -49,35 +45,6 @@ function Map({myPosition}: Props) {
           image={require('../../assets/red-dot.png')}
         />
       )}
-      <Marker
-        coordinate={{
-          latitude: start.latitude,
-          longitude: start.longitude,
-        }}
-        width={15}
-        height={15}
-        anchor={{x: 0.5, y: 0.5}}
-        caption={{text: '출발'}}
-        image={require('../../assets/blue-dot.png')}
-      />
-      <Path
-        coordinates={[
-          {
-            latitude: start.latitude,
-            longitude: start.longitude,
-          },
-          {latitude: end.latitude, longitude: end.longitude},
-        ]}
-        color="orange"
-      />
-      <Marker
-        coordinate={{latitude: end.latitude, longitude: end.longitude}}
-        width={15}
-        height={15}
-        anchor={{x: 0.5, y: 0.5}}
-        caption={{text: '도착'}}
-        image={require('../../assets/green-dot.png')}
-      />
     </NaverMapView>
   );
 }
