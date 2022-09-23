@@ -18,7 +18,7 @@ import java.time.LocalTime;
 public class Trail extends BaseEntity {
 
     private String name;
-    private int length;
+    private double length;
     private LocalTime goingUpTime;
     private LocalTime goingDownTime;
     private String risk;
