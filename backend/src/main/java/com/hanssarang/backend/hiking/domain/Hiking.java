@@ -15,7 +15,7 @@ import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "hiking_ic"))
+@AttributeOverride(name = "id", column = @Column(name = "hiking_id"))
 @Entity
 public class Hiking extends BaseEntity {
 
