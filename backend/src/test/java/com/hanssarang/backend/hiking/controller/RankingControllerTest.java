@@ -3,8 +3,8 @@ package com.hanssarang.backend.hiking.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
+import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.hiking.service.RankingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -175,8 +175,8 @@ public class RankingControllerTest extends ApiDocument {
                 .andDo(toDocument("get-rankings-fail"));
     }
 
-    private ResultActions 전체랭킹내_사용자_검색_요청(String nickname) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/1?nickname=" + nickname)
+    private ResultActions 전체랭킹내_사용자_검색_요청(String keyword) throws Exception {
+        return mockMvc.perform(get("/api/v1/rankings/1?keyword=" + keyword)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
@@ -213,8 +213,8 @@ public class RankingControllerTest extends ApiDocument {
                 .andDo(toDocument("get-rankings-of-mountain-fail"));
     }
 
-    private ResultActions 산랭킹내_사용자_검색_요청(int mountainId, String nickname) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?nickname=" + nickname)
+    private ResultActions 산랭킹내_사용자_검색_요청(int mountainId, String keyword) throws Exception {
+        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?keyword=" + keyword)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
