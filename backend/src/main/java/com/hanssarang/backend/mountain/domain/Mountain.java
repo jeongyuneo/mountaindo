@@ -7,11 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,14 +25,18 @@ public class Mountain extends BaseEntity {
     @Embedded
     private Address address;
 
+    @OneToMany(mappedBy = "mountain", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Trail> trail;
+
     @Builder
     public Mountain(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
-                    String name, String code, int height, String imageUrl, Address address) {
+                    String name, String code, double height, String imageUrl, Address address, List<Trail> trail) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.name = name;
         this.code = code;
         this.height = height;
         this.imageUrl = imageUrl;
         this.address = address;
+        this.trail = trail;
     }
 }
