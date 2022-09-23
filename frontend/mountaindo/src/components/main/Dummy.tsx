@@ -21,7 +21,7 @@ export const dummyfamous = [
   },
 ];
 
-export const dummyFiilter = [
+export const dummyLocalFilter = [
   {
     id: 0,
     title: '전체',

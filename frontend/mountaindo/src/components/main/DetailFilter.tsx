@@ -13,7 +13,7 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import DismissKeyboardView from '../DismissKeyboardView';
-import {dummyFiilter, dummyfamous} from './Dummy';
+import {dummyLocalFilter, dummyfamous} from './Dummy';
 
 interface Props {
   DummyMountain: {
@@ -62,7 +62,7 @@ function DeatilFilter({setLocal, setConstructor}: Props) {
             ))}
           </ScrollView>
           <ScrollView horizontal={true}>
-            {dummyFiilter.map(item => (
+            {dummyLocalFilter.map(item => (
               <Pressable
                 onPress={() => {
                   setLocal(item.title);
