@@ -26,17 +26,17 @@ public class Mountain extends BaseEntity {
     private Address address;
 
     @OneToMany(mappedBy = "mountain", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Trail> trail;
+    private List<Trail> trails;
 
     @Builder
     public Mountain(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
-                    String name, String code, double height, String imageUrl, Address address, List<Trail> trail) {
+                    String name, String code, double height, String imageUrl, Address address, List<Trail> trails) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.name = name;
         this.code = code;
         this.height = height;
         this.imageUrl = imageUrl;
         this.address = address;
-        this.trail = trail;
+        this.trails = trails;
     }
 }
