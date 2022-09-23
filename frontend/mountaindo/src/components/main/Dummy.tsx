@@ -1,31 +1,54 @@
-export const dummyFiilter = [
+export const dummyfamous = [
+  {
+    id: 1,
+    title: '인기순',
+  },
+  {
+    id: 2,
+    title: '이름순',
+  },
+  {
+    id: 3,
+    title: '고도높은순',
+  },
+  {
+    id: 4,
+    title: '고도낮은순',
+  },
+  {
+    id: 5,
+    title: '박휘순',
+  },
+];
+
+export const dummyLocalFilter = [
   {
     id: 0,
     title: '전체',
   },
   {
     id: 1,
-    title: '서울',
+    title: '서울 특별시',
   },
   {
     id: 2,
-    title: '인천',
+    title: '인천 광역시',
   },
   {
     id: 3,
-    title: '대전',
+    title: '대전 광역시',
   },
   {
     id: 4,
-    title: '광주',
+    title: '광주 광역시',
   },
   {
     id: 5,
-    title: '대구',
+    title: '대구 광역시',
   },
   {
     id: 6,
-    title: '부산',
+    title: '부산 광역시',
   },
   {
     id: 7,
