@@ -20,8 +20,8 @@ public class RankingController {
     }
 
     @GetMapping("/1")
-    public ResponseEntity<RankingResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String nickname) {
-        return ResponseEntity.ok(rankingService.searchRanking(nickname));
+    public ResponseEntity<RankingResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+        return ResponseEntity.ok(rankingService.searchRanking(keyword));
     }
 
     @GetMapping("/2/{mountainId}")
@@ -30,7 +30,7 @@ public class RankingController {
     }
 
     @GetMapping("/3/{mountainId}")
-    public ResponseEntity<RankingResponse> searchRankingOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId, @RequestParam String nickname) {
-        return ResponseEntity.ok(rankingService.searchRankingOfMountain(mountainId, nickname));
+    public ResponseEntity<RankingResponse> searchRankingOfMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId, @RequestParam String keyword) {
+        return ResponseEntity.ok(rankingService.searchRankingOfMountain(mountainId, keyword));
     }
 }
