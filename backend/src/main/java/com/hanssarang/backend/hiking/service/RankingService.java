@@ -11,7 +11,7 @@ public class RankingService {
         return null;
     }
 
-    public RankingResponse searchRanking(String nickname) {
+    public RankingResponse searchRanking(String keyword) {
         return null;
     }
 
@@ -19,7 +19,7 @@ public class RankingService {
         return null;
     }
 
-    public RankingResponse searchRankingOfMountain(int mountainId, String nickname) {
+    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
         return null;
     }
 }
