@@ -35,6 +35,8 @@ status code: 500
 
 == 기능
 
+include::member.adoc[]
+
 include::mountain.adoc[]
 
 include::hiking.adoc[]
