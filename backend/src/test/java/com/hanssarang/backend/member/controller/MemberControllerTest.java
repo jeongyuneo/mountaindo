@@ -244,26 +244,26 @@ public class MemberControllerTest extends ApiDocument {
         이메일_중복체크_실패(resultActions, new Message(FAIL_TO_CHECK_EMAIL));
     }
 
-    @DisplayName("일반 회원가입 - 성공")
+    @DisplayName("회원가입 - 성공")
     @Test
     void signUpSuccess() throws Exception {
         // given
         willDoNothing().given(memberService).signUp(any(SignUpRequest.class));
         // when
-        ResultActions resultActions = 일반_회원가입_요청(signUpRequest);
+        ResultActions resultActions = 회원가입_요청(signUpRequest);
         // then
-        일반_회원가입_성공(resultActions);
+        회원가입_성공(resultActions);
     }
 
-    @DisplayName("일반 회원가입 - 실패")
+    @DisplayName("회원가입 - 실패")
     @Test
     void signUpFail() throws Exception {
         // given
         willThrow(new UnexpectedRollbackException(FAIL_TO_SIGNUP)).given(memberService).signUp(any(SignUpRequest.class));
         // when
-        ResultActions resultActions = 일반_회원가입_요청(signUpRequest);
+        ResultActions resultActions = 회원가입_요청(signUpRequest);
         // then
-        일반_회원가입_실패(resultActions, new Message(FAIL_TO_SIGNUP));
+        회원가입_실패(resultActions, new Message(FAIL_TO_SIGNUP));
     }
 
     @DisplayName("사전 설문조사 저장 - 성공")
@@ -466,24 +466,24 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("check-nickname-fail"));
     }
 
-    private ResultActions 일반_회원가입_요청(SignUpRequest signUpRequest) throws Exception {
+    private ResultActions 회원가입_요청(SignUpRequest signUpRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/members")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(signUpRequest)));
     }
 
-    private void 일반_회원가입_성공(ResultActions resultActions) throws Exception {
+    private void 회원가입_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(toDocument("create-signup-success"));
+                .andDo(toDocument("signup-success"));
     }
 
-    private void 일반_회원가입_실패(ResultActions resultActions, Message message) throws Exception {
+    private void 회원가입_실패(ResultActions resultActions, Message message) throws Exception {
         resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
-                .andDo(toDocument("create-signup-fail"));
+                .andDo(toDocument("signup-fail"));
     }
 
     private ResultActions 사전_설문조사_저장_요청(InitialSurveyRequest initialSurveyRequest) throws Exception {
@@ -496,14 +496,14 @@ public class MemberControllerTest extends ApiDocument {
     private void 사전_설문조사_저장_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(toDocument("pre-survey-success"));
+                .andDo(toDocument("create-initial-survey-success"));
     }
 
     private void 사전_설문조사_저장_실패(ResultActions resultActions, Message message) throws Exception {
         resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
-                .andDo(toDocument("pre-survey-fail"));
+                .andDo(toDocument("create-initial-survey-fail"));
     }
 
     private ResultActions 아이디_찾기_요청(FindingEmailRequest findingEmailRequest) throws Exception {
