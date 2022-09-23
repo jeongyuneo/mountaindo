@@ -21,7 +21,7 @@ public class Mountain extends BaseEntity {
 
     private String name;
     private String code;
-    private int height;
+    private double height;
     private String imageUrl;
 
     @Embedded
