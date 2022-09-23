@@ -1,14 +1,8 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
 import {LoggedInParamList} from '../../../AppInner';
+import ResultMap from '../../components/hiking/ResultMap';
 
 type TrackingEndScreenProps = NativeStackScreenProps<
   LoggedInParamList,
@@ -18,12 +12,24 @@ type TrackingEndScreenProps = NativeStackScreenProps<
 function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
   const timer = route.params?.timer; // 총 시간 정보 Hiking 페이지에서 받아와서 저장
+  const coords = route.params?.coords; // 전체 좌표값이 들어있는 리스트
+  const totalDist = route.params?.totalDist ? route.params.totalDist : 0; // 총 거리
+  const totalHigh = route.params?.totalHigh ? route.params.totalHigh : 0; // 고도 변화 값
 
   useEffect(() => {
-    if (!timer) {
+    if (!timer || !coords || !totalDist || !totalHigh) {
       return;
     }
-  }, [timer, route.params?.timer]);
+  }, [
+    timer,
+    route.params?.timer,
+    coords,
+    route.params?.coords,
+    totalDist,
+    route.params?.totalDist,
+    totalHigh,
+    route.params?.totalHigh,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -31,10 +37,9 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
         <Text style={styles.titleText}>등산 종료</Text>
       </View>
       <View>
-        <Image
-          source={require('../../assets/gps-sample.png')}
-          style={styles.image}
-        />
+        <View style={styles.mapContainer}>
+          <ResultMap coords={coords} />
+        </View>
       </View>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
@@ -47,9 +52,9 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
         <View style={styles.textGroup}>
           <Text style={styles.text}>{today}</Text>
           <Text style={styles.text}>대전광역시 계룡산</Text>
-          <Text style={styles.text}>{route.params?.timer}</Text>
-          <Text style={styles.text}>7.5 km</Text>
-          <Text style={styles.text}>500 m</Text>
+          <Text style={styles.text}>{timer}</Text>
+          <Text style={styles.text}>{totalDist} km</Text>
+          <Text style={styles.text}>{totalHigh} m</Text>
         </View>
       </View>
       <View style={styles.moveButton}>
@@ -76,6 +81,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   image: {
+    width: Dimensions.get('window').width,
+    height: 200,
+  },
+  mapContainer: {
     width: Dimensions.get('window').width,
     height: 200,
   },
