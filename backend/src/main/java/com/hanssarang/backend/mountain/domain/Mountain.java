@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "mountain_ic"))
+@AttributeOverride(name = "id", column = @Column(name = "mountain_id"))
 @Entity
 public class Mountain extends BaseEntity {
 
