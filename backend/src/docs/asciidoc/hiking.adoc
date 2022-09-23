@@ -1,5 +1,9 @@
 === 등산 관련 기능
 ==== 등산 목록 조회
+----
+/api/vi/hikings
+----
+
 ===== 성공
 .request
 include::{snippets}/get-hikings-success/http-request.adoc[]
@@ -14,6 +18,19 @@ include::{snippets}/get-hikings-fail/http-request.adoc[]
 include::{snippets}/get-hikings-fail/http-response.adoc[]
 
 ==== 등산 상세 조회
+----
+/api/vi/hikings/1
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|email
+|String
+|이메일
+|===
+
 ===== 성공
 .request
 include::{snippets}/get-hiking-success/http-request.adoc[]
@@ -28,6 +45,10 @@ include::{snippets}/get-hiking-fail/http-request.adoc[]
 include::{snippets}/get-hiking-fail/http-response.adoc[]
 
 ==== 완등 목록 조회
+----
+/api/vi/hikings/2
+----
+
 ===== 성공
 .request
 include::{snippets}/get-completed-hikings-success/http-request.adoc[]
@@ -42,6 +63,10 @@ include::{snippets}/get-completed-hikings-fail/http-request.adoc[]
 include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
 
 ==== 등산 기록 저장
+----
+/api/vi/hikings
+----
+
 ===== 성공
 .request
 include::{snippets}/create-hiking-success/http-request.adoc[]
@@ -57,6 +82,10 @@ include::{snippets}/create-hiking-fail/http-response.adoc[]
 
 === 랭킹 관련 기능
 ==== 전체 랭킹 조회
+----
+/api/vi/rankings
+----
+
 ===== 성공
 .request
 include::{snippets}/get-rankings-success/http-request.adoc[]
@@ -71,14 +100,17 @@ include::{snippets}/get-rankings-fail/http-request.adoc[]
 include::{snippets}/get-rankings-fail/http-response.adoc[]
 
 ==== 전체 랭킹 내 사용자 검색
+----
+/api/vi/rankings/1
+----
 
-[%header, cols=2*]
+[cols="2,2,3"]
 |===
-|Parameter
-|Type
+|Parameter |Type |Description
 
-|nickname
+|keyword
 |String
+|검색 키워드
 |===
 
 ===== 성공
@@ -96,6 +128,10 @@ include::{snippets}/search-ranking-fail/http-request.adoc[]
 include::{snippets}/search-ranking-fail/http-response.adoc[]
 
 ==== 산 랭킹 조회
+----
+/api/vi/rankings/2
+----
+
 ===== 성공
 .request
 include::{snippets}/get-rankings-of-mountain-success/http-request.adoc[]
@@ -111,22 +147,26 @@ include::{snippets}/get-rankings-of-mountain-fail/http-response.adoc[]
 
 ==== 산 랭킹 내 사용자 검색
 
-[%header, cols=2*]
+----
+/api/vi/rankings/3
+----
+
+[cols="2,2,3"]
 |===
-|PathVariable
-|Type
+|Path Variable |Type |Description
 
 |mountainId
 |int
+|산 아이디
 |===
 
-[%header, cols=2*]
+[cols="2,2,3"]
 |===
-|Parameter
-|Type
+|Parameter |Type |Description
 
-|nickname
+|keyword
 |String
+|검색 키워드
 |===
 
 ===== 성공
