@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 
 import CourseList from '../../components/mountainDetail/CourseList';
 import CourseListDummy from '../../components/mountainDetail/CourseListDummy';
+import Facilites from '../../components/mountainDetail/Facilities';
 import WeatherForecast from '../../components/mountainDetail/WeatherForecast';
 
 function MountainDetail() {
@@ -21,6 +22,7 @@ function MountainDetail() {
       </View>
       <WeatherForecast />
       <CourseList CourseListDummy={CourseListDummy} />
+      <Facilites />
     </ScrollView>
   );
 }
