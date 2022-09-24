@@ -12,7 +12,26 @@ public class MemberService {
     public void checkNickname(String nickname) {
     }
 
-    public void signUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpRequest signUpRequest) throws CommonException {
+        Member member = Member.builder()
+                .email(signUpRequest.getEmail())
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .name(signUpRequest.getName())
+                .birth(signUpRequest.getBirth())
+                .phone(signUpRequest.getPhone())
+                .nickname(signUpRequest.getNickname())
+                .address(Address.builder()
+                        .si(signUpRequest.getAddress().getSi())
+                        .gu(signUpRequest.getAddress().getGu())
+                        .dong(signUpRequest.getAddress().getDong())
+                        .build())
+                .imageUrl(null)
+                .createdDate(LocalDateTime.now())
+                .lastModifiedDate(null)
+                .deletedDate(null)
+                .isActive(true)
+                .build();
+        memberRepository.save(member);
     }
 
     public void createInitialSurvey(InitialSurveyRequest initialSurveyRequest) {
