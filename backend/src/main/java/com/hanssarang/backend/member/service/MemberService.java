@@ -31,6 +31,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public void checkEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new DuplicationException(FAIL_TO_CHECK_EMAIL);
+        }
     }
 
     public void checkNickname(String nickname) {
