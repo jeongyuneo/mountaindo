@@ -10,9 +10,25 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
+
+@RequiredArgsConstructor
 @Service
 public class MemberService {
+
+    private static final char[] CHAR_SET = new char[]{
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '!', '@', '#', '$', '%', '^', '&', '*'};
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     public void checkEmail(String email) {
     }
@@ -87,5 +103,13 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_LOGIN));
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
             throw new NotFoundException(FAIL_TO_LOGIN);
+    }
+
+    private String createPassword() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            stringBuilder.append(CHAR_SET[(int) (CHAR_SET.length * Math.random())]);
+        }
+        return stringBuilder.toString();
     }
 }
