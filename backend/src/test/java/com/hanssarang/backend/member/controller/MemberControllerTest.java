@@ -15,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
@@ -31,7 +34,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String EMAIL = "ssafy@samsung.com";
     private static final String PASSWORD = "1q2w3e4r";
     private static final String NAME = "이재용";
-    private static final String BIRTH = "1968.06.23";
+    private static final LocalDate BIRTH = LocalDate.now();
     private static final String PHONE = "010-3333-3333";
     private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
     private static final String NICKNAME = "나는 부회장";
@@ -379,6 +382,7 @@ public class MemberControllerTest extends ApiDocument {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(memberRequest)));
     }
+
     private void 회원정보_수정_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
