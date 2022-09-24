@@ -1,6 +1,14 @@
 package com.hanssarang.backend.member.service;
 
+import com.hanssarang.backend.common.domain.Address;
+import com.hanssarang.backend.common.exception.CommonException;
+import com.hanssarang.backend.common.exception.DuplicationException;
+import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
+import com.hanssarang.backend.member.domain.Member;
+import com.hanssarang.backend.member.domain.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,7 +50,18 @@ public class MemberService {
     }
 
     public MemberResponse getMember(int memberId) {
-        return null;
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        MemberResponse memberResponse = MemberResponse.builder()
+                .email(member.getEmail())
+                .name(member.getName())
+                .birth(member.getBirth())
+                .phone(member.getPhone())
+                .address(member.getAddress())
+                .nickname(member.getNickname())
+                .imageUrl(member.getImageUrl())
+                .build();
+        return memberResponse;
     }
 
     public void updateMember(int memberId, MemberRequest memberRequest) {
