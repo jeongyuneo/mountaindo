@@ -117,8 +117,9 @@ public class MemberService {
     public void login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmailAndIsActiveTrue(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_LOGIN));
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new NotFoundException(FAIL_TO_LOGIN);
+        }
     }
 
     private String createPassword() {
