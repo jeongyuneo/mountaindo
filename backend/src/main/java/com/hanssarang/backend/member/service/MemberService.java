@@ -71,16 +71,15 @@ public class MemberService {
                         findingEmailRequest.getBirth(),
                         findingEmailRequest.getPhone())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
-        EmailResponse emailResponse = EmailResponse.builder()
+        return EmailResponse.builder()
                 .email(member.getEmail())
                 .build();
-        return emailResponse;
     }
 
     public MemberResponse getMember(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        MemberResponse memberResponse = MemberResponse.builder()
+        return MemberResponse.builder()
                 .email(member.getEmail())
                 .name(member.getName())
                 .birth(member.getBirth())
@@ -95,7 +94,6 @@ public class MemberService {
                 .nickname(member.getNickname())
                 .imageUrl(member.getImageUrl())
                 .build();
-        return memberResponse;
     }
 
     public void updateMember(int memberId, MemberRequest memberRequest) {
