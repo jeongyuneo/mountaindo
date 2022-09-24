@@ -9,7 +9,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByNameAndBirthAndPhoneAndIsActiveTrue(String name, LocalDate birth, String phone);
 
-    Optional<Member> findByEmailAndName(String email, String name);
+    Optional<Member> findByEmailAndNameAndIsActiveTrue(String email, String name);
 
     Optional<Member> findByEmailAndIsActiveTrue(String email);
 

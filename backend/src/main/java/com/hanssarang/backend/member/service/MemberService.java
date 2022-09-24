@@ -101,7 +101,7 @@ public class MemberService {
 
     @Transactional
     public void updatePassword(PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
-        Member member = memberRepository.findByEmailAndName(memberPasswordUpdateVerificationRequest.getEmail(), memberPasswordUpdateVerificationRequest.getName())
+        Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(memberPasswordUpdateVerificationRequest.getEmail(), memberPasswordUpdateVerificationRequest.getName())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         String newPassword = createPassword();
         member.updatePassword(passwordEncoder, newPassword);
