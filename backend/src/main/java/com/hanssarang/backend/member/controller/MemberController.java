@@ -59,7 +59,7 @@ public class MemberController {
 
     @PatchMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
-        memberService.updatePassword(1, passwordUpdateVerificationRequest);
+        memberService.updatePassword(passwordUpdateVerificationRequest);
         return ResponseEntity.ok().build();
     }
 
