@@ -68,7 +68,14 @@ public class MemberService {
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
-        return null;
+        Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(findingEmailRequest.getName(),
+                        findingEmailRequest.getBirth(),
+                        findingEmailRequest.getPhone())
+                .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
+        EmailResponse emailResponse = EmailResponse.builder()
+                .email(member.getEmail())
+                .build();
+        return emailResponse;
     }
 
     public MemberResponse getMember(int memberId) {
