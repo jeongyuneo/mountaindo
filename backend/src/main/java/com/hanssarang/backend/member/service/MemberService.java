@@ -55,10 +55,7 @@ public class MemberService {
                         .gu(signUpRequest.getAddress().getGu())
                         .dong(signUpRequest.getAddress().getDong())
                         .build())
-                .imageUrl(null)
                 .createdDate(LocalDateTime.now())
-                .lastModifiedDate(null)
-                .deletedDate(null)
                 .isActive(true)
                 .build();
         memberRepository.save(member);
