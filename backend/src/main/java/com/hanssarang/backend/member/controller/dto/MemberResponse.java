@@ -17,5 +17,5 @@ public class MemberResponse {
     private String phone;
     private Address address;
     private String nickname;
-    private String profilePicture;
+    private String imageUrl;
 }
