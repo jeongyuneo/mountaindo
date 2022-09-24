@@ -21,8 +21,9 @@ function CourseItem({trail, level, timeDuration, imageSrc}: Props) {
 
 const styles = StyleSheet.create({
   courseItemWrapper: {
-    width: '33%',
+    // width: '33%',
     marginTop: 10,
+    marginHorizontal: 10,
     alignItems: 'center',
   },
   trailText: {
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   imageSrc: {
-    width: '80%',
+    width: '100%',
     height: 80,
   },
   levelText: {
