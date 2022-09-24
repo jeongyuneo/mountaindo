@@ -1,6 +1,7 @@
 package com.hanssarang.backend.member.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
@@ -36,7 +37,11 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NAME = "이재용";
     private static final LocalDate BIRTH = LocalDate.now();
     private static final String PHONE = "010-3333-3333";
-    private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
+    private static final Address ADDRESS = Address.builder().
+            si("경기도")
+            .gu("수원시")
+            .dong("영통구")
+            .build();
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String MY_LEVEL = "등린이";
