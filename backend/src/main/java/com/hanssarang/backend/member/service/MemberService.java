@@ -66,7 +66,8 @@ public class MemberService {
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
-        Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(findingEmailRequest.getName(),
+        Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(
+                        findingEmailRequest.getName(),
                         findingEmailRequest.getBirth(),
                         findingEmailRequest.getPhone())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
