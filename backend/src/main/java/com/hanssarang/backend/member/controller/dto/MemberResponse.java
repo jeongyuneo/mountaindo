@@ -1,6 +1,5 @@
 package com.hanssarang.backend.member.controller.dto;
 
-import com.hanssarang.backend.common.domain.Address;
 import lombok.*;
 
 import java.time.LocalDate;
