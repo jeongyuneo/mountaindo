@@ -74,14 +74,14 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
-                .profilePicture(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .build();
         memberRequest = MemberRequest.builder()
                 .name(NAME)
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
-                .profilePicture(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
                 .password(PASSWORD)
