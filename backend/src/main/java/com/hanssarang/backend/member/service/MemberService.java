@@ -56,7 +56,6 @@ public class MemberService {
                         .gu(signUpRequest.getAddress().getGu())
                         .dong(signUpRequest.getAddress().getDong())
                         .build())
-                .createdDate(LocalDateTime.now())
                 .isActive(true)
                 .build();
         memberRepository.save(member);
