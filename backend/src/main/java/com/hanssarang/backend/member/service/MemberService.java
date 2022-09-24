@@ -37,6 +37,9 @@ public class MemberService {
     }
 
     public void checkNickname(String nickname) {
+        if (memberRepository.existsByNickname(nickname)) {
+            throw new DuplicationException(FAIL_TO_CHECK_NICKNAME);
+        }
     }
 
     public void signUp(SignUpRequest signUpRequest) throws CommonException {
