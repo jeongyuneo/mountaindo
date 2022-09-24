@@ -15,7 +15,7 @@ public class MemberResponse {
     private String name;
     private LocalDate birth;
     private String phone;
-    private Address address;
+    private String address;
     private String nickname;
     private String imageUrl;
 }
