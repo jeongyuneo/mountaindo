@@ -322,7 +322,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
+        willDoNothing().given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
         ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
         // then
@@ -333,7 +333,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
         ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
         // then
