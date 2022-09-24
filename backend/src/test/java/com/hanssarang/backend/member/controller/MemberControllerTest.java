@@ -37,8 +37,8 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NAME = "이재용";
     private static final LocalDate BIRTH = LocalDate.now();
     private static final String PHONE = "010-3333-3333";
-    private static final Address ADDRESS = Address.builder().
-            si("경기도")
+    private static final Address ADDRESS = Address.builder()
+            .si("경기도")
             .gu("수원시")
             .dong("영통구")
             .build();
