@@ -1,5 +1,16 @@
+import {faShareFromSquare} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
-import {Modal, StyleSheet, Text, Pressable, View, Image} from 'react-native';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  Image,
+  Share,
+  Alert,
+} from 'react-native';
 
 // Hiking 페이지(mountain) / VisitedDetail 페이지(trails)에서 받아온 Props 정보 type 설정
 interface Props {
@@ -15,6 +26,25 @@ const CompletedMountainModal = ({
   mountain,
   trails,
 }: Props) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'React Native | A framework for building native apps using React',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
   // mountain 정보가 있으면 완등한 산의 모달 없으면 방문한 등산로 모달
   return mountain ? (
     <View style={styles.centeredView}>
@@ -50,6 +80,9 @@ const CompletedMountainModal = ({
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <Pressable onPress={onShare} style={styles.shareButton}>
+                <FontAwesomeIcon icon={faShareFromSquare} size={15} />
+              </Pressable>
               <View>
                 <Image
                   source={require('../../assets/gps-sample.png')}
@@ -145,6 +178,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 10,
+  },
+  shareButton: {
+    alignSelf: 'flex-end',
   },
 });
 
