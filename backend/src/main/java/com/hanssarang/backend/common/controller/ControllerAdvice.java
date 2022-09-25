@@ -1,6 +1,7 @@
 package com.hanssarang.backend.common.controller;
 
 import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DuplicationException.class)
+    @ExceptionHandler({DuplicationException.class, BadRequestException.class})
     public Message DuplicationException(DuplicationException exception) {
         log.info("DuplicationException: {}", exception.getMessage());
         return new Message(exception.getMessage());
