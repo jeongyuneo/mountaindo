@@ -59,7 +59,7 @@ public class MemberControllerTest extends ApiDocument {
     private SignUpRequest signUpRequest;
     private InitialSurveyRequest initialSurveyRequest;
     private FindingEmailRequest findingEmailRequest;
-    private PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest;
+    private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
 
     @MockBean
@@ -116,7 +116,7 @@ public class MemberControllerTest extends ApiDocument {
                 .birth(BIRTH)
                 .phone(PHONE)
                 .build();
-        memberPasswordUpdateVerificationRequest = PasswordUpdateVerificationRequest.builder()
+        passwordUpdateVerificationRequest = PasswordUpdateVerificationRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
                 .build();
@@ -330,7 +330,7 @@ public class MemberControllerTest extends ApiDocument {
         // given
         willDoNothing().given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
-        ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
+        ResultActions resultActions = 비밀번호_재설정_요청(passwordUpdateVerificationRequest);
         // then
         비밀번호_재설정_성공(resultActions);
     }
@@ -341,7 +341,7 @@ public class MemberControllerTest extends ApiDocument {
         // given
         willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
-        ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
+        ResultActions resultActions = 비밀번호_재설정_요청(passwordUpdateVerificationRequest);
         // then
         비밀번호_재설정_실패(resultActions, new Message(FAIL_TO_UPDATE_PASSWORD));
     }
@@ -541,10 +541,10 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("get-email-fail"));
     }
 
-    private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) throws Exception {
+    private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) throws Exception {
         return mockMvc.perform(patch("/api/v1/members/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(memberPasswordUpdateVerificationRequest)));
+                .content(toJson(passwordUpdateVerificationRequest)));
     }
 
     private void 비밀번호_재설정_성공(ResultActions resultActions) throws Exception {
