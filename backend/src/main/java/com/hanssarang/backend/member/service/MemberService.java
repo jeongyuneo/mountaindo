@@ -2,7 +2,6 @@ package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.exception.BadRequestException;
-import com.hanssarang.backend.common.exception.CommonException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
@@ -11,7 +10,6 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 
@@ -57,11 +55,7 @@ public class MemberService {
                         .build())
                 .isActive(true)
                 .build();
-        try {
-            memberRepository.save(member);
-        } catch (Exception e) {
-            throw new CommonException(FAIL_TO_SIGNUP);
-        }
+        memberRepository.save(member);
     }
 
     public void createInitialSurvey(InitialSurveyRequest initialSurveyRequest) {
