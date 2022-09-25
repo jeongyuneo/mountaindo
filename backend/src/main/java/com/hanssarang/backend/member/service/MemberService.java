@@ -41,7 +41,7 @@ public class MemberService {
         }
     }
 
-    public void signUp(SignUpRequest signUpRequest) throws CommonException {
+    public void signUp(SignUpRequest signUpRequest) {
         Member member = Member.builder()
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
@@ -56,7 +56,12 @@ public class MemberService {
                         .build())
                 .isActive(true)
                 .build();
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch (Exception e) {
+            throw new CommonException(FAIL_TO_SIGNUP);
+        }
+
     }
 
     public void createInitialSurvey(InitialSurveyRequest initialSurveyRequest) {
@@ -81,13 +86,7 @@ public class MemberService {
                 .name(member.getName())
                 .birth(member.getBirth())
                 .phone(member.getPhone())
-                .address(new StringBuilder()
-                        .append(member.getAddress().getSi())
-                        .append(" ")
-                        .append(member.getAddress().getGu())
-                        .append(" ")
-                        .append(member.getAddress().getDong())
-                        .toString())
+                .address(member.getAddress().getFullAddress())
                 .nickname(member.getNickname())
                 .imageUrl(member.getImageUrl())
                 .build();
