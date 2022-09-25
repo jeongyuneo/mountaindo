@@ -17,8 +17,8 @@ public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DuplicationException.class, BadRequestException.class})
-    public Message DuplicationException(CommonException exception) {
-        log.info("DuplicationException: {}", exception.getMessage());
+    public Message BadRequestException(CommonException exception) {
+        log.info("BadRequestException: {}", exception.getMessage());
         return new Message(exception.getMessage());
     }
 
