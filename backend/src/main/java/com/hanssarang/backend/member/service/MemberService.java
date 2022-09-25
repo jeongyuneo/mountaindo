@@ -62,7 +62,6 @@ public class MemberService {
         } catch (Exception e) {
             throw new CommonException(FAIL_TO_SIGNUP);
         }
-
     }
 
     public void createInitialSurvey(InitialSurveyRequest initialSurveyRequest) {
