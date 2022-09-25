@@ -1,13 +1,36 @@
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
-
+import {LoggedInParamList} from '../../../AppInner';
 import CourseList from '../../components/mountainDetail/CourseList';
 import CourseListDummy from '../../components/mountainDetail/CourseListDummy';
 import Facilites from '../../components/mountainDetail/Facilities';
 import RankingList from '../../components/mountainDetail/RankingList';
 import WeatherForecast from '../../components/mountainDetail/WeatherForecast';
 
-function MountainDetail() {
+type MountainDetailScreenProps = NativeStackScreenProps<
+  LoggedInParamList,
+  'MountainDetail'
+>;
+
+function MountainDetail({navigation}: MountainDetailScreenProps) {
+  const moveToCourseDetail = (
+    id: number,
+    trail: string,
+    level: string,
+    timeDuration: string,
+    totalDistance: number,
+    imageSrc: any,
+  ) => {
+    navigation.navigate('CourseDetail', {
+      id,
+      trail,
+      level,
+      timeDuration,
+      totalDistance,
+      imageSrc,
+    });
+  };
   return (
     <ScrollView>
       <Image
@@ -22,7 +45,10 @@ function MountainDetail() {
         <Text style={styles.altitudeText}>고도: 800m</Text>
       </View>
       <WeatherForecast />
-      <CourseList CourseListDummy={CourseListDummy} />
+      <CourseList
+        CourseListDummy={CourseListDummy}
+        moveToCourseDetail={moveToCourseDetail}
+      />
       <RankingList />
       <Facilites />
     </ScrollView>
