@@ -1,6 +1,7 @@
 package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.domain.Address;
+import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.CommonException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
@@ -114,7 +115,7 @@ public class MemberService {
         Member member = memberRepository.findByEmailAndIsActiveTrue(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_LOGIN));
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            throw new NotFoundException(FAIL_TO_LOGIN);
+            throw new BadRequestException(FAIL_TO_LOGIN);
         }
     }
 
