@@ -33,6 +33,7 @@ import Visited from './src/pages/completed/Visited';
 import VisitedDetail from './src/pages/completed/VisitedDetail';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
+import CourseDetail from './src/pages/mountain/CourseDetail';
 
 export type LoggedInParamList = {
   Main: any;
@@ -48,6 +49,7 @@ export type LoggedInParamList = {
   ContactUs: any;
   TrackingEnd: any;
   MountainDetail: any;
+  CourseDetail: any;
   Visited: any;
   VisitedDetail: any;
   MainDetail: any;
@@ -173,6 +175,11 @@ function AppInner() {
               name="MountainDetail"
               component={MountainDetail}
               options={{title: '산 상세 정보', headerShown: false}}
+            />
+            <Stack.Screen
+              name="CourseDetail"
+              component={CourseDetail}
+              options={{title: '코스 상세 정보', headerShown: false}}
             />
             <Stack.Screen
               name="VisitedDetail"

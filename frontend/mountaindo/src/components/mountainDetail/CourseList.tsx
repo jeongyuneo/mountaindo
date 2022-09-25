@@ -19,9 +19,10 @@ interface Props {
       imageSrc: any;
     }[];
   }[];
+  moveToCourseDetail: any;
 }
 
-function CourseList({CourseListDummy}: Props) {
+function CourseList({CourseListDummy, moveToCourseDetail}: Props) {
   return (
     <View style={styles.courseList}>
       <Text style={styles.courseText}>코스 목록</Text>
@@ -29,10 +30,13 @@ function CourseList({CourseListDummy}: Props) {
         <ScrollView horizontal={true}>
           {CourseListDummy[0].trailList.map(item => (
             <CourseItem
+              id={item.id}
               trail={item.trail}
               level={item.level}
               timeDuration={item.timeDuration}
+              totalDistance={item.totalDistance}
               imageSrc={item.imageSrc}
+              moveToCourseDetail={moveToCourseDetail}
             />
           ))}
         </ScrollView>
