@@ -1,5 +1,6 @@
 package com.hanssarang.backend.member.controller.dto;
 
+import com.hanssarang.backend.common.domain.Address;
 import lombok.*;
 
 @Getter
@@ -10,7 +11,7 @@ public class MemberRequest {
 
     private String name;
     private String phone;
-    private String address;
+    private Address address;
     private String nickname;
-    private String profilePicture;
+    private String imageUrl;
 }

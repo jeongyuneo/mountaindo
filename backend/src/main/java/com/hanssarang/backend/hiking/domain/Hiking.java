@@ -36,7 +36,7 @@ public class Hiking extends BaseEntity {
     private Trail trail;
 
     @Builder
-    public Hiking(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
+    public Hiking(int id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
                   double distance, LocalTime useTime, double accumulatedHeight, boolean isCompleted, LineString path, Member member, Trail trail) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.distance = distance;

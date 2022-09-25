@@ -1,6 +1,7 @@
 package com.hanssarang.backend.member.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,9 +35,13 @@ public class MemberControllerTest extends ApiDocument {
     private static final String EMAIL = "ssafy@samsung.com";
     private static final String PASSWORD = "1q2w3e4r";
     private static final String NAME = "이재용";
-    private static final String BIRTH = "1968.06.23";
+    private static final LocalDate BIRTH = LocalDate.now();
     private static final String PHONE = "010-3333-3333";
-    private static final String ADDRESS = "경기도 수원시 영통구 삼성로 129";
+    private static final Address ADDRESS = Address.builder()
+            .si("경기도")
+            .gu("수원시")
+            .dong("영통구")
+            .build();
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String MY_LEVEL = "등린이";
@@ -51,7 +59,7 @@ public class MemberControllerTest extends ApiDocument {
     private SignUpRequest signUpRequest;
     private InitialSurveyRequest initialSurveyRequest;
     private FindingEmailRequest findingEmailRequest;
-    private PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest;
+    private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
 
     @MockBean
@@ -64,16 +72,16 @@ public class MemberControllerTest extends ApiDocument {
                 .name(NAME)
                 .birth(BIRTH)
                 .phone(PHONE)
-                .address(ADDRESS)
+                .address(ADDRESS.getFullAddress())
                 .nickname(NICKNAME)
-                .profilePicture(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .build();
         memberRequest = MemberRequest.builder()
                 .name(NAME)
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
-                .profilePicture(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
                 .password(PASSWORD)
@@ -102,7 +110,7 @@ public class MemberControllerTest extends ApiDocument {
                 .birth(BIRTH)
                 .phone(PHONE)
                 .build();
-        memberPasswordUpdateVerificationRequest = PasswordUpdateVerificationRequest.builder()
+        passwordUpdateVerificationRequest = PasswordUpdateVerificationRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
                 .build();
@@ -314,9 +322,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
+        willDoNothing().given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
-        ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
+        ResultActions resultActions = 비밀번호_재설정_요청(passwordUpdateVerificationRequest);
         // then
         비밀번호_재설정_성공(resultActions);
     }
@@ -325,9 +333,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(anyInt(), any(PasswordUpdateVerificationRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
-        ResultActions resultActions = 비밀번호_재설정_요청(memberPasswordUpdateVerificationRequest);
+        ResultActions resultActions = 비밀번호_재설정_요청(passwordUpdateVerificationRequest);
         // then
         비밀번호_재설정_실패(resultActions, new Message(FAIL_TO_UPDATE_PASSWORD));
     }
@@ -379,6 +387,7 @@ public class MemberControllerTest extends ApiDocument {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(memberRequest)));
     }
+
     private void 회원정보_수정_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
@@ -526,10 +535,10 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("get-email-fail"));
     }
 
-    private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) throws Exception {
+    private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) throws Exception {
         return mockMvc.perform(patch("/api/v1/members/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(memberPasswordUpdateVerificationRequest)));
+                .content(toJson(passwordUpdateVerificationRequest)));
     }
 
     private void 비밀번호_재설정_성공(ResultActions resultActions) throws Exception {

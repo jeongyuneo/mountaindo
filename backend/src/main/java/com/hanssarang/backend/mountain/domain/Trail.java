@@ -34,7 +34,7 @@ public class Trail extends BaseEntity {
     private Mountain mountain;
 
     @Builder
-    public Trail(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
+    public Trail(int id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
                  String name, int length, LocalTime goingUpTime, LocalTime goingDownTime, String risk, Level level, LineString path, Mountain mountain) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.name = name;

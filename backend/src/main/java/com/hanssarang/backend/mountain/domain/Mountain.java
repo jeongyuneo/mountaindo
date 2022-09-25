@@ -29,7 +29,7 @@ public class Mountain extends BaseEntity {
     private List<Trail> trails;
 
     @Builder
-    public Mountain(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
+    public Mountain(int id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
                     String name, String code, double height, String imageUrl, Address address, List<Trail> trails) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.name = name;
