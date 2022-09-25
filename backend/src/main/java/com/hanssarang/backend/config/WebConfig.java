@@ -1,4 +1,4 @@
-package com.hanssarang.backend.common.config;
+package com.hanssarang.backend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
