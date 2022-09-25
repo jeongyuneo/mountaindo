@@ -22,7 +22,6 @@ function MountainDetail({navigation}: MountainDetailScreenProps) {
     totalDistance: number,
     imageSrc: any,
   ) => {
-    console.log(timeDuration);
     navigation.navigate('CourseDetail', {
       id,
       trail,
