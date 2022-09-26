@@ -76,8 +76,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
-        memberService.login(loginRequest);
-        return ResponseEntity.ok().header(AUTHORIZATION, BEARER + ACCESS_TOKEN).build();
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok()
+                .body(memberService.login(loginRequest));
     }
 }
