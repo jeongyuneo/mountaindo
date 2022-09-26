@@ -30,7 +30,7 @@ public abstract class BaseEntity {
     private LocalDateTime deletedDate;
     private boolean isActive;
 
-    protected void delete() {
+    public void delete() {
         isActive = false;
         deletedDate = LocalDateTime.now();
     }
