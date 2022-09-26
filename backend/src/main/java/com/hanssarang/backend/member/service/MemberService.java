@@ -88,7 +88,15 @@ public class MemberService {
     }
 
     public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest) {
-        return null;
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname(), updateRequest.getImageUrl());
+        memberRepository.save(member);
+        return UpdateResponse.builder()
+                .nickname(member.getNickname())
+                .imageUrl(member.getImageUrl())
+                .token(JwtUtil.generateToken(memberId, member.getNickname()))
+                .build();
     }
 
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
