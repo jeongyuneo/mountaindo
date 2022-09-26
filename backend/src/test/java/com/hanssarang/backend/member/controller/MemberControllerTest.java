@@ -488,7 +488,6 @@ public class MemberControllerTest extends ApiDocument {
 
     private ResultActions 회원가입_요청(SignUpRequest signUpRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/members")
-                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(signUpRequest)));
     }
