@@ -29,7 +29,7 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put("id", memberId);
         claims.put("nickname", nickname);
-        return AUTHORIZATION_TYPE + DELIMITER + createToken(claims);
+        return createToken(claims);
     }
 
     public static int getMemberId(String token) {
