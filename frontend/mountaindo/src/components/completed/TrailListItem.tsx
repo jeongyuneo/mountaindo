@@ -52,7 +52,7 @@ function TrailListItem({
         </View>
         <View>
           <Image
-            source={require('../../assets/gps-sample.png')}
+            source={require('../../assets/jjang.png')}
             style={styles.mountainImage}
           />
         </View>
