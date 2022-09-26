@@ -45,7 +45,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String MEMBER_EMAIL_PARAMETER_NAME = "email";
 
     private MemberResponse memberResponse;
-    private MemberRequest memberRequest;
+    private UpdateRequest updateRequest;
     private PasswordUpdateRequest passwordUpdateRequest;
     private EmailResponse emailResponse;
     private SignUpRequest signUpRequest;
@@ -68,7 +68,7 @@ public class MemberControllerTest extends ApiDocument {
                 .nickname(NICKNAME)
                 .profilePicture(IMAGE_URL)
                 .build();
-        memberRequest = MemberRequest.builder()
+        updateRequest = UpdateRequest.builder()
                 .name(NAME)
                 .phone(PHONE)
                 .address(ADDRESS)
@@ -144,9 +144,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).updateMember(anyInt(), any(MemberRequest.class));
+        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
         // when
-        ResultActions resultActions = 회원정보_수정_요청(memberRequest);
+        ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
         회원정보_수정_성공(resultActions);
     }
@@ -155,9 +155,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(MemberRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
         // when
-        ResultActions resultActions = 회원정보_수정_요청(memberRequest);
+        ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
         회원정보_수정_실패(resultActions, new Message(FAIL_TO_UPDATE_MEMBER));
     }
@@ -379,11 +379,11 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("get-member-fail"));
     }
 
-    private ResultActions 회원정보_수정_요청(MemberRequest memberRequest) throws Exception {
+    private ResultActions 회원정보_수정_요청(UpdateRequest updateRequest) throws Exception {
         return mockMvc.perform(patch("/api/v1/members")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(memberRequest)));
+                .content(toJson(updateRequest)));
     }
     private void 회원정보_수정_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
