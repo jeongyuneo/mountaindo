@@ -26,21 +26,12 @@ const CompletedMountainModal = ({
   mountain,
   trails,
 }: Props) => {
+  // sns 공유 -> RN Share 사용
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
+        message: 'sns로 공유하기',
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
     } catch (error: any) {
       Alert.alert(error.message);
     }
