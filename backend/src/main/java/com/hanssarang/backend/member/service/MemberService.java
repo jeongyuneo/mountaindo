@@ -100,6 +100,10 @@ public class MemberService {
     }
 
     public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        member.updatePassword(passwordEncoder, passwordUpdateRequest.getPassword());
+        memberRepository.save(member);
     }
 
     public void deleteMember(int memberId) {
