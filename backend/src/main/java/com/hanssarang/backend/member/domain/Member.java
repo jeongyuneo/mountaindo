@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public class Member extends BaseEntity {
     private List<Hiking> hikings;
 
     @Builder
-    public Member(Long id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
+    public Member(int id, LocalDateTime createdDate, LocalDateTime lastModifiedDate, LocalDateTime deletedDate, boolean isActive,
                   String email, String password, String name, LocalDate birth, String phone, String nickname, String imageUrl, Address address) {
         super(id, createdDate, lastModifiedDate, deletedDate, isActive);
         this.email = email;
@@ -45,5 +46,9 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.imageUrl = imageUrl;
         this.address = address;
+    }
+
+    public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
+        this.password = passwordEncoder.encode(newPassword);
     }
 }

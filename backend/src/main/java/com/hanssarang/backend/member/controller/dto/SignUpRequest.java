@@ -1,6 +1,9 @@
 package com.hanssarang.backend.member.controller.dto;
 
+import com.hanssarang.backend.common.domain.Address;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -11,8 +14,8 @@ public class SignUpRequest {
     private String email;
     private String password;
     private String name;
-    private String birth;
+    private LocalDate birth;
     private String phone;
-    private String address;
+    private Address address;
     private String nickname;
 }
