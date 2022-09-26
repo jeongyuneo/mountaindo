@@ -62,7 +62,7 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
         title: '등산 기록',
         message: `등산 시간: ${timer}, 총 거리: ${totalDist}, 총 고도: ${totalHigh}`,
         url: uri,
-        // type: 'image/jpeg',
+        type: 'image/jpeg',
       };
 
       // 소셜 타입 미지정 or 지정
