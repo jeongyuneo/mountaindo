@@ -31,6 +31,29 @@ function usePermissions() {
           }
         })
         .catch(console.error);
+
+      // 저장소 접근 권한 설정 확인
+      check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
+        .then(result => {
+          if (result === RESULTS.BLOCKED || result === RESULTS.DENIED) {
+            Alert.alert(
+              '이 앱은 파일 저장 권한 허용이 필요합니다.',
+              '앱 설정 화면을 열어서 항상 허용으로 바꿔주세요.',
+              [
+                {
+                  text: '네',
+                  onPress: () => Linking.openSettings(),
+                },
+                {
+                  text: '아니오',
+                  onPress: () => console.log('No Pressed'),
+                  style: 'cancel',
+                },
+              ],
+            );
+          }
+        })
+        .catch(console.error);
     }
     // ios일 경우
     else if (Platform.OS === 'ios') {
@@ -58,5 +81,4 @@ function usePermissions() {
     }
   }, []);
 }
-
 export default usePermissions;
