@@ -38,6 +38,7 @@ public class MemberService {
     public void deleteMember(int memberId) {
     }
 
-    public void login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        return null;
     }
 }
