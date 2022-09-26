@@ -1,5 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Dimensions,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {LoggedInParamList} from '../../../AppInner';
@@ -16,9 +24,13 @@ function Hiking({navigation}: HikingScreenProps) {
     longitude: number;
   } | null>(null);
   const [currentLocation, setCurrentLocation] = useState(0); // 내 위치 버튼 클릭 시 재렌더링을 위한 변수
+
   const [isTracking, setIsTracking] = useState(false); // 등산 기록 여부 확인 변수
+  const [tracking, setTracking] = useState(true); // 등산 기록 중인지 확인하기 위한 변수
+
   const [totalDist, setTotalDist] = useState(0); // 총 등산 거리를 저장할 변수
   const [totalHigh, setTotalHigh] = useState(0); // 총 고도를 저정할 변수
+
   // 이동한 경로의 위도, 경도 좌표를 저장할 리스트
   const [coords, setCoords] = useState<
     {latitude: number | undefined; longitude: number | undefined}[] | []
@@ -26,14 +38,24 @@ function Hiking({navigation}: HikingScreenProps) {
 
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
 
+  const [watchId, setWatchId] = useState(0);
+
   // 위치가 변화했을 때 변경된 좌표 정보를 리스트에 넣고 거리를 증가시킴
   const locationDataPush = () => {
-    if (myPosition?.latitude && myPosition.longitude) {
-      setCoords([
-        ...coords,
-        {latitude: myPosition.latitude, longitude: myPosition.longitude},
-      ]);
-      getDistance();
+    if (myPosition?.latitude && myPosition?.longitude) {
+      if (
+        !coords.some(
+          item =>
+            item.latitude === myPosition.latitude &&
+            item.longitude === myPosition.longitude,
+        )
+      ) {
+        setCoords([
+          ...coords,
+          {latitude: myPosition.latitude, longitude: myPosition.longitude},
+        ]);
+        getDistance();
+      }
     }
   };
 
@@ -70,9 +92,8 @@ function Hiking({navigation}: HikingScreenProps) {
     });
   };
 
-  // 현재 위치 받아오기
-  useEffect(() => {
-    Geolocation.watchPosition(
+  const watchPosition = () => {
+    const idTest = Geolocation.watchPosition(
       info => {
         setMyPosition({
           latitude: info.coords.latitude,
@@ -86,15 +107,44 @@ function Hiking({navigation}: HikingScreenProps) {
         distanceFilter: 50,
       },
     );
+    setWatchId(idTest);
     locationDataPush();
-  }, [myPosition, currentLocation, isTracking]);
+  };
+
+  // 현재 위치 받아오기
+  useEffect(() => {
+    if (!tracking) {
+      watchPosition();
+    } else {
+      Geolocation.clearWatch(watchId);
+    }
+  }, [myPosition, currentLocation, isTracking, tracking]);
+
+  useEffect(() => {
+    watchPosition();
+  }, []);
+
+  const wait = (timeout: any) => {
+    return new Promise((resolve: any) => setTimeout(resolve, timeout));
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
     return (
-      <View style={styles.mapLoading}>
-        <Text>내 위치를 로딩 중입니다. 권한을 허용했는지 확인해주세요.</Text>
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <Text>사용자의 현재 위치를 받아오지 못했습니다</Text>
+      </ScrollView>
     );
   }
 
@@ -135,7 +185,7 @@ function Hiking({navigation}: HikingScreenProps) {
         <Pressable
           style={styles.startButton}
           onPress={() => {
-            setIsTracking(!isTracking);
+            setIsTracking(true);
             getLocation();
             setCoords([
               ...coords,
@@ -161,6 +211,8 @@ function Hiking({navigation}: HikingScreenProps) {
       moveToTrackingEnd={moveToTrackingEnd}
       setIsTracking={setIsTracking}
       totalDist={totalDist}
+      setTracking={setTracking}
+      tracking={tracking}
     />
   );
 }
@@ -173,7 +225,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 20,
     flexDirection: 'row',
-    marginBottom: 30,
   },
   textLabelGroup: {
     flex: 0.3,
@@ -183,7 +234,7 @@ const styles = StyleSheet.create({
   },
   mapContainer: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height - 30,
   },
   mapLoading: {
     alignItems: 'center',
@@ -218,6 +269,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
     paddingTop: 15,
+  },
+  scrollView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
