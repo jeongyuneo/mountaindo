@@ -33,7 +33,7 @@ public class JwtUtil {
     }
 
     public static int getMemberId(String token) {
-        return Integer.parseInt((String) getAllClaims(getActualToken(token)).get("id"));
+        return (int) getAllClaims(getActualToken(token)).get("id");
     }
 
     public static void validateToken(String token) {
