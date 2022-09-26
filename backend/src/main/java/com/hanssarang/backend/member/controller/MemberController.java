@@ -50,9 +50,8 @@ public class MemberController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Void> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody MemberRequest memberRequest) {
-        memberService.updateMember(1, memberRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
+        return ResponseEntity.ok().body(memberService.updateMember(1, updateRequest));
     }
 
     @PatchMapping("/password")
