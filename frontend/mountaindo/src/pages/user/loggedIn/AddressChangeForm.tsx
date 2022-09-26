@@ -29,13 +29,25 @@ function AddressChangeForm({navigation, route}: AddressChangeFormScreenProps) {
     // 유저 객체 업데이트
     route.params?.setUserInfo({
       ...route.params?.userInfo,
-      address: {value: selectedCity, cityValue: selectedCity2},
+      address: {
+        value: selectedCity,
+        cityValue:
+          selectedCity2 === '없음' || selectedCity2 === null
+            ? ''
+            : selectedCity2,
+      },
     });
     navigation.navigate('UserInfoChange');
     return Alert.alert('알림', '주소 변경에 성공하였습니다. ');
   }, [navigation, selectedCity, selectedCity2, route.params]);
 
-  const canGoNext = selectedCity && selectedCity2;
+  // 선택된 도시의 값이 없음이거나 null일 경우 버튼 활성화 처리
+  const canGoNext =
+    selectedCity2 === '없음' || selectedCity2 === null
+      ? selectedCity
+      : selectedCity && selectedCity2;
+  console.log(selectedCity2);
+
   return (
     <View style={styles.container}>
       <LocationPicker

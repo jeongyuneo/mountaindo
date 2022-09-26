@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 import RestaurantItem from './RestaurantItem';
 import RestaurantsDummy from './RestaurantsDummy';
 
@@ -28,9 +28,11 @@ function Facilites() {
 			<View style={styles.restaurantsWrapper}>
 				<Text style={styles.restaurantsTitle}>주변 맛집</Text>
 				<View style={styles.itemsWrapper}>
-					{RestaurantsDummy.map(item => (
-						<RestaurantItem name={item.name} imageSrc={item.imageSrc} signatureMenu={item.signatureMenu} location={item.location} operationTime={item.operationTime} review={item.review}/>
-					))}
+					<ScrollView horizontal={true}>
+						{RestaurantsDummy.map(item => (
+							<RestaurantItem name={item.name} imageSrc={item.imageSrc} signatureMenu={item.signatureMenu} location={item.location} operationTime={item.operationTime} review={item.review}/>
+						))}
+					</ScrollView>
 				</View>
 			</View>
     </View>
