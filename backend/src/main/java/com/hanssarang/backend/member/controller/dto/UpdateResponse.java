@@ -6,11 +6,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberRequest {
+public class UpdateResponse {
 
-    private String name;
-    private String phone;
-    private String address;
     private String nickname;
-    private String profilePicture;
+    private String imageUrl;
+    private String token;
 }

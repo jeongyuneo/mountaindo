@@ -26,7 +26,8 @@ public class MemberService {
         return null;
     }
 
-    public void updateMember(int memberId, MemberRequest memberRequest) {
+    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest) {
+        return null;
     }
 
     public void updatePassword(int memberId, PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
@@ -38,6 +39,7 @@ public class MemberService {
     public void deleteMember(int memberId) {
     }
 
-    public void login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        return null;
     }
 }
