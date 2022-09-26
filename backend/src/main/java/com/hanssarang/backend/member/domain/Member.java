@@ -39,4 +39,12 @@ public class Member extends BaseEntity {
     public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
         this.password = passwordEncoder.encode(newPassword);
     }
+
+    public void update(String name, String phone, Address address, String nickname, String imageUrl) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.nickname = nickname;
+        this.imageUrl = imageUrl;
+    }
 }
