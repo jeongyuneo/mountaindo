@@ -103,6 +103,10 @@ public class MemberService {
     }
 
     public void deleteMember(int memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        member.delete();
+        memberRepository.save(member);
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
