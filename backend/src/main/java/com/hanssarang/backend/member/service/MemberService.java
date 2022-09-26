@@ -26,7 +26,8 @@ public class MemberService {
         return null;
     }
 
-    public void updateMember(int memberId, MemberRequest memberRequest) {
+    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest) {
+        return null;
     }
 
     public void updatePassword(int memberId, PasswordUpdateVerificationRequest memberPasswordUpdateVerificationRequest) {
