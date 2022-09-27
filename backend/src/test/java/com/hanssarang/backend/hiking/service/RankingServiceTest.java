@@ -7,6 +7,7 @@ import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -105,6 +106,7 @@ class RankingServiceTest {
         memberRepository.deleteAll();
     }
 
+    @DisplayName("전체 랭킹 목록 검색")
     @Test
     void searchRanking() {
         // given
