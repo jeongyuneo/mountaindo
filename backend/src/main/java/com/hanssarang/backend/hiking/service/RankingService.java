@@ -24,7 +24,7 @@ public class RankingService {
 
     @Transactional(readOnly = true)
     public RankingListResponse getRankings(int memberId) {
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
         int myRanking = IntStream.rangeClosed(1, members.size())
                 .filter(ranking -> members.get(ranking - 1).getId() == memberId)
