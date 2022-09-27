@@ -24,7 +24,6 @@ public class Hiking extends BaseEntity {
     private LocalTime useTime;
     private double accumulatedHeight;
     private boolean isCompleted;
-
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
