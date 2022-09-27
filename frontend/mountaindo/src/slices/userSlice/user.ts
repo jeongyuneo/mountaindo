@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import Config from 'react-native-config';
 import axiosService from '../../store/axiosService';
 const initialState = {
   name: '',
@@ -11,9 +10,6 @@ export const login = createAsyncThunk(
   'userSlice/login',
   async (args: any, {rejectWithValue}) => {
     try {
-      console.log('LOGIN_TRY ==>', args);
-      console.log('CONFIG ===> ', Config.REACT_APP_BE_HOST);
-
       const response = await axiosService.post('/api/v1/members/login', {
         email: args.email,
         password: args.password,
@@ -29,8 +25,6 @@ export const signUp = createAsyncThunk(
   'userSlice/signUp',
   async (args: any, {rejectWithValue}) => {
     try {
-      console.log('SIGNUP_TRY ==>', args);
-
       const response = await axiosService.post('api/v1/members', {
         email: args.email,
         password: args.password,
@@ -56,8 +50,6 @@ export const checkCertification = createAsyncThunk(
   'userSlice/checkCertification',
   async (args: any, {rejectWithValue}) => {
     try {
-      console.log('CHECKCERTIFICATION_TRY ==>', args);
-
       const response = await axiosService.get('api/v1/members/email?', {
         params: {
           email: args.email,

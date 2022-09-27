@@ -89,7 +89,6 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
     dispatch(checkCertification({email}))
       .then(res => {
-        console.log('CHECK CERTIFICATION RES ==>', res);
         if (res.meta.requestStatus === 'fulfilled') {
           setCheckEmail(1);
           Alert.alert('알림', '사용할 수 있는 이메일입니다.');
@@ -99,7 +98,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         }
       })
       .catch(err => {
-        console.log('CHECK CERTIFICATION ERR ==>', err);
+        Alert.alert('알림', err.message);
       });
   }, [disabledEmail, dispatch, email]);
 
@@ -173,10 +172,10 @@ function SignUp({navigation}: SignUpScreenProps) {
       }),
     )
       .then(res => {
-        console.log('LOGIN RES ===> ', res);
+        console.log('SIGNUP RES ===> ', res);
       })
       .catch(err => {
-        console.log('LOGIN ERR ===> ', err);
+        console.log('SIGNUP ERR ===> ', err);
       });
     Alert.alert('알림', '회원가입되었습니다.');
     navigation.navigate('Welcome');
