@@ -2,13 +2,11 @@ package com.hanssarang.backend.mountain.domain;
 
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,6 +25,7 @@ public class Mountain extends BaseEntity {
     @Embedded
     private Address address;
 
+    @Builder.Default
     @OneToMany(mappedBy = "mountain", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Trail> trails;
+    private List<Trail> trails = new ArrayList<>();
 }
