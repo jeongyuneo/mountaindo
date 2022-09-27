@@ -25,7 +25,7 @@ public class RankingService {
 
     @Transactional(readOnly = true)
     public List<RankingResponse> searchRanking(String keyword) {
-        List<Member> members = memberRepository.findAll();
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
         return IntStream.rangeClosed(1, members.size())
                 .filter(ranking -> members.get(ranking - 1).getNickname().contains(keyword))
