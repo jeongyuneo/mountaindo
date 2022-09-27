@@ -27,12 +27,15 @@ public class RankingService {
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
         return IntStream.rangeClosed(1, members.size())
                 .filter(ranking -> members.get(ranking - 1).getNickname().contains(keyword))
-                .mapToObj(ranking -> RankingResponse.builder()
-                        .ranking(ranking)
-                        .nickname(members.get(ranking - 1).getNickname())
-                        .imageUrl(members.get(ranking - 1).getImageUrl())
-                        .accumulatedHeight(members.get(ranking - 1).getAccumulatedHeight())
-                        .build())
+                .mapToObj(ranking -> {
+                    Member member = members.get(ranking - 1);
+                    return RankingResponse.builder()
+                            .ranking(ranking)
+                            .nickname(member.getNickname())
+                            .imageUrl(member.getImageUrl())
+                            .accumulatedHeight(member.getAccumulatedHeight())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
