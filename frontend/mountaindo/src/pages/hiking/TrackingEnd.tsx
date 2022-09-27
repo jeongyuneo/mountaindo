@@ -45,6 +45,7 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
     totalHigh,
     route.params?.totalHigh,
   ]);
+
   const captureRef = useRef<any>(); // 캡쳐할 영역의 값을 가져오기 위한 ref
 
   // 지정된 영역 캡쳐해서 uri 생성
@@ -89,7 +90,7 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
     Alert.alert('이미지 저장', '갤러리에 이미지가 저장되었습니다. ');
   };
 
-  const testKakaoShare = async () => {
+  const kakaoShare = async () => {
     try {
       const uri = await getPhotoUri();
 
@@ -106,10 +107,12 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
       const response = await KakaoShareLink.sendFeed({
         content: {
           title: '등산 기록',
-          imageUrl: file,
+          imageUrl: uri,
           link: {
-            mobileWebUrl: '[이미지를 클릭했을 때, 보낼 모바일 URL 정보]',
-            webUrl: '[이미지를 클릭했을 때, 보낼 웹 URL 정보]',
+            mobileWebUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+            webUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+            androidExecutionParams: [],
+            iosExecutionParams: [],
           },
           description: `등산 시간: ${timer}, 총 거리: ${totalDist}, 총 고도: ${totalHigh}`,
         },
@@ -117,8 +120,10 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
           {
             title: '앱에서 보기',
             link: {
-              mobileWebUrl: '[버튼을 클릭했을 때, 보낼 모바일 URL 정보]',
-              webUrl: '[버튼을 클릭했을 때, 보낼 웹 URL 정보]',
+              mobileWebUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+              webUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+              androidExecutionParams: [],
+              iosExecutionParams: [],
             },
           },
         ],
@@ -127,6 +132,8 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
       console.error(e);
     }
   };
+
+  console.log(route.params?.isTracking);
 
   return (
     <View style={styles.container}>
@@ -142,7 +149,7 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
         </ViewShot>
       </View>
       <View style={styles.shareGroup}>
-        <Pressable onPress={testKakaoShare} style={styles.shareButton}>
+        <Pressable onPress={kakaoShare} style={styles.shareButton}>
           <Text>카카오톡 공유하기</Text>
         </Pressable>
         <Pressable onPress={() => onCapture(null)} style={styles.shareButton}>
