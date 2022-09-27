@@ -6,6 +6,7 @@ import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,17 +23,21 @@ public class RankingService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public List<RankingResponse> searchRanking(String keyword) {
         List<Member> members = memberRepository.findAll();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
         return IntStream.rangeClosed(1, members.size())
                 .filter(ranking -> members.get(ranking - 1).getNickname().contains(keyword))
-                .mapToObj(ranking -> RankingResponse.builder()
-                        .ranking(ranking)
-                        .nickname(members.get(ranking - 1).getNickname())
-                        .imageUrl(members.get(ranking - 1).getImageUrl())
-                        .accumulatedHeight(members.get(ranking - 1).getAccumulatedHeight())
-                        .build())
+                .mapToObj(ranking -> {
+                    Member member = members.get(ranking - 1);
+                    return RankingResponse.builder()
+                            .ranking(ranking)
+                            .nickname(member.getNickname())
+                            .imageUrl(member.getImageUrl())
+                            .accumulatedHeight(member.getAccumulatedHeight())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
