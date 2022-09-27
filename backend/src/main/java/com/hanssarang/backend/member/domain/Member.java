@@ -46,4 +46,10 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
         this.imageUrl = imageUrl;
     }
+
+    public int getAccumulatedHeight() {
+        return (int) hikings.stream()
+                .mapToDouble(Hiking::getAccumulatedHeight)
+                .sum();
+    }
 }
