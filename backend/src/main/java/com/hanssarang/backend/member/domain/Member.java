@@ -3,15 +3,13 @@ package com.hanssarang.backend.member.domain;
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.BaseEntity;
 import com.hanssarang.backend.hiking.domain.Hiking;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,8 +31,9 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Hiking> hikings;
+    private List<Hiking> hikings = new ArrayList<>();
 
     public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
         this.password = passwordEncoder.encode(newPassword);
