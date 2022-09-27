@@ -20,7 +20,7 @@ public class RankingController {
     }
 
     @GetMapping("/1")
-    public ResponseEntity<RankingResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+    public ResponseEntity<List<RankingResponse>> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
         return ResponseEntity.ok(rankingService.searchRanking(keyword));
     }
 
