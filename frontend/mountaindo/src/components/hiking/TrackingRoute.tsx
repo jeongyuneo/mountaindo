@@ -128,7 +128,7 @@ function TrackingRoute({
       </View>
       <View style={styles.distanceContainer}>
         <Text style={styles.distanceText}>{totalDist}</Text>
-        <Text style={styles.explainText}>킬로미터</Text>
+        <Text style={styles.explainText}>km</Text>
       </View>
       <View style={styles.timeContainer}>
         <StopWatch formatTime={formatTime} />
@@ -161,7 +161,10 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   distanceContainer: {
-    alignItems: 'center',
+    alignItems: 'baseline',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginLeft: 20,
   },
   distanceText: {
     fontWeight: 'bold',

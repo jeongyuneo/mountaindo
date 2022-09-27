@@ -133,6 +133,8 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
     }
   };
 
+  console.log(route.params?.isTracking);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>

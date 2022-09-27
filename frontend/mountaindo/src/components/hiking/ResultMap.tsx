@@ -10,7 +10,7 @@ type MyPosition = {
 type Props = {
   coords: MyPosition[];
 };
-function Map({coords}: Props) {
+function ResultMap({coords}: Props) {
   const mapView = useRef<any>(null); // NaverMapView의 설정을 바꾸기 위해 ref 설정 변수
   const [zoomLevel, setZoomLevel] = useState(13); // 지도의 zoomLevel을 설정할 변수 -> 기본값 13
 
@@ -49,8 +49,15 @@ function Map({coords}: Props) {
     const maxValue = Math.max(...findMaxArray);
 
     // 3. maxValue를 기준으로 zoomLevel 결정
-    if (0.015 <= maxValue && maxValue < 0.017) {
+
+    if (maxValue < 0.13) {
+      setZoomLevel(17);
+    } else if (0.013 <= maxValue && maxValue < 0.15) {
+      setZoomLevel(14);
+    } else if (0.015 <= maxValue && maxValue < 0.017) {
       setZoomLevel(12.5);
+    } else {
+      setZoomLevel(10);
     }
   }, [coords]);
   return coords.length > 0 ? (
@@ -152,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Map;
+export default ResultMap;

@@ -104,7 +104,7 @@ function Hiking({navigation}: HikingScreenProps) {
       {
         enableHighAccuracy: true,
         timeout: 20000,
-        distanceFilter: 50,
+        distanceFilter: 10,
       },
     );
     setWatchId(idTest);
@@ -159,7 +159,9 @@ function Hiking({navigation}: HikingScreenProps) {
       ],
       totalDist,
       totalHigh,
+      isTracking,
     });
+    setCoords([]); // 등산 기록 종료 후 리스트 초기화
   };
 
   // isTracking이 false면 기본 정보와 지도 렌더링
