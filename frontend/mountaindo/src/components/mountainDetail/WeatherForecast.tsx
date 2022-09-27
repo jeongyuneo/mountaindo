@@ -70,7 +70,6 @@ function WeatherForecast() {
     setTodayNum(parseInt(todayDigit, 10));
 
     // 하루 뒤 날짜 구하기
-    console.log(addDays(today, 5));
     let oneDayAfterStr = '';
     let year1: number = addDays(today, 1).getFullYear();
     let month1: number = addDays(today, 1).getMonth();
