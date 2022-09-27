@@ -14,11 +14,14 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // component import
 import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import {useAppDispatch} from '../../../store';
+import {login} from '../../../slices/userSlice/user';
 
 // Navigation 사용
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 function SignIn({navigation}: SignInScreenProps) {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState(''); // 이메일 입력을 받기 위한 변수
   const [password, setPassword] = useState(''); // 비밀번호 입력을 받기 위한 변수
   const [emailCheck, setEmailCheck] = useState(''); // 이메일 양식 확인을 위한 변수
@@ -43,6 +46,13 @@ function SignIn({navigation}: SignInScreenProps) {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
+    dispatch(login({email, password}))
+      .then(res => {
+        console.log('LOGIN RES===>', res);
+      })
+      .catch(err => {
+        console.log('LOGIN ERR ===> ', err);
+      });
     Alert.alert('알림', '로그인 되었습니다.');
   }, [email, password]);
 
