@@ -4,12 +4,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice, {servey} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 import {RootState} from '../../../store/reducer';
 
-type Survey5ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey5'>;
+type Survey5ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey5'>;
 
 function Survey5({navigation}: Survey5ScreenProps) {
   const dispatch = useAppDispatch();
@@ -60,6 +60,10 @@ function Survey5({navigation}: Survey5ScreenProps) {
 
   const setServey = () => {
     dispatch(servey({servey1, servey2, servey3, servey4, servey5}));
+  };
+
+  const setIsServeyed = () => {
+    dispatch(userSlice.actions.setIsServeyed());
   };
 
   return (
@@ -252,7 +256,8 @@ function Survey5({navigation}: Survey5ScreenProps) {
         onPress={() => {
           setServey5();
           setServey();
-          navigation.navigate('SignIn');
+          setIsServeyed();
+          navigation.navigate('Survey5');
         }}>
         <FontAwesomeIcon
           icon={faArrowRight}

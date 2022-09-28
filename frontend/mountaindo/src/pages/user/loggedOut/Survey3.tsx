@@ -3,11 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
-type Survey3ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey3'>;
+type Survey3ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey3'>;
 
 function Survey3({navigation}: Survey3ScreenProps) {
   const dispatch = useAppDispatch();

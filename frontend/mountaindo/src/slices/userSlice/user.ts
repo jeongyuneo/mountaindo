@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axiosService from '../../store/axiosService';
 const initialState = {
@@ -9,6 +10,7 @@ const initialState = {
   servey3: '',
   servey4: '',
   servey5: '',
+  isServeyed: false,
   isLoggedIn: false,
 };
 
@@ -84,13 +86,18 @@ export const signUp = createAsyncThunk(
   },
 );
 
+// 설문조사 결과 저장하기
 export const servey = createAsyncThunk(
   'userSlice/servey',
   async (args: any, {rejectWithValue}) => {
     try {
+      const token = await AsyncStorage.getItem('token');
       const response = await axiosService.post(
         '/api/v1/members/initial-survey',
         {
+          headers: {
+            Authorization: token,
+          },
           myLevel: args.servey1,
           visitedMountain: args.servey2,
           preferredMountainLocation: args.servey3,
@@ -98,6 +105,7 @@ export const servey = createAsyncThunk(
           preferredClimbingTime: args.servey5,
         },
       );
+      console.log(response.data);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -170,6 +178,9 @@ const userSlice = createSlice({
       } else if (action.payload.number === 5) {
         state.servey5 = action.payload.preferredClimbingTime;
       }
+    },
+    setIsServeyed(state) {
+      state.isServeyed = true;
     },
   },
   extraReducers: builder => {
