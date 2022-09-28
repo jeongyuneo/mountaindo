@@ -157,7 +157,7 @@ function Hiking({navigation}: HikingScreenProps) {
         ...coords,
         {latitude: myPosition.latitude, longitude: myPosition.longitude},
       ],
-      totalDist,
+      totalDist: totalDist.toFixed(2),
       totalHigh,
       isTracking,
     });
@@ -212,7 +212,7 @@ function Hiking({navigation}: HikingScreenProps) {
     <TrackingRoute
       moveToTrackingEnd={moveToTrackingEnd}
       setIsTracking={setIsTracking}
-      totalDist={totalDist}
+      totalDist={totalDist.toFixed(2)}
       setTracking={setTracking}
       tracking={tracking}
     />
