@@ -125,7 +125,20 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchMountain(String keyword) {
-        return null;
+        List<Mountain> mountains = mountainRepository.findByNameContaining(keyword);
+        List<MountainListResponse> mountainListResponses = new ArrayList<>();
+        List<Mountain> hotMountains = mountainRepository.findIsHot();
+        for (Mountain mountain : mountains) {
+            mountainListResponses.add(MountainListResponse.builder()
+                    .mountainId(mountain.getId())
+                    .name(mountain.getName())
+                    .height(mountain.getHeight())
+                    .address(mountain.getAddress().getFullAddress())
+                    .imageUrl(mountain.getImageUrl())
+                    .isHot(isHotMountain(hotMountains, mountain.getId()))
+                    .build());
+        }
+        return mountainListResponses;
     }
 
     public List<MountainListResponse> searchTrail(String keyword) {
