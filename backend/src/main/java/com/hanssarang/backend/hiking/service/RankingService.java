@@ -50,6 +50,21 @@ public class RankingService {
     public RankingResponse searchRanking(String keyword) {
         List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
+        return getRankingResponse(keyword, members);
+    }
+
+    public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
+        members.sort(Comparator.comparing((Member member) -> member.getAccumulatedHeightInMountain(mountainId)).reversed());
+        return getRankingResponse(keyword, members);
+    }
+
+    private RankingResponse getRankingResponse(String keyword, List<Member> members) {
         for (int ranking = 1; ranking <= members.size(); ranking++) {
             Member member = members.get(ranking - 1);
             if (member.getNickname().equals(keyword)) {
@@ -62,13 +77,5 @@ public class RankingService {
             }
         }
         return RankingResponse.builder().build();
-    }
-
-    public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
-        return null;
-    }
-
-    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
-        return null;
     }
 }
