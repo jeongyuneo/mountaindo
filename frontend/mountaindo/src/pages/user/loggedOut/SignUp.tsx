@@ -12,11 +12,15 @@ import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import DatePicker from '../../../components/user/DatePicker';
 import LocationPicker from '../../../components/user/LocationPicker';
+import {checkCertification, signUp} from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
 function SignUp({navigation}: SignUpScreenProps) {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
+  const [checkEmail, setCheckEmail] = useState(0); // 이메일 중복확인 여부. 사용 가능 : 1, 사용 불가능 : 0
   const [certification, setCertification] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -35,6 +39,7 @@ function SignUp({navigation}: SignUpScreenProps) {
   const phoneNumberRef = useRef<TextInput | null>(null);
   const canGoNext =
     email &&
+    checkEmail &&
     certification &&
     password &&
     passwordCheck &&
@@ -78,15 +83,31 @@ function SignUp({navigation}: SignUpScreenProps) {
     setPhoneNumber(text.trim());
   }, []);
 
-  const pressCertificationButton = () => {
+  const pressCertificationButton = useCallback(() => {
     if (disabledEmail) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
-  };
+    dispatch(checkCertification({email}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setCheckEmail(1);
+          Alert.alert('알림', '사용할 수 있는 이메일입니다.');
+        } else if (res.meta.requestStatus === 'rejected') {
+          setCheckEmail(0);
+          Alert.alert('알림', '중복된 이메일이 있습니다.');
+        }
+      })
+      .catch(err => {
+        Alert.alert('알림', err.message);
+      });
+  }, [disabledEmail, dispatch, email]);
 
   const onSubmit = useCallback(async () => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입해주세요.');
+    }
+    if (!checkEmail) {
+      return Alert.alert('알림', '중복된 이메일이 있습니다.');
     }
     if (!certification || !certification.trim()) {
       return Alert.alert('알림', '인증번호를 입해주세요.');
@@ -105,6 +126,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
     if (!phoneNumber || !phoneNumber.trim()) {
       return Alert.alert('알림', '핸드폰 번호를 입력해주세요.');
+    }
+    if (!selectedCity || !selectedCity2) {
+      return Alert.alert('알림', '주소를 입력해주세요.');
     }
     if (!check) {
       return Alert.alert('알림', '생년월일을 입력해주세요.');
@@ -135,11 +159,29 @@ function SignUp({navigation}: SignUpScreenProps) {
         '숫자, -을 포함해 휴대전화 형식에 맞게 입력해주세요.',
       );
     }
-
+    dispatch(
+      signUp({
+        email,
+        password,
+        name,
+        check,
+        phoneNumber,
+        selectedCity,
+        selectedCity2,
+        nickName,
+      }),
+    )
+      .then(res => {
+        console.log('SIGNUP RES ===> ', res);
+      })
+      .catch(err => {
+        console.log('SIGNUP ERR ===> ', err);
+      });
     Alert.alert('알림', '회원가입되었습니다.');
     navigation.navigate('Welcome');
   }, [
     email,
+    checkEmail,
     certification,
     password,
     passwordCheck,
@@ -147,6 +189,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     nickName,
     phoneNumber,
     check,
+    dispatch,
+    selectedCity,
+    selectedCity2,
     navigation,
   ]);
 
