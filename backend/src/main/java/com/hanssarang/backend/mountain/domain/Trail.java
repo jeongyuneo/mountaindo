@@ -17,15 +17,15 @@ public class Trail extends BaseEntity {
 
     private String name;
     private double length;
-    private LocalTime goingUpTime;
-    private LocalTime goingDownTime;
+    private int goingUpTime;
+    private int goingDownTime;
     private String risk;
 
     @Enumerated(value = EnumType.STRING)
     private Level level;
 
     @Column(nullable = false, columnDefinition = "geometry")
-    private LineString path;
+    private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_id")
