@@ -86,8 +86,17 @@ public class MountainService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public TrailResponse getTrail(int trailId) {
-        return null;
+        Trail trail = trailRepository.findById(trailId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_TRAIL));
+        return TrailResponse.builder()
+                .name(trail.getName())
+                .goingUpTime(trail.getGoingUpTime())
+                .goingDownTime(trail.getGoingDownTime())
+                .length(trail.getLength())
+                .risk(trail.getRisk())
+                .build();
     }
 
     public List<MountainListResponse> searchMountainOrTrail(String keyword) {
