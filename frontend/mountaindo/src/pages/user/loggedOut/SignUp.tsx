@@ -30,6 +30,7 @@ function SignUp({navigation}: SignUpScreenProps) {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedCity2, setSelectedCity2] = useState('');
   const [check, setCheck] = useState(0); // 달력에 날짜를 선택했는지 확인할 변수
+  const [selectedDate, setSelectedDate] = useState(''); // 선택 날짜를 문자열 형태로 변경하여 저장할 변수
   const emailRef = useRef<TextInput | null>(null);
   const certificationRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
@@ -164,7 +165,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         email,
         password,
         name,
-        check,
+        birth: selectedDate,
         phoneNumber,
         selectedCity,
         selectedCity2,
@@ -173,11 +174,11 @@ function SignUp({navigation}: SignUpScreenProps) {
     )
       .then(res => {
         console.log('SIGNUP RES ===> ', res);
+        Alert.alert('알림', '회원가입되었습니다.');
       })
       .catch(err => {
         console.log('SIGNUP ERR ===> ', err);
       });
-    Alert.alert('알림', '회원가입되었습니다.');
     navigation.navigate('Welcome');
   }, [
     email,
@@ -188,10 +189,11 @@ function SignUp({navigation}: SignUpScreenProps) {
     name,
     nickName,
     phoneNumber,
-    check,
-    dispatch,
     selectedCity,
     selectedCity2,
+    check,
+    dispatch,
+    selectedDate,
     navigation,
   ]);
 
@@ -325,7 +327,11 @@ function SignUp({navigation}: SignUpScreenProps) {
             blurOnSubmit={false}
           />
         </View>
-        <DatePicker setCheck={setCheck} />
+        <DatePicker
+          setCheck={setCheck}
+          setSelectedDate={setSelectedDate}
+          selectedDate={selectedDate}
+        />
         <View style={styles.location}>
           <Text>실 거주지의 주소를 선택해주세요</Text>
           <LocationPicker

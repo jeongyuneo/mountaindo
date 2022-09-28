@@ -4,20 +4,41 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
+import userSlice from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 type Survey3ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey3'>;
 
 function Survey3({navigation}: Survey3ScreenProps) {
+  const dispatch = useAppDispatch();
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
+  const setServey3 = () => {
+    if (isChecked1) {
+      dispatch(
+        userSlice.actions.setServey({
+          number: 3,
+          preferredMountainLocation: '전국',
+        }),
+      );
+    } else if (isChecked2) {
+      dispatch(
+        userSlice.actions.setServey({
+          number: 3,
+          preferredMountainLocation: '내 주변',
+        }),
+      );
+    }
+  };
+
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 등산 스타일</Text>
-        <Text style={styles.subTitle}>어떤 등산 스타일을 좋아하시나요?</Text>
+        <Text style={styles.title}>등산지역 선호도</Text>
+        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -27,7 +48,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.answerBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -35,7 +58,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.answerBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -46,7 +71,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.checkedBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -54,7 +81,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.answerBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       ) : (
@@ -65,7 +94,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.answerBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -73,14 +104,19 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.checkedBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       )}
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
-        onPress={() => navigation.navigate('Survey4')}>
+        onPress={() => {
+          setServey3();
+          navigation.navigate('Survey4');
+        }}>
         <FontAwesomeIcon
           icon={faArrowRight}
           size={30}
@@ -123,6 +159,7 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
+    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
@@ -143,6 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: 13,
   },
   nextButton: {
     marginTop: 50,

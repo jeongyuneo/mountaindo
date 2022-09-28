@@ -4,15 +4,43 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
+import userSlice from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
 
 function Survey1({navigation}: Survey1ScreenProps) {
+  const dispatch = useAppDispatch();
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2 || isChecked3;
+
+  const setServey1 = () => {
+    if (isChecked1) {
+      dispatch(
+        userSlice.actions.setServey({
+          number: 1,
+          myLevel: '등린이',
+        }),
+      );
+    } else if (isChecked2) {
+      dispatch(
+        userSlice.actions.setServey({
+          number: 1,
+          myLevel: '등소년',
+        }),
+      );
+    } else if (isChecked3) {
+      dispatch(
+        userSlice.actions.setServey({
+          number: 1,
+          myLevel: '등른이',
+        }),
+      );
+    }
+  };
 
   return (
     <View>
@@ -158,7 +186,10 @@ function Survey1({navigation}: Survey1ScreenProps) {
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
-        onPress={() => navigation.navigate('Survey2')}>
+        onPress={() => {
+          setServey1();
+          navigation.navigate('Survey2');
+        }}>
         <FontAwesomeIcon
           icon={faArrowRight}
           size={30}
