@@ -121,11 +121,7 @@ function BottomTab() {
 }
 
 function AppInner() {
-  // const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  useEffect(() => {
-    console.log('그냥 테스트');
-  }, []);
   // 앱에 접속할 때마다 사용자의 권한 확인
   usePermissions();
   return (
