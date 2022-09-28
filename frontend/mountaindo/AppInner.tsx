@@ -34,10 +34,13 @@ import VisitedDetail from './src/pages/completed/VisitedDetail';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useEffect} from 'react';
 
 export type LoggedInParamList = {
+  Survey1: any;
+  Survey2: any;
+  Survey3: any;
+  Survey4: any;
+  Survey5: any;
   Main: any;
   Completed: any;
   Hiking: any;
@@ -63,11 +66,6 @@ export type RootStackParamList = {
   Agreement: any;
   SignUp: any;
   Welcome: any;
-  Survey1: any;
-  Survey2: any;
-  Survey3: any;
-  Survey4: any;
-  Survey5: any;
   FindId: any;
   FindPassword: any;
 };
@@ -122,101 +120,82 @@ function BottomTab() {
 
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed);
   // 앱에 접속할 때마다 사용자의 권한 확인
   usePermissions();
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        <>
-          <Stack.Group screenOptions={{headerShown: false}}>
-            <Stack.Screen name="BottomTab" component={BottomTab} />
-          </Stack.Group>
+        isSurveyed ? (
+          <>
+            <Stack.Group screenOptions={{headerShown: false}}>
+              <Stack.Screen name="BottomTab" component={BottomTab} />
+            </Stack.Group>
+            <Stack.Group>
+              <Stack.Screen
+                name="MainDetail"
+                component={MainDetail}
+                options={{title: '전체 산 목록'}}
+              />
+              <Stack.Screen
+                name="UserInfoChange"
+                component={UserInfoChange}
+                options={{title: '개인 정보 수정'}}
+              />
+              <Stack.Screen
+                name="PasswordChange"
+                component={PasswordChange}
+                options={{title: '비밀번호 변경'}}
+              />
+              <Stack.Screen
+                name="NicknameChangeForm"
+                component={NicknameChangeForm}
+                options={{title: '닉네임 변경'}}
+              />
+              <Stack.Screen
+                name="PhoneNumberChangeForm"
+                component={PhoneNumberChangeForm}
+                options={{title: '전화번호 변경'}}
+              />
+              <Stack.Screen
+                name="Notice"
+                component={Notice}
+                options={{title: '공지사항'}}
+              />
+              <Stack.Screen
+                name="ContactUs"
+                component={ContactUs}
+                options={{title: '문의하기'}}
+              />
+              <Stack.Screen
+                name="TrackingEnd"
+                component={TrackingEnd}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="MountainDetail"
+                component={MountainDetail}
+                options={{title: '산 상세 정보', headerShown: false}}
+              />
+              <Stack.Screen
+                name="CourseDetail"
+                component={CourseDetail}
+                options={{title: '코스 상세 정보', headerShown: false}}
+              />
+              <Stack.Screen
+                name="VisitedDetail"
+                component={VisitedDetail}
+                options={{title: '방문한 산 상세'}}
+              />
+              <Stack.Screen
+                name="AddressChangeForm"
+                component={AddressChangeForm}
+                options={{title: '주소 변경'}}
+              />
+            </Stack.Group>
+          </>
+        ) : (
           <Stack.Group>
-            <Stack.Screen
-              name="MainDetail"
-              component={MainDetail}
-              options={{title: '전체 산 목록'}}
-            />
-            <Stack.Screen
-              name="UserInfoChange"
-              component={UserInfoChange}
-              options={{title: '개인 정보 수정'}}
-            />
-            <Stack.Screen
-              name="PasswordChange"
-              component={PasswordChange}
-              options={{title: '비밀번호 변경'}}
-            />
-            <Stack.Screen
-              name="NicknameChangeForm"
-              component={NicknameChangeForm}
-              options={{title: '닉네임 변경'}}
-            />
-            <Stack.Screen
-              name="PhoneNumberChangeForm"
-              component={PhoneNumberChangeForm}
-              options={{title: '전화번호 변경'}}
-            />
-            <Stack.Screen
-              name="Notice"
-              component={Notice}
-              options={{title: '공지사항'}}
-            />
-            <Stack.Screen
-              name="ContactUs"
-              component={ContactUs}
-              options={{title: '문의하기'}}
-            />
-            <Stack.Screen
-              name="TrackingEnd"
-              component={TrackingEnd}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="MountainDetail"
-              component={MountainDetail}
-              options={{title: '산 상세 정보', headerShown: false}}
-            />
-            <Stack.Screen
-              name="CourseDetail"
-              component={CourseDetail}
-              options={{title: '코스 상세 정보', headerShown: false}}
-            />
-            <Stack.Screen
-              name="VisitedDetail"
-              component={VisitedDetail}
-              options={{title: '방문한 산 상세'}}
-            />
-            <Stack.Screen
-              name="AddressChangeForm"
-              component={AddressChangeForm}
-              options={{title: '주소 변경'}}
-            />
-          </Stack.Group>
-        </>
-      ) : (
-        <>
-          <Stack.Group screenOptions={{headerShown: false}}>
-            <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{title: '로그인'}}
-            />
-            <Stack.Screen
-              name="Agreement"
-              component={Agreement}
-              options={{title: '약관동의서'}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{title: '회원가입'}}
-            />
-            <Stack.Screen
-              name="Welcome"
-              component={Welcome}
-              options={{title: '가입환영'}}
-            />
             <Stack.Screen
               name="Survey1"
               component={Survey1}
@@ -241,6 +220,31 @@ function AppInner() {
               name="Survey5"
               component={Survey5}
               options={{title: '설문조사5'}}
+            />
+          </Stack.Group>
+        )
+      ) : (
+        <>
+          <Stack.Group screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{title: '로그인'}}
+            />
+            <Stack.Screen
+              name="Agreement"
+              component={Agreement}
+              options={{title: '약관동의서'}}
+            />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{title: '회원가입'}}
+            />
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{title: '가입환영'}}
             />
           </Stack.Group>
           <Stack.Group>

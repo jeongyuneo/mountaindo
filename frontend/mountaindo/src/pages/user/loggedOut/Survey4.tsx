@@ -3,11 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
-type Survey4ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey4'>;
+type Survey4ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey4'>;
 
 function Survey4({navigation}: Survey4ScreenProps) {
   const dispatch = useAppDispatch();
@@ -16,17 +16,17 @@ function Survey4({navigation}: Survey4ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
-  const setServey4 = () => {
+  const setSurvey4 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 4,
           preferredMountainStyle: '험난한 산맥 정복',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 4,
           preferredMountainStyle: '무리없는 등산',
         }),
@@ -102,7 +102,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey4();
+          setSurvey4();
           navigation.navigate('Survey5');
         }}>
         <FontAwesomeIcon

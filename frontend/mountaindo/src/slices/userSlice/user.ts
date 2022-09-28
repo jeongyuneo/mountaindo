@@ -1,14 +1,16 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axiosService from '../../store/axiosService';
 const initialState = {
   name: '',
   email: '',
   accessToken: '',
-  servey1: '',
-  servey2: '',
-  servey3: '',
-  servey4: '',
-  servey5: '',
+  survey1: '',
+  survey2: '',
+  survey3: '',
+  survey4: '',
+  survey5: '',
+  isSurveyed: false,
   isLoggedIn: false,
 };
 
@@ -84,20 +86,26 @@ export const signUp = createAsyncThunk(
   },
 );
 
-export const servey = createAsyncThunk(
-  'userSlice/servey',
+// 설문조사 결과 저장하기
+export const survey = createAsyncThunk(
+  'userSlice/survey',
   async (args: any, {rejectWithValue}) => {
     try {
+      const token = await AsyncStorage.getItem('token');
       const response = await axiosService.post(
         '/api/v1/members/initial-survey',
         {
-          myLevel: args.servey1,
-          visitedMountain: args.servey2,
-          preferredMountainLocation: args.servey3,
-          preferredMountainStyle: args.servey4,
-          preferredClimbingTime: args.servey5,
+          headers: {
+            Authorization: token,
+          },
+          myLevel: args.survey1,
+          visitedMountain: args.survey2,
+          preferredMountainLocation: args.survey3,
+          preferredMountainStyle: args.survey4,
+          preferredClimbingTime: args.survey5,
         },
       );
+      console.log(response.data);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -158,18 +166,21 @@ const userSlice = createSlice({
     setLogout(state, action) {
       state.isLoggedIn = false;
     },
-    setServey(state, action) {
+    setSurvey(state, action) {
       if (action.payload.number === 1) {
-        state.servey1 = action.payload.myLevel;
+        state.survey1 = action.payload.myLevel;
       } else if (action.payload.number === 2) {
-        state.servey2 = action.payload.visitedMountain;
+        state.survey2 = action.payload.visitedMountain;
       } else if (action.payload.number === 3) {
-        state.servey3 = action.payload.preferredMountainLocation;
+        state.survey3 = action.payload.preferredMountainLocation;
       } else if (action.payload.number === 4) {
-        state.servey4 = action.payload.preferredMountainStyle;
+        state.survey4 = action.payload.preferredMountainStyle;
       } else if (action.payload.number === 5) {
-        state.servey5 = action.payload.preferredClimbingTime;
+        state.survey5 = action.payload.preferredClimbingTime;
       }
+    },
+    setIsSurveyed(state) {
+      state.isSurveyed = true;
     },
   },
   extraReducers: builder => {
@@ -208,11 +219,11 @@ const userSlice = createSlice({
       .addCase(signUp.rejected, (state, {payload}) => {
         console.log('SignUp Rejected ==>', payload);
       })
-      .addCase(servey.fulfilled, (state, {payload}) => {
-        console.log('Servey Fulfilled ==>', payload);
+      .addCase(survey.fulfilled, (state, {payload}) => {
+        console.log('Survey Fulfilled ==>', payload);
       })
-      .addCase(servey.rejected, (state, {payload}) => {
-        console.log('Servey Rejected ==>', payload);
+      .addCase(survey.rejected, (state, {payload}) => {
+        console.log('Survey Rejected ==>', payload);
       })
       .addCase(findEmail.fulfilled, (state, {payload}) => {
         console.log('findEmail Fulfilled ==> ', payload);

@@ -3,11 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
-type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey1'>;
+type Survey1ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey1'>;
 
 function Survey1({navigation}: Survey1ScreenProps) {
   const dispatch = useAppDispatch();
@@ -17,24 +17,24 @@ function Survey1({navigation}: Survey1ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2 || isChecked3;
 
-  const setServey1 = () => {
+  const setSurvey1 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등린이',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등소년',
         }),
       );
     } else if (isChecked3) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등른이',
         }),
@@ -187,7 +187,7 @@ function Survey1({navigation}: Survey1ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey1();
+          setSurvey1();
           navigation.navigate('Survey2');
         }}>
         <FontAwesomeIcon

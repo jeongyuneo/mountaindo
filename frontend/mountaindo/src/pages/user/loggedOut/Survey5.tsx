@@ -4,12 +4,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {RootStackParamList} from '../../../../AppInner';
-import userSlice, {servey} from '../../../slices/userSlice/user';
+import {LoggedInParamList} from '../../../../AppInner';
+import userSlice, {survey} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 import {RootState} from '../../../store/reducer';
 
-type Survey5ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey5'>;
+type Survey5ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey5'>;
 
 function Survey5({navigation}: Survey5ScreenProps) {
   const dispatch = useAppDispatch();
@@ -20,37 +20,37 @@ function Survey5({navigation}: Survey5ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2 || isChecked3 || isChecked4;
 
-  const servey1 = useSelector((state: RootState) => state.user.servey1);
-  const servey2 = useSelector((state: RootState) => state.user.servey2);
-  const servey3 = useSelector((state: RootState) => state.user.servey3);
-  const servey4 = useSelector((state: RootState) => state.user.servey4);
-  const servey5 = useSelector((state: RootState) => state.user.servey5);
+  const survey1 = useSelector((state: RootState) => state.user.survey1);
+  const survey2 = useSelector((state: RootState) => state.user.survey2);
+  const survey3 = useSelector((state: RootState) => state.user.survey3);
+  const survey4 = useSelector((state: RootState) => state.user.survey4);
+  const survey5 = useSelector((state: RootState) => state.user.survey5);
 
-  const setServey5 = () => {
+  const setSurvey5 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 5,
           preferredClimbingTime: '1시간 이내',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 5,
           preferredClimbingTime: '1 ~ 2시간',
         }),
       );
     } else if (isChecked3) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 5,
           preferredClimbingTime: '2 ~ 3시간',
         }),
       );
     } else if (isChecked4) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 5,
           preferredClimbingTime: '3시간 이상',
         }),
@@ -58,8 +58,12 @@ function Survey5({navigation}: Survey5ScreenProps) {
     }
   };
 
-  const setServey = () => {
-    dispatch(servey({servey1, servey2, servey3, servey4, servey5}));
+  const setSurvey = () => {
+    dispatch(survey({survey1, survey2, survey3, survey4, survey5}));
+  };
+
+  const setIsSurveyed = () => {
+    dispatch(userSlice.actions.setIsSurveyed());
   };
 
   return (
@@ -250,9 +254,10 @@ function Survey5({navigation}: Survey5ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey5();
-          setServey();
-          navigation.navigate('SignIn');
+          setSurvey5();
+          setSurvey();
+          setIsSurveyed();
+          navigation.navigate('Survey5');
         }}>
         <FontAwesomeIcon
           icon={faArrowRight}
