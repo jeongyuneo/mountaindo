@@ -131,8 +131,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
   },
-  rankingZero: {
-    backgroundColor: 'grey',
-  },
 });
 export default MainRankList;
