@@ -34,6 +34,8 @@ import VisitedDetail from './src/pages/completed/VisitedDetail';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect} from 'react';
 
 export type LoggedInParamList = {
   Main: any;
@@ -119,8 +121,11 @@ function BottomTab() {
 }
 
 function AppInner() {
-  const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
-
+  // const isLoggedIn = useSelector((state: RootState) => !!state.user.email);
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  useEffect(() => {
+    console.log('그냥 테스트');
+  }, []);
   // 앱에 접속할 때마다 사용자의 권한 확인
   usePermissions();
   return (
