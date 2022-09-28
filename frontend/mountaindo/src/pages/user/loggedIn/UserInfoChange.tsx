@@ -1,10 +1,13 @@
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import userSlice, {signOut} from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 // navigation을 사용하기 위해 type 설정
 type UserInfoChangeScreenProps = NativeStackScreenProps<
@@ -22,7 +25,7 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
     phoneNumber: '010-0000-0000',
     address: {value: '충청남도', cityValue: '아산시'},
   });
-
+  const dispatch = useAppDispatch();
   return (
     <DismissKeyboardView>
       <View style={styles.container}>
@@ -94,7 +97,21 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
             </Pressable>
           </View>
         </View>
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            dispatch(signOut(''))
+              .then(async res => {
+                // 회원 탈퇴 요청 성공 시 => AsyncStorage에서 token제거, logout처리
+                if (res.meta.requestStatus === 'fulfilled') {
+                  await AsyncStorage.removeItem('token');
+                  dispatch(userSlice.actions.setLogout(''));
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }}>
           <Text>회원 탈퇴</Text>
         </Pressable>
       </View>

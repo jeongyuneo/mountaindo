@@ -9,9 +9,23 @@ const initialState = {
   servey3: '',
   servey4: '',
   servey5: '',
+  isLoggedIn: false,
 };
 
-// 로그인하기
+// 회원정보 API
+export const userInfo = createAsyncThunk(
+  'userSlice/userInfo',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get('/api/v1/members');
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 로그인 API
 export const login = createAsyncThunk(
   'userSlice/login',
   async (args: any, {rejectWithValue}) => {
@@ -124,14 +138,25 @@ export const findPassword = createAsyncThunk(
   },
 );
 
+// 회원탈퇴
+export const signOut = createAsyncThunk(
+  'userSlice/signOut',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.delete('/api/v1/members');
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser(state, action) {
-      state.email = action.payload.email;
-      state.name = action.payload.name;
-      state.accessToken = action.payload.accessToken;
+    setLogout(state, action) {
+      state.isLoggedIn = false;
     },
     setServey(state, action) {
       if (action.payload.number === 1) {
@@ -154,9 +179,19 @@ const userSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, {payload}) => {
         console.log('LoginFulfilled ==> ', payload);
+        if (payload.token) {
+          state.isLoggedIn = true;
+        }
       })
       .addCase(login.rejected, (state, {payload}) => {
         console.log('LoginRejected ==>', payload);
+        state.isLoggedIn = false;
+      })
+      .addCase(userInfo.fulfilled, (state, {payload}) => {
+        console.log('userInfoFulfilled ==> ', payload);
+      })
+      .addCase(userInfo.rejected, (state, {payload}) => {
+        console.log('userInfoRejected ==>', payload);
       })
       .addCase(checkCertification.fulfilled, (state, {payload}) => {
         console.log('CheckCertification Fullfilled ==>', payload);
@@ -190,6 +225,12 @@ const userSlice = createSlice({
       })
       .addCase(findPassword.rejected, (state, {payload}) => {
         console.log('findPassword Rejected ==>', payload);
+      })
+      .addCase(signOut.fulfilled, (state, {payload}) => {
+        console.log('signOut Fulfilled ==> ', payload);
+      })
+      .addCase(signOut.rejected, (state, {payload}) => {
+        console.log('signOut Rejected ==>', payload);
       });
   },
 });
