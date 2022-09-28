@@ -166,7 +166,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         email,
         password,
         name,
-        check,
+        birth: selectedDate,
         phoneNumber,
         selectedCity,
         selectedCity2,
@@ -175,11 +175,11 @@ function SignUp({navigation}: SignUpScreenProps) {
     )
       .then(res => {
         console.log('SIGNUP RES ===> ', res);
+        Alert.alert('알림', '회원가입되었습니다.');
       })
       .catch(err => {
         console.log('SIGNUP ERR ===> ', err);
       });
-    Alert.alert('알림', '회원가입되었습니다.');
     navigation.navigate('Welcome');
   }, [
     email,
@@ -190,10 +190,11 @@ function SignUp({navigation}: SignUpScreenProps) {
     name,
     nickName,
     phoneNumber,
-    check,
-    dispatch,
     selectedCity,
     selectedCity2,
+    check,
+    dispatch,
+    selectedDate,
     navigation,
   ]);
 
