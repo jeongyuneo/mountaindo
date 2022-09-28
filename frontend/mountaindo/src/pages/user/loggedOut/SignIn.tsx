@@ -54,7 +54,7 @@ function SignIn({navigation}: SignInScreenProps) {
         console.log('LOGIN ERR ===> ', err);
       });
     Alert.alert('알림', '로그인 되었습니다.');
-  }, [email, password]);
+  }, [dispatch, email, password]);
 
   // 이메일 유효성 검사
   useEffect(() => {
