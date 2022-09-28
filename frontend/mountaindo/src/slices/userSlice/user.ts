@@ -1,6 +1,14 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axiosService from '../../store/axiosService';
 const initialState = {
+  name: '',
+  email: '',
+  accessToken: '',
+  servey1: '',
+  servey2: '',
+  servey3: '',
+  servey4: '',
+  servey5: '',
   isLoggedIn: false,
 };
 
@@ -59,7 +67,7 @@ export const signUp = createAsyncThunk(
         email: args.email,
         password: args.password,
         name: args.name,
-        birth: args.check,
+        birth: args.birth,
         phone: args.phoneNumber,
         address: {
           si: args.selectedCity,
@@ -69,6 +77,27 @@ export const signUp = createAsyncThunk(
         },
         nickname: args.nickName,
       });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+export const servey = createAsyncThunk(
+  'userSlice/servey',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.post(
+        '/api/v1/members/initial-survey',
+        {
+          myLevel: args.servey1,
+          visitedMountain: args.servey2,
+          preferredMountainLocation: args.servey3,
+          preferredMountainStyle: args.servey4,
+          preferredClimbingTime: args.servey5,
+        },
+      );
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -129,6 +158,19 @@ const userSlice = createSlice({
     setLogout(state, action) {
       state.isLoggedIn = false;
     },
+    setServey(state, action) {
+      if (action.payload.number === 1) {
+        state.servey1 = action.payload.myLevel;
+      } else if (action.payload.number === 2) {
+        state.servey2 = action.payload.visitedMountain;
+      } else if (action.payload.number === 3) {
+        state.servey3 = action.payload.preferredMountainLocation;
+      } else if (action.payload.number === 4) {
+        state.servey4 = action.payload.preferredMountainStyle;
+      } else if (action.payload.number === 5) {
+        state.servey5 = action.payload.preferredClimbingTime;
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -165,6 +207,12 @@ const userSlice = createSlice({
       })
       .addCase(signUp.rejected, (state, {payload}) => {
         console.log('SignUp Rejected ==>', payload);
+      })
+      .addCase(servey.fulfilled, (state, {payload}) => {
+        console.log('Servey Fulfilled ==>', payload);
+      })
+      .addCase(servey.rejected, (state, {payload}) => {
+        console.log('Servey Rejected ==>', payload);
       })
       .addCase(findEmail.fulfilled, (state, {payload}) => {
         console.log('findEmail Fulfilled ==> ', payload);
