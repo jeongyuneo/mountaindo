@@ -13,6 +13,8 @@ function TrackingRoute({
   totalDist,
   setTracking,
   tracking,
+  currentTemp,
+  currentWeather,
 }: any) {
   const [timer, setTimer] = useState(0); // 타이머 저장 변수
 
@@ -121,7 +123,9 @@ function TrackingRoute({
           <Text>산 정보</Text>
         </View>
         <View style={styles.textGroup}>
-          <Text>맑음</Text>
+          <Text>
+            {currentTemp} {currentWeather}
+          </Text>
           <Text>{today}</Text>
           <Text>계룡산</Text>
         </View>

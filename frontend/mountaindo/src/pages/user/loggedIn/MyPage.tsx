@@ -1,5 +1,5 @@
 // react import
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -10,10 +10,24 @@ import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
 
 // component import
 import {LoggedInParamList} from '../../../../AppInner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppDispatch} from '../../../store';
+import userSlice, {userInfo} from '../../../slices/userSlice/user';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
+  const dispatch = useAppDispatch();
+  //로그아웃 버튼 클릭시 로그인창으로 화면전환
+  const loggedout = () => {
+    dispatch(userSlice.actions.setLogout(false));
+  };
+  // 토큰값을 확인하기 위해 우선 적용한 API
+  useEffect(() => {
+    dispatch(userInfo('a')).then(res => {
+      console.log('유저정보--->', res);
+    });
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.containerUp}>
@@ -95,7 +109,9 @@ function MyPage({navigation}: MyPageScreenProps) {
           </Pressable>
 
           <View style={styles.menuStyle}>
-            <Text style={styles.goMenuText}>로그아웃</Text>
+            <Text style={styles.goMenuText} onPress={loggedout}>
+              로그아웃
+            </Text>
             <FontAwesomeIcon
               icon={faAngleRight}
               size={15}
