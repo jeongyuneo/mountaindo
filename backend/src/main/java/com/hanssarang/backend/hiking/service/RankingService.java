@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Service
@@ -24,21 +22,21 @@ public class RankingService {
     }
 
     @Transactional(readOnly = true)
-    public List<RankingResponse> searchRanking(String keyword) {
+    public RankingResponse searchRanking(String keyword) {
         List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
-        return IntStream.rangeClosed(1, members.size())
-                .filter(ranking -> members.get(ranking - 1).getNickname().contains(keyword))
-                .mapToObj(ranking -> {
-                    Member member = members.get(ranking - 1);
-                    return RankingResponse.builder()
+        for (int ranking = 1; ranking <= members.size(); ranking++) {
+            Member member = members.get(ranking - 1);
+            if (member.getNickname().equals(keyword)) {
+                return RankingResponse.builder()
                             .ranking(ranking)
                             .nickname(member.getNickname())
                             .imageUrl(member.getImageUrl())
                             .accumulatedHeight(member.getAccumulatedHeight())
                             .build();
-                })
-                .collect(Collectors.toList());
+            }
+        }
+        return RankingResponse.builder().build();
     }
 
     public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
