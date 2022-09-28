@@ -46,8 +46,22 @@ public class RankingService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public RankingResponse searchRanking(String keyword) {
-        return null;
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
+        members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
+        for (int ranking = 1; ranking <= members.size(); ranking++) {
+            Member member = members.get(ranking - 1);
+            if (member.getNickname().equals(keyword)) {
+                return RankingResponse.builder()
+                        .ranking(ranking)
+                        .nickname(member.getNickname())
+                        .imageUrl(member.getImageUrl())
+                        .accumulatedHeight(member.getAccumulatedHeight())
+                        .build();
+            }
+        }
+        return RankingResponse.builder().build();
     }
 
     public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
