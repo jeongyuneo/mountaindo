@@ -20,6 +20,7 @@ public class Trail extends BaseEntity {
     private int goingUpTime;
     private int goingDownTime;
     private String risk;
+    private String imageUrl;
 
     @Enumerated(value = EnumType.STRING)
     private Level level;
