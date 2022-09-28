@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/rankings")
@@ -23,7 +21,7 @@ public class RankingController {
     }
 
     @GetMapping("/1")
-    public ResponseEntity<List<RankingResponse>> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
+    public ResponseEntity<RankingResponse> searchRanking(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
         return ResponseEntity.ok()
                 .body(rankingService.searchRanking(keyword));
     }
