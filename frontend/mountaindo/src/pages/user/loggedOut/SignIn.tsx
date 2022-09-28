@@ -16,6 +16,7 @@ import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import {useAppDispatch} from '../../../store';
 import {login} from '../../../slices/userSlice/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Navigation 사용
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
@@ -46,14 +47,18 @@ function SignIn({navigation}: SignInScreenProps) {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
+    //로그인 버튼 클릭 시 서버 전송
     dispatch(login({email, password}))
-      .then(res => {
-        console.log('LOGIN RES===>', res);
+      .then(async res => {
+        // 토큰값 정보
+        await AsyncStorage.setItem('token', res.payload.token);
+        const token = await AsyncStorage.getItem('token');
       })
       .catch(err => {
         console.log('LOGIN ERR ===> ', err);
       });
-    Alert.alert('알림', '로그인 되었습니다.');
+    // Alert.alert('알림', '로그인 되었습니다.');
+    console.log('로그인 성공');
   }, [dispatch, email, password]);
 
   // 이메일 유효성 검사
