@@ -23,17 +23,17 @@ public class RankingService {
 
     @Transactional(readOnly = true)
     public RankingResponse searchRanking(String keyword) {
-        List<Member> members = memberRepository.findAllByIsActiveTrue();
-        members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
+        List<Member> members = memberRepository.findAllByIsActiveTrue()
+                .sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
         for (int ranking = 1; ranking <= members.size(); ranking++) {
             Member member = members.get(ranking - 1);
             if (member.getNickname().equals(keyword)) {
                 return RankingResponse.builder()
-                            .ranking(ranking)
-                            .nickname(member.getNickname())
-                            .imageUrl(member.getImageUrl())
-                            .accumulatedHeight(member.getAccumulatedHeight())
-                            .build();
+                        .ranking(ranking)
+                        .nickname(member.getNickname())
+                        .imageUrl(member.getImageUrl())
+                        .accumulatedHeight(member.getAccumulatedHeight())
+                        .build();
             }
         }
         return RankingResponse.builder().build();
