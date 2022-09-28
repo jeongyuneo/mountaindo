@@ -24,26 +24,13 @@ public class RankingService {
 
     @Transactional(readOnly = true)
     public RankingListResponse getRankings(int memberId) {
-        List<Member> members = memberRepository.findAllByIsActiveTrue();
-        members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
-        int myRanking = IntStream.rangeClosed(1, members.size())
-                .filter(ranking -> members.get(ranking - 1).getId() == memberId)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        List<Member> members = memberRepository.findAllByIsActiveTrue()
+                .stream()
+                .sorted(Comparator.comparing(Member::getAccumulatedHeight).reversed())
+                .collect(Collectors.toList());
+        int myRanking = getMyRanking(memberId, members);
         Member member = members.get(myRanking - 1);
-        return RankingListResponse.builder()
-                .imageUrl(member.getImageUrl())
-                .ranking(myRanking)
-                .nickname(member.getNickname())
-                .accumulatedHeight(member.getAccumulatedHeight())
-                .rankings(members.stream()
-                        .map(currentMember -> RankingResponse.builder()
-                                .imageUrl(currentMember.getImageUrl())
-                                .nickname(currentMember.getNickname())
-                                .accumulatedHeight(currentMember.getAccumulatedHeight())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+        return getRankingListResponse(members, myRanking, member);
     }
 
     @Transactional(readOnly = true)
@@ -64,11 +51,49 @@ public class RankingService {
         return RankingResponse.builder().build();
     }
 
+    @Transactional(readOnly = true)
     public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
-        return null;
+        List<Member> members = memberRepository.findAllByIsActiveTrue()
+                .stream()
+                .sorted(Comparator.comparing((Member member) -> member.getAccumulatedHeightInMountain(mountainId)).reversed())
+                .collect(Collectors.toList());
+        int myRanking = getMyRanking(memberId, members);
+        Member member = members.get(myRanking - 1);
+        return RankingListResponse.builder()
+                .imageUrl(member.getImageUrl())
+                .ranking(myRanking)
+                .nickname(member.getNickname())
+                .accumulatedHeight(member.getAccumulatedHeight())
+                .rankings(members.stream()
+                        .map(currentMember -> RankingResponse.builder()
+                                .imageUrl(currentMember.getImageUrl())
+                                .nickname(currentMember.getNickname())
+                                .accumulatedHeight(currentMember.getAccumulatedHeight())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 
-    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
-        return null;
+    private RankingListResponse getRankingListResponse(List<Member> members, int myRanking, Member member) {
+        return RankingListResponse.builder()
+                .imageUrl(member.getImageUrl())
+                .ranking(myRanking)
+                .nickname(member.getNickname())
+                .accumulatedHeight(member.getAccumulatedHeight())
+                .rankings(members.stream()
+                        .map(currentMember -> RankingResponse.builder()
+                                .imageUrl(currentMember.getImageUrl())
+                                .nickname(currentMember.getNickname())
+                                .accumulatedHeight(currentMember.getAccumulatedHeight())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private int getMyRanking(int memberId, List<Member> members) {
+        return IntStream.rangeClosed(1, members.size())
+                .filter(ranking -> members.get(ranking - 1).getId() == memberId)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
     }
 }
