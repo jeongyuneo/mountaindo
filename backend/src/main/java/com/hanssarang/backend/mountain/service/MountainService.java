@@ -142,6 +142,28 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchTrail(String keyword) {
-        return null;
+        List<Mountain> mountains = mountainRepository.findByTrailNameContaining(keyword);
+        List<Mountain> hotMountains = mountainRepository.findIsHot();
+        List<MountainListResponse> mountainListResponses = new ArrayList<>();
+        for (Mountain mountain : mountains) {
+            mountainListResponses.add(MountainListResponse.builder()
+                    .mountainId(mountain.getId())
+                    .name(mountain.getName())
+                    .height(mountain.getHeight())
+                    .address(mountain.getAddress().getFullAddress())
+                    .imageUrl(mountain.getImageUrl())
+                    .isHot(isHotMountain(hotMountains, mountain.getId()))
+                    .build());
+        }
+        return mountainListResponses;
+    }
+
+    public boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
+        for (Mountain mountain : hotMountains) {
+            if (mountain.getId() == mountainId) {
+                return true;
+            }
+        }
+        return false;
     }
 }
