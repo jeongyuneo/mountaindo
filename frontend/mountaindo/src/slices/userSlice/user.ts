@@ -6,6 +6,7 @@ const initialState = {
   accessToken: '',
 };
 
+// 로그인하기
 export const login = createAsyncThunk(
   'userSlice/login',
   async (args: any, {rejectWithValue}) => {
@@ -21,6 +22,24 @@ export const login = createAsyncThunk(
   },
 );
 
+// 이메일 중복확인하기
+export const checkCertification = createAsyncThunk(
+  'userSlice/checkCertification',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get('api/v1/members/email?', {
+        params: {
+          email: args.email,
+        },
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 회원가입하기
 export const signUp = createAsyncThunk(
   'userSlice/signUp',
   async (args: any, {rejectWithValue}) => {
@@ -38,6 +57,13 @@ export const signUp = createAsyncThunk(
           fullAddress: '경기도',
         },
         nickname: args.nickName,
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
 
 // 아아디 찾기 (이메일)
 export const findEmail = createAsyncThunk(
@@ -55,15 +81,6 @@ export const findEmail = createAsyncThunk(
     }
   },
 );
-
-export const checkCertification = createAsyncThunk(
-  'userSlice/checkCertification',
-  async (args: any, {rejectWithValue}) => {
-    try {
-      const response = await axiosService.get('api/v1/members/email?', {
-        params: {
-          email: args.email,
-        },
 
 // 비밀번호 찾기
 export const findPassword = createAsyncThunk(
@@ -102,6 +119,12 @@ const userSlice = createSlice({
       .addCase(login.rejected, (state, {payload}) => {
         console.log('LoginRejected ==>', payload);
       })
+      .addCase(checkCertification.fulfilled, (state, {payload}) => {
+        console.log('CheckCertification Fullfilled ==>', payload);
+      })
+      .addCase(checkCertification.rejected, (state, {payload}) => {
+        console.log('CheckCertification Rejected ==>', payload);
+      })
       .addCase(signUp.pending, (state, {payload}) => {
         console.log('SignUp Pending ==>', payload);
       })
@@ -110,15 +133,6 @@ const userSlice = createSlice({
       })
       .addCase(signUp.rejected, (state, {payload}) => {
         console.log('SignUp Rejected ==>', payload);
-      })
-      .addCase(checkCertification.pending, (state, {payload}) => {
-        console.log('CheckCertification Pending ==>', payload);
-      })
-      .addCase(checkCertification.fulfilled, (state, {payload}) => {
-        console.log('CheckCertification Fullfilled ==>', payload);
-      })
-      .addCase(checkCertification.rejected, (state, {payload}) => {
-        console.log('CheckCertification Rejected ==>', payload);
       })
       .addCase(findEmail.fulfilled, (state, {payload}) => {
         console.log('findEmail Fulfilled ==> ', payload);
