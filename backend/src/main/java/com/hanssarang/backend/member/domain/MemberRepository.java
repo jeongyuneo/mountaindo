@@ -3,6 +3,7 @@ package com.hanssarang.backend.member.domain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Integer> {
@@ -16,4 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     boolean existsByEmail(String email);
 
     boolean existsByNickname(String nickname);
+
+    List<Member> findAllByIsActiveTrue();
 }
