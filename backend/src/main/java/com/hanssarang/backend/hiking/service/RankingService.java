@@ -37,18 +37,7 @@ public class RankingService {
     public RankingResponse searchRanking(String keyword) {
         List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
-        for (int ranking = 1; ranking <= members.size(); ranking++) {
-            Member member = members.get(ranking - 1);
-            if (member.getNickname().equals(keyword)) {
-                return RankingResponse.builder()
-                        .ranking(ranking)
-                        .nickname(member.getNickname())
-                        .imageUrl(member.getImageUrl())
-                        .accumulatedHeight(member.getAccumulatedHeight())
-                        .build();
-            }
-        }
-        return RankingResponse.builder().build();
+        return getRankingResponse(keyword, members);
     }
 
     @Transactional(readOnly = true)
@@ -59,19 +48,14 @@ public class RankingService {
                 .collect(Collectors.toList());
         int myRanking = getMyRanking(memberId, members);
         Member member = members.get(myRanking - 1);
-        return RankingListResponse.builder()
-                .imageUrl(member.getImageUrl())
-                .ranking(myRanking)
-                .nickname(member.getNickname())
-                .accumulatedHeight(member.getAccumulatedHeight())
-                .rankings(members.stream()
-                        .map(currentMember -> RankingResponse.builder()
-                                .imageUrl(currentMember.getImageUrl())
-                                .nickname(currentMember.getNickname())
-                                .accumulatedHeight(currentMember.getAccumulatedHeight())
-                                .build())
-                        .collect(Collectors.toList()))
-                .build();
+        return getRankingListResponse(members, myRanking, member)
+    }
+
+    @Transactional(readOnly = true)
+    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
+        members.sort(Comparator.comparing((Member member) -> member.getAccumulatedHeightInMountain(mountainId)).reversed());
+        return getRankingResponse(keyword, members);
     }
 
     private RankingListResponse getRankingListResponse(List<Member> members, int myRanking, Member member) {
@@ -88,6 +72,21 @@ public class RankingService {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    private RankingResponse getRankingResponse(String keyword, List<Member> members) {
+        for (int ranking = 1; ranking <= members.size(); ranking++) {
+            Member member = members.get(ranking - 1);
+            if (member.getNickname().equals(keyword)) {
+                return RankingResponse.builder()
+                        .ranking(ranking)
+                        .nickname(member.getNickname())
+                        .imageUrl(member.getImageUrl())
+                        .accumulatedHeight(member.getAccumulatedHeight())
+                        .build();
+            }
+        }
+        return RankingResponse.builder().build();
     }
 
     private int getMyRanking(int memberId, List<Member> members) {
