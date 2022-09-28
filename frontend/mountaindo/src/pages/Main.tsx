@@ -1,5 +1,5 @@
 // React
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View, Image} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -13,14 +13,53 @@ import {dummyEasy, dummyAge} from '../components/main/Dummy';
 import AgeMountain from '../components/main/AgeMountain';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
+import {useAppDispatch} from '../store';
+import {totalRanking} from '../slices/rankingSlice/ranking';
+
+// 랭킹의 타입 설정
+export type Rankings = {
+  imageUrl: string;
+  ranking: number;
+  nickname: string;
+  accumulatedHeight: number;
+};
 
 type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, 'Main'>;
 function Main({navigation}: MainInScreenProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
+  const [myRanking, setMyRanking] = useState<Rankings | null>(null); // 내 랭킹 정보를 저장할 변수
+
+  const dispatch = useAppDispatch();
 
   const goAllRank = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  // 화면을 처음 렌더링할 때 전체 랭킹리스트 요청
+  useEffect(() => {
+    dispatch(totalRanking(''))
+      // 요청 성공시 내 랭킹과 전체 랭킹 저장
+      .then(res => {
+        setMyRanking({
+          imageUrl: res.payload?.imageUrl,
+          ranking: res.payload?.ranking,
+          nickname: res.payload?.nickname,
+          accumulatedHeight: res.payload?.accumulatedHeight,
+        });
+        setRankingList(res.payload?.rankings);
+      })
+      .catch(err => {
+        console.log();
+      });
+  }, []);
+
+  // 만약 전체 랭킹과 내 랭킹의 정보가 아직 들어오지 않았다면 재렌더링
+  useEffect(() => {
+    if (!myRanking?.ranking || !rankingList || rankingList.length < 1) {
+      return;
+    }
+  }, [myRanking?.ranking, rankingList]);
 
   return (
     <View style={styles.containerMain}>
@@ -29,13 +68,15 @@ function Main({navigation}: MainInScreenProps) {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           goAllRank={goAllRank}
+          rankingList={rankingList}
+          myRanking={myRanking}
         />
         <View style={styles.photoContainer}>
           <Photo />
         </View>
 
         <View style={styles.suggestionContainer}>
-          <RankList goAllRank={goAllRank} />
+          <RankList goAllRank={goAllRank} rankingList={rankingList} />
 
           <View>
             <View style={styles.mountainList}>

@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
-import {dummyFilter} from './Dummy';
+import {Rankings} from '../../pages/Main';
 
 interface Props {
   goAllRank: any;
+  rankingList: any;
 }
-function MainRankList({goAllRank}: Props) {
-  let num = 1;
+function MainRankList({goAllRank, rankingList}: Props) {
   return (
     <View>
       <View style={styles.rankStart}>
@@ -16,7 +16,7 @@ function MainRankList({goAllRank}: Props) {
           <Text style={styles.rankTitle}>MountainDo 전체랭킹</Text>
           <View style={styles.goModal}>
             <Text style={styles.rankAll} onPress={goAllRank}>
-              전체 랭키 보기
+              전체 랭킹 보기
             </Text>
             <FontAwesomeIcon
               icon={faAngleDown}
@@ -33,21 +33,24 @@ function MainRankList({goAllRank}: Props) {
       </View>
 
       <View>
-        {dummyFilter.map(item => (
-          <View key={item.id} style={styles.rankList}>
-            <View style={styles.styleRow}>
-              <Text style={styles.rankNum}>{num++}</Text>
-              <View style={styles.styleRow}>
-                <Image source={item.profile} style={styles.imgStyle} />
+        {rankingList.length > 0 &&
+          rankingList.map((item: Rankings, index: number) =>
+            index < 3 ? (
+              <View key={index} style={styles.rankList}>
                 <View style={styles.styleRow}>
-                  <Text style={styles.nameStyle}>{item.name}</Text>
-                  <Text style={styles.namePix}>님</Text>
+                  <Text style={styles.rankNum}>{item.ranking}</Text>
+                  <View style={styles.styleRow}>
+                    {/* <Image source={item.imageUrl} style={styles.imgStyle} /> */}
+                    <View style={styles.styleRow}>
+                      <Text style={styles.nameStyle}>{item.nickname}</Text>
+                      <Text style={styles.namePix}>님</Text>
+                    </View>
+                  </View>
                 </View>
+                <Text style={styles.meter}>{item.accumulatedHeight}m</Text>
               </View>
-            </View>
-            <Text style={styles.meter}>{item.meter}m</Text>
-          </View>
-        ))}
+            ) : null,
+          )}
       </View>
     </View>
   );
@@ -127,6 +130,9 @@ const styles = StyleSheet.create({
   meter: {
     fontWeight: 'bold',
     color: 'black',
+  },
+  rankingZero: {
+    backgroundColor: 'grey',
   },
 });
 export default MainRankList;
