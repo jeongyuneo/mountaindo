@@ -62,8 +62,28 @@ public class MountainService {
         return mountainListResponses;
     }
 
+    @Transactional(readOnly = true)
     public MountainResponse getMountain(int mountainId) {
-        return null;
+        Mountain mountain = mountainRepository.findById(mountainId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MOUNTAIN));
+        List<Mountain> hotMountains = mountainRepository.findIsHot();
+        return MountainResponse.builder()
+                .name(mountain.getName())
+                .height(mountain.getHeight())
+                .address(mountain.getAddress().getFullAddress())
+                .imageUrl(mountain.getImageUrl())
+                .isHot(isHotMountain(hotMountains, mountain.getId()))
+                .trails(mountain.getTrails()
+                        .stream()
+                        .map(trail -> TrailListResponse.builder()
+                                .trailId(trail.getId())
+                                .name(trail.getName())
+                                .length(trail.getLength())
+                                .level(trail.getLevel().toString())
+                                .imageUrl(trail.getImageUrl())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     public TrailResponse getTrail(int trailId) {
