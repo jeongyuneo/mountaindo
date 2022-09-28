@@ -56,12 +56,12 @@ public class HikingControllerTest extends ApiDocument {
 
     @BeforeEach
     void setUp() {
-        List<HikingPath> hikingPath = IntStream.range(1, 6)
-                .mapToObj(n -> HikingPath.builder().x(n * X).y((n / 2.0) * Y).build())
+        List<PathResponse> pathResponse = IntStream.range(1, 6)
+                .mapToObj(n -> PathResponse.builder().x(n * X).y((n / 2.0) * Y).build())
                 .collect(Collectors.toList());
         hikingRequest = HikingRequest.builder()
-                .path(hikingPath)
-                .endPoint(HikingPath.builder().x(X).y(Y).build())
+                .path(pathResponse)
+                .endPoint(PathResponse.builder().x(X).y(Y).build())
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .useTime(USE_TIME)
                 .build();
@@ -87,7 +87,7 @@ public class HikingControllerTest extends ApiDocument {
                 .height(HEIGHT)
                 .trailName(TRAIL_NAME)
                 .level(LEVEL)
-                .path(hikingPath)
+                .path(pathResponse)
                 .build();
     }
 

@@ -10,8 +10,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HikingRequest {
 
-    private List<HikingPath> path;
-    private HikingPath endPoint;
+    private List<PathResponse> path;
+    private PathResponse endPoint;
     private double accumulatedHeight;
     private String useTime;
 }

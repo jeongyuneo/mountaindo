@@ -15,5 +15,5 @@ public class HikingResponse {
     private int height;
     private String trailName;
     private String level;
-    private List<HikingPath> path;
+    private List<PathResponse> path;
 }
