@@ -12,9 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class RankingServiceTest {
@@ -131,8 +129,8 @@ class RankingServiceTest {
         // given
 
         // when
-        List<RankingResponse> rankingResponses = rankingService.searchRanking("윤");
+        RankingResponse rankingResponse = rankingService.searchRanking("기윤");
         // then
-        assertEquals(2, rankingResponses.size());
+        assertEquals("기윤", rankingResponse.getNickname());
     }
 }
