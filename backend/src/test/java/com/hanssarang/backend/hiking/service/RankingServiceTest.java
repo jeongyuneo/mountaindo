@@ -30,58 +30,69 @@ class RankingServiceTest {
     @Autowired
     private HikingRepository hikingRepository;
 
+    private Member giyoon;
+    private Member beomsu;
+    private Member eunhye;
+    private Member jeongyun;
+
+    private Hiking gi1;
+    private Hiking beom1;
+    private Hiking eun1;
+    private Hiking eun2;
+    private Hiking jeong1;
+
     @BeforeEach
     void setUp(){
-        Member giyoon = Member.builder()
+        giyoon = Member.builder()
                 .email("giyoon@ssafy.io")
                 .nickname("기윤")
                 .imageUrl("asdf")
                 .isActive(true)
                 .build();
-        Member beomsu = Member.builder()
+        beomsu = Member.builder()
                 .email("beomsu@ssafy.io")
                 .nickname("범수")
                 .imageUrl("asdf")
                 .isActive(true)
                 .build();
-        Member eunhye = Member.builder()
+        eunhye = Member.builder()
                 .email("eunhye@ssafy.io")
                 .nickname("은혜")
                 .imageUrl("asdf")
                 .isActive(true)
                 .build();
-        Member jeongyun = Member.builder()
+        jeongyun = Member.builder()
                 .email("jeonyun@ssafy.io")
                 .nickname("정윤")
                 .imageUrl("asdf")
                 .isActive(true)
                 .build();
 
-        Hiking gi1 = Hiking.builder()
+        gi1 = Hiking.builder()
                 .member(giyoon)
                 .accumulatedHeight(100.0)
                 .path(PATH)
                 .isActive(true)
                 .build();
-        Hiking beom1 = Hiking.builder()
+        beom1 = Hiking.builder()
                 .member(beomsu)
                 .accumulatedHeight(150.0)
                 .path(PATH)
                 .isActive(true)
                 .build();
-        Hiking eun1 = Hiking.builder()
+        eun1 = Hiking.builder()
                 .member(eunhye)
                 .accumulatedHeight(51.0)
                 .path(PATH)
                 .isActive(true)
                 .build();
-        Hiking eun2 = Hiking.builder()
+        eun2 = Hiking.builder()
                 .member(eunhye)
                 .accumulatedHeight(51.0)
                 .path(PATH)
                 .isActive(true)
                 .build();
-        Hiking jeong1 = Hiking.builder()
+        jeong1 = Hiking.builder()
                 .member(jeongyun)
                 .accumulatedHeight(50.0)
                 .path(PATH)
@@ -102,8 +113,16 @@ class RankingServiceTest {
 
     @AfterEach
     void clear() {
-        hikingRepository.deleteAll();
-        memberRepository.deleteAll();
+        hikingRepository.delete(gi1);
+        hikingRepository.delete(beom1);
+        hikingRepository.delete(eun1);
+        hikingRepository.delete(eun2);
+        hikingRepository.delete(jeong1);
+
+        memberRepository.delete(giyoon);
+        memberRepository.delete(beomsu);
+        memberRepository.delete(eunhye);
+        memberRepository.delete(jeongyun);
     }
 
     @DisplayName("전체 랭킹 목록 검색")
