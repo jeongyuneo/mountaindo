@@ -100,7 +100,28 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchMountainOrTrail(String keyword) {
-        return null;
+        Set<Mountain> mountainSet = new HashSet<>();
+        List<Mountain> mountainsByMountainName = mountainRepository.findByNameContaining(keyword);
+        List<Mountain> mountainsByTrailName = mountainRepository.findByTrailNameContaining(keyword);
+        for(Mountain mountain : mountainsByMountainName){
+            mountainSet.add(mountain);
+        }
+        for(Mountain mountain : mountainsByTrailName){
+            mountainSet.add(mountain);
+        }
+        List<MountainListResponse> mountainListResponses = new ArrayList<>();
+        List<Mountain> hotMountains = mountainRepository.findIsHot();
+        for (Mountain mountain : mountainSet) {
+            mountainListResponses.add(MountainListResponse.builder()
+                    .mountainId(mountain.getId())
+                    .name(mountain.getName())
+                    .height(mountain.getHeight())
+                    .address(mountain.getAddress().getFullAddress())
+                    .imageUrl(mountain.getImageUrl())
+                    .isHot(isHotMountain(hotMountains, mountain.getId()))
+                    .build());
+        }
+        return mountainListResponses;
     }
 
     public List<MountainListResponse> searchMountain(String keyword) {
