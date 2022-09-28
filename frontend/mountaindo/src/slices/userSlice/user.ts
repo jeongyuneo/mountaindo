@@ -109,6 +109,19 @@ export const findPassword = createAsyncThunk(
   },
 );
 
+// 회원탈퇴
+export const signOut = createAsyncThunk(
+  'userSlice/signOut',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.delete('/api/v1/members');
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -164,6 +177,12 @@ const userSlice = createSlice({
       })
       .addCase(findPassword.rejected, (state, {payload}) => {
         console.log('findPassword Rejected ==>', payload);
+      })
+      .addCase(signOut.fulfilled, (state, {payload}) => {
+        console.log('signOut Fulfilled ==> ', payload);
+      })
+      .addCase(signOut.rejected, (state, {payload}) => {
+        console.log('signOut Rejected ==>', payload);
       });
   },
 });
