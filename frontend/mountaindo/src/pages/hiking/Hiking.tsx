@@ -332,6 +332,3 @@ const styles = StyleSheet.create({
 });
 
 export default Hiking;
-function getWeatherByCurrentLocation() {
-  throw new Error('Function not implemented.');
-}
