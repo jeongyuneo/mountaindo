@@ -11,22 +11,31 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
-import {dummyUser, myFilter} from './Dummy';
 import DismissKeyboardView from '../DismissKeyboardView';
+import {Rankings} from '../../pages/Main';
 
 interface Props {
   isModalVisible: any;
   setIsModalVisible: any;
   goAllRank: any;
+  rankingList: any;
+  myRanking: any;
 }
 
-function MainModal({isModalVisible, setIsModalVisible, goAllRank}: Props) {
+function MainModal({
+  isModalVisible,
+  setIsModalVisible,
+  goAllRank,
+  rankingList,
+  myRanking,
+}: Props) {
   let allNum = 1;
   let mynum = 1;
 
   const searchData = (text: any) => {
     console.log(text);
   };
+
   return (
     <>
       <DismissKeyboardView>
@@ -62,43 +71,46 @@ function MainModal({isModalVisible, setIsModalVisible, goAllRank}: Props) {
               <Text style={styles.myRankTitle}>내 랭킹</Text>
             </View>
             <View>
-              {myFilter.map(item => (
-                <View>
-                  <View key={item.id} style={styles.myRank}>
+              <View style={styles.myRank}>
+                <View style={styles.styleRow}>
+                  <Text style={styles.rankNum}>{myRanking?.ranking}</Text>
+                  <View style={styles.styleRow}>
+                    <Image
+                      source={myRanking?.imageUrl}
+                      style={styles.imgStyle}
+                    />
                     <View style={styles.styleRow}>
-                      <Text style={styles.rankNum}>{mynum++}</Text>
-                      <View style={styles.styleRow}>
-                        <Image source={item.profile} style={styles.imgStyle} />
-                        <View style={styles.styleRow}>
-                          <Text style={styles.nameStyle}>{item.name}</Text>
-                          <Text style={styles.namePix}>님</Text>
-                        </View>
-                      </View>
+                      <Text style={styles.nameStyle}>
+                        {myRanking?.nickname}
+                      </Text>
+                      <Text style={styles.namePix}>님</Text>
                     </View>
-                    <Text style={styles.meter}>{item.meter}m</Text>
                   </View>
                 </View>
-              ))}
+                <Text style={styles.meter}>
+                  {myRanking?.accumulatedHeight}m
+                </Text>
+              </View>
             </View>
 
             <View>
               <Text style={styles.userTitle}>사용자 전체랭킹</Text>
             </View>
             <ScrollView>
-              {dummyUser.map(item => (
+              {rankingList.map((item: Rankings) => (
                 <View>
-                  <View key={item.id} style={styles.rankList}>
+                  <View key={item.ranking} style={styles.rankList}>
                     <View style={styles.styleRow}>
-                      <Text style={styles.rankNum}>{allNum++}</Text>
+                      <Text style={styles.rankNum}>{item.ranking}</Text>
                       <View style={styles.styleRow}>
-                        <Image source={item.profile} style={styles.imgStyle} />
+                        {/* <Image source={item.imageUrl} style={styles.imgStyle} /> */}
                         <View style={styles.styleRow}>
-                          <Text style={styles.nameStyle}>{item.name}</Text>
+                          <Text style={styles.nameStyle}>{item.nickname}</Text>
                           <Text style={styles.namePix}>님</Text>
                         </View>
                       </View>
                     </View>
-                    <Text style={styles.meter}>{item.meter}m</Text>
+                    <Text style={styles.meter}>{item.accumulatedHeight}m</Text>
                   </View>
                 </View>
               ))}
