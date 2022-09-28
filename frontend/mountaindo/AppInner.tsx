@@ -36,6 +36,7 @@ import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useEffect} from 'react';
+import SplashScreen from 'react-native-splash-screen';
 
 export type LoggedInParamList = {
   Main: any;
@@ -123,6 +124,9 @@ function BottomTab() {
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   // 앱에 접속할 때마다 사용자의 권한 확인
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   usePermissions();
   return (
     <Stack.Navigator>
