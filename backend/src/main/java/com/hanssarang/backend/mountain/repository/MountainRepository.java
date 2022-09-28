@@ -3,6 +3,7 @@ package com.hanssarang.backend.mountain.repository;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "group by m.mountain_id " +
             "LIMIT 10", nativeQuery = true)
     List<Mountain> findIsHot();
+
+    List<Mountain> findByNameContaining(String keyword);
 }
