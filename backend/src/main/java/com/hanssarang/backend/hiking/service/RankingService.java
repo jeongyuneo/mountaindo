@@ -48,7 +48,7 @@ public class RankingService {
                 .collect(Collectors.toList());
         int myRanking = getMyRanking(memberId, members);
         Member member = members.get(myRanking - 1);
-        return getRankingListResponse(members, myRanking, member)
+        return getRankingListResponse(members, myRanking, member);
     }
 
     @Transactional(readOnly = true)
