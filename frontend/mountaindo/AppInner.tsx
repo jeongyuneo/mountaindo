@@ -120,13 +120,13 @@ function BottomTab() {
 
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const isServeyed = useSelector((state: RootState) => state.user.isServeyed);
+  const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed);
   // 앱에 접속할 때마다 사용자의 권한 확인
   usePermissions();
   return (
     <Stack.Navigator>
       {isLoggedIn ? (
-        isServeyed ? (
+        isSurveyed ? (
           <>
             <Stack.Group screenOptions={{headerShown: false}}>
               <Stack.Screen name="BottomTab" component={BottomTab} />

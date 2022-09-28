@@ -17,24 +17,24 @@ function Survey1({navigation}: Survey1ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2 || isChecked3;
 
-  const setServey1 = () => {
+  const setSurvey1 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등린이',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등소년',
         }),
       );
     } else if (isChecked3) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 1,
           myLevel: '등른이',
         }),
@@ -187,7 +187,7 @@ function Survey1({navigation}: Survey1ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey1();
+          setSurvey1();
           navigation.navigate('Survey2');
         }}>
         <FontAwesomeIcon
