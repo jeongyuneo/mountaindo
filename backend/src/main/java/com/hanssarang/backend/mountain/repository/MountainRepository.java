@@ -34,4 +34,13 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     List<Mountain> findIsHot();
 
     List<Mountain> findByNameContaining(String keyword);
+
+    @Query(value = "select m.* " +
+            "from mountain m " +
+            "inner join (select distinct t.mountain_id " +
+            "from trail t " +
+            "where t.name like concat('%',:keyword,'%') " +
+            "and t.mountain_id is not null) v " +
+            "on m.mountain_id = v.mountain_id", nativeQuery = true)
+    List<Mountain> findByTrailNameContaining(@Param("keyword") String keyword);
 }
