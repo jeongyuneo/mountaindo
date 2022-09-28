@@ -12,8 +12,13 @@ import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import DatePicker from '../../../components/user/DatePicker';
 import LocationPicker from '../../../components/user/LocationPicker';
-import {checkCertification, signUp} from '../../../slices/userSlice/user';
+import {
+  checkCertification,
+  login,
+  signUp,
+} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
@@ -176,6 +181,14 @@ function SignUp({navigation}: SignUpScreenProps) {
       .then(res => {
         console.log('SIGNUP RES ===> ', res);
         Alert.alert('알림', '회원가입되었습니다.');
+        // 임시: 회원가입 후 로그인 요청 -> 토큰 값 반환 -> 후에 백에서 자동로그인 처리 예정
+        dispatch(login({email, password}))
+          .then(async res2 => {
+            await AsyncStorage.setItem('token', res2.payload.token);
+          })
+          .catch(err => {
+            console.log('LOGIN ERR ==>', err);
+          });
       })
       .catch(err => {
         console.log('SIGNUP ERR ===> ', err);
