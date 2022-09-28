@@ -14,6 +14,8 @@ import {LoggedInParamList} from '../../../AppInner';
 import Map from '../../components/hiking/Map';
 import TrackingRoute from '../../components/hiking/TrackingRoute';
 import {calDistance} from '../../utils';
+import Config from 'react-native-config';
+import axios from 'axios';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
@@ -30,6 +32,8 @@ function Hiking({navigation}: HikingScreenProps) {
 
   const [totalDist, setTotalDist] = useState(0); // 총 등산 거리를 저장할 변수
   const [totalHigh, setTotalHigh] = useState(0); // 총 고도를 저정할 변수
+  const [currentWeather, setCurrentWeather] = useState(''); // 현재 날씨를 저장할 변수(흐림, 맑음, 비, 맑음, 눈)
+  const [currentTemp, setCurrentTemp] = useState(''); // 현재 기온을 저장할 변수
 
   // 이동한 경로의 위도, 경도 좌표를 저장할 리스트
   const [coords, setCoords] = useState<
@@ -110,6 +114,33 @@ function Hiking({navigation}: HikingScreenProps) {
     setWatchId(idTest);
     locationDataPush();
   };
+  // 현재 날씨 받아오기
+  const getWeatherByCurrentLocation = async (lat: number, lon: number) => {
+    const APIkey = Config.CURRENT_WEATHER_API_KEY;
+    let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}&units=metric`;
+    // axios 호출
+    await axios
+      .get(url)
+      .then(res => {
+        setCurrentTemp(res.data.main.temp);
+        if (res.data.weather[0].main === 'Wind') {
+          setCurrentWeather('바람');
+        } else if (res.data.weather[0].main === 'Rain') {
+          setCurrentWeather('비');
+        } else if (res.data.weather[0].main === 'Clounds') {
+          setCurrentWeather('흐림');
+        } else if (res.data.weather[0].main === 'Snow') {
+          setCurrentWeather('눈');
+        } else {
+          setCurrentWeather('맑음');
+        }
+      })
+
+      // 실패시 err 로그 출력
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   // 현재 위치 받아오기
   useEffect(() => {
@@ -120,9 +151,26 @@ function Hiking({navigation}: HikingScreenProps) {
     }
   }, [myPosition, currentLocation, isTracking, tracking]);
 
+  // 처음 화면 렌더링될 때 위치 정보 받아오기
   useEffect(() => {
     watchPosition();
   }, []);
+
+  // 현재 위치를 받아온 후 날씨 정보 받아오기
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      info => {
+        const latitude = info.coords.latitude;
+        const longitude = info.coords.longitude;
+        getWeatherByCurrentLocation(latitude, longitude);
+      },
+      console.error,
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+      },
+    );
+  }, [currentWeather, currentTemp]);
 
   const wait = (timeout: any) => {
     return new Promise((resolve: any) => setTimeout(resolve, timeout));
@@ -175,7 +223,9 @@ function Hiking({navigation}: HikingScreenProps) {
           <Text>산 정보</Text>
         </View>
         <View style={styles.textGroup}>
-          <Text>맑음</Text>
+          <Text>
+            {currentTemp} {currentWeather}
+          </Text>
           <Text>{today}</Text>
           <Text>계룡산</Text>
         </View>
@@ -215,6 +265,8 @@ function Hiking({navigation}: HikingScreenProps) {
       totalDist={totalDist.toFixed(2)}
       setTracking={setTracking}
       tracking={tracking}
+      currentTemp={currentTemp}
+      currentWeather={currentWeather}
     />
   );
 }
@@ -280,3 +332,6 @@ const styles = StyleSheet.create({
 });
 
 export default Hiking;
+function getWeatherByCurrentLocation() {
+  throw new Error('Function not implemented.');
+}
