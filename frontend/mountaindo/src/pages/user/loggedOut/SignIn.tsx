@@ -59,7 +59,7 @@ function SignIn({navigation}: SignInScreenProps) {
       });
     // Alert.alert('알림', '로그인 되었습니다.');
     console.log('로그인 성공');
-  }, [email, password]);
+  }, [dispatch, email, password]);
 
   // 이메일 유효성 검사
   useEffect(() => {

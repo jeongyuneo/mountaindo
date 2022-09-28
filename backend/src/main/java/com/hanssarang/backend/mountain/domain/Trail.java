@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.geolatte.geom.LineString;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -28,8 +27,7 @@ public class Trail extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Level level;
 
-    @Column(nullable = false, columnDefinition = "geometry")
-    private LineString path;
+    private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_id")

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.geolatte.geom.LineString;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -25,9 +24,7 @@ public class Hiking extends BaseEntity {
     private LocalTime useTime;
     private double accumulatedHeight;
     private boolean isCompleted;
-
-    @Column(nullable = false, columnDefinition = "geometry")
-    private LineString path;
+    private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
