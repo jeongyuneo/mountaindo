@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -44,7 +45,7 @@ public class HikingControllerTest extends ApiDocument {
     private static final double X = 30.0312;
     private static final double Y = 500.1937;
     private static final double ACCUMULATED_HEIGHT = 320.45;
-    private static final String USE_TIME = "16:40:20";
+    private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
 
     private HikingRequest hikingRequest;
     private List<HikingListResponse> hikingListResponses;
@@ -57,11 +58,12 @@ public class HikingControllerTest extends ApiDocument {
     @BeforeEach
     void setUp() {
         List<PathResponse> pathResponse = IntStream.range(1, 6)
-                .mapToObj(n -> PathResponse.builder().x(n * X).y((n / 2.0) * Y).build())
+                .mapToObj(n -> PathResponse.builder().latitude(n * X).longitude((n / 2.0) * Y).build())
                 .collect(Collectors.toList());
         hikingRequest = HikingRequest.builder()
+                .trailId(ID)
                 .path(pathResponse)
-                .endPoint(PathResponse.builder().x(X).y(Y).build())
+                .endPoint(PathResponse.builder().latitude(X).longitude(Y).build())
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .useTime(USE_TIME)
                 .build();
