@@ -4,10 +4,10 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HikingPath {
+public class PathResponse {
 
-    private double x;
-    private double y;
+    private double latitude;
+    private double longitude;
 }
