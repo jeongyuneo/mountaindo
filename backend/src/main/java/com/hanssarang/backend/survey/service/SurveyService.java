@@ -26,6 +26,7 @@ public class SurveyService {
                 .preferredMountainLocation(saveSurveyRequest.getPreferredMountainLocation())
                 .preferredHikingStyle(saveSurveyRequest.getPreferredHikingStyle())
                 .preferredHikingTime(saveSurveyRequest.getPreferredHikingTime())
+                .isActive(true)
                 .member(member)
                 .build();
         surveyRepository.save(survey);
