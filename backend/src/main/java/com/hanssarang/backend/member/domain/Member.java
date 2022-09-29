@@ -62,5 +62,6 @@ public class Member extends BaseEntity {
 
     public void addHiking(Hiking hiking) {
         hikings.add(hiking);
+        hiking.addMember(this);
     }
 }
