@@ -19,17 +19,20 @@ public class HikingController {
 
     @GetMapping
     public ResponseEntity<List<HikingListResponse>> getHikings(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(hikingService.getHikings(1));
+        return ResponseEntity.ok()
+                .body(hikingService.getHikings(1));
     }
 
     @GetMapping("/1/{hikingId}")
     public ResponseEntity<HikingResponse> getHiking(@RequestHeader("Authorization") String token, @PathVariable int hikingId) {
-        return ResponseEntity.ok(hikingService.getHiking(1));
+        return ResponseEntity.ok()
+                .body(hikingService.getHiking(1));
     }
 
     @GetMapping("/2")
     public ResponseEntity<List<HikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok(hikingService.getCompletedHikings(1));
+        return ResponseEntity.ok()
+                .body(hikingService.getCompletedHikings(1));
     }
 
     @PostMapping
