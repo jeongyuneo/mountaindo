@@ -13,6 +13,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import DismissKeyboardView from '../DismissKeyboardView';
 import {Rankings} from '../../pages/Main';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 
 interface Props {
   isModalVisible: any;
@@ -47,12 +49,13 @@ function MainModal({
           onRequestClose={() => {
             setIsModalVisible(!isModalVisible);
           }}>
-          <View style={styles.dummyFlex}></View>
           <View style={styles.mainFlex}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>MountainDo 전체랭킹</Text>
+              <AppTextBold style={styles.modalTitle}>
+                MountainDo 전체랭킹
+              </AppTextBold>
               <Pressable onPress={goAllRank}>
-                <Text style={styles.closeModal}>X</Text>
+                <AppTextBold style={styles.closeModal}>X</AppTextBold>
               </Pressable>
             </View>
             <View style={styles.findInput}>
@@ -68,52 +71,51 @@ function MainModal({
               />
             </View>
             <View>
-              <Text style={styles.myRankTitle}>내 랭킹</Text>
+              <AppTextBold style={styles.myRankTitle}>내 랭킹</AppTextBold>
             </View>
             <View>
               <View style={styles.myRank}>
                 <View style={styles.styleRow}>
-                  <Text style={styles.rankNum}>{myRanking?.ranking}</Text>
-                  <View style={styles.styleRow}>
-                    <Image
-                      source={myRanking?.imageUrl}
-                      style={styles.imgStyle}
-                    />
-                    <View style={styles.styleRow}>
-                      <Text style={styles.nameStyle}>
-                        {myRanking?.nickname}
-                      </Text>
-                      <Text style={styles.namePix}>님</Text>
-                    </View>
-                  </View>
+                  <AppTextBold style={styles.rankNum}>
+                    {myRanking?.ranking}
+                  </AppTextBold>
+                  <Image source={myRanking?.imageUrl} style={styles.imgStyle} />
+                  <AppTextBold style={styles.nameStyle}>
+                    {myRanking?.nickname}
+                  </AppTextBold>
+                  <Text style={styles.namePix}>님</Text>
                 </View>
-                <Text style={styles.meter}>
-                  {myRanking?.accumulatedHeight}m
-                </Text>
+                <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
               </View>
             </View>
 
             <View>
-              <Text style={styles.userTitle}>사용자 전체랭킹</Text>
+              <AppTextBold style={styles.userTitle}>
+                사용자 전체랭킹
+              </AppTextBold>
             </View>
             <ScrollView>
-              {rankingList.map((item: Rankings) => (
-                <View>
-                  <View key={item.ranking} style={styles.rankList}>
-                    <View style={styles.styleRow}>
-                      <Text style={styles.rankNum}>{item.ranking}</Text>
+              {rankingList?.length > 0 &&
+                rankingList.map((item: Rankings) => (
+                  <View>
+                    <View key={item.ranking} style={styles.rankList}>
                       <View style={styles.styleRow}>
-                        {/* <Image source={item.imageUrl} style={styles.imgStyle} /> */}
-                        <View style={styles.styleRow}>
-                          <Text style={styles.nameStyle}>{item.nickname}</Text>
-                          <Text style={styles.namePix}>님</Text>
-                        </View>
+                        <AppTextBold style={styles.rankNum}>
+                          {item.ranking}
+                        </AppTextBold>
+                        <Image
+                          source={item?.imageUrl}
+                          style={styles.imgStyle}
+                        />
+                        <AppTextBold style={styles.nameStyle}>
+                          {item.nickname}
+                        </AppTextBold>
+                        <AppText style={styles.namePix}>님</AppText>
                       </View>
+                      <AppTextBold>{item.accumulatedHeight}m</AppTextBold>
                     </View>
-                    <Text style={styles.meter}>{item.accumulatedHeight}m</Text>
                   </View>
-                </View>
-              ))}
+                ))}
             </ScrollView>
           </View>
         </Modal>
@@ -128,8 +130,6 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     marginBottom: 5,
     fontSize: 13,
-    fontWeight: 'bold',
-    color: 'black',
   },
   myRank: {
     flexDirection: 'row',
@@ -141,13 +141,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 10,
+    alignItems: 'center',
   },
   myRankTitle: {
     marginLeft: 7,
     marginBottom: 5,
     fontSize: 13,
-    fontWeight: 'bold',
-    color: 'black',
   },
   magnify: {
     marginTop: 17,
@@ -157,6 +156,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     paddingRight: 250,
     marginLeft: 3,
+    fontFamily: 'NanumBarunGothic',
   },
   findInput: {
     flexDirection: 'row',
@@ -165,11 +165,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 10,
   },
-  dummyFlex: {
-    flex: 0.5,
-  },
   mainFlex: {
-    flex: 1.5,
     backgroundColor: 'white',
   },
   modalHeader: {
@@ -180,30 +176,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginRight: 10,
     fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
   },
   modalTitle: {
-    fontWeight: 'bold',
-    color: 'black',
     fontSize: 17,
     paddingTop: 10,
     paddingLeft: 5,
   },
   styleRow: {
     flexDirection: 'row',
-  },
-  rankTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: 3,
+    alignItems: 'flex-end',
   },
   rankList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 7,
     marginHorizontal: 10,
+    alignItems: 'flex-end',
   },
   imgStyle: {
     width: 20,
@@ -216,25 +204,14 @@ const styles = StyleSheet.create({
   },
   rankNum: {
     fontSize: 15,
-    fontWeight: 'bold',
-    color: 'black',
     marginRight: 10,
   },
   nameStyle: {
-    fontWeight: 'bold',
-    color: 'black',
-    marginTop: 3,
-    fontSize: 13,
-  },
-  namePix: {
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: 5,
     fontSize: 15,
   },
-  meter: {
-    fontWeight: 'bold',
-    color: 'black',
+  namePix: {
+    marginLeft: 5,
+    fontSize: 15,
   },
 });
 

@@ -34,6 +34,8 @@ import VisitedDetail from './src/pages/completed/VisitedDetail';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
+import {useEffect} from 'react';
+import SplashScreen from 'react-native-splash-screen';
 
 export type LoggedInParamList = {
   Survey1: any;
@@ -122,6 +124,9 @@ function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed);
   // 앱에 접속할 때마다 사용자의 권한 확인
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   usePermissions();
   return (
     <Stack.Navigator>

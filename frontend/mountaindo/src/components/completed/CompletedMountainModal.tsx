@@ -11,6 +11,8 @@ import {
   Share,
   Alert,
 } from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 
 // Hiking 페이지(mountain) / VisitedDetail 페이지(trails)에서 받아온 Props 정보 type 설정
 interface Props {
@@ -48,12 +50,12 @@ const CompletedMountainModal = ({
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>완등한 산 정보</Text>
-            <Text style={styles.modalText}>{mountain}</Text>
+            <AppText style={styles.modalText}>완등한 산 정보</AppText>
+            <AppText style={styles.modalText}>{mountain}</AppText>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>닫기</Text>
+              <AppText style={styles.textStyle}>닫기</AppText>
             </Pressable>
           </View>
         </View>
@@ -82,22 +84,28 @@ const CompletedMountainModal = ({
               </View>
               <View style={styles.textContainer}>
                 <View style={styles.textItem}>
-                  <Text style={styles.text}>{trails?.totalDistance} km</Text>
-                  <Text style={styles.label}>총 거리</Text>
+                  <AppTextBold style={styles.text}>
+                    {trails?.totalDistance} km
+                  </AppTextBold>
+                  <AppText style={styles.label}>총 거리</AppText>
                 </View>
                 <View style={styles.textItem}>
-                  <Text style={styles.text}>{trails?.timeDuration}</Text>
-                  <Text style={styles.label}>소요 시간</Text>
+                  <AppTextBold style={styles.text}>
+                    {trails?.timeDuration}
+                  </AppTextBold>
+                  <AppText style={styles.label}>소요 시간</AppText>
                 </View>
                 <View style={styles.textItem}>
-                  <Text style={styles.text}>{trails?.totalHigh} km</Text>
-                  <Text style={styles.label}>총 고도</Text>
+                  <AppTextBold style={styles.text}>
+                    {trails?.totalHigh} km
+                  </AppTextBold>
+                  <AppText style={styles.label}>총 고도</AppText>
                 </View>
               </View>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>닫기</Text>
+                <AppText style={styles.textStyle}>닫기</AppText>
               </Pressable>
             </View>
           </View>
@@ -142,7 +150,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   modalText: {
@@ -163,8 +170,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontWeight: 'bold',
-    color: 'black',
     fontSize: 15,
   },
   label: {

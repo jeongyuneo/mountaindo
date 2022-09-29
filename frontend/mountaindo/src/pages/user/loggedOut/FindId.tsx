@@ -13,6 +13,8 @@ import DatePicker from '../../../components/user/DatePicker';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import {useAppDispatch} from '../../../store';
 import {findEmail} from '../../../slices/userSlice/user';
+import AppTextBold from '../../../components/AppTextBold';
+import AppText from '../../../components/AppText';
 
 // navigation을 사용하기 위해 type 설정
 type FindIdScreenProps = NativeStackScreenProps<RootStackParamList, 'FindId'>;
@@ -85,14 +87,14 @@ function FindId({navigation}: FindIdScreenProps) {
       {visibleId ? (
         <View>
           <View style={styles.titleView}>
-            <Text style={styles.title}>아이디 찾기 성공</Text>
+            <AppTextBold style={styles.title}>아이디 찾기 성공</AppTextBold>
           </View>
           <View style={styles.findIdView}>
-            <Text style={styles.findIdText}>{userEmail}</Text>
+            <AppTextBold style={styles.findIdText}>{userEmail}</AppTextBold>
           </View>
           <View style={styles.toLoginButton}>
             <Pressable onPress={() => navigation.navigate('SignIn')}>
-              <Text>로그인</Text>
+              <AppText>로그인</AppText>
             </Pressable>
           </View>
         </View>
@@ -140,7 +142,7 @@ function FindId({navigation}: FindIdScreenProps) {
           </View>
           <View style={styles.findPasswordButton}>
             <Pressable onPress={() => navigation.push('FindPassword')}>
-              <Text>비밀번호 찾기</Text>
+              <AppText>비밀번호 찾기</AppText>
             </Pressable>
           </View>
           <View>
@@ -155,7 +157,7 @@ function FindId({navigation}: FindIdScreenProps) {
                     )
                   : styles.findIdButton
               }>
-              <Text style={styles.buttonText}>아이디 찾기</Text>
+              <AppText style={styles.buttonText}>아이디 찾기</AppText>
             </Pressable>
           </View>
         </View>
@@ -175,8 +177,6 @@ const styles = StyleSheet.create({
   },
   findIdText: {
     textAlign: 'center',
-    fontWeight: 'bold',
-    color: 'black',
     fontSize: 20,
   },
   toLoginButton: {
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    color: 'black',
+    fontFamily: 'NanumBarunGothic',
   },
   findPasswordButton: {
     alignItems: 'flex-end',
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    borderRadius: 5,
+    borderRadius: 20,
     marginVertical: 10,
   },
   findIdButtonActive: {
@@ -218,8 +218,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   title: {
-    fontWeight: 'bold',
-    color: 'black',
     fontSize: 15,
   },
 });

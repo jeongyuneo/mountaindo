@@ -1,6 +1,13 @@
 // React
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, Image} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -15,10 +22,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {useAppDispatch} from '../store';
 import {totalRanking} from '../slices/rankingSlice/ranking';
+import AppTextBold from '../components/AppTextBold';
+import AppText from '../components/AppText';
 
 // 랭킹의 타입 설정
 export type Rankings = {
-  imageUrl: string;
+  imageUrl: any;
   ranking: number;
   nickname: string;
   accumulatedHeight: number;
@@ -76,17 +85,21 @@ function Main({navigation}: MainInScreenProps) {
         </View>
 
         <View style={styles.suggestionContainer}>
-          <RankList goAllRank={goAllRank} rankingList={rankingList} />
+          <View style={styles.rankList}>
+            <RankList goAllRank={goAllRank} rankingList={rankingList} />
+          </View>
 
           <View>
             <View style={styles.mountainList}>
-              <Text style={styles.easyTitle}>쉬운 난이도의 등산 코스</Text>
+              <AppTextBold style={styles.easyTitle}>
+                쉬운 난이도의 등산 코스
+              </AppTextBold>
               <View style={styles.goList}>
-                <Text
-                  style={styles.mountainAll}
-                  onPress={() => navigation.navigate('MainDetail')}>
-                  전체 산 목록 보기
-                </Text>
+                <Pressable onPress={() => navigation.navigate('MainDetail')}>
+                  <AppText style={styles.mountainAll}>
+                    전체 산 목록 보기
+                  </AppText>
+                </Pressable>
                 <FontAwesomeIcon
                   icon={faAngleDown}
                   size={12}
@@ -98,7 +111,9 @@ function Main({navigation}: MainInScreenProps) {
           </View>
 
           <View>
-            <Text style={styles.easyTitle}>20대에게 인기있는 등산 코스</Text>
+            <AppTextBold style={styles.easyTitle}>
+              20대에게 인기있는 등산 코스
+            </AppTextBold>
             <AgeMountain dummyAge={dummyAge} />
           </View>
         </View>
@@ -112,6 +127,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginTop: 12,
     color: 'gray',
+    alignItems: 'flex-start',
   },
   angleDown: {
     marginTop: 3,
@@ -119,7 +135,6 @@ const styles = StyleSheet.create({
   },
   mountainAll: {
     fontSize: 12,
-    fontWeight: 'bold',
   },
   mountainList: {
     flexDirection: 'row',
@@ -133,13 +148,14 @@ const styles = StyleSheet.create({
   },
   suggestionContainer: {
     flex: 2,
+    marginHorizontal: 20,
   },
   easyTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
     marginLeft: 3,
     paddingVertical: 10,
+  },
+  rankList: {
+    marginVertical: 10,
   },
 });
 
