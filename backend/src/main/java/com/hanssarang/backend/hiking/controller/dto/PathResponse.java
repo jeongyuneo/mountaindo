@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PathResponse {
 
-    private double x;
-    private double y;
+    private double latitude;
+    private double longitude;
 }
