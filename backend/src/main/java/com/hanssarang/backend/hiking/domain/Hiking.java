@@ -33,4 +33,8 @@ public class Hiking extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trail_id")
     private Trail trail;
+
+    public void addMember(Member member) {
+        this.member = member;
+    }
 }
