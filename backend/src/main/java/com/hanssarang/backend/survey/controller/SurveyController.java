@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/survey")
 public class SurveyController {
 
-    private static final String AUTHORIZATION = "Authorization";
-
     private final SurveyService surveyService;
 
     @PostMapping()
