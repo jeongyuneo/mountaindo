@@ -16,7 +16,7 @@ public class SurveyController {
 
     private final SurveyService surveyService;
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> saveSurvey(@RequestHeader("Authorization") String token, @RequestBody SaveSurveyRequest saveSurveyRequest) {
         surveyService.saveSurvey(JwtUtil.getMemberId(token), saveSurveyRequest);
         return ResponseEntity.ok().build();
