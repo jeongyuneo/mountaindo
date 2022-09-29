@@ -1,4 +1,3 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -7,16 +6,23 @@ import {
   TextInput,
   Pressable,
   Alert,
+  ScrollView,
 } from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import DatePicker from '../../../components/user/DatePicker';
 import LocationPicker from '../../../components/user/LocationPicker';
+import {
+  checkCertification,
+  login,
+  signUp,
+} from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type SignUpScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
-
-function SignUp({navigation}: SignUpScreenProps) {
+function SignUp() {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState('');
+  const [checkEmail, setCheckEmail] = useState(0); // 이메일 중복확인 여부. 사용 가능 : 1, 사용 불가능 : 0
   const [certification, setCertification] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
@@ -26,6 +32,8 @@ function SignUp({navigation}: SignUpScreenProps) {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedCity2, setSelectedCity2] = useState('');
   const [check, setCheck] = useState(0); // 달력에 날짜를 선택했는지 확인할 변수
+  const [selectedDate, setSelectedDate] = useState(''); // 선택 날짜를 문자열 형태로 변경하여 저장할 변수
+
   const emailRef = useRef<TextInput | null>(null);
   const certificationRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
@@ -35,6 +43,7 @@ function SignUp({navigation}: SignUpScreenProps) {
   const phoneNumberRef = useRef<TextInput | null>(null);
   const canGoNext =
     email &&
+    checkEmail &&
     certification &&
     password &&
     passwordCheck &&
@@ -78,15 +87,31 @@ function SignUp({navigation}: SignUpScreenProps) {
     setPhoneNumber(text.trim());
   }, []);
 
-  const pressCertificationButton = () => {
+  const pressCertificationButton = useCallback(() => {
     if (disabledEmail) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
-  };
+    dispatch(checkCertification({email}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setCheckEmail(1);
+          Alert.alert('알림', '사용할 수 있는 이메일입니다.');
+        } else if (res.meta.requestStatus === 'rejected') {
+          setCheckEmail(0);
+          Alert.alert('알림', '중복된 이메일이 있습니다.');
+        }
+      })
+      .catch(err => {
+        Alert.alert('알림', err.message);
+      });
+  }, [disabledEmail, dispatch, email]);
 
   const onSubmit = useCallback(async () => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입해주세요.');
+    }
+    if (!checkEmail) {
+      return Alert.alert('알림', '중복된 이메일이 있습니다.');
     }
     if (!certification || !certification.trim()) {
       return Alert.alert('알림', '인증번호를 입해주세요.');
@@ -105,6 +130,9 @@ function SignUp({navigation}: SignUpScreenProps) {
     }
     if (!phoneNumber || !phoneNumber.trim()) {
       return Alert.alert('알림', '핸드폰 번호를 입력해주세요.');
+    }
+    if (!selectedCity || !selectedCity2) {
+      return Alert.alert('알림', '주소를 입력해주세요.');
     }
     if (!check) {
       return Alert.alert('알림', '생년월일을 입력해주세요.');
@@ -135,19 +163,47 @@ function SignUp({navigation}: SignUpScreenProps) {
         '숫자, -을 포함해 휴대전화 형식에 맞게 입력해주세요.',
       );
     }
-
-    Alert.alert('알림', '회원가입되었습니다.');
-    navigation.navigate('Welcome');
+    dispatch(
+      signUp({
+        email,
+        password,
+        name,
+        birth: selectedDate,
+        phoneNumber,
+        selectedCity,
+        selectedCity2,
+        nickName,
+      }),
+    )
+      .then(res => {
+        console.log('SIGNUP RES ===> ', res);
+        Alert.alert('알림', '회원가입되었습니다.');
+        // 임시: 회원가입 후 로그인 요청 -> 토큰 값 반환 -> 후에 백에서 자동로그인 처리 예정
+        dispatch(login({email, password}))
+          .then(async res2 => {
+            await AsyncStorage.setItem('token', res2.payload.token);
+          })
+          .catch(err => {
+            console.log('LOGIN ERR ==>', err);
+          });
+      })
+      .catch(err => {
+        console.log('SIGNUP ERR ===> ', err);
+      });
   }, [
     email,
+    checkEmail,
     certification,
     password,
     passwordCheck,
     name,
     nickName,
     phoneNumber,
+    selectedCity,
+    selectedCity2,
     check,
-    navigation,
+    dispatch,
+    selectedDate,
   ]);
 
   useEffect(() => {
@@ -164,217 +220,229 @@ function SignUp({navigation}: SignUpScreenProps) {
   }, [phoneNumber]);
 
   return (
-    <DismissKeyboardView>
-      <Text style={styles.title}>회원가입</Text>
-      <View style={styles.emailInputWrapper}>
-        <TextInput
-          style={styles.emailInputText}
-          onChangeText={onChangeEmail}
-          placeholder="이메일을 입력해주세요."
-          placeholderTextColor="#666"
-          textContentType="emailAddress"
-          value={email}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={emailRef}
-          onSubmitEditing={() => certificationRef.current?.focus()}
-          blurOnSubmit={false}
-        />
-        <Pressable
-          style={!disabledEmail ? styles.checkEmailActive : styles.checkEmail}
-          onPress={pressCertificationButton}>
-          <Text style={styles.checkEmailText}>인증</Text>
-        </Pressable>
-      </View>
-      <View style={styles.inputGroup}>
-        <View style={styles.inputWrapper}>
+    <DismissKeyboardView style={styles.wrapper}>
+      <ScrollView>
+        <Text style={styles.title}>회원가입</Text>
+        <View style={styles.emailInputWrapper}>
           <TextInput
-            style={styles.inputText}
-            onChangeText={onChangeCertification}
-            placeholder="인증번호를 입력해주세요."
+            style={styles.emailInputText}
+            onChangeText={onChangeEmail}
+            placeholder="이메일을 입력해주세요."
             placeholderTextColor="#666"
-            textContentType="none"
-            value={certification}
+            textContentType="emailAddress"
+            value={email}
             returnKeyType="next"
             clearButtonMode="while-editing"
-            ref={certificationRef}
-            onSubmitEditing={() => passwordRef.current?.focus()}
+            ref={emailRef}
+            onSubmitEditing={() => certificationRef.current?.focus()}
             blurOnSubmit={false}
           />
+          <Pressable
+            style={!disabledEmail ? styles.checkEmailActive : styles.checkEmail}
+            onPress={pressCertificationButton}>
+            <Text style={styles.checkEmailText}>인증</Text>
+          </Pressable>
         </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={onChangePassword}
-            placeholder="비밀번호를 입력해주세요(영문, 숫자, 특수문자)"
-            placeholderTextColor="#666"
-            textContentType="password"
-            value={password}
-            secureTextEntry
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={passwordRef}
-            onSubmitEditing={() => passwordCheckRef.current?.focus()}
-            blurOnSubmit={false}
+        <View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangeCertification}
+              placeholder="인증번호를 입력해주세요."
+              placeholderTextColor="#666"
+              textContentType="none"
+              value={certification}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={certificationRef}
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangePassword}
+              placeholder="비밀번호를 입력해주세요(영문, 숫자, 특수문자)"
+              placeholderTextColor="#666"
+              textContentType="password"
+              value={password}
+              secureTextEntry
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={passwordRef}
+              onSubmitEditing={() => passwordCheckRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangePasswordCheck}
+              placeholder="비밀번호를 재입력해주세요."
+              placeholderTextColor="#666"
+              textContentType="none"
+              value={passwordCheck}
+              secureTextEntry
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={passwordCheckRef}
+              onSubmitEditing={() => nameRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangeName}
+              placeholder="이름을 입력해주세요."
+              placeholderTextColor="#666"
+              textContentType="name"
+              value={name}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={nameRef}
+              onSubmitEditing={() => nickNameRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangeNickName}
+              placeholder="닉네임을 입력해주세요."
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              textContentType="nickname"
+              value={nickName}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={nickNameRef}
+              onSubmitEditing={() => phoneNumberRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              style={styles.inputText}
+              onChangeText={onChangePhoneNumber}
+              placeholder="핸드폰 번호를 입력해주세요. ex) 010-1234-5678"
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              textContentType="telephoneNumber"
+              value={phoneNumber}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={phoneNumberRef}
+              blurOnSubmit={false}
+            />
+          </View>
+          <DatePicker
+            setCheck={setCheck}
+            setSelectedDate={setSelectedDate}
+            selectedDate={selectedDate}
           />
+          <View style={styles.location}>
+            <Text style={styles.locationText}>
+              실 거주지의 주소를 선택해주세요
+            </Text>
+            <LocationPicker
+              setSelectedCity={setSelectedCity}
+              setSelectedCity2={setSelectedCity2}
+            />
+          </View>
         </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={onChangePasswordCheck}
-            placeholder="비밀번호를 재입력해주세요."
-            placeholderTextColor="#666"
-            textContentType="none"
-            value={passwordCheck}
-            secureTextEntry
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={passwordCheckRef}
-            onSubmitEditing={() => nameRef.current?.focus()}
-            blurOnSubmit={false}
-          />
+        <View style={styles.buttonZone}>
+          <Pressable
+            style={
+              canGoNext ? styles.registerButtonActive : styles.registerButton
+            }
+            disabled={!canGoNext}>
+            <Text style={styles.registerButtonText} onPress={onSubmit}>
+              가입하기
+            </Text>
+          </Pressable>
         </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={onChangeName}
-            placeholder="이름을 입력해주세요."
-            placeholderTextColor="#666"
-            textContentType="name"
-            value={name}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={nameRef}
-            onSubmitEditing={() => nickNameRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-        </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={onChangeNickName}
-            placeholder="닉네임을 입력해주세요."
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            textContentType="nickname"
-            value={nickName}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={nickNameRef}
-            onSubmitEditing={() => phoneNumberRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-        </View>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            style={styles.inputText}
-            onChangeText={onChangePhoneNumber}
-            placeholder="핸드폰 번호를 입력해주세요. ex) 010-1234-5678"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            textContentType="telephoneNumber"
-            value={phoneNumber}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={phoneNumberRef}
-            blurOnSubmit={false}
-          />
-        </View>
-        <DatePicker setCheck={setCheck} />
-        <View style={styles.location}>
-          <Text>실 거주지의 주소를 선택해주세요</Text>
-          <LocationPicker
-            setSelectedCity={setSelectedCity}
-            setSelectedCity2={setSelectedCity2}
-          />
-        </View>
-      </View>
-      <View style={styles.buttonZone}>
-        <Pressable
-          style={
-            canGoNext ? styles.registerButtonActive : styles.registerButton
-          }
-          disabled={!canGoNext}>
-          <Text style={styles.registerButtonText} onPress={onSubmit}>
-            가입하기
-          </Text>
-        </Pressable>
-      </View>
+      </ScrollView>
     </DismissKeyboardView>
   );
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white',
+    paddingHorizontal: 40,
+  },
   title: {
-    marginTop: 30,
-    marginLeft: 20,
+    marginTop: 40,
     marginBottom: 10,
-    color: 'black',
+    color: '#57d696',
     fontWeight: 'bold',
-    fontSize: 30,
+    fontSize: 25,
   },
   emailInputWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   emailInputText: {
-    marginLeft: 20,
     borderBottomWidth: 1,
-    width: 250,
+    borderBottomColor: '#c5c5c5',
+    width: 230,
+    fontSize: 12,
   },
   checkEmail: {
-    backgroundColor: 'grey',
+    backgroundColor: '#c5c5c5',
     borderRadius: 30,
     paddingHorizontal: 10,
     paddingVertical: 10,
     marginTop: 10,
-    marginRight: 20,
   },
   checkEmailActive: {
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
     borderRadius: 30,
     paddingHorizontal: 10,
     paddingVertical: 10,
     marginTop: 10,
-    marginRight: 20,
   },
   checkEmailText: {
     color: 'white',
-  },
-  inputGroup: {
-    marginHorizontal: 20,
   },
   inputWrapper: {
     flexDirection: 'row',
   },
   inputText: {
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    width: 320,
+    borderBottomColor: '#c5c5c5',
+    width: '100%',
+    fontSize: 12,
   },
   buttonZone: {
     marginTop: 20,
     alignItems: 'center',
   },
   registerButton: {
-    backgroundColor: 'grey',
+    backgroundColor: '#c5c5c5',
     borderRadius: 30,
     paddingHorizontal: 100,
     paddingVertical: 10,
-    marginTop: 5,
+    marginBottom: 40,
   },
   registerButtonActive: {
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
     borderRadius: 30,
     paddingHorizontal: 100,
     paddingVertical: 10,
-    marginTop: 10,
+    marginBottom: 40,
   },
   registerButtonText: {
     color: 'white',
   },
   location: {
-    marginVertical: 20,
+    marginVertical: 30,
+  },
+  locationText: {
+    fontSize: 12,
+    color: 'black',
   },
 });
 

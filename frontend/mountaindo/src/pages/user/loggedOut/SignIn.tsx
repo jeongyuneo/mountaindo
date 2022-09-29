@@ -14,11 +14,17 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 // component import
 import {RootStackParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import {useAppDispatch} from '../../../store';
+import {login} from '../../../slices/userSlice/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 
 // Navigation 사용
 type SignInScreenProps = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 function SignIn({navigation}: SignInScreenProps) {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = useState(''); // 이메일 입력을 받기 위한 변수
   const [password, setPassword] = useState(''); // 비밀번호 입력을 받기 위한 변수
   const [emailCheck, setEmailCheck] = useState(''); // 이메일 양식 확인을 위한 변수
@@ -43,8 +49,19 @@ function SignIn({navigation}: SignInScreenProps) {
     if (!password || !password.trim()) {
       return Alert.alert('알림', '비밀번호를 입력해주세요.');
     }
-    Alert.alert('알림', '로그인 되었습니다.');
-  }, [email, password]);
+    //로그인 버튼 클릭 시 서버 전송
+    dispatch(login({email, password}))
+      .then(async res => {
+        // 토큰값 정보
+        await AsyncStorage.setItem('token', res.payload.token);
+        const token = await AsyncStorage.getItem('token');
+      })
+      .catch(err => {
+        console.log('LOGIN ERR ===> ', err);
+      });
+    // Alert.alert('알림', '로그인 되었습니다.');
+    console.log('로그인 성공');
+  }, [dispatch, email, password]);
 
   // 이메일 유효성 검사
   useEffect(() => {
@@ -67,11 +84,11 @@ function SignIn({navigation}: SignInScreenProps) {
       <View style={styles.container}>
         <View style={styles.titleSettings}>
           <View>
-            <Text style={styles.mountainTitle}>MountainDo</Text>
-            <Text style={styles.mountainText}>건강한 삶의 친구!</Text>
-            <Text style={styles.mountainText}>
+            <AppTextBold style={styles.mountainTitle}>MountainDo</AppTextBold>
+            <AppText style={styles.mountainText}>건강한 삶의 친구!</AppText>
+            <AppText style={styles.mountainText}>
               등산로 추천으로 재밌는 코스를 즐겨보세요!
-            </Text>
+            </AppText>
           </View>
         </View>
 
@@ -95,7 +112,9 @@ function SignIn({navigation}: SignInScreenProps) {
               />
             </View>
             <View style={styles.emailInfoCheck}>
-              <Text style={styles.emailInfoText}>{emailCheck}</Text>
+              <AppTextBold style={styles.emailInfoText}>
+                {emailCheck}
+              </AppTextBold>
             </View>
 
             <View style={styles.textPadding}>
@@ -120,25 +139,20 @@ function SignIn({navigation}: SignInScreenProps) {
           </View>
 
           <View style={styles.userInfoCreate}>
-            <Text
-              style={styles.userInfoText}
-              onPress={() => navigation.push('Agreement')}>
-              회원 가입
-            </Text>
-            <Text style={styles.userInfoText}>|</Text>
-            <Text
-              style={styles.userInfoText}
-              onPress={() => navigation.push('FindId')}>
-              아이디 찾기
-            </Text>
-            <Text style={styles.userInfoText}>|</Text>
-            <Text
-              style={styles.userInfoText}
-              onPress={() => navigation.push('FindPassword')}>
-              비밀 번호 찾기
-            </Text>
+            <Pressable onPress={() => navigation.push('Agreement')}>
+              <AppTextBold style={styles.userInfoText}>회원 가입</AppTextBold>
+            </Pressable>
+            <AppText style={styles.userInfoText}>|</AppText>
+            <Pressable onPress={() => navigation.push('FindId')}>
+              <AppTextBold style={styles.userInfoText}>아이디 찾기</AppTextBold>
+            </Pressable>
+            <AppText style={styles.userInfoText}>|</AppText>
+            <Pressable onPress={() => navigation.push('FindPassword')}>
+              <AppTextBold style={styles.userInfoText}>
+                비밀 번호 찾기
+              </AppTextBold>
+            </Pressable>
           </View>
-
           <View style={styles.buttonZone}>
             <Pressable
               style={
@@ -151,7 +165,7 @@ function SignIn({navigation}: SignInScreenProps) {
               }
               disabled={!goNext}
               onPress={onSubmit}>
-              <Text style={styles.loginText}>로그인</Text>
+              <AppTextBold style={styles.loginText}>로그인</AppTextBold>
             </Pressable>
           </View>
         </View>
@@ -163,6 +177,7 @@ function SignIn({navigation}: SignInScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginHorizontal: 20,
   },
   containerSession: {
     flex: 2,
@@ -172,14 +187,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 10,
     marginTop: 50,
+    marginBottom: 30,
   },
   mountainTitle: {
-    fontWeight: 'bold',
-    fontSize: 25,
-    color: 'black',
+    fontSize: 40,
   },
   mountainText: {
-    color: 'black',
     fontSize: 14,
   },
   textPadding: {
@@ -188,7 +201,6 @@ const styles = StyleSheet.create({
   textInput: {
     borderBottomWidth: 1,
     borderBottomColor: 'black',
-    fontFamily: 'Campton-Bold',
     fontWeight: 'normal',
   },
   userInfoCreate: {
@@ -198,7 +210,6 @@ const styles = StyleSheet.create({
   },
   userInfoText: {
     color: 'black',
-    fontWeight: 'bold',
     fontSize: 12,
   },
   emailInfoCheck: {
@@ -208,12 +219,11 @@ const styles = StyleSheet.create({
   },
   emailInfoText: {
     fontSize: 11,
-    fontWeight: 'bold',
     color: 'red',
   },
   loginButton: {
     backgroundColor: 'gray',
-    paddingHorizontal: 140,
+    paddingHorizontal: 130,
     paddingVertical: 10,
     borderRadius: 20,
     marginBottom: 10,
@@ -228,7 +238,6 @@ const styles = StyleSheet.create({
   loginText: {
     color: 'white',
     fontSize: 15,
-    fontWeight: 'bold',
   },
 });
 

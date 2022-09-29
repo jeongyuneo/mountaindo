@@ -5,11 +5,12 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 // props로 받은 정보의 type 지정
 interface Props {
   setCheck: any;
+  setSelectedDate: any;
+  selectedDate: any;
 }
 
-function DatePicker({setCheck}: Props) {
+function DatePicker({setCheck, setSelectedDate, selectedDate}: Props) {
   const [date, onChangeDate] = useState(new Date()); // 선택한 날짜를 저장할 변수
-  const [selectedDate, setSelectedDate] = useState(''); // 선택 날짜를 문자열 형태로 변경하여 저장할 변수
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false); // 달력을 화면에 띄울지 말지를 결정하는 변수
 
   // 달력을 화면에 띄우는 함수
@@ -56,13 +57,16 @@ function DatePicker({setCheck}: Props) {
 const styles = StyleSheet.create({
   dateButton: {
     borderBottomWidth: 1,
+    borderBottomColor: '#c5c5c5',
   },
   buttonText: {
     paddingVertical: 15,
     color: 'grey',
+    fontSize: 12,
   },
   buttonTextActive: {
     color: 'black',
+    fontSize: 12,
   },
 });
 

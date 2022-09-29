@@ -3,21 +3,42 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
+import userSlice from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
-type Survey1ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey2'>;
+type Survey2ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey2'>;
 
-function Survey2({navigation}: Survey1ScreenProps) {
+function Survey2({navigation}: Survey2ScreenProps) {
+  const dispatch = useAppDispatch();
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
+  const setSurvey2 = () => {
+    if (isChecked1) {
+      dispatch(
+        userSlice.actions.setSurvey({
+          number: 2,
+          visitedMountain: '없음',
+        }),
+      );
+    } else if (isChecked2) {
+      dispatch(
+        userSlice.actions.setSurvey({
+          number: 2,
+          visitedMountain: '있음',
+        }),
+      );
+    }
+  };
+
   return (
-    <View>
+    <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산지역 선호도</Text>
-        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
+        <Text style={styles.title}>최근 방문했던 산</Text>
+        <Text style={styles.subTitle}>최근 어떤 산을 방문했나요?</Text>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -27,9 +48,7 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.answerBoxText}>없음</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -37,9 +56,7 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.answerBoxText}>있음</Text>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -50,9 +67,7 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.checkedBoxText}>없음</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -60,9 +75,7 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.answerBoxText}>있음</Text>
           </Pressable>
         </View>
       ) : (
@@ -73,9 +86,7 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.answerBoxText}>없음</Text>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -83,16 +94,17 @@ function Survey2({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.checkedBoxText}>있음</Text>
           </Pressable>
         </View>
       )}
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
-        onPress={() => navigation.navigate('Survey3')}>
+        onPress={() => {
+          setSurvey2();
+          navigation.navigate('Survey3');
+        }}>
         <FontAwesomeIcon
           icon={faArrowRight}
           size={30}
@@ -104,47 +116,51 @@ function Survey2({navigation}: Survey1ScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 20,
+  },
   titleWrapper: {
     marginTop: 50,
-    marginLeft: 20,
+    // marginLeft: 20,
     marginBottom: 30,
   },
   title: {
     fontSize: 30,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: 'white',
     height: 60,
-    borderRadius: 20,
+    borderRadius: 30,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#c5c5c5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerBoxText: {
-    color: 'black',
+    color: 'grey',
     fontWeight: 'bold',
   },
   checkedBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 30,
     color: 'black',
-    backgroundColor: 'grey',
+    backgroundColor: '#57d696',
     height: 60,
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: 30,
+    borderWidth: 0,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
@@ -164,11 +180,11 @@ const styles = StyleSheet.create({
   arrowButton: {
     width: 50,
     height: 50,
-    marginTop: 50,
-    marginLeft: 280,
+    marginTop: 40,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'grey',
+    backgroundColor: '#c5c5c5',
     alignItems: 'flex-end',
   },
   arrowIcon: {
@@ -177,11 +193,11 @@ const styles = StyleSheet.create({
   arrowButtonActive: {
     width: 50,
     height: 50,
-    marginTop: 50,
-    marginLeft: 280,
+    marginTop: 40,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
     alignItems: 'flex-end',
   },
   arrowIconActive: {

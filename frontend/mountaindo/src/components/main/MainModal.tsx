@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
   Modal,
   StyleSheet,
   Pressable,
@@ -11,22 +10,44 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
-import {dummyUser, myFilter} from './Dummy';
 import DismissKeyboardView from '../DismissKeyboardView';
+import {Rankings} from '../../pages/Main';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
+import {useAppDispatch} from '../../store';
+import {totalRankingSearch} from '../../slices/rankingSlice/ranking';
 
 interface Props {
   isModalVisible: any;
   setIsModalVisible: any;
   goAllRank: any;
+  rankingList: any;
+  myRanking: any;
 }
 
-function MainModal({isModalVisible, setIsModalVisible, goAllRank}: Props) {
-  let allNum = 1;
-  let mynum = 1;
+function MainModal({
+  isModalVisible,
+  setIsModalVisible,
+  goAllRank,
+  rankingList,
+  myRanking,
+}: Props) {
+  const [search, setSearch] = useState('');
 
-  const searchData = (text: any) => {
-    console.log(text);
+  const dispatch = useAppDispatch();
+
+  const onSearch = () => {
+    dispatch(totalRankingSearch({keyword: search}))
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
   };
+
+  const onChangeSearchInput = (text: any) => {
+    setSearch(text.trim());
+  };
+
   return (
     <>
       <DismissKeyboardView>
@@ -38,70 +59,86 @@ function MainModal({isModalVisible, setIsModalVisible, goAllRank}: Props) {
           onRequestClose={() => {
             setIsModalVisible(!isModalVisible);
           }}>
-          <View style={styles.dummyFlex}></View>
           <View style={styles.mainFlex}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>MountainDo 전체랭킹</Text>
-              <Pressable onPress={goAllRank}>
-                <Text style={styles.closeModal}>X</Text>
-              </Pressable>
-            </View>
-            <View style={styles.findInput}>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                size={15}
-                style={styles.magnify}
-              />
-              <TextInput
-                placeholder="사용자 검색"
-                style={styles.find}
-                onChangeText={text => searchData(text)}
-              />
-            </View>
-            <View>
-              <Text style={styles.myRankTitle}>내 랭킹</Text>
-            </View>
-            <View>
-              {myFilter.map(item => (
-                <View>
-                  <View key={item.id} style={styles.myRank}>
-                    <View style={styles.styleRow}>
-                      <Text style={styles.rankNum}>{mynum++}</Text>
-                      <View style={styles.styleRow}>
-                        <Image source={item.profile} style={styles.imgStyle} />
-                        <View style={styles.styleRow}>
-                          <Text style={styles.nameStyle}>{item.name}</Text>
-                          <Text style={styles.namePix}>님</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <Text style={styles.meter}>{item.meter}m</Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-
-            <View>
-              <Text style={styles.userTitle}>사용자 전체랭킹</Text>
-            </View>
             <ScrollView>
-              {dummyUser.map(item => (
-                <View>
-                  <View key={item.id} style={styles.rankList}>
-                    <View style={styles.styleRow}>
-                      <Text style={styles.rankNum}>{allNum++}</Text>
-                      <View style={styles.styleRow}>
-                        <Image source={item.profile} style={styles.imgStyle} />
-                        <View style={styles.styleRow}>
-                          <Text style={styles.nameStyle}>{item.name}</Text>
-                          <Text style={styles.namePix}>님</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <Text style={styles.meter}>{item.meter}m</Text>
+              <View style={styles.modalHeader}>
+                <AppTextBold style={styles.modalTitle}>
+                  MountainDo 전체랭킹
+                </AppTextBold>
+                <Pressable onPress={goAllRank}>
+                  <AppTextBold style={styles.closeModal}>X</AppTextBold>
+                </Pressable>
+              </View>
+              <View style={styles.findInput}>
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  size={15}
+                  style={styles.magnify}
+                />
+                <TextInput
+                  style={styles.find}
+                  onChangeText={onChangeSearchInput}
+                  placeholder="사용자 검색"
+                  placeholderTextColor="#666"
+                  importantForAutofill="yes"
+                  autoComplete="name"
+                  textContentType="name"
+                  value={search}
+                  returnKeyType="send"
+                  clearButtonMode="while-editing"
+                  onSubmitEditing={onSearch}
+                  blurOnSubmit={false}
+                />
+              </View>
+              <View>
+                <AppTextBold style={styles.myRankTitle}>내 랭킹</AppTextBold>
+              </View>
+              <View>
+                <View style={styles.myRank}>
+                  <View style={styles.styleRow}>
+                    <AppTextBold style={styles.rankNum}>
+                      {myRanking?.ranking}
+                    </AppTextBold>
+                    <Image
+                      source={myRanking?.imageUrl}
+                      style={styles.imgStyle}
+                    />
+                    <AppTextBold style={styles.nameStyle}>
+                      {myRanking?.nickname}
+                    </AppTextBold>
+                    <AppText style={styles.namePix}>님</AppText>
                   </View>
+                  <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
                 </View>
-              ))}
+              </View>
+
+              <View>
+                <AppTextBold style={styles.userTitle}>
+                  사용자 전체랭킹
+                </AppTextBold>
+              </View>
+
+              {rankingList?.length > 0 &&
+                rankingList.map((item: Rankings) => (
+                  <View>
+                    <View key={item.ranking} style={styles.rankList}>
+                      <View style={styles.styleRow}>
+                        <AppTextBold style={styles.rankNum}>
+                          {item.ranking}
+                        </AppTextBold>
+                        <Image
+                          source={item?.imageUrl}
+                          style={styles.imgStyle}
+                        />
+                        <AppTextBold style={styles.nameStyle}>
+                          {item.nickname}
+                        </AppTextBold>
+                        <AppText style={styles.namePix}>님</AppText>
+                      </View>
+                      <AppTextBold>{item.accumulatedHeight}m</AppTextBold>
+                    </View>
+                  </View>
+                ))}
             </ScrollView>
           </View>
         </Modal>
@@ -116,8 +153,6 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     marginBottom: 5,
     fontSize: 13,
-    fontWeight: 'bold',
-    color: 'black',
   },
   myRank: {
     flexDirection: 'row',
@@ -129,13 +164,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 10,
+    alignItems: 'center',
   },
   myRankTitle: {
     marginLeft: 7,
     marginBottom: 5,
     fontSize: 13,
-    fontWeight: 'bold',
-    color: 'black',
   },
   magnify: {
     marginTop: 17,
@@ -145,6 +179,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     paddingRight: 250,
     marginLeft: 3,
+    fontFamily: 'NanumBarunGothic',
   },
   findInput: {
     flexDirection: 'row',
@@ -153,11 +188,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 10,
   },
-  dummyFlex: {
-    flex: 0.5,
-  },
   mainFlex: {
-    flex: 1.5,
     backgroundColor: 'white',
   },
   modalHeader: {
@@ -168,30 +199,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginRight: 10,
     fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
   },
   modalTitle: {
-    fontWeight: 'bold',
-    color: 'black',
     fontSize: 17,
     paddingTop: 10,
     paddingLeft: 5,
   },
   styleRow: {
     flexDirection: 'row',
-  },
-  rankTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: 3,
+    alignItems: 'flex-end',
   },
   rankList: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 7,
     marginHorizontal: 10,
+    alignItems: 'flex-end',
   },
   imgStyle: {
     width: 20,
@@ -204,25 +227,14 @@ const styles = StyleSheet.create({
   },
   rankNum: {
     fontSize: 15,
-    fontWeight: 'bold',
-    color: 'black',
     marginRight: 10,
   },
   nameStyle: {
-    fontWeight: 'bold',
-    color: 'black',
-    marginTop: 3,
-    fontSize: 13,
-  },
-  namePix: {
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: 5,
     fontSize: 15,
   },
-  meter: {
-    fontWeight: 'bold',
-    color: 'black',
+  namePix: {
+    marginLeft: 5,
+    fontSize: 15,
   },
 });
 

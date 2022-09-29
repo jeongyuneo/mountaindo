@@ -1,16 +1,25 @@
 import {faPause, faStop} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Alert, Dimensions, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 import StopWatch from './StopWatch';
 
 // moveToTrackingEnd: Hiking 페이지에서 받아오는 TrackingEnd 페이지 이동 함수
 // setIsTracking: Hiking  페이지에서 받아오는 기록 여부 확인 함수
 
-function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
-  const [tracking, setTracking] = useState(true); // 등산 기록 중인지 확인하기 위한 변수
-  const [timer, setTimer] = useState(0); // 타이머 저장 변수
-
+function TrackingRoute({
+  moveToTrackingEnd,
+  setIsTracking,
+  totalDist,
+  setTracking,
+  tracking,
+  currentTemp,
+  currentWeather,
+  timer,
+  setTimer,
+}: any) {
   const increment = useRef<any>(null); // ref의 current에서 setInterval 호출하여 사용하기 위해 변수 생성, 컴포넌트가 재렌더링되지 않음
 
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
@@ -31,7 +40,7 @@ function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
     {
       tracking
         ? (increment.current = setInterval(() => {
-            setTimer(timer => timer + 1);
+            setTimer((timer: any) => timer + 1);
           }, 1000))
         : clearInterval(increment.current);
     }
@@ -40,7 +49,7 @@ function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
   // 타이머 초기화 함수
   const handleReset = () => {
     clearInterval(increment.current);
-    setTracking(false);
+    setTracking(true);
     setTimer(0);
     setIsTracking(false);
   };
@@ -80,20 +89,26 @@ function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
 
   // 등산 종료 버튼 클릭 시 (longPress -> 종료)
   const endTracking = useCallback(() => {
-    return Alert.alert('등산 기록 종료', '등산 기록을 종료하시겠습니까?', [
-      {
-        text: '네',
-        onPress: () => {
-          moveToTrackingEnd(formatTime());
-          handleReset();
+    return Alert.alert(
+      '등산 기록 종료',
+      timer < 60
+        ? '등산 기록이 너무 짧습니다. 그래도 저장하시겠습니까?'
+        : '등산 기록을 종료하시겠습니까?',
+      [
+        {
+          text: '네',
+          onPress: () => {
+            moveToTrackingEnd(formatTime());
+            handleReset();
+          },
         },
-      },
-      {
-        text: '아니오',
-        onPress: () => console.log('No Pressed'),
-        style: 'cancel',
-      },
-    ]);
+        {
+          text: '아니오',
+          onPress: () => console.log('No Pressed'),
+          style: 'cancel',
+        },
+      ],
+    );
   }, [tracking, timer]);
 
   // 페이지 첫 접속 시 타이머 바로 시작
@@ -105,28 +120,30 @@ function TrackingRoute({moveToTrackingEnd, setIsTracking, totalDist}: any) {
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
-          <Text>오늘의 날씨</Text>
-          <Text>오늘의 정보</Text>
-          <Text>산 정보</Text>
+          <AppText>오늘의 날씨</AppText>
+          <AppText>오늘의 정보</AppText>
+          <AppText>산 정보</AppText>
         </View>
         <View style={styles.textGroup}>
-          <Text>맑음</Text>
-          <Text>{today}</Text>
-          <Text>계룡산</Text>
+          <AppText>
+            {currentTemp} {currentWeather}
+          </AppText>
+          <AppText>{today}</AppText>
+          <AppText>계룡산</AppText>
         </View>
       </View>
       <View style={styles.distanceContainer}>
-        <Text style={styles.distanceText}>{totalDist}</Text>
-        <Text style={styles.explainText}>킬로미터</Text>
+        <AppTextBold style={styles.distanceText}>{totalDist}</AppTextBold>
+        <AppText style={styles.explainText}>km</AppText>
       </View>
       <View style={styles.timeContainer}>
         <StopWatch formatTime={formatTime} />
       </View>
       <View style={styles.iconView}>
-        <Text onPress={stopTracking} onLongPress={endTracking}>
+        <Pressable onPress={stopTracking} onLongPress={endTracking}>
           <FontAwesomeIcon icon={!tracking ? faStop : faPause} size={60} />
-        </Text>
-        <Text>길게 눌러 종료하기</Text>
+        </Pressable>
+        <AppText>길게 눌러 종료하기</AppText>
       </View>
     </View>
   );
@@ -150,12 +167,14 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   distanceContainer: {
-    alignItems: 'center',
+    alignItems: 'baseline',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginLeft: 20,
+    marginTop: 30,
   },
   distanceText: {
-    fontWeight: 'bold',
     fontSize: 100,
-    color: 'black',
   },
   explainText: {
     fontSize: 20,

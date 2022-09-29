@@ -9,7 +9,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
+import AppText from '../../../components/AppText';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import {findPassword} from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 // navigation을 사용하기 위해 type 설정
 type FindPasswordScreenProps = NativeStackScreenProps<
@@ -19,31 +22,13 @@ type FindPasswordScreenProps = NativeStackScreenProps<
 
 function FindPassword({navigation}: FindPasswordScreenProps) {
   const [email, setEmail] = useState(''); // 사용자 이메일 저장할 변수
-  const [code, setCode] = useState(''); // 이메일 인증번호 저장할 변수
-  const [password1, setPassword1] = useState(''); // 비밀번호 저장할 변수
-  const [password2, setPassword2] = useState(''); // 비밀번호 확인을 저장할 변수
+  const [name, setName] = useState(''); // 사용자 이름 저장할 변수
   const [emailValid, setEmailValid] = useState(false); // 이메일 유효성 검사를 확인할 변수
-  const [emailVerify, setEmailVerify] = useState(false); // 이메일 인증 확인을 위한 변수
 
   const emailRef = useRef<TextInput | null>(null); // 사용자 이메일 input의 값 가져오기
-  const codeRef = useRef<TextInput | null>(null); // 이메일 인증번호 input의 값 가져오기
-  const password1Ref = useRef<TextInput | null>(null); // 비밀번호 input의 값 가져오기
-  const password2Ref = useRef<TextInput | null>(null); // 비밀번호 확인 input의 값 가져오기
+  const nameRef = useRef<TextInput | null>(null); // 사용자 이름 input의 값 가져오기
 
-  // 이메일 인증번호 input 변경 시 email에 저장
-  const onChangeCode = useCallback((text: string) => {
-    setCode(text.trim());
-  }, []);
-
-  // 비밀번호 input 변경 시 password1에 저장
-  const onChangePassword1 = useCallback((text: string) => {
-    setPassword1(text.trim());
-  }, []);
-
-  // 비밀번호 확인 input 변경 시 password2에 저장
-  const onChangePassword2 = useCallback((text: string) => {
-    setPassword2(text.trim());
-  }, []);
+  const dispatch = useAppDispatch();
 
   // 이메일 유효성 검사 함수
   const checkEmail = useCallback((text: string) => {
@@ -52,14 +37,6 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
         text,
       )
     ) {
-      return false;
-    }
-    return true;
-  }, []);
-
-  // 비밀번호 유효성 검사 함수
-  const checkPassword = useCallback((text: string) => {
-    if (!/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@^!%*#?&]).{8,50}$/.test(text)) {
       return false;
     }
     return true;
@@ -78,64 +55,50 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
     [checkEmail],
   );
 
-  // 이메일 인증코드 전송 함수
-  const sendCode = () => {
-    if (emailValid) {
-      setEmailVerify(true);
-      return Alert.alert('알림', '인증번호를 전송했습니다.');
-    }
-    setEmailVerify(false);
-    return Alert.alert('알림', '인증번호를 전송하지 못했습니다.');
-  };
+  // 이름 input 변경 시 email에 저장 및 유효성 검사
+  const onChangeName = useCallback(
+    (text: string) => {
+      setName(text.trim());
+    },
+    [name],
+  );
 
-  // 비밀번호 찾기 버튼 클릭 시 유효성 검사
+  // 비밀번호 재설정 버튼 클릭 시 유효성 검사
   const onSubmit = useCallback(() => {
     if (!email || !email.trim()) {
       return Alert.alert('알림', '이메일을 입력해주세요.');
     }
-    if (!code || !code.trim()) {
-      return Alert.alert('알림', '인증번호를 입력해주세요.');
-    }
-    if (!password1 || !password1.trim()) {
-      return Alert.alert('알림', '비밀번호를 입력해주세요.');
-    }
-    if (!password2 || !password2.trim()) {
-      return Alert.alert('알림', '비밀번호를 입력해주세요.');
-    }
-    if (password1 !== password2) {
-      return Alert.alert('알림', '비밀번호가 일치하지 않습니다.');
+    if (!name || !name.trim()) {
+      return Alert.alert('알림', '이름을 입력해주세요.');
     }
     if (!checkEmail(email)) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
-    if (!emailVerify) {
-      return Alert.alert('알림', '이메일 인증이 되지 않았습니다.');
-    }
-    if (!checkPassword(password1)) {
-      return Alert.alert(
-        '알림',
-        '비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.',
-      );
-    }
-    return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
-  }, [
-    email,
-    code,
-    password1,
-    password2,
-    checkEmail,
-    emailVerify,
-    checkPassword,
-  ]);
+    // 비밀번호 찾기 요청
+    dispatch(findPassword({email, name}))
+      .then(res => {
+        // 이메일 연결 후 수정
+        Alert.alert(
+          '비밀번호 재설정',
+          `비밀번호 재설정을 요청했습니다. \n메일을 확인해주세요!`,
+        );
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert(
+          '비밀번호 재설정',
+          '비밀번호 재설정에 실패했습니다. 다시 시도해주세요',
+        );
+      });
+  }, [email, name, checkEmail, emailValid]);
 
-  const canGoNext =
-    email && code && password1 && password2 && emailValid && emailVerify; // 버튼 disabled 확인할 변수
+  const canGoNext = email && name && emailValid; // 버튼 disabled 확인할 변수
   return (
     <DismissKeyboardView>
       <View style={styles.inputGroup}>
-        <View style={styles.emailInputView}>
+        <View style={styles.inputView}>
           <TextInput
-            style={styles.emailInput}
+            style={styles.input}
             onChangeText={onChangeEmail}
             placeholder="이메일을 입력해주세요"
             placeholderTextColor="#666"
@@ -146,80 +109,34 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             returnKeyType="next"
             clearButtonMode="while-editing"
             ref={emailRef}
-            onSubmitEditing={() => codeRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-          <Pressable
-            onPress={sendCode}
-            style={
-              emailValid
-                ? StyleSheet.compose(styles.codeButton, styles.buttonActive)
-                : styles.codeButton
-            }
-            disabled={!emailValid}>
-            <Text style={styles.codeButtonText}>인증</Text>
-          </Pressable>
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeCode}
-            placeholder="인증번호를 입력해주세요"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            textContentType="none"
-            value={code}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={codeRef}
-            onSubmitEditing={() => password1Ref.current?.focus()}
+            onSubmitEditing={() => nameRef.current?.focus()}
             blurOnSubmit={false}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
             style={styles.input}
-            onChangeText={onChangePassword1}
-            placeholder="새 비밀번호를 입력해주세요"
+            onChangeText={onChangeName}
+            placeholder="이름을 입력해주세요"
             placeholderTextColor="#666"
             importantForAutofill="yes"
-            autoComplete="password"
-            textContentType="password"
-            secureTextEntry
-            value={password1}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={password1Ref}
-            onSubmitEditing={() => password2Ref.current?.focus()}
-            blurOnSubmit={false}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangePassword2}
-            placeholder="새 비밀번호를 다시 입력해주세요"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            autoComplete="password"
-            textContentType="password"
-            secureTextEntry
-            value={password2}
+            textContentType="name"
+            value={name}
             returnKeyType="send"
             clearButtonMode="while-editing"
-            ref={password2Ref}
+            ref={nameRef}
             onSubmitEditing={onSubmit}
             blurOnSubmit={false}
           />
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('FindId')}>
-            <Text>아이디 찾기</Text>
+            <AppText>아이디 찾기</AppText>
           </Pressable>
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('SignIn')}>
-            <Text>로그인</Text>
+            <AppText>로그인</AppText>
           </Pressable>
         </View>
         <View>
@@ -234,7 +151,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
                   )
                 : styles.findPasswordButton
             }>
-            <Text style={styles.buttonText}>비밀번호 재설정</Text>
+            <AppText style={styles.buttonText}>비밀번호 재설정</AppText>
           </Pressable>
         </View>
       </View>
@@ -247,31 +164,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginHorizontal: 20,
   },
-  emailInput: {
-    borderBottomWidth: 1,
-    width: 240,
-    color: 'black',
-  },
-  emailInputView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  codeButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-  },
-  codeButtonText: {
-    textAlign: 'center',
-    color: 'white',
-  },
   inputView: {
     marginVertical: 10,
   },
   input: {
     borderBottomWidth: 1,
-    color: 'black',
+    fontFamily: 'NanumBarunGothic',
   },
   findIdButton: {
     alignItems: 'flex-end',
@@ -281,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    borderRadius: 5,
+    borderRadius: 20,
     marginVertical: 10,
   },
   buttonActive: {

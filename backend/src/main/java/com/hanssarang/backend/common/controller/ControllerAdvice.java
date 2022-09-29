@@ -1,8 +1,11 @@
 package com.hanssarang.backend.common.controller;
 
 import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.BadRequestException;
+import com.hanssarang.backend.common.exception.CommonException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
+import com.hanssarang.backend.common.exception.WrongAccessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,9 +17,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(DuplicationException.class)
-    public Message DuplicationException(DuplicationException exception) {
-        log.info("DuplicationException: {}", exception.getMessage());
+    @ExceptionHandler({DuplicationException.class, BadRequestException.class})
+    public Message BadRequestException(CommonException exception) {
+        log.info("BadRequestException: {}", exception.getMessage());
+        return new Message(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(WrongAccessException.class)
+    public Message WrongAccessException(WrongAccessException exception) {
+        log.info("WrongAccessException: {}", exception.getMessage());
         return new Message(exception.getMessage());
     }
 

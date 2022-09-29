@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
+import {passwordChange} from '../../../slices/userSlice/user';
+import {useAppDispatch} from '../../../store';
 
 // navigation을 사용하기 위해 type 설정
 type PasswordChangeScreenProps = NativeStackScreenProps<
@@ -25,6 +27,8 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
   const passwordRef = useRef<TextInput | null>(null); // 기존 비밀번호 input의 값 가져오기
   const password1Ref = useRef<TextInput | null>(null); // 새 비밀번호 input의 값 가져오기
   const password2Ref = useRef<TextInput | null>(null); // 새 비밀번호 확인 input의 값 가져오기
+
+  const dispatch = useAppDispatch();
 
   // 비밀번호 input 변경 시 password에 저장
   const onChangePassword = useCallback((text: string) => {
@@ -75,8 +79,19 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
         '비밀번호는 영문,숫자,특수문자($@^!%*#?&)를 모두 포함하여 8자 이상 입력해야합니다.',
       );
     }
-    navigation.navigate('UserInfoChange');
-    return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
+
+    dispatch(passwordChange({password: password2}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          navigation.navigate('UserInfoChange');
+          return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
+        }
+        return Alert.alert('알림', '비밀번호 재설정에 실패하였습니다.');
+      })
+      .catch(err => {
+        console.log(err);
+        return Alert.alert('알림', '비밀번호 재설정에 실패하였습니다.');
+      });
   }, [password, password1, password2, checkPassword, navigation]);
 
   const canGoNext = password && password1 && password2; // 버튼 disabled 확인할 변수

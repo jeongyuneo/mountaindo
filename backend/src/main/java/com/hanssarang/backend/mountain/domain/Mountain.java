@@ -26,7 +26,6 @@ public class Mountain extends BaseEntity {
     @Embedded
     private Address address;
 
-    @Builder.Default
     @OneToMany(mappedBy = "mountain", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Trail> trails = new ArrayList<>();
 }

@@ -1,6 +1,13 @@
 // React
-import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -13,14 +20,55 @@ import {dummyEasy, dummyAge} from '../components/main/Dummy';
 import AgeMountain from '../components/main/AgeMountain';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
+import {useAppDispatch} from '../store';
+import {totalRanking} from '../slices/rankingSlice/ranking';
+import AppTextBold from '../components/AppTextBold';
+import AppText from '../components/AppText';
+
+// 랭킹의 타입 설정
+export type Rankings = {
+  imageUrl: any;
+  ranking: number;
+  nickname: string;
+  accumulatedHeight: number;
+};
 
 type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, 'Main'>;
 function Main({navigation}: MainInScreenProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
+  const [myRanking, setMyRanking] = useState<Rankings | null>(null); // 내 랭킹 정보를 저장할 변수
+
+  const dispatch = useAppDispatch();
 
   const goAllRank = () => {
     setIsModalVisible(!isModalVisible);
   };
+
+  // 화면을 처음 렌더링할 때 전체 랭킹리스트 요청
+  useEffect(() => {
+    dispatch(totalRanking(''))
+      // 요청 성공시 내 랭킹과 전체 랭킹 저장
+      .then(res => {
+        setMyRanking({
+          imageUrl: res.payload?.imageUrl,
+          ranking: res.payload?.ranking,
+          nickname: res.payload?.nickname,
+          accumulatedHeight: res.payload?.accumulatedHeight,
+        });
+        setRankingList(res.payload?.rankings);
+      })
+      .catch(err => {
+        console.log();
+      });
+  }, []);
+
+  // 만약 전체 랭킹과 내 랭킹의 정보가 아직 들어오지 않았다면 재렌더링
+  useEffect(() => {
+    if (!myRanking?.ranking || !rankingList || rankingList.length < 1) {
+      return;
+    }
+  }, [myRanking?.ranking, rankingList]);
 
   return (
     <View style={styles.containerMain}>
@@ -29,23 +77,29 @@ function Main({navigation}: MainInScreenProps) {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           goAllRank={goAllRank}
+          rankingList={rankingList}
+          myRanking={myRanking}
         />
         <View style={styles.photoContainer}>
           <Photo />
         </View>
 
         <View style={styles.suggestionContainer}>
-          <RankList goAllRank={goAllRank} />
+          <View style={styles.rankList}>
+            <RankList goAllRank={goAllRank} rankingList={rankingList} />
+          </View>
 
           <View>
             <View style={styles.mountainList}>
-              <Text style={styles.easyTitle}>쉬운 난이도의 등산 코스</Text>
+              <AppTextBold style={styles.easyTitle}>
+                쉬운 난이도의 등산 코스
+              </AppTextBold>
               <View style={styles.goList}>
-                <Text
-                  style={styles.mountainAll}
-                  onPress={() => navigation.navigate('MainDetail')}>
-                  전체 산 목록 보기
-                </Text>
+                <Pressable onPress={() => navigation.navigate('MainDetail')}>
+                  <AppText style={styles.mountainAll}>
+                    전체 산 목록 보기
+                  </AppText>
+                </Pressable>
                 <FontAwesomeIcon
                   icon={faAngleDown}
                   size={12}
@@ -57,7 +111,9 @@ function Main({navigation}: MainInScreenProps) {
           </View>
 
           <View>
-            <Text style={styles.easyTitle}>20대에게 인기있는 등산 코스</Text>
+            <AppTextBold style={styles.easyTitle}>
+              20대에게 인기있는 등산 코스
+            </AppTextBold>
             <AgeMountain dummyAge={dummyAge} />
           </View>
         </View>
@@ -71,6 +127,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginTop: 12,
     color: 'gray',
+    alignItems: 'flex-start',
   },
   angleDown: {
     marginTop: 3,
@@ -78,7 +135,6 @@ const styles = StyleSheet.create({
   },
   mountainAll: {
     fontSize: 12,
-    fontWeight: 'bold',
   },
   mountainList: {
     flexDirection: 'row',
@@ -92,13 +148,14 @@ const styles = StyleSheet.create({
   },
   suggestionContainer: {
     flex: 2,
+    marginHorizontal: 20,
   },
   easyTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: 'black',
     marginLeft: 3,
     paddingVertical: 10,
+  },
+  rankList: {
+    marginVertical: 10,
   },
 });
 

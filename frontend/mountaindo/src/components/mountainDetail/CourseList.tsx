@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import AppTextBold from '../AppTextBold';
 import CourseItem from './CourseItem';
 
 interface Props {
@@ -19,21 +20,27 @@ interface Props {
       imageSrc: any;
     }[];
   }[];
+  moveToCourseDetail: any;
 }
 
-function CourseList({CourseListDummy}: Props) {
+function CourseList({CourseListDummy, moveToCourseDetail}: Props) {
   return (
     <View style={styles.courseList}>
-      <Text style={styles.courseText}>코스 목록</Text>
+      <AppTextBold style={styles.courseText}>코스 목록</AppTextBold>
       <View style={styles.courseListWrapper}>
-        {CourseListDummy[0].trailList.map(item => (
-          <CourseItem
-            trail={item.trail}
-            level={item.level}
-            timeDuration={item.timeDuration}
-            imageSrc={item.imageSrc}
-          />
-        ))}
+        <ScrollView horizontal={true}>
+          {CourseListDummy[0].trailList.map(item => (
+            <CourseItem
+              id={item.id}
+              trail={item.trail}
+              level={item.level}
+              timeDuration={item.timeDuration}
+              totalDistance={item.totalDistance}
+              imageSrc={item.imageSrc}
+              moveToCourseDetail={moveToCourseDetail}
+            />
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -45,13 +52,10 @@ const styles = StyleSheet.create({
   },
   courseListWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     marginHorizontal: 20,
   },
   courseText: {
-    fontWeight: 'bold',
     fontSize: 20,
-    color: 'black',
     marginLeft: 20,
     marginTop: 20,
   },

@@ -1,5 +1,7 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 
 // TrailList에서 받아온 정보 타입 설정
 interface Props {
@@ -33,26 +35,26 @@ function TrailListItem({
       }}>
       <View style={styles.titleGroup}>
         <View>
-          <Text style={styles.title}>{trail}</Text>
+          <AppTextBold style={styles.title}>{trail}</AppTextBold>
         </View>
         <View>
-          <Text style={styles.date}>{visitedDate}</Text>
+          <AppText style={styles.date}>{visitedDate}</AppText>
         </View>
       </View>
       <View style={styles.item}>
         <View style={styles.labelGroup}>
-          <Text style={styles.label}>소요 시간</Text>
-          <Text style={styles.label}>난이도</Text>
-          <Text style={styles.label}>위치</Text>
+          <AppText style={styles.label}>소요 시간</AppText>
+          <AppText style={styles.label}>난이도</AppText>
+          <AppText style={styles.label}>위치</AppText>
         </View>
         <View style={styles.textGroup}>
-          <Text style={styles.text}>{timeDuration}</Text>
-          <Text style={styles.text}>{level}</Text>
-          <Text style={styles.text}>{location}</Text>
+          <AppText style={styles.text}>{timeDuration}</AppText>
+          <AppText style={styles.text}>{level}</AppText>
+          <AppText style={styles.text}>{location}</AppText>
         </View>
         <View>
           <Image
-            source={require('../../assets/gps-sample.png')}
+            source={require('../../assets/jjang.png')}
             style={styles.mountainImage}
           />
         </View>
@@ -64,6 +66,9 @@ function TrailListItem({
 const styles = StyleSheet.create({
   itemContainer: {
     marginVertical: 15,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
   },
   titleGroup: {
     flexDirection: 'row',
@@ -71,12 +76,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   title: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: '800',
+    fontSize: 15,
   },
   date: {
     marginLeft: 10,
+    fontSize: 10,
   },
   item: {
     flexDirection: 'row',
@@ -94,10 +98,11 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 5,
+    fontSize: 13,
   },
   text: {
     marginBottom: 5,
-    color: 'black',
+    fontSize: 13,
   },
 });
 

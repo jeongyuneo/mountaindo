@@ -2,6 +2,7 @@ package com.hanssarang.backend.mountain.domain;
 
 import com.hanssarang.backend.common.domain.BaseEntity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 
 @Getter
 @SuperBuilder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "trail_id"))
 @Entity
@@ -22,7 +24,7 @@ public class Trail extends BaseEntity {
     private String risk;
     private String imageUrl;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Level level;
 
     @Column(nullable = false)
