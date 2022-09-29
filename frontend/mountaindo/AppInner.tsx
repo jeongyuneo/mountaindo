@@ -46,6 +46,7 @@ import {
 import {faFlag} from '@fortawesome/free-regular-svg-icons';
 
 export type LoggedInParamList = {
+  Welcome: any;
   Survey1: any;
   Survey2: any;
   Survey3: any;
@@ -75,7 +76,6 @@ export type RootStackParamList = {
   SignIn: any;
   Agreement: any;
   SignUp: any;
-  Welcome: any;
   FindId: any;
   FindPassword: any;
 };
@@ -264,7 +264,12 @@ function AppInner() {
             </Stack.Group>
           </>
         ) : (
-          <Stack.Group>
+          <Stack.Group screenOptions={{headerShown: false}}>
+            <Stack.Screen
+              name="Welcome"
+              component={Welcome}
+              options={{title: '가입환영'}}
+            />
             <Stack.Screen
               name="Survey1"
               component={Survey1}
@@ -309,11 +314,6 @@ function AppInner() {
               name="SignUp"
               component={SignUp}
               options={{title: '회원가입'}}
-            />
-            <Stack.Screen
-              name="Welcome"
-              component={Welcome}
-              options={{title: '가입환영'}}
             />
           </Stack.Group>
           <Stack.Group>
