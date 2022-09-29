@@ -7,6 +7,7 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.survey.domain.SurveyRepository;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,7 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final SurveyRepository surveyRepository;
 
     public void checkEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
@@ -131,6 +133,7 @@ public class MemberService {
                 .memberId(member.getId())
                 .nickname(member.getNickname())
                 .imageUrl(member.getImageUrl())
+                .hasSurveyResult(surveyRepository.existsByMemberId(member.getId()))
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
     }
