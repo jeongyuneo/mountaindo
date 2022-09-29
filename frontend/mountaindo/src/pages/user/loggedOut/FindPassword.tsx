@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
+import AppText from '../../../components/AppText';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import {findPassword} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -130,12 +131,12 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('FindId')}>
-            <Text>아이디 찾기</Text>
+            <AppText>아이디 찾기</AppText>
           </Pressable>
         </View>
         <View style={styles.findIdButton}>
           <Pressable onPress={() => navigation.push('SignIn')}>
-            <Text>로그인</Text>
+            <AppText>로그인</AppText>
           </Pressable>
         </View>
         <View>
@@ -150,7 +151,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
                   )
                 : styles.findPasswordButton
             }>
-            <Text style={styles.buttonText}>비밀번호 재설정</Text>
+            <AppText style={styles.buttonText}>비밀번호 재설정</AppText>
           </Pressable>
         </View>
       </View>
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    color: 'black',
+    fontFamily: 'NanumBarunGothic',
   },
   findIdButton: {
     alignItems: 'flex-end',
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    borderRadius: 5,
+    borderRadius: 20,
     marginVertical: 10,
   },
   buttonActive: {

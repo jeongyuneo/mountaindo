@@ -159,6 +159,24 @@ export const signOut = createAsyncThunk(
   },
 );
 
+// 비밀번호 수정(마이페이지)
+export const passwordChange = createAsyncThunk(
+  'userSlice/passwordChange',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.patch(
+        '/api/v1/members/mypage/password',
+        {
+          password: args.password,
+        },
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -242,6 +260,12 @@ const userSlice = createSlice({
       })
       .addCase(signOut.rejected, (state, {payload}) => {
         console.log('signOut Rejected ==>', payload);
+      })
+      .addCase(passwordChange.fulfilled, (state, {payload}) => {
+        console.log('passwordChange Fulfilled ==> ', payload);
+      })
+      .addCase(passwordChange.rejected, (state, {payload}) => {
+        console.log('passwordChange Rejected ==>', payload);
       });
   },
 });

@@ -16,6 +16,8 @@ import TrackingRoute from '../../components/hiking/TrackingRoute';
 import {calDistance} from '../../utils';
 import Config from 'react-native-config';
 import axios from 'axios';
+import AppText from '../../components/AppText';
+import AppTextBold from '../../components/AppTextBold';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
@@ -25,8 +27,6 @@ function Hiking({navigation}: HikingScreenProps) {
     latitude: number;
     longitude: number;
   } | null>(null);
-  const [currentLocation, setCurrentLocation] = useState(0); // 내 위치 버튼 클릭 시 재렌더링을 위한 변수
-
   const [isTracking, setIsTracking] = useState(false); // 등산 기록 여부 확인 변수
   const [tracking, setTracking] = useState(true); // 등산 기록 중인지 확인하기 위한 변수
 
@@ -149,7 +149,7 @@ function Hiking({navigation}: HikingScreenProps) {
     } else {
       Geolocation.clearWatch(watchId);
     }
-  }, [myPosition, currentLocation, isTracking, tracking]);
+  }, [myPosition, isTracking, tracking]);
 
   // 처음 화면 렌더링될 때 위치 정보 받아오기
   useEffect(() => {
@@ -218,16 +218,16 @@ function Hiking({navigation}: HikingScreenProps) {
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
-          <Text>오늘의 날씨</Text>
-          <Text>오늘의 정보</Text>
-          <Text>산 정보</Text>
+          <AppText>오늘의 날씨</AppText>
+          <AppText>오늘의 정보</AppText>
+          <AppText>산 정보</AppText>
         </View>
         <View style={styles.textGroup}>
-          <Text>
+          <AppText>
             {currentTemp} {currentWeather}
-          </Text>
-          <Text>{today}</Text>
-          <Text>계룡산</Text>
+          </AppText>
+          <AppText>{today}</AppText>
+          <AppText>계룡산</AppText>
         </View>
       </View>
       <View style={styles.mapContainer}>
@@ -247,14 +247,7 @@ function Hiking({navigation}: HikingScreenProps) {
               },
             ]);
           }}>
-          <Text style={styles.buttonText}>등산 시작</Text>
-        </Pressable>
-      </View>
-      <View style={styles.myLocationButtonView}>
-        <Pressable
-          style={styles.myLocationtButton}
-          onPress={() => setCurrentLocation(curr => curr + 1)}>
-          <Text style={styles.buttonText}>내 위치</Text>
+          <AppTextBold style={styles.buttonText}>등산 시작</AppTextBold>
         </Pressable>
       </View>
     </View>
@@ -297,32 +290,21 @@ const styles = StyleSheet.create({
   },
   startButtonView: {
     position: 'absolute',
-    left: Dimensions.get('window').width / 2 - 100,
-    top: Dimensions.get('window').height - 150,
-  },
-  myLocationButtonView: {
-    position: 'absolute',
-    left: Dimensions.get('window').width - 70,
+    left: Dimensions.get('window').width / 2 - 120,
     top: Dimensions.get('window').height - 150,
   },
   startButton: {
-    backgroundColor: 'green',
-    width: 200,
+    width: 250,
     height: 50,
     borderRadius: 20,
-  },
-  myLocationtButton: {
-    backgroundColor: 'black',
-    width: 50,
-    height: 50,
-    borderRadius: 100,
+    justifyContent: 'center',
+    backgroundColor: '#75CFB8',
+    paddingVertical: 15,
   },
   buttonText: {
     color: 'white',
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 15,
-    paddingTop: 15,
   },
   scrollView: {
     flex: 1,

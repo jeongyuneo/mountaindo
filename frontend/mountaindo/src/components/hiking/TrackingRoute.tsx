@@ -1,7 +1,16 @@
 import {faPause, faStop} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {Alert, Dimensions, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 import StopWatch from './StopWatch';
 
 // moveToTrackingEnd: Hiking 페이지에서 받아오는 TrackingEnd 페이지 이동 함수
@@ -118,30 +127,30 @@ function TrackingRoute({
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
-          <Text>오늘의 날씨</Text>
-          <Text>오늘의 정보</Text>
-          <Text>산 정보</Text>
+          <AppText>오늘의 날씨</AppText>
+          <AppText>오늘의 정보</AppText>
+          <AppText>산 정보</AppText>
         </View>
         <View style={styles.textGroup}>
-          <Text>
+          <AppText>
             {currentTemp} {currentWeather}
-          </Text>
-          <Text>{today}</Text>
-          <Text>계룡산</Text>
+          </AppText>
+          <AppText>{today}</AppText>
+          <AppText>계룡산</AppText>
         </View>
       </View>
       <View style={styles.distanceContainer}>
-        <Text style={styles.distanceText}>{totalDist}</Text>
-        <Text style={styles.explainText}>km</Text>
+        <AppTextBold style={styles.distanceText}>{totalDist}</AppTextBold>
+        <AppText style={styles.explainText}>km</AppText>
       </View>
       <View style={styles.timeContainer}>
         <StopWatch formatTime={formatTime} />
       </View>
       <View style={styles.iconView}>
-        <Text onPress={stopTracking} onLongPress={endTracking}>
+        <Pressable onPress={stopTracking} onLongPress={endTracking}>
           <FontAwesomeIcon icon={!tracking ? faStop : faPause} size={60} />
-        </Text>
-        <Text>길게 눌러 종료하기</Text>
+        </Pressable>
+        <AppText>길게 눌러 종료하기</AppText>
       </View>
     </View>
   );
@@ -169,11 +178,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginLeft: 20,
+    marginTop: 30,
   },
   distanceText: {
-    fontWeight: 'bold',
     fontSize: 100,
-    color: 'black',
   },
   explainText: {
     fontSize: 20,
