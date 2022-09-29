@@ -52,17 +52,17 @@ public class HikingService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         Trail trail = trailRepository.findById(hikingRequest.getTrailId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_TRAIL));
-        String path = toLineStringForm(hikingRequest.getPath());
-        member.addHiking(Hiking.builder()
-                .member(member)
-                .trail(trail)
-                .distance(hikingRequest.getDistance())
-                .accumulatedHeight(hikingRequest.getAccumulatedHeight())
-                .useTime(hikingRequest.getUseTime())
-                .path(path)
-                .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
-                .isActive(true)
-                .build());
+        member.addHiking(
+                Hiking.builder()
+                        .trail(trail)
+                        .distance(hikingRequest.getDistance())
+                        .accumulatedHeight(hikingRequest.getAccumulatedHeight())
+                        .useTime(hikingRequest.getUseTime())
+                        .path(toLineStringForm(hikingRequest.getPath()))
+                        .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
+                        .isActive(true)
+                        .build()
+        );
         memberRepository.save(member);
     }
 
