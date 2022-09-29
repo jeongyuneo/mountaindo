@@ -24,7 +24,7 @@ public class SurveyService {
         Survey survey = Survey.builder()
                 .level(saveSurveyRequest.getLevel())
                 .preferredMountainLocation(saveSurveyRequest.getPreferredMountainLocation())
-                .preferredClimbingStyle(saveSurveyRequest.getPreferredClimbingStyle())
+                .preferredHikingStyle(saveSurveyRequest.getPreferredHikingStyle())
                 .preferredHikingTime(saveSurveyRequest.getPreferredHikingTime())
                 .member(member)
                 .build();

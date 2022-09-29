@@ -10,6 +10,6 @@ public class SaveSurveyRequest {
 
     private int level;
     private int preferredMountainLocation;
-    private int preferredClimbingStyle;
+    private int preferredHikingStyle;
     private int preferredHikingTime;
 }
