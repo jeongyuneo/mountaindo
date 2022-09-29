@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SaveSurveyRequest {
+public class CreateSurveyRequest {
 
     private int level;
     private int preferredMountainLocation;
