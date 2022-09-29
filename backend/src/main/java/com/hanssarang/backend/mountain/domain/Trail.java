@@ -25,7 +25,7 @@ public class Trail extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Level level;
 
-    @Column(nullable = false, columnDefinition = "geometry")
+    @Column(nullable = false)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
