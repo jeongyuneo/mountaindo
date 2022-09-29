@@ -52,4 +52,11 @@ public class Member extends BaseEntity {
                 .mapToDouble(Hiking::getAccumulatedHeight)
                 .sum();
     }
+
+    public int getAccumulatedHeightInMountain(int mountainId) {
+        return (int) hikings.stream()
+                .filter(hiking -> hiking.getTrail().getMountain().getId() == mountainId)
+                .mapToDouble(Hiking::getAccumulatedHeight)
+                .sum();
+    }
 }

@@ -24,13 +24,41 @@ public class RankingService {
 
     @Transactional(readOnly = true)
     public RankingListResponse getRankings(int memberId) {
+        List<Member> members = memberRepository.findAllByIsActiveTrue()
+                .stream()
+                .sorted(Comparator.comparing(Member::getAccumulatedHeight).reversed())
+                .collect(Collectors.toList());
+        int myRanking = getMyRanking(memberId, members);
+        Member member = members.get(myRanking - 1);
+        return getRankingListResponse(members, myRanking, member);
+    }
+
+    @Transactional(readOnly = true)
+    public RankingResponse searchRanking(String keyword) {
         List<Member> members = memberRepository.findAllByIsActiveTrue();
         members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
-        int myRanking = IntStream.rangeClosed(1, members.size())
-                .filter(ranking -> members.get(ranking - 1).getId() == memberId)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        return getRankingResponse(keyword, members);
+    }
+
+    @Transactional(readOnly = true)
+    public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
+        List<Member> members = memberRepository.findAllByIsActiveTrue()
+                .stream()
+                .sorted(Comparator.comparing((Member member) -> member.getAccumulatedHeightInMountain(mountainId)).reversed())
+                .collect(Collectors.toList());
+        int myRanking = getMyRanking(memberId, members);
         Member member = members.get(myRanking - 1);
+        return getRankingListResponse(members, myRanking, member);
+    }
+
+    @Transactional(readOnly = true)
+    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
+        List<Member> members = memberRepository.findAllByIsActiveTrue();
+        members.sort(Comparator.comparing((Member member) -> member.getAccumulatedHeightInMountain(mountainId)).reversed());
+        return getRankingResponse(keyword, members);
+    }
+
+    private RankingListResponse getRankingListResponse(List<Member> members, int myRanking, Member member) {
         return RankingListResponse.builder()
                 .imageUrl(member.getImageUrl())
                 .ranking(myRanking)
@@ -46,10 +74,7 @@ public class RankingService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public RankingResponse searchRanking(String keyword) {
-        List<Member> members = memberRepository.findAllByIsActiveTrue();
-        members.sort(Comparator.comparing(Member::getAccumulatedHeight).reversed());
+    private RankingResponse getRankingResponse(String keyword, List<Member> members) {
         for (int ranking = 1; ranking <= members.size(); ranking++) {
             Member member = members.get(ranking - 1);
             if (member.getNickname().equals(keyword)) {
@@ -64,11 +89,10 @@ public class RankingService {
         return RankingResponse.builder().build();
     }
 
-    public RankingListResponse getRankingsOfMountain(int memberId, int mountainId) {
-        return null;
-    }
-
-    public RankingResponse searchRankingOfMountain(int mountainId, String keyword) {
-        return null;
+    private int getMyRanking(int memberId, List<Member> members) {
+        return IntStream.rangeClosed(1, members.size())
+                .filter(ranking -> members.get(ranking - 1).getId() == memberId)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
     }
 }

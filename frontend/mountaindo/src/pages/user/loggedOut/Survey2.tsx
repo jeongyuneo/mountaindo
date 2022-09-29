@@ -3,11 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
-type Survey2ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey2'>;
+type Survey2ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey2'>;
 
 function Survey2({navigation}: Survey2ScreenProps) {
   const dispatch = useAppDispatch();
@@ -16,17 +16,17 @@ function Survey2({navigation}: Survey2ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
-  const setServey2 = () => {
+  const setSurvey2 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 2,
           visitedMountain: '없음',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 2,
           visitedMountain: '있음',
         }),
@@ -102,7 +102,7 @@ function Survey2({navigation}: Survey2ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey2();
+          setSurvey2();
           navigation.navigate('Survey3');
         }}>
         <FontAwesomeIcon

@@ -3,11 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
-type Survey3ScreenProps = NativeStackScreenProps<RootStackParamList, 'Survey3'>;
+type Survey3ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey3'>;
 
 function Survey3({navigation}: Survey3ScreenProps) {
   const dispatch = useAppDispatch();
@@ -16,17 +16,17 @@ function Survey3({navigation}: Survey3ScreenProps) {
   const [isChecked, setChecked] = useState(0);
   const canGoNext = isChecked1 || isChecked2;
 
-  const setServey3 = () => {
+  const setSurvey3 = () => {
     if (isChecked1) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 3,
           preferredMountainLocation: '전국',
         }),
       );
     } else if (isChecked2) {
       dispatch(
-        userSlice.actions.setServey({
+        userSlice.actions.setSurvey({
           number: 3,
           preferredMountainLocation: '내 주변',
         }),
@@ -114,7 +114,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
         onPress={() => {
-          setServey3();
+          setSurvey3();
           navigation.navigate('Survey4');
         }}>
         <FontAwesomeIcon
