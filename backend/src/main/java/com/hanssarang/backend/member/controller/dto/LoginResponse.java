@@ -11,6 +11,6 @@ public class LoginResponse {
     private int memberId;
     private String nickname;
     private String imageUrl;
-    private boolean hasSurveyResult;
+    private boolean isCompletedSurvey;
     private String token;
 }
