@@ -14,7 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
@@ -41,10 +44,10 @@ public class MountainService {
             mountains = mountainRepository.findAll(Sort.by(Sort.Direction.DESC, HEIGHT));
         } else if (sort.equals(LOW_HEIGHT)) {
             mountains = mountainRepository.findAll(Sort.by(Sort.Direction.ASC, HEIGHT));
-        } else if (sort.equals(POPULARITY)){
+        } else if (sort.equals(POPULARITY)) {
             mountains = mountainRepository.findAllPopularity(sort);
         }
-        return getMountainListResponses(mountains, mountainRepository.findIsHot());
+        return getMountainListResponses(mountains);
     }
 
     @Transactional(readOnly = true)
@@ -87,18 +90,18 @@ public class MountainService {
         Set<Mountain> mountains = new HashSet<>();
         mountains.addAll(mountainRepository.findByNameContaining(keyword));
         mountains.addAll(mountainRepository.findByTrailNameContaining(keyword));
-        return getMountainListResponses(mountains, mountainRepository.findIsHot());
+        return getMountainListResponses(mountains);
     }
 
     public List<MountainListResponse> searchMountain(String keyword) {
-        return getMountainListResponses(mountainRepository.findByNameContaining(keyword), mountainRepository.findIsHot());
+        return getMountainListResponses(mountainRepository.findByNameContaining(keyword));
     }
 
     public List<MountainListResponse> searchTrail(String keyword) {
-        return getMountainListResponses(mountainRepository.findByTrailNameContaining(keyword), mountainRepository.findIsHot());
+        return getMountainListResponses(mountainRepository.findByTrailNameContaining(keyword));
     }
 
-    private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains, List<Mountain> hotMountains) {
+    private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains) {
         return mountains.stream()
                 .map(mountain -> MountainListResponse.builder()
                         .mountainId(mountain.getId())
