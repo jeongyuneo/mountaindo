@@ -51,13 +51,12 @@ public class MountainService {
     public MountainResponse getMountain(int mountainId) {
         Mountain mountain = mountainRepository.findById(mountainId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MOUNTAIN));
-        List<Mountain> hotMountains = mountainRepository.findIsHot();
         return MountainResponse.builder()
                 .name(mountain.getName())
                 .height(mountain.getHeight())
                 .address(mountain.getAddress().getFullAddress())
                 .imageUrl(mountain.getImageUrl())
-                .isHot(isHotMountain(hotMountains, mountain.getId()))
+                .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                 .trails(mountain.getTrails()
                         .stream()
                         .map(trail -> TrailListResponse.builder()
