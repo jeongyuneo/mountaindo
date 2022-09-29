@@ -1,10 +1,17 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, Pressable, View} from 'react-native';
+import {StyleSheet, Pressable, View} from 'react-native';
+import {Rankings} from '../../pages/Main';
+import AppTextBold from '../AppTextBold';
 import RankingListDummy from './RankingListDummy';
 import RankingListItem from './RankingListItem';
 import RankingListModal from './RankingListModal';
 
-function CourseList() {
+interface Props {
+  rankingList: any;
+  myRanking: any;
+}
+
+function CourseList({rankingList, myRanking}: Props) {
   const [visibleModal, setVisibleModal] = useState(false);
 
   return (
@@ -12,21 +19,26 @@ function CourseList() {
       <Pressable
         style={styles.rankingListWrapper}
         onPress={() => setVisibleModal(true)}>
-        <Text style={styles.rankingTitle}>
+        <AppTextBold style={styles.rankingTitle}>
           {RankingListDummy[0].mountain} 랭킹
-        </Text>
-        {RankingListDummy[0].rankingList.map(item => (
-          <RankingListItem
-            id={item.id}
-            imageSrc={item.imageSrc}
-            userName={item.userName}
-            totalDistance={item.totalDistance}
-          />
-        ))}
+        </AppTextBold>
+        {rankingList?.length > 0 &&
+          rankingList.map((item: Rankings, index: number) =>
+            index < 3 ? (
+              <RankingListItem
+                key={index}
+                ranking={item.ranking}
+                imageUrl={item.imageUrl}
+                nickname={item.nickname}
+                accumulatedHeight={item.accumulatedHeight}
+              />
+            ) : null,
+          )}
       </Pressable>
       {visibleModal && (
         <RankingListModal
-          RankingListDummy={RankingListDummy}
+          rankingList={rankingList}
+          myRanking={myRanking}
           visibleModal={visibleModal}
           setVisibleModal={setVisibleModal}
         />
