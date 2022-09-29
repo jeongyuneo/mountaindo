@@ -7,6 +7,8 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
+import com.hanssarang.backend.survey.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -64,9 +66,9 @@ public class MemberService {
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
         Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(
-                findingEmailRequest.getName(),
-                findingEmailRequest.getBirth(),
-                findingEmailRequest.getPhone())
+                        findingEmailRequest.getName(),
+                        findingEmailRequest.getBirth(),
+                        findingEmailRequest.getPhone())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
         return EmailResponse.builder()
                 .email(member.getEmail())
@@ -131,6 +133,7 @@ public class MemberService {
                 .memberId(member.getId())
                 .nickname(member.getNickname())
                 .imageUrl(member.getImageUrl())
+                .isCompletedSurvey(member.isCompletedSurvey())
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
     }
@@ -141,5 +144,19 @@ public class MemberService {
             stringBuilder.append(CHAR_SET[(int) (CHAR_SET.length * Math.random())]);
         }
         return stringBuilder.toString();
+    }
+
+    public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Survey survey = Survey.builder()
+                .level(createSurveyRequest.getLevel())
+                .preferredMountainLocation(createSurveyRequest.getPreferredMountainLocation())
+                .preferredHikingStyle(createSurveyRequest.getPreferredHikingStyle())
+                .preferredHikingTime(createSurveyRequest.getPreferredHikingTime())
+                .isActive(true)
+                .build();
+        member.submit(survey);
+        memberRepository.save(member);
     }
 }
