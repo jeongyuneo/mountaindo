@@ -45,6 +45,7 @@ import {
 import {faFlag} from '@fortawesome/free-regular-svg-icons';
 
 export type LoggedInParamList = {
+  Welcome: any;
   Survey1: any;
   Survey2: any;
   Survey3: any;
@@ -73,7 +74,6 @@ export type RootStackParamList = {
   SignIn: any;
   Agreement: any;
   SignUp: any;
-  Welcome: any;
   FindId: any;
   FindPassword: any;
 };
