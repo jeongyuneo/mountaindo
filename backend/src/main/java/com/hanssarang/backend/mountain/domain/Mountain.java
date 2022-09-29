@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@EqualsAndHashCode
 @SuperBuilder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "mountain_id"))
-@EqualsAndHashCode
 @Entity
 public class Mountain extends BaseEntity {
 
