@@ -1,5 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 
 interface Props {
   dummyAge: {
@@ -17,9 +19,11 @@ function AgeMountain({dummyAge}: Props) {
       <ScrollView horizontal={true}>
         {dummyAge.map(item => (
           <View key={item.id}>
-            <Text style={styles.mountainCourse}>{item.course}</Text>
+            <AppTextBold style={styles.mountainCourse}>
+              {item.course}
+            </AppTextBold>
             <Image source={item.profile} style={styles.imgStyle} />
-            <Text style={styles.mountainTitle}>{item.name}</Text>
+            <AppText style={styles.mountainTitle}>{item.name}</AppText>
           </View>
         ))}
       </ScrollView>
@@ -29,15 +33,11 @@ function AgeMountain({dummyAge}: Props) {
 
 const styles = StyleSheet.create({
   mountainCourse: {
-    fontWeight: 'bold',
     fontSize: 12,
-    color: 'black',
     marginLeft: 8,
   },
   mountainTitle: {
-    fontWeight: 'bold',
-    fontSize: 11,
-    color: 'black',
+    fontSize: 10,
     marginLeft: 5,
     marginBottom: 7,
   },
