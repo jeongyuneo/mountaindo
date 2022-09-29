@@ -4,6 +4,7 @@ import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
 import com.hanssarang.backend.hiking.service.HikingService;
+import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +21,24 @@ public class HikingController {
     @GetMapping
     public ResponseEntity<List<HikingListResponse>> getHikings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok()
-                .body(hikingService.getHikings(1));
+                .body(hikingService.getHikings(JwtUtil.getMemberId(token)));
     }
 
     @GetMapping("/1/{hikingId}")
     public ResponseEntity<HikingResponse> getHiking(@RequestHeader("Authorization") String token, @PathVariable int hikingId) {
         return ResponseEntity.ok()
-                .body(hikingService.getHiking(1));
+                .body(hikingService.getHiking(JwtUtil.getMemberId(token)));
     }
 
     @GetMapping("/2")
     public ResponseEntity<List<HikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok()
-                .body(hikingService.getCompletedHikings(1));
+                .body(hikingService.getCompletedHikings(JwtUtil.getMemberId(token)));
     }
 
     @PostMapping
     public ResponseEntity<Void> createHiking(@RequestHeader("Authorization") String token, @RequestBody HikingRequest hikingRequest) {
-        hikingService.createHiking(1, hikingRequest);
+        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest);
         return ResponseEntity.ok().build();
     }
 }
