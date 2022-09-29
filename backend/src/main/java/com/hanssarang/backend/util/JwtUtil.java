@@ -7,13 +7,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Component
 public class JwtUtil {
 
     private static final String JWT_HEADER = "Authorization";
