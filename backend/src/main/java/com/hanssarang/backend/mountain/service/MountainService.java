@@ -98,12 +98,16 @@ public class MountainService {
         return getMountainListResponses(mountainRepository.findByTrailNameContaining(keyword), mountainRepository.findIsHot());
     }
 
-    public boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
-        for (Mountain mountain : hotMountains) {
-            if (mountain.getId() == mountainId) {
-                return true;
-            }
-        }
-        return false;
+    private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains, List<Mountain> hotMountains) {
+        return mountains.stream()
+                .map(mountain -> MountainListResponse.builder()
+                        .mountainId(mountain.getId())
+                        .name(mountain.getName())
+                        .height(mountain.getHeight())
+                        .address(mountain.getAddress().getFullAddress())
+                        .imageUrl(mountain.getImageUrl())
+                        .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
+                        .build())
+                .collect(Collectors.toList());
     }
 }
