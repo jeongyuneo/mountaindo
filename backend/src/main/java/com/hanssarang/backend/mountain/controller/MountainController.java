@@ -21,31 +21,37 @@ public class MountainController {
 
     @GetMapping
     public ResponseEntity<List<MountainListResponse>> getMountains(@RequestHeader("Authorization") String token, @RequestParam String sort) {
-        return ResponseEntity.ok().body(mountainService.getMountains(sort));
+        return ResponseEntity.ok()
+                .body(mountainService.getMountains(sort));
     }
 
     @GetMapping("/{mountainId}")
     public ResponseEntity<MountainResponse> getMountain(@RequestHeader("Authorization") String token, @PathVariable int mountainId) {
-        return ResponseEntity.ok().body(mountainService.getMountain(mountainId));
+        return ResponseEntity.ok()
+                .body(mountainService.getMountain(mountainId));
     }
 
     @GetMapping("/trail/{trailId}")
     public ResponseEntity<TrailResponse> getTrail(@RequestHeader("Authorization") String token, @PathVariable int trailId) {
-        return ResponseEntity.ok().body(mountainService.getTrail(trailId));
+        return ResponseEntity.ok()
+                .body(mountainService.getTrail(trailId));
     }
 
     @GetMapping("/search/1")
     public ResponseEntity<List<MountainListResponse>> searchMountainOrTrail(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
-        return ResponseEntity.ok().body(mountainService.searchMountainOrTrail(keyword));
+        return ResponseEntity.ok()
+                .body(mountainService.searchMountainOrTrail(keyword));
     }
 
     @GetMapping("/search/2")
     public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
-        return ResponseEntity.ok().body(mountainService.searchMountain(keyword));
+        return ResponseEntity.ok()
+                .body(mountainService.searchMountain(keyword));
     }
 
     @GetMapping("/search/3")
     public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader("Authorization") String token, @RequestParam String keyword) {
-        return ResponseEntity.ok().body(mountainService.searchTrail(keyword));
+        return ResponseEntity.ok()
+                .body(mountainService.searchTrail(keyword));
     }
 }
