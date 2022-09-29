@@ -9,22 +9,22 @@ import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class HikingServiceTest {
 
-    private static final String PATH = "LINESTRING (10.0 20.0, 20.0 40.0, 30.0 60.0)";
+    private static final String LINESTRING_PATH = "LINESTRING (10.0 20.0, 20.0 40.0, 30.0 60.0)";
+    private static final String MULTILINESTRING_PATH = "MULTILINESTRING ((10.0 20.0, 20.0 40.0, 30.0 10.0), (10.0 20.0, 20.0 40.0, 30.0 5.0))";
 
     @Autowired
     private HikingService hikingService;
@@ -40,7 +40,8 @@ class HikingServiceTest {
 
     private Member giyoon;
     private Mountain mountain;
-    private Trail trail;
+    private Trail trail1;
+    private Trail trail2;
 
     @BeforeEach
     void setUp() {
@@ -58,15 +59,24 @@ class HikingServiceTest {
                 .build();
         mountainRepository.save(mountain);
 
-        trail = Trail.builder()
-                .name("A코스")
+        trail1 = Trail.builder()
                 .mountain(mountain)
+                .name("A코스")
+                .path(LINESTRING_PATH)
                 .isActive(true)
                 .build();
-        trailRepository.save(trail);
+        trail2 = Trail.builder()
+                .mountain(mountain)
+                .name("B코스")
+                .path(MULTILINESTRING_PATH)
+                .isActive(true)
+                .build();
+        trailRepository.save(trail1);
+        trailRepository.save(trail2);
     }
 
     @Transactional
+    @DisplayName("등산 기록 저장 성공 - LINESTRING 코스")
     @Test
     void createHiking() {
         // given
@@ -74,16 +84,40 @@ class HikingServiceTest {
                 .trailId(1)
                 .accumulatedHeight(100.0)
                 .distance(5000.0)
-                .endPoint(PathResponse.builder().latitude(10.0).longitude(20.0).build())
+                .endPoint(PathResponse.builder().latitude(30.0).longitude(60.0).build())
                 .path(IntStream.range(1, 4)
                         .mapToObj(n -> PathResponse.builder().latitude(10.0 * n).longitude(20.0 * n).build())
                         .collect(Collectors.toList()))
                 .build();
         // when
         hikingService.createHiking(1, hikingRequest);
-        Member member = memberRepository.findById(1)
+        Member savedMember = memberRepository.findById(1)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         // then
-        assertEquals(PATH, member.getHikings().get(0).getPath());
+        assertEquals(LINESTRING_PATH, savedMember.getHikings().get(0).getPath());
+        assertTrue(savedMember.getHikings().get(0).isCompleted());
+    }
+
+    @Transactional
+    @DisplayName("등산 기록 저장 - MULTILINESTRING 코스")
+    @Test
+    void createHikingInMultiLineString() {
+        // given
+        HikingRequest hikingRequest = HikingRequest.builder()
+                .trailId(4)
+                .accumulatedHeight(100.0)
+                .distance(5000.0)
+                .endPoint(PathResponse.builder().latitude(30.0).longitude(30.0).build())
+                .path(IntStream.range(1, 4)
+                        .mapToObj(n -> PathResponse.builder().latitude(10.0 * n).longitude(20.0 * n).build())
+                        .collect(Collectors.toList()))
+                .build();
+        // when
+        hikingService.createHiking(2, hikingRequest);
+        Member savedMember = memberRepository.findById(2)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        // then
+        assertEquals(LINESTRING_PATH, savedMember.getHikings().get(0).getPath());
+        assertFalse(savedMember.getHikings().get(0).isCompleted());
     }
 }
