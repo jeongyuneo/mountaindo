@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    // color: 'black',
     backgroundColor: 'white',
     height: 60,
     borderRadius: 30,
