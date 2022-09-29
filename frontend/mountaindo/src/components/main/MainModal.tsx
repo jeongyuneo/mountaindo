@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
   Modal,
   StyleSheet,
   Pressable,
@@ -15,6 +14,8 @@ import DismissKeyboardView from '../DismissKeyboardView';
 import {Rankings} from '../../pages/Main';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
+import {useAppDispatch} from '../../store';
+import {totalRankingSearch} from '../../slices/rankingSlice/ranking';
 
 interface Props {
   isModalVisible: any;
@@ -31,11 +32,20 @@ function MainModal({
   rankingList,
   myRanking,
 }: Props) {
-  let allNum = 1;
-  let mynum = 1;
+  const [search, setSearch] = useState('');
 
-  const searchData = (text: any) => {
-    console.log(text);
+  const dispatch = useAppDispatch();
+
+  const onSearch = () => {
+    dispatch(totalRankingSearch({keyword: search}))
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const onChangeSearchInput = (text: any) => {
+    setSearch(text.trim());
   };
 
   return (
@@ -50,51 +60,64 @@ function MainModal({
             setIsModalVisible(!isModalVisible);
           }}>
           <View style={styles.mainFlex}>
-            <View style={styles.modalHeader}>
-              <AppTextBold style={styles.modalTitle}>
-                MountainDo 전체랭킹
-              </AppTextBold>
-              <Pressable onPress={goAllRank}>
-                <AppTextBold style={styles.closeModal}>X</AppTextBold>
-              </Pressable>
-            </View>
-            <View style={styles.findInput}>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                size={15}
-                style={styles.magnify}
-              />
-              <TextInput
-                placeholder="사용자 검색"
-                style={styles.find}
-                onChangeText={text => searchData(text)}
-              />
-            </View>
-            <View>
-              <AppTextBold style={styles.myRankTitle}>내 랭킹</AppTextBold>
-            </View>
-            <View>
-              <View style={styles.myRank}>
-                <View style={styles.styleRow}>
-                  <AppTextBold style={styles.rankNum}>
-                    {myRanking?.ranking}
-                  </AppTextBold>
-                  <Image source={myRanking?.imageUrl} style={styles.imgStyle} />
-                  <AppTextBold style={styles.nameStyle}>
-                    {myRanking?.nickname}
-                  </AppTextBold>
-                  <Text style={styles.namePix}>님</Text>
-                </View>
-                <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
-              </View>
-            </View>
-
-            <View>
-              <AppTextBold style={styles.userTitle}>
-                사용자 전체랭킹
-              </AppTextBold>
-            </View>
             <ScrollView>
+              <View style={styles.modalHeader}>
+                <AppTextBold style={styles.modalTitle}>
+                  MountainDo 전체랭킹
+                </AppTextBold>
+                <Pressable onPress={goAllRank}>
+                  <AppTextBold style={styles.closeModal}>X</AppTextBold>
+                </Pressable>
+              </View>
+              <View style={styles.findInput}>
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  size={15}
+                  style={styles.magnify}
+                />
+                <TextInput
+                  style={styles.find}
+                  onChangeText={onChangeSearchInput}
+                  placeholder="사용자 검색"
+                  placeholderTextColor="#666"
+                  importantForAutofill="yes"
+                  autoComplete="name"
+                  textContentType="name"
+                  value={search}
+                  returnKeyType="send"
+                  clearButtonMode="while-editing"
+                  onSubmitEditing={onSearch}
+                  blurOnSubmit={false}
+                />
+              </View>
+              <View>
+                <AppTextBold style={styles.myRankTitle}>내 랭킹</AppTextBold>
+              </View>
+              <View>
+                <View style={styles.myRank}>
+                  <View style={styles.styleRow}>
+                    <AppTextBold style={styles.rankNum}>
+                      {myRanking?.ranking}
+                    </AppTextBold>
+                    <Image
+                      source={myRanking?.imageUrl}
+                      style={styles.imgStyle}
+                    />
+                    <AppTextBold style={styles.nameStyle}>
+                      {myRanking?.nickname}
+                    </AppTextBold>
+                    <AppText style={styles.namePix}>님</AppText>
+                  </View>
+                  <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
+                </View>
+              </View>
+
+              <View>
+                <AppTextBold style={styles.userTitle}>
+                  사용자 전체랭킹
+                </AppTextBold>
+              </View>
+
               {rankingList?.length > 0 &&
                 rankingList.map((item: Rankings) => (
                   <View>

@@ -1,22 +1,28 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
+import AppTextBold from '../AppTextBold';
 
 interface Props {
-  id: number;
-  imageSrc: any;
-  userName: string;
-  totalDistance: number;
+  ranking: number;
+  imageUrl: any;
+  nickname: string;
+  accumulatedHeight: number;
 }
 
-function RestaurantItem({id, imageSrc, userName, totalDistance}: Props) {
+function RestaurantItem({
+  ranking,
+  imageUrl,
+  nickname,
+  accumulatedHeight,
+}: Props) {
   return (
     <View style={styles.itemWrapper}>
       <View style={styles.userInfoWrapper}>
-        <Text style={styles.userInfoText}>{id}</Text>
-        <Image source={imageSrc} style={styles.imageSrc} />
-        <Text style={styles.userInfoText}>{userName}님</Text>
+        <AppTextBold style={styles.userInfoText}>{ranking}</AppTextBold>
+        <Image source={imageUrl} style={styles.imageSrc} />
+        <AppTextBold style={styles.userInfoText}>{nickname}님</AppTextBold>
       </View>
-      <Text style={styles.distanceText}>{totalDistance}m</Text>
+      <AppTextBold>{accumulatedHeight}m</AppTextBold>
     </View>
   );
 }
@@ -32,8 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   userInfoText: {
-    color: 'black',
-    fontWeight: 'bold',
     fontSize: 12,
     marginHorizontal: 10,
   },
@@ -41,10 +45,6 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 50,
-  },
-  distanceText: {
-    color: 'black',
-    fontWeight: 'bold',
   },
 });
 export default RestaurantItem;

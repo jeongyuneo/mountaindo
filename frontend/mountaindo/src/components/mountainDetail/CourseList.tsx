@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
+import AppTextBold from '../AppTextBold';
 import CourseItem from './CourseItem';
 
 interface Props {
@@ -25,7 +26,7 @@ interface Props {
 function CourseList({CourseListDummy, moveToCourseDetail}: Props) {
   return (
     <View style={styles.courseList}>
-      <Text style={styles.courseText}>코스 목록</Text>
+      <AppTextBold style={styles.courseText}>코스 목록</AppTextBold>
       <View style={styles.courseListWrapper}>
         <ScrollView horizontal={true}>
           {CourseListDummy[0].trailList.map(item => (
@@ -54,9 +55,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   courseText: {
-    fontWeight: 'bold',
     fontSize: 20,
-    color: 'black',
     marginLeft: 20,
     marginTop: 20,
   },
