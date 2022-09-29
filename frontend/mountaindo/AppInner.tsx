@@ -36,6 +36,14 @@ import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
 import {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faHome,
+  faMountain,
+  faPersonHiking,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
+import {faFlag} from '@fortawesome/free-regular-svg-icons';
 
 export type LoggedInParamList = {
   Survey1: any;
@@ -94,27 +102,83 @@ function TopTab() {
 }
 function BottomTab() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Main" component={Main} options={{headerShown: false}} />
+    <Tab.Navigator
+      screenOptions={{
+        tabBarInactiveTintColor: 'black',
+        tabBarActiveTintColor: 'black',
+        tabBarStyle: {
+          position: 'absolute',
+        },
+      }}>
+      <Tab.Screen
+        name="Main"
+        component={Main}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faHome}
+              size={20}
+              color={focused ? '#7FB77E' : 'black'}
+            />
+          ),
+        }}
+      />
       <Tab.Screen
         name="Hiking"
         component={Hiking}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faPersonHiking}
+              size={20}
+              color={focused ? '#7FB77E' : 'black'}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="Mountain"
         component={Mountain}
-        options={{title: 'Mountain'}}
+        options={{
+          title: 'Mountain',
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faMountain}
+              size={20}
+              color={focused ? '#7FB77E' : 'black'}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="CompletedMountain"
         component={TopTab}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faFlag}
+              size={20}
+              color={focused ? '#7FB77E' : 'black'}
+            />
+          ),
+        }}
       />
       <Tab.Screen
         name="MyPage"
         component={MyPage}
-        options={{headerShown: false}} // Header 제거
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <FontAwesomeIcon
+              icon={faUser}
+              size={20}
+              color={focused ? '#7FB77E' : 'black'}
+            />
+          ),
+        }} // Header 제거
       />
     </Tab.Navigator>
   );
