@@ -95,20 +95,7 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchTrail(String keyword) {
-        List<Mountain> mountains = mountainRepository.findByTrailNameContaining(keyword);
-        List<Mountain> hotMountains = mountainRepository.findIsHot();
-        List<MountainListResponse> mountainListResponses = new ArrayList<>();
-        for (Mountain mountain : mountains) {
-            mountainListResponses.add(MountainListResponse.builder()
-                    .mountainId(mountain.getId())
-                    .name(mountain.getName())
-                    .height(mountain.getHeight())
-                    .address(mountain.getAddress().getFullAddress())
-                    .imageUrl(mountain.getImageUrl())
-                    .isHot(isHotMountain(hotMountains, mountain.getId()))
-                    .build());
-        }
-        return mountainListResponses;
+        return getMountainListResponses(mountainRepository.findByTrailNameContaining(keyword), mountainRepository.findIsHot());
     }
 
     public boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
