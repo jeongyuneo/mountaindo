@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 import {LoggedInParamList} from '../../../AppInner';
+import AppText from '../../components/AppText';
+import AppTextBold from '../../components/AppTextBold';
 import CompletedMountainModal from '../../components/completed/CompletedMountainModal';
 import TrailList from '../../components/completed/TrailList';
 
@@ -35,8 +37,8 @@ function VisitedDetail({route}: VisitedDetailScreenProps) {
       />
       <View style={styles.container}>
         <View>
-          <Text style={styles.title}>{mountain}</Text>
-          <Text style={styles.content}>{location}</Text>
+          <AppTextBold style={styles.title}>{mountain}</AppTextBold>
+          <AppText style={styles.content}>{location}</AppText>
         </View>
         <TrailList
           trails={trails}
@@ -61,15 +63,15 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
   },
   container: {
-    marginVertical: 5,
+    marginVertical: 20,
     marginHorizontal: 10,
   },
   title: {
-    fontWeight: 'bold',
     fontSize: 25,
+    marginBottom: 10,
   },
   content: {
-    fontSize: 15,
+    fontSize: 13,
   },
 });
 export default VisitedDetail;

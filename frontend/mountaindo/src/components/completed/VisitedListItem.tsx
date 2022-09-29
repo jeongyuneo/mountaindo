@@ -1,5 +1,7 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 import {TrailType} from './VisitedList';
 
 // VisitedList에서 받아온 정보 타입 설정
@@ -24,8 +26,8 @@ function VisitedListItem({
         moveToVisitedDetail(trailList, mountain, location);
       }}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{mountain}</Text>
-        <Text style={styles.content}>{location}</Text>
+        <AppTextBold style={styles.title}>{mountain}</AppTextBold>
+        <AppText style={styles.content}>{location}</AppText>
       </View>
       <View>
         <Image
@@ -43,17 +45,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 15,
     marginHorizontal: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
   },
   textContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
   title: {
-    fontWeight: 'bold',
     fontSize: 25,
   },
   content: {
-    fontSize: 15,
+    fontSize: 13,
   },
   mountainImg: {
     width: 80,

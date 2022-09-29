@@ -65,7 +65,7 @@ function Map({
             height={15}
             anchor={{x: 0.5, y: 0.5}}
             caption={{text: pos.mountain}}>
-            <FontAwesomeIcon icon={faFlag} size={25} color={'blue'} />
+            <FontAwesomeIcon icon={faFlag} size={25} color={'#7FB77E'} />
           </Marker>
         ))}
     </NaverMapView>
