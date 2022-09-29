@@ -18,6 +18,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faDownload} from '@fortawesome/free-solid-svg-icons';
 
 import KakaoShareLink from 'react-native-kakao-share-link';
+import AppText from '../../components/AppText';
+import AppTextBold from '../../components/AppTextBold';
 
 type TrackingEndScreenProps = NativeStackScreenProps<
   LoggedInParamList,
@@ -133,12 +135,10 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
     }
   };
 
-  console.log(route.params?.isTracking);
-
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.titleText}>등산 종료</Text>
+        <AppTextBold style={styles.titleText}>등산 종료</AppTextBold>
       </View>
       <View>
         <ViewShot
@@ -150,7 +150,7 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
       </View>
       <View style={styles.shareGroup}>
         <Pressable onPress={kakaoShare} style={styles.shareButton}>
-          <Text>카카오톡 공유하기</Text>
+          <AppText>카카오톡 공유하기</AppText>
         </Pressable>
         <Pressable onPress={() => onCapture(null)} style={styles.shareButton}>
           <FontAwesomeIcon icon={faShareFromSquare} size={15} />
@@ -161,25 +161,25 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
       </View>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
-          <Text style={styles.text}>일시</Text>
-          <Text style={styles.text}>장소</Text>
-          <Text style={styles.text}>소요시간</Text>
-          <Text style={styles.text}>총 거리</Text>
-          <Text style={styles.text}>총 고도</Text>
+          <AppText style={styles.text}>일시</AppText>
+          <AppText style={styles.text}>장소</AppText>
+          <AppText style={styles.text}>소요시간</AppText>
+          <AppText style={styles.text}>총 거리</AppText>
+          <AppText style={styles.text}>총 고도</AppText>
         </View>
         <View style={styles.textGroup}>
-          <Text style={styles.text}>{today}</Text>
-          <Text style={styles.text}>대전광역시 계룡산</Text>
-          <Text style={styles.text}>{timer}</Text>
-          <Text style={styles.text}>{totalDist} km</Text>
-          <Text style={styles.text}>{totalHigh} m</Text>
+          <AppText style={styles.text}>{today}</AppText>
+          <AppText style={styles.text}>대전광역시 계룡산</AppText>
+          <AppText style={styles.text}>{timer}</AppText>
+          <AppText style={styles.text}>{totalDist} km</AppText>
+          <AppText style={styles.text}>{totalHigh} m</AppText>
         </View>
       </View>
       <View style={styles.moveButton}>
         <Pressable
           onPress={() => navigation.navigate('Main')}
           style={styles.button}>
-          <Text style={styles.buttonText}>메인페이지로 이동</Text>
+          <AppText style={styles.buttonText}>메인페이지로 이동</AppText>
         </Pressable>
       </View>
     </View>
@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   titleText: {
-    fontWeight: 'bold',
     fontSize: 20,
   },
   image: {
@@ -219,17 +218,18 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   text: {
-    fontWeight: '700',
-    fontSize: 15,
+    fontSize: 13,
+    margin: 5,
   },
   moveButton: {
     alignItems: 'center',
   },
   button: {
-    backgroundColor: 'grey',
-    width: 200,
-    paddingVertical: 10,
-    borderRadius: 10,
+    backgroundColor: '#FFC478',
+    width: 300,
+    paddingVertical: 15,
+    borderRadius: 20,
+    marginTop: 10,
   },
   buttonText: {
     color: 'white',
