@@ -110,4 +110,9 @@ public class MountainService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    private boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
+        return hotMountains.stream()
+                .anyMatch(mountain -> mountain.getId() == mountainId);
+    }
 }
