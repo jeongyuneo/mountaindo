@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/survey")
+@RequestMapping("/api/v1/surveys")
 public class SurveyController {
 
     private final MemberService memberService;
