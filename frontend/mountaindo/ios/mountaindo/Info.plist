@@ -65,5 +65,13 @@
 	<false/>
 	<key>NMFClientId</key>
 	<string>@string/NAVER_MAP_KEY</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>NotoSansKR-Regular.otf</string>
+		<string>NanumBarunGothic.otf</string>
+		<string>NanumBarunGothicLight.otf</string>
+		<string>NanumPenScript-Regular.ttf</string>
+		<string>NanumBarunGothicBold.otf</string>
+	</array>
 </dict>
 </plist>
