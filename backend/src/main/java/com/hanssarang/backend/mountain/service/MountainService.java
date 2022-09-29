@@ -6,18 +6,15 @@ import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
 import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
 import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
 import com.hanssarang.backend.mountain.domain.Mountain;
+import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
-import com.hanssarang.backend.mountain.repository.MountainRepository;
-import com.hanssarang.backend.mountain.repository.TrailRepository;
+import com.hanssarang.backend.mountain.domain.TrailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
@@ -38,8 +35,6 @@ public class MountainService {
 
     public List<MountainListResponse> getMountains(String sort) {
         List<Mountain> mountains = null;
-        List<MountainListResponse> mountainListResponses = new ArrayList<>();
-        List<Mountain> hotMountains = mountainRepository.findIsHot();
         if (sort.equals(NAME)) {
             mountains = mountainRepository.findAll(Sort.by(Sort.Direction.ASC, NAME));
         } else if (sort.equals(HIGH_HEIGHT)) {
@@ -49,17 +44,7 @@ public class MountainService {
         } else if (sort.equals(POPULARITY)){
             mountains = mountainRepository.findAllPopularity(sort);
         }
-        for (Mountain mountain : mountains) {
-            mountainListResponses.add(MountainListResponse.builder()
-                    .mountainId(mountain.getId())
-                    .name(mountain.getName())
-                    .height(mountain.getHeight())
-                    .address(mountain.getAddress().getFullAddress())
-                    .imageUrl(mountain.getImageUrl())
-                    .isHot(isHotMountain(hotMountains, mountain.getId()))
-                    .build());
-        }
-        return mountainListResponses;
+        return getMountainListResponses(mountains, mountainRepository.findIsHot());
     }
 
     @Transactional(readOnly = true)
