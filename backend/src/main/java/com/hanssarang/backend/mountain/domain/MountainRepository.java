@@ -1,6 +1,5 @@
-package com.hanssarang.backend.mountain.repository;
+package com.hanssarang.backend.mountain.domain;
 
-import com.hanssarang.backend.mountain.domain.Mountain;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,10 +14,11 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "            from hiking h " +
             "            inner join trail t " +
             "            on t.trail_id = h.trail_id " +
-            "            group by h.trail_id) v " +
+            "            group by t.trail_id) v " +
             "on m.mountain_id = v.mountain_id " +
             "group by m.mountain_id " +
-            "order by count(m.mountain_id) desc ", nativeQuery = true)
+            "having sum(v.count) " +
+            "order by v.count desc", nativeQuery = true)
     List<Mountain> findAllPopularity(String sort);
 
     @Query(value = "select m.* " +
