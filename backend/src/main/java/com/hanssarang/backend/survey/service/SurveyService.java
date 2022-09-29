@@ -18,7 +18,7 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
     private final MemberRepository memberRepository;
 
-    public void saveSurvey(int memberId, SaveSurveyRequest saveSurveyRequest) {
+    public void createSurvey(int memberId, SaveSurveyRequest saveSurveyRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         Survey survey = Survey.builder()
