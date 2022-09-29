@@ -10,6 +10,7 @@ import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
+import com.hanssarang.backend.util.PathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,7 +67,8 @@ public class HikingService {
     }
 
     private boolean isCompleted(String path, PathResponse endPoint) {
-        return false;
+        return PathUtil.find(path)
+                .isCompleted(path, endPoint.getLatitude(), endPoint.getLongitude());
     }
 
     private String toLineStringForm(List<PathResponse> path) {
