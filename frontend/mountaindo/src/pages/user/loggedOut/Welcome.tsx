@@ -1,11 +1,11 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {RootStackParamList} from '../../../../AppInner';
+import {LoggedInParamList} from '../../../../AppInner';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 
-type WelcomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Welcome'>;
+type WelcomeScreenProps = NativeStackScreenProps<LoggedInParamList, 'Welcome'>;
 
 function Welcome({navigation}: WelcomeScreenProps) {
   return (
@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
     marginTop: 180,
   },
   title: {
-    color: 'black',
+    color: '#272827',
     fontSize: 30,
     fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
     marginBottom: 30,
-    color: 'black',
+    color: '#272827',
     fontSize: 15,
   },
   arrowButton: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     borderRadius: 50,
     marginTop: 80,
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
   },
   arrowIcon: {
     color: 'white',
