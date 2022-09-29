@@ -59,4 +59,8 @@ public class Member extends BaseEntity {
                 .mapToDouble(Hiking::getAccumulatedHeight)
                 .sum();
     }
+
+    public void addHiking(Hiking hiking) {
+        hikings.add(hiking);
+    }
 }
