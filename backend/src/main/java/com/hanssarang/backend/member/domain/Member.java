@@ -32,12 +32,12 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Survey survey;
+
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hiking> hikings = new ArrayList<>();
-
-    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Survey survey;
 
     public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
         this.password = passwordEncoder.encode(newPassword);
@@ -71,5 +71,10 @@ public class Member extends BaseEntity {
 
     public boolean isCompletedSurvey() {
         return survey != null;
+    }
+
+    public void addHiking(Hiking hiking) {
+        hikings.add(hiking);
+        hiking.addMember(this);
     }
 }
