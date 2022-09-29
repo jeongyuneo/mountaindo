@@ -155,7 +155,6 @@ public class MemberService {
                 .preferredHikingStyle(createSurveyRequest.getPreferredHikingStyle())
                 .preferredHikingTime(createSurveyRequest.getPreferredHikingTime())
                 .isActive(true)
-                .member(member)
                 .build();
         member.submit(survey);
         memberRepository.save(member);
