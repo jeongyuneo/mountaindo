@@ -11,7 +11,7 @@ import java.util.List;
 public class MountainResponse {
 
     private String name;
-    private int height;
+    private double height;
     private String address;
     private String imageUrl;
     private boolean isHot;

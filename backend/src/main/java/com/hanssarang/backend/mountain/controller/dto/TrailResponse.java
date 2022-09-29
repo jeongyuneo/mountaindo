@@ -9,8 +9,8 @@ import lombok.*;
 public class TrailResponse {
 
     private String name;
-    private String goingUpTime;
-    private String goingDownTime;
-    private String length;
+    private int goingUpTime;
+    private int goingDownTime;
+    private double length;
     private String risk;
 }

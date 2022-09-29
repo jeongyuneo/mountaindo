@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Getter
 @SuperBuilder
@@ -20,13 +19,15 @@ public class Trail extends BaseEntity {
 
     private String name;
     private double length;
-    private LocalTime goingUpTime;
-    private LocalTime goingDownTime;
+    private int goingUpTime;
+    private int goingDownTime;
     private String risk;
+    private String imageUrl;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Level level;
 
+    @Column(nullable = false)
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)

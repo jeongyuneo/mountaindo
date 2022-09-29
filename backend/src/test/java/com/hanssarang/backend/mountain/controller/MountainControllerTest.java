@@ -45,10 +45,10 @@ class MountainControllerTest extends ApiDocument {
     private static final String IMAGE_URL = "{image url}";
     private static final boolean IS_HOT = true;
     private static final String TRAIL_NAME = "A코스";
-    private static final String LENGTH = "1km";
+    private static final double LENGTH = 1;
     private static final String LEVEL = "하";
-    private static final String GOING_UP_TIME = "3시간 30분";
-    private static final String GOING_DOWN_TIME = "2시간";
+    private static final int GOING_UP_TIME = 3;
+    private static final int GOING_DOWN_TIME = 4;
     private static final String RISK = "경사가 가파릅니다.";
     private static final String NAME_ORDER = "name";
 
