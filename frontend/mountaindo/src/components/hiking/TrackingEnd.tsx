@@ -1,16 +1,7 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useEffect, useRef} from 'react';
-import {
-  Alert,
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useRef} from 'react';
+import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
 import ViewShot from 'react-native-view-shot';
-import {LoggedInParamList} from '../../../AppInner';
-import ResultMap from '../../components/hiking/ResultMap';
+import ResultMap from './ResultMap';
 import Share from 'react-native-share';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {faShareFromSquare} from '@fortawesome/free-regular-svg-icons';
@@ -18,36 +9,19 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faDownload} from '@fortawesome/free-solid-svg-icons';
 
 import KakaoShareLink from 'react-native-kakao-share-link';
-import AppText from '../../components/AppText';
-import AppTextBold from '../../components/AppTextBold';
+import AppText from '../AppText';
+import AppTextBold from '../AppTextBold';
 
-type TrackingEndScreenProps = NativeStackScreenProps<
-  LoggedInParamList,
-  'TrackingEnd'
->;
+type Props = {
+  timer: any;
+  coords: any;
 
-function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
-  const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
-  const timer = route.params?.timer; // 총 시간 정보 Hiking 페이지에서 받아와서 저장
-  const coords = route.params?.coords; // 전체 좌표값이 들어있는 리스트
-  const totalDist = route.params?.totalDist ? route.params.totalDist : 0; // 총 거리
-  const totalHigh = route.params?.totalHigh ? route.params.totalHigh : 0; // 고도 변화 값
+  totalDist: any;
+  totalHigh: any;
+  today: any;
+};
 
-  useEffect(() => {
-    if (!timer || !coords || !totalDist || !totalHigh) {
-      return;
-    }
-  }, [
-    timer,
-    route.params?.timer,
-    coords,
-    route.params?.coords,
-    totalDist,
-    route.params?.totalDist,
-    totalHigh,
-    route.params?.totalHigh,
-  ]);
-
+function TrackingEnd({timer, coords, totalDist, totalHigh, today}: Props) {
   const captureRef = useRef<any>(); // 캡쳐할 영역의 값을 가져오기 위한 ref
 
   // 지정된 영역 캡쳐해서 uri 생성
@@ -175,13 +149,6 @@ function TrackingEnd({navigation, route}: TrackingEndScreenProps) {
           <AppText style={styles.text}>{totalHigh} m</AppText>
         </View>
       </View>
-      <View style={styles.moveButton}>
-        <Pressable
-          onPress={() => navigation.navigate('Main')}
-          style={styles.button}>
-          <AppText style={styles.buttonText}>메인페이지로 이동</AppText>
-        </Pressable>
-      </View>
     </View>
   );
 }
@@ -220,20 +187,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 13,
     margin: 5,
-  },
-  moveButton: {
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#FFC478',
-    width: 300,
-    paddingVertical: 15,
-    borderRadius: 20,
-    marginTop: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
   },
   shareGroup: {
     flexDirection: 'row',

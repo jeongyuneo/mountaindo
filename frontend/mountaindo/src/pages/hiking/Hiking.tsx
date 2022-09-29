@@ -5,7 +5,6 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
@@ -18,6 +17,8 @@ import Config from 'react-native-config';
 import axios from 'axios';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
+import TrackingEnd from '../../components/hiking/TrackingEnd';
+import {useIsFocused} from '@react-navigation/native';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
@@ -34,6 +35,11 @@ function Hiking({navigation}: HikingScreenProps) {
   const [totalHigh, setTotalHigh] = useState(0); // 총 고도를 저정할 변수
   const [currentWeather, setCurrentWeather] = useState(''); // 현재 날씨를 저장할 변수(흐림, 맑음, 비, 맑음, 눈)
   const [currentTemp, setCurrentTemp] = useState(''); // 현재 기온을 저장할 변수
+
+  const [isHikingEnd, setIsHikingEnd] = useState(false); // 등산 기록 종료 여부를 확인하는 변수
+  const [timer, setTimer] = useState(0); // 타이머 저장 변수
+
+  const isFocused = useIsFocused(); // 화면에 focus 여부를 확인하는 변수
 
   // 이동한 경로의 위도, 경도 좌표를 저장할 리스트
   const [coords, setCoords] = useState<
@@ -114,6 +120,7 @@ function Hiking({navigation}: HikingScreenProps) {
     setWatchId(idTest);
     locationDataPush();
   };
+
   // 현재 날씨 받아오기
   const getWeatherByCurrentLocation = async (lat: number, lon: number) => {
     const APIkey = Config.CURRENT_WEATHER_API_KEY;
@@ -156,6 +163,13 @@ function Hiking({navigation}: HikingScreenProps) {
     watchPosition();
   }, []);
 
+  // 등산 기록이 종료 되었을 때 isHikingEnd 값 변경
+  useEffect(() => {
+    if (!isTracking && isHikingEnd) {
+      setIsHikingEnd(!isHikingEnd);
+    }
+  }, [isHikingEnd, isFocused]);
+
   // 현재 위치를 받아온 후 날씨 정보 받아오기
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -191,30 +205,22 @@ function Hiking({navigation}: HikingScreenProps) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <Text>사용자의 현재 위치를 받아오지 못했습니다</Text>
+        <AppTextBold>사용자의 현재 위치를 받아오지 못했습니다</AppTextBold>
       </ScrollView>
     );
   }
 
-  // 기록 종료 시 TrackingEnd 페이지로 이동 함수
+  // 기록 종료 시 TrackingEnd 이동 함수
   const moveToTrackingEnd = (timer: any) => {
     getLocation();
-    navigation.navigate('TrackingEnd', {
-      timer,
-      coords: [
-        ...coords,
-        {latitude: myPosition.latitude, longitude: myPosition.longitude},
-      ],
-      totalDist: totalDist.toFixed(2),
-      totalHigh,
-      isTracking,
-    });
+    setIsHikingEnd(true);
     setCoords([]); // 등산 기록 종료 후 리스트 초기화
   };
 
-  // isTracking이 false면 기본 정보와 지도 렌더링
-  // true면 TrackingRoute 화면 렌더링
-  return !isTracking ? (
+  // !isTracking && !isHikingEnd면 기본 정보와 지도 렌더링
+  // isTracking && !isHikingEnd면 TrackingRoute 화면 렌더링
+  // !isTracking && isHikingEnd면 등산기록 종료 화면 렌더링
+  return !isTracking && !isHikingEnd ? (
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <View style={styles.textLabelGroup}>
@@ -251,7 +257,7 @@ function Hiking({navigation}: HikingScreenProps) {
         </Pressable>
       </View>
     </View>
-  ) : (
+  ) : isTracking && !isHikingEnd ? (
     <TrackingRoute
       moveToTrackingEnd={moveToTrackingEnd}
       setIsTracking={setIsTracking}
@@ -260,7 +266,28 @@ function Hiking({navigation}: HikingScreenProps) {
       tracking={tracking}
       currentTemp={currentTemp}
       currentWeather={currentWeather}
+      timer={timer}
+      setTimer={setTimer}
     />
+  ) : !isTracking && isHikingEnd ? (
+    <TrackingEnd
+      today={today}
+      timer={timer}
+      coords={[
+        ...coords,
+        {latitude: myPosition.latitude, longitude: myPosition.longitude},
+      ]}
+      totalDist={totalDist.toFixed(2)}
+      totalHigh={totalHigh}
+    />
+  ) : (
+    <ScrollView
+      contentContainerStyle={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <AppTextBold>사용자의 현재 위치를 받아오지 못했습니다</AppTextBold>
+    </ScrollView>
   );
 }
 

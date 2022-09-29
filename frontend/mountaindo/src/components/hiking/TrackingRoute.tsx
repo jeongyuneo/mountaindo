@@ -1,14 +1,7 @@
 import {faPause, faStop} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {
-  Alert,
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {useCallback, useEffect, useRef} from 'react';
+import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 import StopWatch from './StopWatch';
@@ -24,9 +17,9 @@ function TrackingRoute({
   tracking,
   currentTemp,
   currentWeather,
+  timer,
+  setTimer,
 }: any) {
-  const [timer, setTimer] = useState(0); // 타이머 저장 변수
-
   const increment = useRef<any>(null); // ref의 current에서 setInterval 호출하여 사용하기 위해 변수 생성, 컴포넌트가 재렌더링되지 않음
 
   const today = JSON.stringify(new Date()).split('T')[0].replace('"', ''); // 날짜 데이터를 문자열로 가공
@@ -47,7 +40,7 @@ function TrackingRoute({
     {
       tracking
         ? (increment.current = setInterval(() => {
-            setTimer(timer => timer + 1);
+            setTimer((timer: any) => timer + 1);
           }, 1000))
         : clearInterval(increment.current);
     }
