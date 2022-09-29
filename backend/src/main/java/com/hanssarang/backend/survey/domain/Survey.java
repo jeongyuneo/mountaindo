@@ -26,4 +26,8 @@ public class Survey extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void submit(Member member) {
+        this.member = member;
+    }
 }

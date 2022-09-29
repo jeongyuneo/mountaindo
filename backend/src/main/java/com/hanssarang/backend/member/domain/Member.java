@@ -3,6 +3,7 @@ package com.hanssarang.backend.member.domain;
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.BaseEntity;
 import com.hanssarang.backend.hiking.domain.Hiking;
+import com.hanssarang.backend.survey.domain.Survey;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +36,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hiking> hikings = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Survey survey;
+
     public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
         this.password = passwordEncoder.encode(newPassword);
     }
@@ -58,5 +62,14 @@ public class Member extends BaseEntity {
                 .filter(hiking -> hiking.getTrail().getMountain().getId() == mountainId)
                 .mapToDouble(Hiking::getAccumulatedHeight)
                 .sum();
+    }
+
+    public void submit(Survey survey) {
+        this.survey = survey;
+        survey.submit(this);
+    }
+
+    public boolean isCompletedSurvey() {
+        return survey != null;
     }
 }
