@@ -25,6 +25,7 @@ public class Hiking extends BaseEntity {
     private double accumulatedHeight;
     private boolean isCompleted;
     private String path;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
