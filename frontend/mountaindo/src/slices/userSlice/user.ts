@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axiosService from '../../store/axiosService';
 const initialState = {
@@ -9,7 +8,6 @@ const initialState = {
   survey2: '',
   survey3: '',
   survey4: '',
-  survey5: '',
   isSurveyed: false,
   isLoggedIn: false,
 };
@@ -91,21 +89,12 @@ export const survey = createAsyncThunk(
   'userSlice/survey',
   async (args: any, {rejectWithValue}) => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      const response = await axiosService.post(
-        '/api/v1/members/initial-survey',
-        {
-          headers: {
-            Authorization: token,
-          },
-          myLevel: args.survey1,
-          visitedMountain: args.survey2,
-          preferredMountainLocation: args.survey3,
-          preferredMountainStyle: args.survey4,
-          preferredClimbingTime: args.survey5,
-        },
-      );
-      console.log(response.data);
+      const response = await axiosService.post('/api/v1/members/surveys', {
+        level: args.survey1,
+        preferredMountainLocation: args.survey2,
+        preferredHikingStyle: args.survey3,
+        preferredHikingTime: args.survey4,
+      });
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -186,19 +175,14 @@ const userSlice = createSlice({
     },
     setSurvey(state, action) {
       if (action.payload.number === 1) {
-        state.survey1 = action.payload.myLevel;
+        state.survey1 = action.payload.level;
       } else if (action.payload.number === 2) {
-        state.survey2 = action.payload.visitedMountain;
+        state.survey2 = action.payload.preferredMountainLocation;
       } else if (action.payload.number === 3) {
-        state.survey3 = action.payload.preferredMountainLocation;
+        state.survey3 = action.payload.preferredHikingStyle;
       } else if (action.payload.number === 4) {
-        state.survey4 = action.payload.preferredMountainStyle;
-      } else if (action.payload.number === 5) {
-        state.survey5 = action.payload.preferredClimbingTime;
+        state.survey4 = action.payload.preferredHikingTime;
       }
-    },
-    setIsSurveyed(state) {
-      state.isSurveyed = true;
     },
   },
   extraReducers: builder => {

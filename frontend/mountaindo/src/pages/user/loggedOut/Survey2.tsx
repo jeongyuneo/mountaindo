@@ -21,24 +21,24 @@ function Survey2({navigation}: Survey2ScreenProps) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 2,
-          visitedMountain: '없음',
+          preferredMountainLocation: 1,
         }),
       );
     } else if (isChecked2) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 2,
-          visitedMountain: '있음',
+          preferredMountainLocation: 2,
         }),
       );
     }
   };
 
   return (
-    <View style={styles.wrapper}>
+    <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>최근 방문했던 산</Text>
-        <Text style={styles.subTitle}>최근 어떤 산을 방문했나요?</Text>
+        <Text style={styles.title}>등산지역 선호도</Text>
+        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -48,7 +48,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>없음</Text>
+            <Text style={styles.answerBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -56,7 +58,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>있음</Text>
+            <Text style={styles.answerBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -67,7 +71,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>없음</Text>
+            <Text style={styles.checkedBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -75,7 +81,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>있음</Text>
+            <Text style={styles.answerBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       ) : (
@@ -86,7 +94,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>없음</Text>
+            <Text style={styles.answerBoxText}>
+              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
+            </Text>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -94,7 +104,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>있음</Text>
+            <Text style={styles.checkedBoxText}>
+              지역 - 저의 주변을 주로 선호해요!
+            </Text>
           </Pressable>
         </View>
       )}
@@ -116,51 +128,48 @@ function Survey2({navigation}: Survey2ScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: 'white',
-    height: '100%',
-    padding: 20,
-  },
   titleWrapper: {
     marginTop: 50,
-    // marginLeft: 20,
+    marginLeft: 20,
     marginBottom: 30,
   },
   title: {
     fontSize: 30,
-    color: '#272827',
+    color: 'black',
     fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
-    color: '#272827',
+    color: 'black',
     fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     marginTop: 30,
+    color: 'black',
     backgroundColor: 'white',
     height: 60,
-    borderRadius: 30,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#c5c5c5',
+    borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerBoxText: {
-    color: 'grey',
+    color: 'black',
     fontWeight: 'bold',
+    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     marginTop: 30,
     color: 'black',
-    backgroundColor: '#57d696',
+    backgroundColor: 'grey',
     height: 60,
-    borderRadius: 30,
-    borderWidth: 0,
+    borderRadius: 20,
+    borderWidth: 1,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,6 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: 13,
   },
   nextButton: {
     marginTop: 50,
@@ -180,11 +190,11 @@ const styles = StyleSheet.create({
   arrowButton: {
     width: 50,
     height: 50,
-    marginTop: 40,
-    marginLeft: 250,
+    marginTop: 50,
+    marginLeft: 280,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'grey',
     alignItems: 'flex-end',
   },
   arrowIcon: {
@@ -193,11 +203,11 @@ const styles = StyleSheet.create({
   arrowButtonActive: {
     width: 50,
     height: 50,
-    marginTop: 40,
-    marginLeft: 250,
+    marginTop: 50,
+    marginLeft: 280,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: '#57d696',
+    backgroundColor: 'black',
     alignItems: 'flex-end',
   },
   arrowIconActive: {

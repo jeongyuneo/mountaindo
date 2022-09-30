@@ -22,21 +22,21 @@ function Survey1({navigation}: Survey1ScreenProps) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 1,
-          myLevel: '등린이',
+          level: 1,
         }),
       );
     } else if (isChecked2) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 1,
-          myLevel: '등소년',
+          level: 2,
         }),
       );
     } else if (isChecked3) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 1,
-          myLevel: '등른이',
+          level: 3,
         }),
       );
     }
