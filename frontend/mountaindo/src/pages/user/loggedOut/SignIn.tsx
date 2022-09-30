@@ -54,7 +54,6 @@ function SignIn({navigation}: SignInScreenProps) {
       .then(async res => {
         // 토큰값 정보
         await AsyncStorage.setItem('token', res.payload.token);
-        const token = await AsyncStorage.getItem('token');
       })
       .catch(err => {
         console.log('LOGIN ERR ===> ', err);
