@@ -33,18 +33,36 @@ function MainModal({
   myRanking,
 }: Props) {
   const [search, setSearch] = useState('');
+  const [searchResult, setSearchResult] = useState<Rankings | null>(null);
+  const [isResult, setIsResult] = useState(0); // 0: 검색 전, 1: 검색 결과 없음, 2: 검색 결과 있음
 
   const dispatch = useAppDispatch();
 
   const onSearch = () => {
     dispatch(totalRankingSearch({keyword: search}))
       .then(res => {
-        console.log(res);
+        if (res.meta.requestStatus === 'fulfilled') {
+          if (res.payload?.nickname === null) {
+            setIsResult(1);
+          } else {
+            setSearchResult({
+              imageUrl: res.payload?.imageUrl,
+              ranking: res.payload?.ranking,
+              nickname: res.payload?.nickname,
+              accumulatedHeight: res.payload?.accumulatedHeight,
+            });
+            setIsResult(2);
+          }
+        }
       })
       .catch(err => console.log(err));
   };
 
   const onChangeSearchInput = (text: any) => {
+    if (!text.trim()) {
+      setIsResult(0);
+    }
+
     setSearch(text.trim());
   };
 
@@ -90,6 +108,40 @@ function MainModal({
                   blurOnSubmit={false}
                 />
               </View>
+
+              {!!searchResult && isResult === 2 ? (
+                <View>
+                  <AppTextBold style={styles.myRankTitle}>
+                    검색 결과
+                  </AppTextBold>
+                  <View style={styles.searchResult}>
+                    <View style={styles.styleRow}>
+                      <AppTextBold style={styles.rankNum}>
+                        {searchResult?.ranking}
+                      </AppTextBold>
+                      <Image
+                        source={searchResult?.imageUrl}
+                        style={styles.imgStyle}
+                      />
+                      <AppTextBold style={styles.nameStyle}>
+                        {searchResult?.nickname}
+                      </AppTextBold>
+                      <AppText style={styles.namePix}>님</AppText>
+                    </View>
+                    <AppTextBold>
+                      {searchResult?.accumulatedHeight}m
+                    </AppTextBold>
+                  </View>
+                </View>
+              ) : isResult === 0 ? (
+                <></>
+              ) : (
+                <View>
+                  <AppTextBold style={styles.result}>
+                    검색 결과가 없습니다.
+                  </AppTextBold>
+                </View>
+              )}
               <View>
                 <AppTextBold style={styles.myRankTitle}>내 랭킹</AppTextBold>
               </View>
@@ -111,13 +163,11 @@ function MainModal({
                   <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
                 </View>
               </View>
-
               <View>
                 <AppTextBold style={styles.userTitle}>
                   사용자 전체랭킹
                 </AppTextBold>
               </View>
-
               {rankingList?.length > 0 &&
                 rankingList.map((item: Rankings) => (
                   <View>
@@ -168,7 +218,7 @@ const styles = StyleSheet.create({
   },
   myRankTitle: {
     marginLeft: 7,
-    marginBottom: 5,
+    marginVertical: 10,
     fontSize: 13,
   },
   magnify: {
@@ -235,6 +285,16 @@ const styles = StyleSheet.create({
   namePix: {
     marginLeft: 5,
     fontSize: 15,
+  },
+  searchResult: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+    marginHorizontal: 10,
+    alignItems: 'center',
+  },
+  result: {
+    marginVertical: 10,
   },
 });
 

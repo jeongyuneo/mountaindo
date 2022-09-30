@@ -29,18 +29,36 @@ function RankingListModal({
   setVisibleModal,
 }: Props) {
   const [search, setSearch] = useState('');
+  const [searchResult, setSearchResult] = useState<Rankings | null>(null);
+  const [isResult, setIsResult] = useState(0); // 0: 검색 전, 1: 검색 결과 없음, 2: 검색 결과 있음
 
   const dispatch = useAppDispatch();
 
   const onSearch = () => {
     dispatch(mountainRankingSearch({mountainId: 1, keyword: search}))
       .then(res => {
-        console.log(res);
+        if (res.meta.requestStatus === 'fulfilled') {
+          if (res.payload?.nickname === null) {
+            setIsResult(1);
+          } else {
+            setSearchResult({
+              imageUrl: res.payload?.imageUrl,
+              ranking: res.payload?.ranking,
+              nickname: res.payload?.nickname,
+              accumulatedHeight: res.payload?.accumulatedHeight,
+            });
+            setIsResult(2);
+          }
+        }
       })
       .catch(err => console.log(err));
   };
 
   const onChangeSearchInput = (text: any) => {
+    if (!text.trim()) {
+      setIsResult(0);
+    }
+
     setSearch(text.trim());
   };
   return (
@@ -64,7 +82,36 @@ function RankingListModal({
               onSubmitEditing={onSearch}
               blurOnSubmit={false}
             />
-
+            {!!searchResult && isResult === 2 ? (
+              <View>
+                <AppTextBold style={styles.myRankingText}>
+                  검색 결과
+                </AppTextBold>
+                <View style={styles.itemWrapper}>
+                  <View style={styles.userInfoWrapper}>
+                    <AppTextBold style={styles.userInfoText}>
+                      {searchResult?.ranking}
+                    </AppTextBold>
+                    <Image
+                      source={searchResult?.imageUrl}
+                      style={styles.imageSrc}
+                    />
+                    <AppTextBold style={styles.userInfoText}>
+                      {searchResult?.nickname}님
+                    </AppTextBold>
+                  </View>
+                  <AppTextBold>{searchResult?.accumulatedHeight}m</AppTextBold>
+                </View>
+              </View>
+            ) : isResult === 0 ? (
+              <></>
+            ) : (
+              <View>
+                <AppTextBold style={styles.searchResult}>
+                  검색 결과가 없습니다.
+                </AppTextBold>
+              </View>
+            )}
             <AppTextBold style={styles.myRankingText}>내 랭킹</AppTextBold>
             <View style={styles.itemWrapper}>
               <View style={styles.userInfoWrapper}>
@@ -147,6 +194,9 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 50,
+  },
+  searchResult: {
+    marginVertical: 10,
   },
 });
 export default RankingListModal;

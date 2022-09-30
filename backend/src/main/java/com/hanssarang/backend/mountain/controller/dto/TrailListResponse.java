@@ -4,13 +4,13 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TrailListResponse {
 
     private int trailId;
     private String name;
-    private String length;
+    private double length;
     private String level;
     private String imageUrl;
 }

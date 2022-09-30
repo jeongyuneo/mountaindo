@@ -25,7 +25,6 @@ import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
-import TrackingEnd from './src/pages/hiking/TrackingEnd';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
@@ -61,7 +60,6 @@ export type LoggedInParamList = {
   MyPage: any;
   Notice: any;
   ContactUs: any;
-  TrackingEnd: any;
   MountainDetail: any;
   CourseDetail: any;
   Visited: any;
@@ -82,6 +80,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const Top = createMaterialTopTabNavigator();
 
+// 방문한 산의 top tab
 function TopTab() {
   return (
     <Top.Navigator>
@@ -98,8 +97,117 @@ function TopTab() {
     </Top.Navigator>
   );
 }
-function BottomTab() {
+
+// 유저 관련 bottom tab에 연결되는 페이지
+function UserTab() {
   return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{title: '프로필'}}
+      />
+      <Stack.Screen
+        name="UserInfoChange"
+        component={UserInfoChange}
+        options={{title: '개인 정보 수정'}}
+      />
+      <Stack.Screen
+        name="PasswordChange"
+        component={PasswordChange}
+        options={{title: '비밀번호 변경'}}
+      />
+      <Stack.Screen
+        name="NicknameChangeForm"
+        component={NicknameChangeForm}
+        options={{title: '닉네임 변경'}}
+      />
+      <Stack.Screen
+        name="PhoneNumberChangeForm"
+        component={PhoneNumberChangeForm}
+        options={{title: '전화번호 변경'}}
+      />
+      <Stack.Screen
+        name="Notice"
+        component={Notice}
+        options={{title: '공지사항'}}
+      />
+      <Stack.Screen
+        name="ContactUs"
+        component={ContactUs}
+        options={{title: '문의하기'}}
+      />
+      <Stack.Screen
+        name="AddressChangeForm"
+        component={AddressChangeForm}
+        options={{title: '주소 변경'}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// 산 bottom tab에 연결되는 페이지
+function MountainTab() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Mountain"
+        component={Mountain}
+        options={{title: '전체 산 목록'}}
+      />
+      <Stack.Screen
+        name="MainDetail"
+        component={MainDetail}
+        options={{title: '전체 산 목록'}}
+      />
+      <Stack.Screen
+        name="MountainDetail"
+        component={MountainDetail}
+        options={{title: '산 상세 정보', headerShown: false}}
+      />
+      <Stack.Screen
+        name="CourseDetail"
+        component={CourseDetail}
+        options={{title: '코스 상세 정보', headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// 방문한 산 bottom tab에 연결되는 페이지
+function VisitedTab() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Completed"
+        component={TopTab}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="VisitedDetail"
+        component={VisitedDetail}
+        options={{title: '방문한 산 상세'}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function AppInner() {
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn); // 로그인 여부 확인
+  const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed); // 설문조사 여부 확인
+
+  // 앱 로딩이 종료되면 splash screen 종료
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
+  // 앱에 접속할 때마다 사용자의 권한 확인
+  usePermissions();
+
+  // isLoggedIn && isSurveyed면 기본 bottom tab에 연결된 화면 렌더링
+  // isLoggedIn && !isSurveyed면 설문조사 화면 렌더링
+  // 그 외엔 로그인 전에 접속할 수 있는 페이지 렌더링
+  return isLoggedIn && isSurveyed ? (
     <Tab.Navigator
       screenOptions={{
         tabBarInactiveTintColor: 'black',
@@ -137,8 +245,8 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="Mountain"
-        component={Mountain}
+        name="MountainList"
+        component={MountainTab}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -151,8 +259,8 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="CompletedMountain"
-        component={TopTab}
+        name="VisitedTab"
+        component={VisitedTab}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -165,8 +273,8 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
-        name="MyPage"
-        component={MyPage}
+        name="User"
+        component={UserTab}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -176,153 +284,75 @@ function BottomTab() {
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
-        }} // Header 제거
+        }}
       />
     </Tab.Navigator>
-  );
-}
-
-function AppInner() {
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed);
-  // 앱에 접속할 때마다 사용자의 권한 확인
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-  usePermissions();
-  return (
+  ) : isLoggedIn && !isSurveyed ? (
     <Stack.Navigator>
-      {isLoggedIn ? (
-        isSurveyed ? (
-          <>
-            <Stack.Group screenOptions={{headerShown: false}}>
-              <Stack.Screen name="BottomTab" component={BottomTab} />
-            </Stack.Group>
-            <Stack.Group>
-              <Stack.Screen
-                name="MainDetail"
-                component={MainDetail}
-                options={{title: '전체 산 목록'}}
-              />
-              <Stack.Screen
-                name="UserInfoChange"
-                component={UserInfoChange}
-                options={{title: '개인 정보 수정'}}
-              />
-              <Stack.Screen
-                name="PasswordChange"
-                component={PasswordChange}
-                options={{title: '비밀번호 변경'}}
-              />
-              <Stack.Screen
-                name="NicknameChangeForm"
-                component={NicknameChangeForm}
-                options={{title: '닉네임 변경'}}
-              />
-              <Stack.Screen
-                name="PhoneNumberChangeForm"
-                component={PhoneNumberChangeForm}
-                options={{title: '전화번호 변경'}}
-              />
-              <Stack.Screen
-                name="Notice"
-                component={Notice}
-                options={{title: '공지사항'}}
-              />
-              <Stack.Screen
-                name="ContactUs"
-                component={ContactUs}
-                options={{title: '문의하기'}}
-              />
-              <Stack.Screen
-                name="TrackingEnd"
-                component={TrackingEnd}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="MountainDetail"
-                component={MountainDetail}
-                options={{title: '산 상세 정보', headerShown: false}}
-              />
-              <Stack.Screen
-                name="CourseDetail"
-                component={CourseDetail}
-                options={{title: '코스 상세 정보', headerShown: false}}
-              />
-              <Stack.Screen
-                name="VisitedDetail"
-                component={VisitedDetail}
-                options={{title: '방문한 산 상세'}}
-              />
-              <Stack.Screen
-                name="AddressChangeForm"
-                component={AddressChangeForm}
-                options={{title: '주소 변경'}}
-              />
-            </Stack.Group>
-          </>
-        ) : (
-          <Stack.Group screenOptions={{headerShown: false}}>
-            <Stack.Screen
-              name="Welcome"
-              component={Welcome}
-              options={{title: '가입환영'}}
-            />
-            <Stack.Screen
-              name="Survey1"
-              component={Survey1}
-              options={{title: '설문조사1'}}
-            />
-            <Stack.Screen
-              name="Survey2"
-              component={Survey2}
-              options={{title: '설문조사2'}}
-            />
-            <Stack.Screen
-              name="Survey3"
-              component={Survey3}
-              options={{title: '설문조사3'}}
-            />
-            <Stack.Screen
-              name="Survey4"
-              component={Survey4}
-              options={{title: '설문조사4'}}
-            />
-          </Stack.Group>
-        )
-      ) : (
-        <>
-          <Stack.Group screenOptions={{headerShown: false}}>
-            <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{title: '로그인'}}
-            />
-            <Stack.Screen
-              name="Agreement"
-              component={Agreement}
-              options={{title: '약관동의서'}}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{title: '회원가입'}}
-            />
-          </Stack.Group>
-          <Stack.Group>
-            <Stack.Screen
-              name="FindId"
-              component={FindId}
-              options={{title: '아이디찾기'}}
-            />
-            <Stack.Screen
-              name="FindPassword"
-              component={FindPassword}
-              options={{title: '비밀번호찾기'}}
-            />
-          </Stack.Group>
-        </>
-      )}
+      <Stack.Group>
+        <Stack.Screen
+          name="Survey1"
+          component={Survey1}
+          options={{title: '설문조사1'}}
+        />
+        <Stack.Screen
+          name="Survey2"
+          component={Survey2}
+          options={{title: '설문조사2'}}
+        />
+        <Stack.Screen
+          name="Survey3"
+          component={Survey3}
+          options={{title: '설문조사3'}}
+        />
+        <Stack.Screen
+          name="Survey4"
+          component={Survey4}
+          options={{title: '설문조사4'}}
+        />
+        <Stack.Screen
+          name="Survey5"
+          component={Survey5}
+          options={{title: '설문조사5'}}
+        />
+      </Stack.Group>
+    </Stack.Navigator>
+  ) : (
+    <Stack.Navigator>
+      <Stack.Group screenOptions={{headerShown: false}}>
+        <Stack.Screen
+          name="SignIn"
+          component={SignIn}
+          options={{title: '로그인'}}
+        />
+        <Stack.Screen
+          name="Agreement"
+          component={Agreement}
+          options={{title: '약관동의서'}}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{title: '회원가입'}}
+        />
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{title: '가입환영'}}
+        />
+      </Stack.Group>
+      <Stack.Group>
+        <Stack.Screen
+          name="FindId"
+          component={FindId}
+          options={{title: '아이디찾기'}}
+        />
+        <Stack.Screen
+          name="FindPassword"
+          component={FindPassword}
+          options={{title: '비밀번호찾기'}}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }

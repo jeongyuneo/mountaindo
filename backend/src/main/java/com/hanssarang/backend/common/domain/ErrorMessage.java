@@ -2,6 +2,8 @@ package com.hanssarang.backend.common.domain;
 
 public class ErrorMessage {
 
+    public static final String EXPIRED_TOKEN = "토큰 정보가 만료되었습니다.";
+
     public static final String FAIL_TO_CHECK_EMAIL = "중복된 이메일이 있습니다.";
     public static final String FAIL_TO_SIGNUP = "가입에 실패했습니다.";
     public static final String FAIL_TO_SURVEY = "사전 설문조사에 실패했습니다.";
@@ -22,4 +24,6 @@ public class ErrorMessage {
     public static final String FAIL_TO_SEARCH_TRAIL = "등산로 검색에 실패했습니다.";
     public static final String FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL = "산 또는 등산로 검색에 실패했습니다.";
     public static final String FAIL_TO_CREATE_HIKING = "등산 정보 저장을 실패했습니다.";
+
+    public static final String WRONG_PATH = "잘못된 경로입니다.";
 }

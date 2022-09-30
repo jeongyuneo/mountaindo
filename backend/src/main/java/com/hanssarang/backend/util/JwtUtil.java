@@ -7,13 +7,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Component
 public class JwtUtil {
 
     private static final String JWT_HEADER = "Authorization";
@@ -55,10 +53,14 @@ public class JwtUtil {
     }
 
     private static Claims getAllClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parser()
+                    .setSigningKey(SECRET.getBytes(StandardCharsets.UTF_8))
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new WrongAccessException(EXPIRED_TOKEN);
+        }
     }
 
     private static String getActualToken(String token) {
