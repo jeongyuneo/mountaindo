@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,12 +41,12 @@ public class HikingControllerTest extends ApiDocument {
     private static final String MOUNTAIN_NAME = "북악산";
     private static final String ADDRESS = "서울시 종로구";
     private static final String LEVEL = "중";
-    private static final String LAST_HIKING_DATE = "2022.09.19";
+    private static final LocalDate LAST_HIKING_DATE = LocalDate.parse("2022-09-19");
     private static final String LAST_HIKING_TRAIL_NAME = "A코스";
     private static final int HEIGHT = 1930;
     private static final String TRAIL_NAME = "A코스";
-    private static final double X = 30.0312;
-    private static final double Y = 500.1937;
+    private static final double LATITUDE = 30.0312;
+    private static final double LONGITUDE = 500.1937;
     private static final double ACCUMULATED_HEIGHT = 320.45;
     private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
 
@@ -60,18 +61,19 @@ public class HikingControllerTest extends ApiDocument {
     @BeforeEach
     void setUp() {
         List<PathResponse> pathResponse = IntStream.range(1, 6)
-                .mapToObj(n -> PathResponse.builder().latitude(n * X).longitude((n / 2.0) * Y).build())
+                .mapToObj(n -> PathResponse.builder().latitude(n * LATITUDE).longitude((n / 2.0) * LONGITUDE).build())
                 .collect(Collectors.toList());
         hikingRequest = HikingRequest.builder()
                 .trailId(ID)
                 .path(pathResponse)
-                .endPoint(PathResponse.builder().latitude(X).longitude(Y).build())
+                .endPoint(PathResponse.builder().latitude(LATITUDE).longitude(LONGITUDE).build())
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .useTime(USE_TIME)
                 .build();
         hikingListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> HikingListResponse.builder()
                         .mountainName(MOUNTAIN_NAME)
+                        .address(ADDRESS)
                         .lastHikingDate(LAST_HIKING_DATE)
                         .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
                         .build())
@@ -79,10 +81,11 @@ public class HikingControllerTest extends ApiDocument {
         completedHikingListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> CompletedHikingListResponse.builder()
                         .mountainName(MOUNTAIN_NAME)
+                        .address(ADDRESS)
                         .lastHikingDate(LAST_HIKING_DATE)
                         .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
-                        .x(X)
-                        .y(Y)
+                        .latitude(LATITUDE)
+                        .longitude(LONGITUDE)
                         .build())
                 .collect(Collectors.toList());
         hikingResponse = HikingResponse.builder()
