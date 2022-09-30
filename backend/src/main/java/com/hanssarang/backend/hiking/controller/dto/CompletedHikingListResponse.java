@@ -14,6 +14,6 @@ public class CompletedHikingListResponse {
     private String address;
     private LocalDate lastHikingDate;
     private String lastHikingTrailName;
-    private double x;
-    private double y;
+    private double latitude;
+    private double longitude;
 }
