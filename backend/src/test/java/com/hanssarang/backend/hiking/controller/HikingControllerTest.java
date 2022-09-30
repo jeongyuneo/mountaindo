@@ -40,14 +40,14 @@ public class HikingControllerTest extends ApiDocument {
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
     private static final String MOUNTAIN_NAME = "북악산";
     private static final String ADDRESS = "서울시 종로구";
-    private static final String LEVEL = "중";
     private static final LocalDate LAST_HIKING_DATE = LocalDate.parse("2022-09-19");
     private static final String LAST_HIKING_TRAIL_NAME = "A코스";
-    private static final int HEIGHT = 1930;
     private static final String TRAIL_NAME = "A코스";
     private static final double LATITUDE = 30.0312;
     private static final double LONGITUDE = 500.1937;
     private static final double ACCUMULATED_HEIGHT = 320.45;
+    private static final double DISTANCE = 100.3;
+    private static final String IMAGE_URL = "{image url}";
     private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
 
     private HikingRequest hikingRequest;
@@ -91,10 +91,11 @@ public class HikingControllerTest extends ApiDocument {
         hikingResponse = HikingResponse.builder()
                 .mountainName(MOUNTAIN_NAME)
                 .address(ADDRESS)
-                .height(HEIGHT)
                 .trailName(TRAIL_NAME)
-                .level(LEVEL)
-                .path(pathResponse)
+                .distance(DISTANCE)
+                .useTime(USE_TIME)
+                .imageUrl(IMAGE_URL)
+                .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .build();
     }
 
@@ -124,7 +125,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getHikingSuccess() throws Exception {
         // given
-        willReturn(hikingResponse).given(hikingService).getHiking(anyInt());
+        willReturn(hikingResponse).given(hikingService).getHiking(anyInt(), anyInt());
         // when
         ResultActions resultActions = 등산상세_조회_요청(ID);
         // then
@@ -135,7 +136,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getHikingFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_HIKING)).given(hikingService).getHiking(anyInt());
+        willThrow(new NotFoundException(NOT_FOUND_HIKING)).given(hikingService).getHiking(anyInt(), anyInt());
         // when
         ResultActions resultActions = 등산상세_조회_요청(ID);
         // then

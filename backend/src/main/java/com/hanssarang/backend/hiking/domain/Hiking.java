@@ -37,6 +37,9 @@ public class Hiking extends BaseEntity {
     private String path;
 
     @NotNull
+    private String imageUrl;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
