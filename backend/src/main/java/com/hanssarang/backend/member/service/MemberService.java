@@ -118,7 +118,7 @@ public class MemberService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmailAndIsActiveTrue(loginRequest.getEmail())
-                .orElseThrow(() -> new NotFoundException(FAIL_TO_LOGIN));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         validatePassword(member, loginRequest.getPassword());
         return LoginResponse.builder()
                 .memberId(member.getId())
