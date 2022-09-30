@@ -44,7 +44,6 @@ function MyPage({navigation}: MyPageScreenProps) {
   // 유저정보를 받아오는 기능.
   useEffect(() => {
     dispatch(userInfo('a')).then(async res => {
-      console.log('유저정보 성공 ===> ', res);
       const si = res.payload?.address.split(' ');
       setUser({
         si: si[0],
