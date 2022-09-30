@@ -277,6 +277,12 @@ const userSlice = createSlice({
       })
       .addCase(passwordChange.rejected, (state, {payload}) => {
         console.log('passwordChange Rejected ==>', payload);
+      })
+      .addCase(userChange.fulfilled, (state, {payload}) => {
+        console.log('passwordChange Fulfilled ==> ', payload);
+      })
+      .addCase(userChange.rejected, (state, {payload}) => {
+        console.log('passwordChange Rejected ==>', payload);
       });
   },
 });
