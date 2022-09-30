@@ -1,6 +1,5 @@
 package com.hanssarang.backend.member.service;
 
-import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
@@ -43,22 +42,12 @@ public class MemberService {
         }
     }
 
-    public void signUp(SignUpRequest signUpRequest) {
-        Member member = Member.builder()
-                .email(signUpRequest.getEmail())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                .name(signUpRequest.getName())
-                .birth(signUpRequest.getBirth())
-                .phone(signUpRequest.getPhone())
-                .nickname(signUpRequest.getNickname())
-                .address(Address.builder()
-                        .si(signUpRequest.getAddress().getSi())
-                        .gu(signUpRequest.getAddress().getGu())
-                        .dong(signUpRequest.getAddress().getDong())
-                        .build())
-                .isActive(true)
+    public SignUpResponse signUp(SignUpRequest signUpRequest) {
+        Member member = signUpRequest.toEntity(passwordEncoder);
+        memberRepository.save(signUpRequest.toEntity(passwordEncoder));
+        return SignUpResponse.builder()
+                .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
-        memberRepository.save(member);
     }
 
     public void createInitialSurvey(int memberId, InitialSurveyRequest initialSurveyRequest) {
