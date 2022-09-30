@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class HikingListResponse {
 
     private String mountainName;
+    private String address;
     private LocalDate lastHikingDate;
     private String lastHikingTrailName;
 }
