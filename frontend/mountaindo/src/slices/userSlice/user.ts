@@ -11,6 +11,30 @@ const initialState = {
   isLoggedIn: false,
 };
 
+// 회원정보 수정
+export const userChange = createAsyncThunk(
+  'userSlice/userChange',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.patch('/api/v1/members', {
+        name: args.user.name,
+        phone: args.user.phone,
+        address: {
+          si: args.user.si,
+          gu: args.user.gu,
+          dong: args.user.dong,
+          fullAddress: args.user.fullAddress,
+        },
+        nickname: args.user.nickname,
+        imageUrl: args.user.imageUrl,
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 // 회원정보 API
 export const userInfo = createAsyncThunk(
   'userSlice/userInfo',
@@ -169,10 +193,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setLogout(state) {
+    setLogout(state, action) {
       state.isLoggedIn = false;
     },
-    setIsSurveyed(state) {
+    setIsSurveyed(state, action) {
       state.isSurveyed = true;
     },
     setSurvey(state, action) {

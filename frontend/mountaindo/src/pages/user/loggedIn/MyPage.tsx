@@ -1,6 +1,13 @@
 // react import
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+  ScrollView,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // fontawesom import
@@ -22,12 +29,37 @@ function MyPage({navigation}: MyPageScreenProps) {
   const loggedout = () => {
     dispatch(userSlice.actions.setLogout(false));
   };
-  // 토큰값을 확인하기 위해 우선 적용한 API
+  const [user, setUser] = useState({
+    si: '',
+    gu: '',
+    dong: '',
+    fullAddress: '',
+    birth: '',
+    email: '',
+    name: '',
+    nickname: '',
+    phone: '',
+    imageUrl: '',
+  });
+  // 유저정보를 받아오는 기능.
   useEffect(() => {
-    dispatch(userInfo('a')).then(res => {
-      console.log('유저정보--->', res);
+    dispatch(userInfo('a')).then(async res => {
+      console.log('유저정보 성공 ===> ', res);
+      const si = res.payload?.address.split(' ');
+      setUser({
+        si: si[0],
+        gu: si[1],
+        dong: si[2],
+        fullAddress: res.payload?.address,
+        birth: res.payload?.birth,
+        email: res.payload?.email,
+        name: res.payload?.name,
+        nickname: res.payload?.nickname,
+        phone: res.payload?.phone,
+        imageUrl: res.payload?.imageUrl,
+      });
     });
-  }, []);
+  }, [user.nickname]);
   return (
     <View style={styles.container}>
       <View style={styles.containerUp}>
@@ -50,7 +82,7 @@ function MyPage({navigation}: MyPageScreenProps) {
               source={require('../../../assets/user.png')}
               style={styles.userImg}
             />
-            <Text style={styles.userName}>등산짱님</Text>
+            <Text style={styles.userName}>{user.nickname} 님</Text>
           </View>
 
           <View style={styles.containerRank}>
@@ -75,7 +107,9 @@ function MyPage({navigation}: MyPageScreenProps) {
       <View style={styles.containerBottom}>
         <View style={styles.mentStart}>
           <View style={styles.line} />
-          <Pressable onPress={() => navigation.push('UserInfoChange')}>
+
+          <Pressable
+            onPress={() => navigation.push('UserInfoChange', {user, setUser})}>
             <View style={styles.menuStyle}>
               <Text style={styles.goMenuText}>개인 정보 수정</Text>
               <FontAwesomeIcon
