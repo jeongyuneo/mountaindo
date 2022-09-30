@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,23 @@ public class HikingService {
     private final TrailRepository trailRepository;
 
     public List<HikingListResponse> getHikings(int memberId) {
-        return null;
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        List<HikingListResponse> hikingListResponses = new ArrayList<>();
+        member.getHikings()
+                .stream()
+                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getName()))
+                .forEach((mountainName, hikings) -> {
+                    Hiking lastHiking = hikings.get(hikings.size() - 1);
+                    hikingListResponses.add(
+                            HikingListResponse.builder()
+                                    .mountainName(mountainName)
+                                    .lastHikingDate(lastHiking.getCreatedDate().toLocalDate())
+                                    .lastHikingTrailName(lastHiking.getTrail().getName())
+                                    .build()
+                    );
+                });
+        return hikingListResponses;
     }
 
     public HikingResponse getHiking(int hikingId) {
