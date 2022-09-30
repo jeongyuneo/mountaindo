@@ -25,7 +25,7 @@ function PhoneNumberChangeForm({
   const dispatch = useAppDispatch();
   // 사용자 휴대폰번호를 저장할 변수, route에 값이 있을 경우 기존에 존재하는 값을 가져옴
   const [phone, setPhoneNumber] = useState(
-    route ? route.params?.user.phone : '',
+    route.params?.user.phone ? route.params?.user.phone : '',
   );
   const phoneNumberRef = useRef<TextInput | null>(null); // 사용자 휴대폰번호 input의 값 가져오기
 

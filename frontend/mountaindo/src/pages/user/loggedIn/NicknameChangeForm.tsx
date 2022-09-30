@@ -24,7 +24,7 @@ function NicknameChangeForm({
 }: NicknameChangeFormScreenProps) {
   // 사용자 별명을 저장할 변수, route에 값이 있을 경우 기존에 존재하는 값을 가져옴
   const [nickname, setNickname] = useState(
-    route ? route.params?.user.nickname : '',
+    route.params?.user.nickname ? route.params?.user.nickname : '',
   );
   const nicknameRef = useRef<TextInput | null>(null); // 사용자 별명 input의 값 가져오기
 
