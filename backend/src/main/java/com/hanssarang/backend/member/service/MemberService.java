@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 
 @RequiredArgsConstructor
@@ -101,7 +104,8 @@ public class MemberService {
     public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        member.updatePassword(passwordEncoder, passwordUpdateRequest.getPassword());
+        validatePassword(member, passwordUpdateRequest.getPassword());
+        member.updatePassword(passwordEncoder, passwordUpdateRequest.getNewPassword());
         memberRepository.save(member);
     }
 
@@ -115,9 +119,7 @@ public class MemberService {
     public LoginResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmailAndIsActiveTrue(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_LOGIN));
-        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
-            throw new BadRequestException(FAIL_TO_LOGIN);
-        }
+        validatePassword(member, loginRequest.getPassword());
         return LoginResponse.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
@@ -125,14 +127,6 @@ public class MemberService {
                 .isCompletedSurvey(member.isCompletedSurvey())
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
-    }
-
-    private String createPassword() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            stringBuilder.append(CHAR_SET[(int) (CHAR_SET.length * Math.random())]);
-        }
-        return stringBuilder.toString();
     }
 
     public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
@@ -153,5 +147,11 @@ public class MemberService {
         return IntStream.range(0, 10)
                 .mapToObj(n -> String.valueOf(CHAR_SET[(int) (CHAR_SET.length * Math.random())]))
                 .collect(Collectors.joining());
+    }
+
+    private void validatePassword(Member member, String password) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new BadRequestException(NOT_EQUAL_PASSWORD);
+        }
     }
 }
