@@ -16,6 +16,6 @@ public class HikingResponse {
     private String trailName;
     private double distance;
     private LocalTime useTime;
-    private String imageUrl;
     private double accumulatedHeight;
+    private String imageUrl;
 }
