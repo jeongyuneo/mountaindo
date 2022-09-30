@@ -44,7 +44,7 @@ public class MemberService {
 
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         Member member = signUpRequest.toEntity(passwordEncoder);
-        memberRepository.save(signUpRequest.toEntity(passwordEncoder));
+        memberRepository.save(member);
         return SignUpResponse.builder()
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
