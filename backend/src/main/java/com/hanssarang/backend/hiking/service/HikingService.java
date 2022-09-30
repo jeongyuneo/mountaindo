@@ -6,8 +6,10 @@ import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
 import com.hanssarang.backend.hiking.controller.dto.PathResponse;
 import com.hanssarang.backend.hiking.domain.Hiking;
+import com.hanssarang.backend.hiking.domain.HikingRepository;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
 import com.hanssarang.backend.util.PathUtil;
@@ -19,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
+import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +35,7 @@ public class HikingService {
 
     private final MemberRepository memberRepository;
     private final TrailRepository trailRepository;
+    private final HikingRepository hikingRepository;
 
     public List<HikingListResponse> getHikings(int memberId) {
         Member member = memberRepository.findById(memberId)
@@ -56,8 +58,20 @@ public class HikingService {
         return hikingListResponses;
     }
 
-    public HikingResponse getHiking(int hikingId) {
-        return null;
+    public HikingResponse getHiking(int memberId, int hikingId) {
+        Hiking hiking = hikingRepository.findByMemberIdAndId(memberId, hikingId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HIKING));
+        Trail trail = hiking.getTrail();
+        Mountain mountain = trail.getMountain();
+        return HikingResponse.builder()
+                .mountainName(mountain.getName())
+                .address(mountain.getAddress().getFullAddress())
+                .trailName(trail.getName())
+                .distance(hiking.getDistance())
+                .useTime(hiking.getUseTime())
+                .imageUrl(hiking.getImageUrl())
+                .accumulatedHeight(hiking.getAccumulatedHeight())
+                .build();
     }
 
     public List<HikingListResponse> getCompletedHikings(int memberId) {
