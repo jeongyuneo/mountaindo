@@ -16,7 +16,7 @@ public class JwtUtil {
 
     private static final String JWT_HEADER = "Authorization";
     private static final String SECRET = "ssafy second semester second project - mountaindo";
-    private static final int TOKEN_EXPIRE_TIME = 86400;
+    private static final long TOKEN_EXPIRE_TIME = 60 * 60 * 1000L;
     private static final String WRONG_TOKEN = "잘못된 토큰 값입니다.";
     private static final String EXPIRED_TOKEN = "로그인 정보가 만료되었습니다.";
     private static final String AUTHORIZATION_TYPE = "Bearer";
