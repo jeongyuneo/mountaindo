@@ -4,10 +4,9 @@ const initialState = {
   name: '',
   email: '',
   accessToken: '',
-  survey1: '',
-  survey2: '',
-  survey3: '',
-  survey4: '',
+  survey1: 0,
+  survey2: 0,
+  survey3: 0,
   isSurveyed: false,
   isLoggedIn: false,
 };
@@ -89,7 +88,7 @@ export const survey = createAsyncThunk(
   'userSlice/survey',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.post('/api/v1/members/surveys', {
+      const response = await axiosService.post('/api/v1/survey', {
         level: args.survey1,
         preferredMountainLocation: args.survey2,
         preferredHikingStyle: args.survey3,
@@ -170,8 +169,11 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setLogout(state, action) {
+    setLogout(state) {
       state.isLoggedIn = false;
+    },
+    setIsSurveyed(state) {
+      state.isSurveyed = true;
     },
     setSurvey(state, action) {
       if (action.payload.number === 1) {
@@ -180,8 +182,6 @@ const userSlice = createSlice({
         state.survey2 = action.payload.preferredMountainLocation;
       } else if (action.payload.number === 3) {
         state.survey3 = action.payload.preferredHikingStyle;
-      } else if (action.payload.number === 4) {
-        state.survey4 = action.payload.preferredHikingTime;
       }
     },
   },
@@ -192,6 +192,9 @@ const userSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, {payload}) => {
         console.log('LoginFulfilled ==> ', payload);
+        if (payload.completedSurvey === true) {
+          state.isSurveyed = true;
+        }
         if (payload.token) {
           state.isLoggedIn = true;
         }
