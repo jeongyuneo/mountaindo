@@ -27,7 +27,7 @@ public class HikingController {
     @GetMapping("/1/{hikingId}")
     public ResponseEntity<HikingResponse> getHiking(@RequestHeader("Authorization") String token, @PathVariable int hikingId) {
         return ResponseEntity.ok()
-                .body(hikingService.getHiking(JwtUtil.getMemberId(token)));
+                .body(hikingService.getHiking(JwtUtil.getMemberId(token), hikingId));
     }
 
     @GetMapping("/2")

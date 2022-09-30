@@ -2,6 +2,7 @@ package com.hanssarang.backend.hiking.controller.dto;
 
 import lombok.*;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -12,8 +13,9 @@ public class HikingResponse {
 
     private String mountainName;
     private String address;
-    private int height;
     private String trailName;
-    private String level;
-    private List<PathResponse> path;
+    private double distance;
+    private LocalTime useTime;
+    private double accumulatedHeight;
+    private String imageUrl;
 }
