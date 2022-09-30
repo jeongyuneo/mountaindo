@@ -50,13 +50,15 @@ function Main({navigation}: MainInScreenProps) {
     dispatch(totalRanking(''))
       // 요청 성공시 내 랭킹과 전체 랭킹 저장
       .then(res => {
-        setMyRanking({
-          imageUrl: res.payload?.imageUrl,
-          ranking: res.payload?.ranking,
-          nickname: res.payload?.nickname,
-          accumulatedHeight: res.payload?.accumulatedHeight,
-        });
-        setRankingList(res.payload?.rankings);
+        if (res.meta.requestStatus === 'fulfilled') {
+          setMyRanking({
+            imageUrl: res.payload?.imageUrl,
+            ranking: res.payload?.ranking,
+            nickname: res.payload?.nickname,
+            accumulatedHeight: res.payload?.accumulatedHeight,
+          });
+          setRankingList(res.payload?.rankings);
+        }
       })
       .catch(err => {
         console.log();

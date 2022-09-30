@@ -53,8 +53,10 @@ function SignIn({navigation}: SignInScreenProps) {
     dispatch(login({email, password}))
       .then(async res => {
         // 토큰값 정보
+        console.log('=========================================');
+        console.log(res);
+
         await AsyncStorage.setItem('token', res.payload.token);
-        const token = await AsyncStorage.getItem('token');
       })
       .catch(err => {
         console.log('LOGIN ERR ===> ', err);
