@@ -1,5 +1,6 @@
 package com.hanssarang.backend.hiking.controller;
 
+import com.hanssarang.backend.hiking.controller.dto.CompletedHikingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
 import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
@@ -31,7 +32,7 @@ public class HikingController {
     }
 
     @GetMapping("/2")
-    public ResponseEntity<List<HikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<CompletedHikingListResponse>> getCompletedHikings(@RequestHeader("Authorization") String token) {
         return ResponseEntity.ok()
                 .body(hikingService.getCompletedHikings(JwtUtil.getMemberId(token)));
     }

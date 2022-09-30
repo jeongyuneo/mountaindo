@@ -13,19 +13,30 @@ public enum PathUtil {
     LINESTRING("LINESTRING") {
         @Override
         public boolean isCompleted(String path, double latitude, double longitude) {
-            String coordinate = PATH_TYPE.matcher(path).replaceAll(DELETE);
-            String[] lines = PARENTHESIS.matcher(coordinate).replaceAll(DELETE).split(COORDINATE_DELIMITER);
-            return isInEndPoint(lines[lines.length - 1], latitude, longitude);
+            String[] coordinates = split(path, PARENTHESIS, COORDINATE_DELIMITER);
+            return isInEndPoint(coordinates[coordinates.length - 1], latitude, longitude);
+        }
+
+        @Override
+        public double[] getCentralCoordinate(String path) {
+            String[] coordinates = split(path, PARENTHESIS, COORDINATE_DELIMITER);
+            return toCentralCoordinate(coordinates[coordinates.length / 2]);
         }
     },
     MULTILINESTRING("MULTILINESTRING") {
         @Override
         public boolean isCompleted(String path, double latitude, double longitude) {
-            String coordinate = PATH_TYPE.matcher(path).replaceAll(DELETE);
-            String[] lines = MULTI_PARENTHESIS.matcher(coordinate).replaceAll(DELETE).split(MULTILINESTRING_COORDINATE_DELIMITER);
+            String[] lines = split(path, MULTI_PARENTHESIS, MULTILINESTRING_COORDINATE_DELIMITER);
             return Arrays.stream(lines)
                     .map(line -> line.split(COORDINATE_DELIMITER))
-                    .anyMatch(line -> isInEndPoint(line[line.length - 1], latitude, longitude));
+                    .anyMatch(coordinates -> isInEndPoint(coordinates[coordinates.length - 1], latitude, longitude));
+        }
+
+        @Override
+        public double[] getCentralCoordinate(String path) {
+            String[] lines = split(path, MULTI_PARENTHESIS, MULTILINESTRING_COORDINATE_DELIMITER);
+            String[] coordinates = lines[0].split(COORDINATE_DELIMITER);
+            return toCentralCoordinate(coordinates[coordinates.length / 2]);
         }
     };
 
@@ -44,6 +55,8 @@ public enum PathUtil {
 
     public abstract boolean isCompleted(String path, double latitude, double longitude);
 
+    public abstract double[] getCentralCoordinate(String path);
+
     public static PathUtil find(String path) {
         return Arrays.stream(values())
                 .filter(value -> value.type.equals(path.split(PATH_DELIMITER)[TYPE]))
@@ -57,6 +70,16 @@ public enum PathUtil {
         double theta = longitude1 - longitude2;
         double distance = Math.sin(toRadians(latitude1)) * Math.sin(toRadians(latitude2)) + Math.cos(toRadians(latitude1)) * Math.cos(toRadians(latitude2)) * Math.cos(toRadians(theta));
         return (toDegrees(Math.acos(distance)) * 60 * 1.1515) * 1609.344 < 10;
+    }
+
+    protected String[] split(String path, Pattern parenthesis, String delimiter) {
+        return parenthesis.matcher(PATH_TYPE.matcher(path).replaceAll(DELETE))
+                .replaceAll(DELETE)
+                .split(delimiter);
+    }
+
+    protected double[] toCentralCoordinate(String coordinate) {
+        return Arrays.stream(coordinate.split(PATH_DELIMITER)).mapToDouble(Double::parseDouble).toArray();
     }
 
     private double getCoordinate(String path, int coordinateInfo) {

@@ -1,10 +1,7 @@
 package com.hanssarang.backend.hiking.service;
 
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
-import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
-import com.hanssarang.backend.hiking.controller.dto.PathResponse;
+import com.hanssarang.backend.hiking.controller.dto.*;
 import com.hanssarang.backend.hiking.domain.Hiking;
 import com.hanssarang.backend.hiking.domain.HikingRepository;
 import com.hanssarang.backend.member.domain.Member;
@@ -32,6 +29,8 @@ public class HikingService {
     private static final String CLOSING_PARENTHESIS = ")";
     private static final String DELIMITER = " ";
     private static final String REST = ",";
+    private static final int LATITUDE = 0;
+    private static final int LONGITUDE = 1;
 
     private final MemberRepository memberRepository;
     private final TrailRepository trailRepository;
@@ -74,8 +73,31 @@ public class HikingService {
                 .build();
     }
 
-    public List<HikingListResponse> getCompletedHikings(int memberId) {
-        return null;
+    @Transactional(readOnly = true)
+    public List<CompletedHikingListResponse> getCompletedHikings(int memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        List<CompletedHikingListResponse> completedHikingListResponses = new ArrayList<>();
+        member.getHikings()
+                .stream()
+                .filter(Hiking::isCompleted)
+                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getId()))
+                .forEach((mountainId, hikings) -> {
+                    Hiking hiking = hikings.get(0);
+                    String path = hiking.getTrail().getPath();
+                    double[] centralCoordinate = PathUtil.find(path).getCentralCoordinate(path);
+                    completedHikingListResponses.add(
+                            CompletedHikingListResponse.builder()
+                                    .mountainName(hiking.getTrail().getMountain().getName())
+                                    .address(hiking.getTrail().getMountain().getAddress().getFullAddress())
+                                    .lastHikingDate(hiking.getCreatedDate().toLocalDate())
+                                    .lastHikingTrailName(hiking.getTrail().getName())
+                                    .latitude(centralCoordinate[LATITUDE])
+                                    .longitude(centralCoordinate[LONGITUDE])
+                                    .build()
+                    );
+                });
+        return completedHikingListResponses;
     }
 
     @Transactional
