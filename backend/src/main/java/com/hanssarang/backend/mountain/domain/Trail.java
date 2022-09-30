@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @SuperBuilder
@@ -17,17 +18,26 @@ import javax.persistence.*;
 @Entity
 public class Trail extends BaseEntity {
 
+    @NotNull
     private String name;
+
+    @NotNull
     private double length;
+
+    @NotNull
     private int goingUpTime;
+
+    @NotNull
     private int goingDownTime;
+
     private String risk;
     private String imageUrl;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Level level;
 
-    @Column(nullable = false)
+    @NotNull
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
