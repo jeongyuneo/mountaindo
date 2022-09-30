@@ -38,7 +38,7 @@ status code: 500
 === 회원 관련 기능
 ==== 회원가입
 ----
-/api/vi/members
+/api/v1/members
 ----
 ===== 성공
 .request
@@ -55,7 +55,7 @@ include::{snippets}/signup-fail/http-response.adoc[]
 
 ==== 이메일 중복체크
 ----
-/api/vi/members/email
+/api/v1/members/email
 ----
 
 [cols="2,2,3"]
@@ -82,7 +82,7 @@ include::{snippets}/check-email-fail/http-response.adoc[]
 
 ==== 닉네임 중복체크
 ----
-/api/vi/members/nickname
+/api/v1/members/nickname
 ----
 
 [cols="2,2,3"]
@@ -109,7 +109,7 @@ include::{snippets}/check-nickname-fail/http-response.adoc[]
 
 ==== 사전설문 저장
 ----
-/api/vi/members/initial-survey
+/api/v1/members/initial-survey
 ----
 
 ===== 성공
@@ -127,7 +127,7 @@ include::{snippets}/create-initial-survey-fail/http-response.adoc[]
 
 ==== 아이디 찾기
 ----
-/api/vi/members/email
+/api/v1/members/email
 ----
 
 ===== 성공
@@ -145,7 +145,7 @@ include::{snippets}/get-email-fail/http-response.adoc[]
 
 ==== 비밀번호 재설정
 ----
-/api/vi/members/password
+/api/v1/members/password
 ----
 
 ===== 성공
@@ -163,7 +163,7 @@ include::{snippets}/update-password-fail/http-response.adoc[]
 
 ==== 로그인
 ----
-/api/vi/members/login
+/api/v1/members/login
 ----
 
 ===== 성공
@@ -181,7 +181,7 @@ include::{snippets}/login-fail/http-response.adoc[]
 
 ==== 회원정보 조회
 ----
-/api/vi/members
+/api/v1/members
 ----
 
 ===== 성공
@@ -199,7 +199,7 @@ include::{snippets}/get-member-fail/http-response.adoc[]
 
 ==== 회원정보 수정
 ----
-/api/vi/members
+/api/v1/members
 ----
 
 ===== 성공
@@ -217,7 +217,7 @@ include::{snippets}/update-member-fail/http-response.adoc[]
 
 ==== 회원정보 비밀번호 수정
 ----
-/api/vi/members/mypage/password
+/api/v1/members/mypage/password
 ----
 
 ===== 성공
@@ -235,7 +235,7 @@ include::{snippets}/update-password-in-mypage-fail/http-response.adoc[]
 
 ==== 회원탈퇴
 ----
-/api/vi/members
+/api/v1/members
 ----
 
 ===== 성공
@@ -254,7 +254,7 @@ include::{snippets}/delete-member-fail/http-response.adoc[]
 === 산/등산로 관련 기능
 ==== 산 목록 조회
 ----
-/api/vi/mountains
+/api/v1/mountains
 ----
 
 [cols="1,1,4a,1"]
@@ -283,7 +283,7 @@ include::{snippets}/get-mountains-fail/http-response.adoc[]
 
 ==== 산 상세 조회
 ----
-/api/vi/mountains
+/api/v1/mountains
 ----
 
 [cols="2,2,3"]
@@ -310,7 +310,7 @@ include::{snippets}/get-mountain-fail/http-response.adoc[]
 
 ==== 등산로 상세 조회
 ----
-/api/vi/mountains/trail
+/api/v1/mountains/trail
 ----
 
 [cols="2,2,3"]
@@ -337,7 +337,7 @@ include::{snippets}/get-trail-fail/http-response.adoc[]
 
 ==== 산/등산로 검색
 ----
-/api/vi/mountains/search/1
+/api/v1/mountains/search/1
 ----
 
 [cols="2,2,3"]
@@ -364,7 +364,7 @@ include::{snippets}/search-mountain-or-trail-fail/http-response.adoc[]
 
 ==== 산 검색
 ----
-/api/vi/mountains/search/2
+/api/v1/mountains/search/2
 ----
 
 [cols="2,2,3"]
@@ -391,7 +391,7 @@ include::{snippets}/search-mountain-fail/http-response.adoc[]
 
 ==== 등산로 검색
 ----
-/api/vi/mountains/search/3
+/api/v1/mountains/search/3
 ----
 
 [cols="2,2,3"]
@@ -419,7 +419,7 @@ include::{snippets}/search-trail-fail/http-response.adoc[]
 === 등산 관련 기능
 ==== 등산 목록 조회
 ----
-/api/vi/hikings
+/api/v1/hikings
 ----
 
 ===== 성공
@@ -437,7 +437,7 @@ include::{snippets}/get-hikings-fail/http-response.adoc[]
 
 ==== 등산 상세 조회
 ----
-/api/vi/hikings/1
+/api/v1/hikings/1
 ----
 
 [cols="2,2,3"]
@@ -464,7 +464,7 @@ include::{snippets}/get-hiking-fail/http-response.adoc[]
 
 ==== 완등 목록 조회
 ----
-/api/vi/hikings/2
+/api/v1/hikings/2
 ----
 
 ===== 성공
@@ -482,7 +482,7 @@ include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
 
 ==== 등산 기록 저장
 ----
-/api/vi/hikings
+/api/v1/hikings
 ----
 
 ===== 성공
@@ -501,7 +501,7 @@ include::{snippets}/create-hiking-fail/http-response.adoc[]
 === 랭킹 관련 기능
 ==== 전체 랭킹 조회
 ----
-/api/vi/rankings
+/api/v1/rankings
 ----
 
 ===== 성공
@@ -519,7 +519,7 @@ include::{snippets}/get-rankings-fail/http-response.adoc[]
 
 ==== 전체 랭킹 내 사용자 검색
 ----
-/api/vi/rankings/1
+/api/v1/rankings/1
 ----
 
 [cols="2,2,3"]
@@ -547,7 +547,7 @@ include::{snippets}/search-ranking-fail/http-response.adoc[]
 
 ==== 산 랭킹 조회
 ----
-/api/vi/rankings/2
+/api/v1/rankings/2
 ----
 
 ===== 성공
@@ -566,7 +566,7 @@ include::{snippets}/get-rankings-of-mountain-fail/http-response.adoc[]
 ==== 산 랭킹 내 사용자 검색
 
 ----
-/api/vi/rankings/3
+/api/v1/rankings/3
 ----
 
 [cols="2,2,3"]

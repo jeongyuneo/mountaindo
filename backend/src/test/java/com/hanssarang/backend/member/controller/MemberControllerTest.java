@@ -56,6 +56,7 @@ public class MemberControllerTest extends ApiDocument {
     private PasswordUpdateRequest passwordUpdateRequest;
     private EmailResponse emailResponse;
     private SignUpRequest signUpRequest;
+    private SignUpResponse signUpResponse;
     private InitialSurveyRequest initialSurveyRequest;
     private FindingEmailRequest findingEmailRequest;
     private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
@@ -102,6 +103,9 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
+                .build();
+        signUpResponse = SignUpResponse.builder()
+                .token(JwtUtil.generateToken(ID, NICKNAME))
                 .build();
         initialSurveyRequest = InitialSurveyRequest.builder()
                 .myLevel(MY_LEVEL)
@@ -267,11 +271,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void signUpSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).signUp(any(SignUpRequest.class));
+        willReturn(signUpResponse).given(memberService).signUp(any(SignUpRequest.class));
         // when
         ResultActions resultActions = 회원가입_요청(signUpRequest);
         // then
-        회원가입_성공(resultActions);
+        회원가입_성공(resultActions, signUpResponse);
     }
 
     @DisplayName("회원가입 - 실패")
@@ -493,8 +497,9 @@ public class MemberControllerTest extends ApiDocument {
                 .content(toJson(signUpRequest)));
     }
 
-    private void 회원가입_성공(ResultActions resultActions) throws Exception {
+    private void 회원가입_성공(ResultActions resultActions, SignUpResponse signUpResponse) throws Exception {
         resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(signUpResponse)))
                 .andDo(print())
                 .andDo(toDocument("signup-success"));
     }
