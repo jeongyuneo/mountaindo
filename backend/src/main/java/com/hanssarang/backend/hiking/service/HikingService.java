@@ -47,6 +47,7 @@ public class HikingService {
                     hikingListResponses.add(
                             HikingListResponse.builder()
                                     .mountainName(mountainName)
+                                    .address(lastHiking.getTrail().getMountain().getAddress().getFullAddress())
                                     .lastHikingDate(lastHiking.getCreatedDate().toLocalDate())
                                     .lastHikingTrailName(lastHiking.getTrail().getName())
                                     .build()
