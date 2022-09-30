@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +19,19 @@ import java.util.List;
 @Entity
 public class Mountain extends BaseEntity {
 
+    @NotNull
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String code;
+
+    @NotNull
     private double height;
+
+    @NotNull
     private String imageUrl;
 
+    @NotNull
     @Embedded
     private Address address;
 
