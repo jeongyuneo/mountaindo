@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @SuperBuilder
@@ -18,11 +19,19 @@ import javax.persistence.*;
 @Entity
 public class Survey extends BaseEntity {
 
+    @NotNull
     private int level;
+
+    @NotNull
     private int preferredMountainLocation;
+
+    @NotNull
     private int preferredHikingStyle;
+
+    @NotNull
     private int preferredHikingTime;
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
