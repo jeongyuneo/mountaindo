@@ -59,7 +59,7 @@ public class HikingService {
     }
 
     public HikingResponse getHiking(int memberId, int hikingId) {
-        Hiking hiking = hikingRepository.findByMemberIdAndId(memberId, hikingId)
+        Hiking hiking = hikingRepository.findById(hikingId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_HIKING));
         Trail trail = hiking.getTrail();
         Mountain mountain = trail.getMountain();
