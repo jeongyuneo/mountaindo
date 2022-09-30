@@ -29,9 +29,9 @@ public class MemberController {
     }
 
     @PostMapping()
-    public ResponseEntity<Void> signUp(@RequestBody SignUpRequest signUpRequest) {
-        memberService.signUp(signUpRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+        return ResponseEntity.ok()
+                .body(memberService.signUp(signUpRequest));
     }
 
     @PostMapping("/initial-survey")
