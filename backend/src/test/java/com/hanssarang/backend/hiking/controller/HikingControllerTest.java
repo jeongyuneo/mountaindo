@@ -45,8 +45,8 @@ public class HikingControllerTest extends ApiDocument {
     private static final String LAST_HIKING_TRAIL_NAME = "A코스";
     private static final int HEIGHT = 1930;
     private static final String TRAIL_NAME = "A코스";
-    private static final double X = 30.0312;
-    private static final double Y = 500.1937;
+    private static final double LATITUDE = 30.0312;
+    private static final double LONGITUDE = 500.1937;
     private static final double ACCUMULATED_HEIGHT = 320.45;
     private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
 
@@ -61,12 +61,12 @@ public class HikingControllerTest extends ApiDocument {
     @BeforeEach
     void setUp() {
         List<PathResponse> pathResponse = IntStream.range(1, 6)
-                .mapToObj(n -> PathResponse.builder().latitude(n * X).longitude((n / 2.0) * Y).build())
+                .mapToObj(n -> PathResponse.builder().latitude(n * LATITUDE).longitude((n / 2.0) * LONGITUDE).build())
                 .collect(Collectors.toList());
         hikingRequest = HikingRequest.builder()
                 .trailId(ID)
                 .path(pathResponse)
-                .endPoint(PathResponse.builder().latitude(X).longitude(Y).build())
+                .endPoint(PathResponse.builder().latitude(LATITUDE).longitude(LONGITUDE).build())
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .useTime(USE_TIME)
                 .build();
@@ -82,8 +82,8 @@ public class HikingControllerTest extends ApiDocument {
                         .mountainName(MOUNTAIN_NAME)
                         .lastHikingDate(LAST_HIKING_DATE)
                         .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
-                        .x(X)
-                        .y(Y)
+                        .latitude(LATITUDE)
+                        .longitude(LONGITUDE)
                         .build())
                 .collect(Collectors.toList());
         hikingResponse = HikingResponse.builder()
