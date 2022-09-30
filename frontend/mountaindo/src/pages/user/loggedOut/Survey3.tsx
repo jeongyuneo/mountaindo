@@ -21,14 +21,14 @@ function Survey3({navigation}: Survey3ScreenProps) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 3,
-          preferredMountainLocation: '전국',
+          preferredHikingStyle: 1,
         }),
       );
     } else if (isChecked2) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 3,
-          preferredMountainLocation: '내 주변',
+          preferredHikingStyle: 2,
         }),
       );
     }
@@ -37,8 +37,8 @@ function Survey3({navigation}: Survey3ScreenProps) {
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산지역 선호도</Text>
-        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
+        <Text style={styles.title}>선호하는 등산 스타일</Text>
+        <Text style={styles.subTitle}>어떤 등산 스타일을 좋아하시나요?</Text>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -48,9 +48,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -58,9 +56,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -71,9 +67,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.checkedBoxText}>험난한 산맥 정복하기</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -81,9 +75,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
           </Pressable>
         </View>
       ) : (
@@ -94,9 +86,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
-              전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -104,9 +94,7 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>
-              지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            <Text style={styles.checkedBoxText}>무리 없는 등산하기</Text>
           </Pressable>
         </View>
       )}
@@ -159,7 +147,6 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
@@ -180,7 +167,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 13,
   },
   nextButton: {
     marginTop: 50,

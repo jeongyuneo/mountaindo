@@ -3,9 +3,11 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {LoggedInParamList} from '../../../../AppInner';
-import userSlice from '../../../slices/userSlice/user';
+import userSlice, {survey} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
+import {RootState} from '../../../store/reducer';
 
 type Survey4ScreenProps = NativeStackScreenProps<LoggedInParamList, 'Survey4'>;
 
@@ -13,32 +15,66 @@ function Survey4({navigation}: Survey4ScreenProps) {
   const dispatch = useAppDispatch();
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
+  const [isChecked3, setChecked3] = useState(false);
+  const [isChecked4, setChecked4] = useState(false);
   const [isChecked, setChecked] = useState(0);
-  const canGoNext = isChecked1 || isChecked2;
+  const canGoNext = isChecked1 || isChecked2 || isChecked3 || isChecked4;
+
+  const survey1 = useSelector((state: RootState) => state.user.survey1);
+  const survey2 = useSelector((state: RootState) => state.user.survey2);
+  const survey3 = useSelector((state: RootState) => state.user.survey3);
+  const survey4 = useSelector((state: RootState) => state.user.survey4);
 
   const setSurvey4 = () => {
     if (isChecked1) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 4,
-          preferredMountainStyle: '험난한 산맥 정복',
+          preferredHikingTime: 1,
         }),
       );
     } else if (isChecked2) {
       dispatch(
         userSlice.actions.setSurvey({
           number: 4,
-          preferredMountainStyle: '무리없는 등산',
+          preferredHikingTime: 2,
+        }),
+      );
+    } else if (isChecked3) {
+      dispatch(
+        userSlice.actions.setSurvey({
+          number: 4,
+          preferredHikingTime: 3,
+        }),
+      );
+    } else if (isChecked4) {
+      dispatch(
+        userSlice.actions.setSurvey({
+          number: 4,
+          preferredHikingTime: 4,
         }),
       );
     }
+    setSurvey();
+  };
+
+  const setSurvey = () => {
+    dispatch(survey({survey1, survey2, survey3, survey4}))
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 등산 스타일</Text>
-        <Text style={styles.subTitle}>어떤 등산 스타일을 좋아하시나요?</Text>
+        <Text style={styles.title}>선호하는 등산 소요시간</Text>
+        <Text style={styles.subTitle}>
+          등산하는데 어느 정도의 시간을 소요하시나요?
+        </Text>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -48,7 +84,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -56,7 +92,23 @@ function Survey4({navigation}: Survey4ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked3(!isChecked3);
+              setChecked(3);
+            }}>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked4(!isChecked4);
+              setChecked(4);
+            }}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -67,7 +119,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.checkedBoxText}>1시간 이내</Text>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -75,7 +127,93 @@ function Survey4({navigation}: Survey4ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked3(!isChecked3);
+              setChecked(3);
+            }}>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked4(!isChecked4);
+              setChecked(4);
+            }}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
+          </Pressable>
+        </View>
+      ) : isChecked === 2 ? (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.checkedBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
+            <Text style={styles.checkedBoxText}>1시간 이상 2시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked3(!isChecked3);
+              setChecked(3);
+            }}>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked4(!isChecked4);
+              setChecked(4);
+            }}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
+          </Pressable>
+        </View>
+      ) : isChecked === 3 ? (
+        <View>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked1(!isChecked1);
+              setChecked(1);
+            }}>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked2(!isChecked2);
+              setChecked(2);
+            }}>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.checkedBox}
+            onPress={() => {
+              setChecked3(!isChecked3);
+              setChecked(3);
+            }}>
+            <Text style={styles.checkedBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked4(!isChecked4);
+              setChecked(4);
+            }}>
+            <Text style={styles.answerBoxText}>3시간 이상</Text>
           </Pressable>
         </View>
       ) : (
@@ -86,15 +224,31 @@ function Survey4({navigation}: Survey4ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <Text style={styles.answerBoxText}>1시간 이내</Text>
           </Pressable>
           <Pressable
-            style={styles.checkedBox}
+            style={styles.answerBox}
             onPress={() => {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>무리 없는 등산하기</Text>
+            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.answerBox}
+            onPress={() => {
+              setChecked3(!isChecked3);
+              setChecked(3);
+            }}>
+            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
+          </Pressable>
+          <Pressable
+            style={styles.checkedBox}
+            onPress={() => {
+              setChecked4(!isChecked4);
+              setChecked(4);
+            }}>
+            <Text style={styles.checkedBoxText}>3시간 이상</Text>
           </Pressable>
         </View>
       )}
@@ -103,7 +257,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
         disabled={!canGoNext}
         onPress={() => {
           setSurvey4();
-          navigation.navigate('Survey5');
+          navigation.navigate('Survey4');
         }}>
         <FontAwesomeIcon
           icon={faArrowRight}
@@ -134,7 +288,7 @@ const styles = StyleSheet.create({
   answerBox: {
     padding: 20,
     marginHorizontal: 20,
-    marginTop: 30,
+    marginTop: 20,
     color: 'black',
     backgroundColor: 'white',
     height: 60,
@@ -147,11 +301,12 @@ const styles = StyleSheet.create({
   answerBoxText: {
     color: 'black',
     fontWeight: 'bold',
+    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
     marginHorizontal: 20,
-    marginTop: 30,
+    marginTop: 20,
     color: 'black',
     backgroundColor: 'grey',
     height: 60,
@@ -164,19 +319,15 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 13,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  nextButton: {
-    marginTop: 50,
-    marginRight: 20,
-    alignItems: 'flex-end',
-  },
   arrowButton: {
     width: 50,
     height: 50,
-    marginTop: 50,
+    marginTop: 30,
     marginLeft: 280,
     padding: 10,
     borderRadius: 50,
@@ -189,7 +340,7 @@ const styles = StyleSheet.create({
   arrowButtonActive: {
     width: 50,
     height: 50,
-    marginTop: 50,
+    marginTop: 30,
     marginLeft: 280,
     padding: 10,
     borderRadius: 50,

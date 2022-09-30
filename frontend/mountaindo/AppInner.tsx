@@ -21,7 +21,6 @@ import Survey1 from './src/pages/user/loggedOut/Survey1';
 import Survey2 from './src/pages/user/loggedOut/Survey2';
 import Survey3 from './src/pages/user/loggedOut/Survey3';
 import Survey4 from './src/pages/user/loggedOut/Survey4';
-import Survey5 from './src/pages/user/loggedOut/Survey5';
 import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
@@ -51,7 +50,6 @@ export type LoggedInParamList = {
   Survey2: any;
   Survey3: any;
   Survey4: any;
-  Survey5: any;
   Main: any;
   Completed: any;
   Hiking: any;
@@ -142,7 +140,7 @@ function BottomTab() {
         name="Mountain"
         component={Mountain}
         options={{
-          title: 'Mountain',
+          headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon
               icon={faMountain}
@@ -289,11 +287,6 @@ function AppInner() {
               name="Survey4"
               component={Survey4}
               options={{title: '설문조사4'}}
-            />
-            <Stack.Screen
-              name="Survey5"
-              component={Survey5}
-              options={{title: '설문조사5'}}
             />
           </Stack.Group>
         )
