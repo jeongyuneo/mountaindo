@@ -310,11 +310,6 @@ function AppInner() {
           component={Survey4}
           options={{title: '설문조사4'}}
         />
-        <Stack.Screen
-          name="Survey5"
-          component={Survey5}
-          options={{title: '설문조사5'}}
-        />
       </Stack.Group>
     </Stack.Navigator>
   ) : (
