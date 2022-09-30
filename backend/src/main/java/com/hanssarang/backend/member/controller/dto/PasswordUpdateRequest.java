@@ -9,4 +9,5 @@ import lombok.*;
 public class PasswordUpdateRequest {
 
     private String password;
+    private String newPassword;
 }

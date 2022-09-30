@@ -370,11 +370,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void loginFail() throws Exception {
         // given
-        willThrow(new NotFoundException(FAIL_TO_LOGIN)).given(memberService).login(any(LoginRequest.class));
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(memberService).login(any(LoginRequest.class));
         // when
         ResultActions resultActions = 로그인_요청(loginRequest);
         // then
-        로그인_실패(resultActions, new Message(FAIL_TO_LOGIN));
+        로그인_실패(resultActions, new Message(NOT_FOUND_MEMBER));
     }
 
     private ResultActions 회원정보_조회_요청() throws Exception {
