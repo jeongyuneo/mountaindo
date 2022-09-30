@@ -67,14 +67,14 @@ public class HikingService {
         member.getHikings()
                 .stream()
                 .filter(Hiking::isCompleted)
-                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getName()))
-                .forEach((mountainName, hikings) -> {
+                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getId()))
+                .forEach((mountainId, hikings) -> {
                     Hiking hiking = hikings.get(0);
                     String path = hiking.getTrail().getPath();
                     double[] centralCoordinate = PathUtil.find(path).getCentralCoordinate(path);
                     completedHikingListResponses.add(
                             CompletedHikingListResponse.builder()
-                                    .mountainName(mountainName)
+                                    .mountainName(hiking.getTrail().getMountain().getName())
                                     .address(hiking.getTrail().getMountain().getAddress().getFullAddress())
                                     .lastHikingDate(hiking.getCreatedDate().toLocalDate())
                                     .lastHikingTrailName(hiking.getTrail().getName())
