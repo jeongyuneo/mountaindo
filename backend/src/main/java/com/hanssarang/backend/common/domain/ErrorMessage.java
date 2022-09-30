@@ -12,7 +12,8 @@ public class ErrorMessage {
     public static final String FAIL_TO_UPDATE_PASSWORD = "비밀번호 재설정에 실패하였습니다.";
     public static final String FAIL_TO_DELETE_MEMBER = "회원탈퇴에 실패하였습니다.";
     public static final String FAIL_TO_CHECK_NICKNAME = "중복된 닉네임이 있습니다.";
-    public static final String FAIL_TO_LOGIN = "로그인에 실패하였습니다.";
+
+    public static final String NOT_EQUAL_PASSWORD = "비밀번호가 일치하지 않습니다.";
 
     public static final String NOT_FOUND_MEMBER = "사용자를 찾을 수 없습니다.";
     public static final String NOT_FOUND_HIKING = "등산 정보를 찾을 수 없습니다.";
