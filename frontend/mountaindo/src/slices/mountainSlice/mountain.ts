@@ -2,19 +2,6 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axiosService from '../../store/axiosService';
 const initialState = {};
 
-// 회원정보 API
-export const userInfo = createAsyncThunk(
-  'userSlice/userInfo',
-  async (args: any, {rejectWithValue}) => {
-    try {
-      const response = await axiosService.get('/api/v1/members');
-      return response.data;
-    } catch (err: any) {
-      return rejectWithValue(err.response);
-    }
-  },
-);
-
 // 산 전체 목록 가져오기 API
 export const getMountainList = createAsyncThunk(
   'mountainSlice/getMountainList',
