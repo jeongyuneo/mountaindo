@@ -93,7 +93,7 @@ public class MemberService {
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(passwordUpdateVerificationRequest.getEmail(), passwordUpdateVerificationRequest.getName())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        String newPassword = createPassword();
+        String newPassword = createTemporaryPassword();
         member.updatePassword(passwordEncoder, newPassword);
         // 이메일 전송
     }
@@ -147,5 +147,11 @@ public class MemberService {
                 .build();
         member.submit(survey);
         memberRepository.save(member);
+    }
+
+    private String createTemporaryPassword() {
+        return IntStream.range(0, 10)
+                .mapToObj(n -> String.valueOf(CHAR_SET[(int) (CHAR_SET.length * Math.random())]))
+                .collect(Collectors.joining());
     }
 }
