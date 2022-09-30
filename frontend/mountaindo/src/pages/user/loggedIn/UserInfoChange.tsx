@@ -2,7 +2,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
@@ -15,8 +15,8 @@ type UserInfoChangeScreenProps = NativeStackScreenProps<
   'UserInfoChange'
 >;
 
-function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
-  // 화면에 띄워줄 임시 사용자 정보
+function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
+  // 화면에 띄워줄 임시 사용자 정보 [주소 변경 API 미연결  하여 아직 지우지 않았습니다.]
   const [userInfo, setUserInfo] = useState({
     name: '사용자 이름',
     nickname: '사용자 별명',
@@ -26,6 +26,7 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
     address: {value: '충청남도', cityValue: '아산시'},
   });
   const dispatch = useAppDispatch();
+  useEffect(() => {}, [route.params?.user]);
   return (
     <DismissKeyboardView>
       <View style={styles.container}>
@@ -39,7 +40,7 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
             <Text style={styles.textLabel}>실 거주지</Text>
           </View>
           <View style={styles.textGroup}>
-            <Text style={styles.text}>{userInfo.name}</Text>
+            <Text style={styles.text}>{route.params?.user.name}</Text>
             {/* 우측 화살표를 눌러서 닉네임 변경 페이지로 이동
                 params로 user정보를 전달
               */}
@@ -47,19 +48,19 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
               style={styles.goToChangeForm}
               onPress={() =>
                 navigation.navigate('NicknameChangeForm', {
-                  userInfo: userInfo,
-                  setUserInfo: setUserInfo,
+                  user: route.params?.user,
+                  setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{userInfo.nickname}</Text>
+              <Text style={styles.text}>{route.params?.user.nickname}</Text>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
                 style={styles.icon}
               />
             </Pressable>
-            <Text style={styles.text}>{userInfo.email}</Text>
-            <Text style={styles.text}>{userInfo.birth}</Text>
+            <Text style={styles.text}>{route.params?.user.email}</Text>
+            <Text style={styles.text}>{route.params?.user.birth}</Text>
             {/* 우측 화살표를 눌러서 전화번호 변경 페이지로 이동
                 params로 user정보를 전달
               */}
@@ -67,11 +68,11 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
               style={styles.goToChangeForm}
               onPress={() =>
                 navigation.navigate('PhoneNumberChangeForm', {
-                  userInfo: userInfo,
-                  setUserInfo: setUserInfo,
+                  user: route.params?.user,
+                  setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{userInfo.phoneNumber}</Text>
+              <Text style={styles.text}>{route.params?.user.phone}</Text>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
@@ -86,9 +87,7 @@ function UserInfoChange({navigation}: UserInfoChangeScreenProps) {
                   setUserInfo: setUserInfo,
                 })
               }>
-              <Text style={styles.text}>
-                {userInfo.address.value} {userInfo.address.cityValue}
-              </Text>
+              <Text style={styles.text}>{route.params?.user.fullAddress}</Text>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
