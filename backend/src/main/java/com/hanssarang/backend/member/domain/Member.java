@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +22,27 @@ import java.util.List;
 @Entity
 public class Member extends BaseEntity {
 
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @NotNull
     private String password;
+
+    @NotNull
     private String name;
+
+    @NotNull
     private LocalDate birth;
+
+    @Column(nullable = false, unique = true)
     private String phone;
+
+    @Column(nullable = false, unique = true)
     private String nickname;
+
     private String imageUrl;
 
+    @NotNull
     @Embedded
     private Address address;
 
