@@ -35,7 +35,7 @@ function Survey2({navigation}: Survey2ScreenProps) {
   };
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>등산지역 선호도</Text>
         <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
@@ -128,48 +128,52 @@ function Survey2({navigation}: Survey2ScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 20,
+  },
   titleWrapper: {
     marginTop: 50,
-    marginLeft: 20,
     marginBottom: 30,
   },
   title: {
     fontSize: 30,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 30,
     color: 'black',
     backgroundColor: 'white',
     height: 60,
-    borderRadius: 20,
+    borderRadius: 30,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#c5c5c5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerBoxText: {
-    color: 'black',
+    color: 'grey',
     fontWeight: 'bold',
-    fontSize: 13,
+    fontSize: 12,
   },
   checkedBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 30,
     color: 'black',
-    backgroundColor: 'grey',
+    backgroundColor: '#57d696',
     height: 60,
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: 30,
+    borderWidth: 0,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
@@ -180,7 +184,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 13,
+    fontSize: 12,
   },
   nextButton: {
     marginTop: 50,
@@ -190,11 +194,11 @@ const styles = StyleSheet.create({
   arrowButton: {
     width: 50,
     height: 50,
-    marginTop: 50,
-    marginLeft: 280,
+    marginTop: 40,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'grey',
+    backgroundColor: '#c5c5c5',
     alignItems: 'flex-end',
   },
   arrowIcon: {
@@ -203,11 +207,11 @@ const styles = StyleSheet.create({
   arrowButtonActive: {
     width: 50,
     height: 50,
-    marginTop: 50,
-    marginLeft: 280,
+    marginTop: 40,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
     alignItems: 'flex-end',
   },
   arrowIconActive: {

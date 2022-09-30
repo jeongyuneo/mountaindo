@@ -23,37 +23,17 @@ function Survey4({navigation}: Survey4ScreenProps) {
   const survey1 = useSelector((state: RootState) => state.user.survey1);
   const survey2 = useSelector((state: RootState) => state.user.survey2);
   const survey3 = useSelector((state: RootState) => state.user.survey3);
-  const survey4 = useSelector((state: RootState) => state.user.survey4);
+  let survey4 = 0;
 
   const setSurvey4 = () => {
     if (isChecked1) {
-      dispatch(
-        userSlice.actions.setSurvey({
-          number: 4,
-          preferredHikingTime: 1,
-        }),
-      );
+      survey4 = 1;
     } else if (isChecked2) {
-      dispatch(
-        userSlice.actions.setSurvey({
-          number: 4,
-          preferredHikingTime: 2,
-        }),
-      );
+      survey4 = 2;
     } else if (isChecked3) {
-      dispatch(
-        userSlice.actions.setSurvey({
-          number: 4,
-          preferredHikingTime: 3,
-        }),
-      );
+      survey4 = 3;
     } else if (isChecked4) {
-      dispatch(
-        userSlice.actions.setSurvey({
-          number: 4,
-          preferredHikingTime: 4,
-        }),
-      );
+      survey4 = 4;
     }
     setSurvey();
   };
@@ -62,6 +42,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
     dispatch(survey({survey1, survey2, survey3, survey4}))
       .then(res => {
         console.log(res);
+        dispatch(userSlice.actions.setIsSurveyed());
       })
       .catch(err => {
         console.log(err);
@@ -69,7 +50,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
   };
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>선호하는 등산 소요시간</Text>
         <Text style={styles.subTitle}>
@@ -270,48 +251,50 @@ function Survey4({navigation}: Survey4ScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 20,
+  },
   titleWrapper: {
     marginTop: 50,
-    marginLeft: 20,
-    marginBottom: 30,
+    marginBottom: 5,
   },
   title: {
     fontSize: 30,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
-    color: 'black',
+    color: '#272827',
     fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 20,
-    color: 'black',
     backgroundColor: 'white',
     height: 60,
-    borderRadius: 20,
+    borderRadius: 30,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#c5c5c5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   answerBoxText: {
-    color: 'black',
+    color: 'grey',
     fontWeight: 'bold',
-    fontSize: 13,
   },
   checkedBox: {
     padding: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 20,
     color: 'black',
-    backgroundColor: 'grey',
+    backgroundColor: '#57d696',
     height: 60,
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: 30,
+    borderWidth: 0,
     borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
@@ -319,7 +302,6 @@ const styles = StyleSheet.create({
   checkedBoxText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 13,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -328,10 +310,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: 30,
-    marginLeft: 280,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'grey',
+    backgroundColor: '#c5c5c5',
     alignItems: 'flex-end',
   },
   arrowIcon: {
@@ -341,10 +323,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: 30,
-    marginLeft: 280,
+    marginLeft: 250,
     padding: 10,
     borderRadius: 50,
-    backgroundColor: 'black',
+    backgroundColor: '#57d696',
     alignItems: 'flex-end',
   },
   arrowIconActive: {
