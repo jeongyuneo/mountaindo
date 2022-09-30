@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 @Getter
@@ -20,17 +21,30 @@ import java.time.LocalTime;
 @Entity
 public class Hiking extends BaseEntity {
 
+    @NotNull
     private double distance;
+
+    @NotNull
     private LocalTime useTime;
+
+    @NotNull
     private double accumulatedHeight;
+
+    @NotNull
     private boolean isCompleted;
+
+    @NotNull
     private String path;
+
+    @NotNull
     private String imageUrl;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trail_id")
     private Trail trail;
