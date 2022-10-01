@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @SuperBuilder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
