@@ -175,19 +175,17 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public Message sendEmailValidationToken(String email) {
-        String emailValidateToken = createPassword();
+    public void sendEmailValidationToken(String email) {
+        String emailValidateToken = randomString();
         RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
         sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
                 TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
-        return new Message(SUCCESS_MESSAGE);
     }
 
-    public Message validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
+    public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
-            throw new NotEqualException(VALIDATION_TOKEN);
+            throw new NotEqualException(VALIDATION_TOKEN_NOT_EQUAL);
         }
-        return new Message(SUCCESS_MESSAGE);
     }
 
     private void sendMailMessage(String email, String subject, String message) {
