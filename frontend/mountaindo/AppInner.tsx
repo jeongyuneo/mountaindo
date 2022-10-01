@@ -256,7 +256,6 @@ function AppInner() {
         name="HikingTab"
         component={HikingTab}
         options={{
-          unmountOnBlur: false,
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon
