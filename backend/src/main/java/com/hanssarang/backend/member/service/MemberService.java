@@ -1,8 +1,10 @@
 package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.domain.Address;
+import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
+import com.hanssarang.backend.common.exception.NotEqualException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
@@ -10,7 +12,10 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
 import com.hanssarang.backend.survey.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
+import com.hanssarang.backend.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +32,15 @@ public class MemberService {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             '!', '@', '#', '$', '%', '^', '&', '*'};
+    private static final String ADMIN_EMAIL = "mountaindo201@naver.com";
+    private static final String JOIN_MOUNTAINDO_MESSAGE = "MountainDo: 회원가입 인증번호 안내";
+    private static final String CONFIRMATION_NUMBER = "\n해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+    private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
+    private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
+    private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
+    private static final String SUCCESS_MESSAGE = "succeeded";
 
+    private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
