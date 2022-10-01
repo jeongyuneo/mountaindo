@@ -18,8 +18,10 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "on m.mountain_id = v.mountain_id " +
             "group by m.mountain_id " +
             "having sum(v.count) " +
-            "order by v.count desc", nativeQuery = true)
-    List<Mountain> findAllPopularity(String sort);
+            "order by v.count desc " +
+            "LIMIT :limit " +
+            "OFFSET :offset", nativeQuery = true)
+    List<Mountain> findAllPopularity(int offset, int limit);
 
     @Query(value = "select m.* " +
             "from mountain m " +
