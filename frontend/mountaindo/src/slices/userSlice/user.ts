@@ -245,6 +245,9 @@ const userSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state, {payload}) => {
         console.log('SignUp Fulfilled ==>', payload);
+        if (payload.token) {
+          state.isLoggedIn = true;
+        }
       })
       .addCase(signUp.rejected, (state, {payload}) => {
         console.log('SignUp Rejected ==>', payload);

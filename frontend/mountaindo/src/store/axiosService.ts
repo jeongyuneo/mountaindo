@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Config from 'react-native-config';
+import userSlice from '../slices/userSlice/user';
 
 // Axios URL 베이스 설정.
 const axiosService = axios.create({
@@ -21,12 +22,17 @@ axiosService.interceptors.request.use(
   },
 );
 
-// 토큰값 에러 발생시
+// 토큰 만료로 401일 경우 logout 및 AsyncStorage clear
 axiosService.interceptors.response.use(
   config => {
     return config;
   },
-  err => {
+  async err => {
+    const status = err.response ? err.response.status : null;
+    if (status === 401) {
+      userSlice.actions.setLogout(false);
+      await AsyncStorage.clear();
+    }
     return Promise.reject(err);
   },
 );

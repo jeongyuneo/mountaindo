@@ -1,13 +1,6 @@
 // react import
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Pressable,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // fontawesom import
@@ -26,8 +19,9 @@ type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
   //로그아웃 버튼 클릭시 로그인창으로 화면전환
-  const loggedout = () => {
+  const loggedout = async () => {
     dispatch(userSlice.actions.setLogout(false));
+    await AsyncStorage.clear();
   };
   const [user, setUser] = useState({
     si: '',
