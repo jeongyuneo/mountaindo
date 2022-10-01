@@ -287,6 +287,8 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    implementation project(':lottie-react-native')
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
