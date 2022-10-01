@@ -180,6 +180,7 @@ export const passwordChange = createAsyncThunk(
         '/api/v1/members/mypage/password',
         {
           password: args.password,
+          newPassword: args.newPassword,
         },
       );
       return response.data;
