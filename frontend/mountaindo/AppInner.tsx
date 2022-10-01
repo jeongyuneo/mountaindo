@@ -153,7 +153,7 @@ function MountainTab() {
       <Stack.Screen
         name="Mountain"
         component={Mountain}
-        options={{title: '전체 산 목록'}}
+        options={{title: '전체 산 목록', headerShown: false}}
       />
       <Stack.Screen
         name="MainDetail"
@@ -217,17 +217,18 @@ function AppInner() {
         },
       }}>
       <Tab.Screen
-        name="Main"
-        component={Main}
+        name="MountainList"
+        component={MountainTab}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon
-              icon={faHome}
+              icon={faMountain}
               size={20}
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -242,20 +243,22 @@ function AppInner() {
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
-        name="MountainList"
-        component={MountainTab}
+        name="Main"
+        component={Main}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon
-              icon={faMountain}
+              icon={faHome}
               size={20}
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -270,6 +273,7 @@ function AppInner() {
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
+          unmountOnBlur: true,
         }}
       />
       <Tab.Screen
@@ -284,12 +288,13 @@ function AppInner() {
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
+          unmountOnBlur: true,
         }}
       />
     </Tab.Navigator>
   ) : isLoggedIn && !isSurveyed ? (
     <Stack.Navigator>
-      <Stack.Group>
+      <Stack.Group screenOptions={{headerShown: false}}>
         <Stack.Screen
           name="Survey1"
           component={Survey1}

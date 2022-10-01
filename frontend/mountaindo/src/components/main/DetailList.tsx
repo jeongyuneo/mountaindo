@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Pressable,
-  Alert,
-} from 'react-native';
+import {Text, View, Image, StyleSheet, Pressable, Alert} from 'react-native';
 
 interface Props {
   DummyMountain: {
