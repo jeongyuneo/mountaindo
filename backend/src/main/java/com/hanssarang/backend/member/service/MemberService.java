@@ -1,7 +1,6 @@
 package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.domain.Address;
-import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotEqualException;
@@ -120,7 +119,7 @@ public class MemberService {
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(passwordUpdateVerificationRequest.getEmail(), passwordUpdateVerificationRequest.getName())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        String newPassword = createPassword();
+        String newPassword = randomString();
         member.updatePassword(passwordEncoder, newPassword);
         memberRepository.save(member);
         sendMailMessage(member.getEmail(), ISSUANCE_OF_TEMPORARY_PASSWORD,
@@ -156,7 +155,7 @@ public class MemberService {
                 .build();
     }
 
-    private String createPassword() {
+    private String randomString() {
         return IntStream.range(0, 10)
                 .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
                 .collect(Collectors.joining());
