@@ -82,7 +82,7 @@ public class MemberController {
                 .body(memberService.login(loginRequest));
     }
 
-    @GetMapping("/email/1")
+    @PostMapping("/email/1")
     public ResponseEntity<Message> sendEmailValidationToken(@RequestParam String email) {
         Message message = memberService.sendEmailValidationToken(email);
         return ResponseEntity.ok()
