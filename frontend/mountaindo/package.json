@@ -34,6 +34,7 @@
     "react-native": "0.68.2",
     "react-native-config": "^1.4.6",
     "react-native-encrypted-storage": "^4.0.2",
+    "react-native-image-picker": "^4.10.0",
     "react-native-kakao-share-link": "^1.0.6",
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-linear-gradient": "^2.6.2",

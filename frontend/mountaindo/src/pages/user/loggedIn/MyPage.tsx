@@ -7,28 +7,29 @@ import {
   Image,
   Pressable,
   ScrollView,
+  PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // fontawesom import
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faArrowLeft} from '@fortawesome/free-solid-svg-icons';
+import {faCamera} from '@fortawesome/free-solid-svg-icons';
 import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
 
 // component import
 import {LoggedInParamList} from '../../../../AppInner';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAppDispatch} from '../../../store';
-import userSlice, {userInfo} from '../../../slices/userSlice/user';
+import userSlice, {userChange, userInfo} from '../../../slices/userSlice/user';
+
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
-  //로그아웃 버튼 클릭시 로그인창으로 화면전환
-  const loggedout = () => {
-    dispatch(userSlice.actions.setLogout(false));
-  };
+  const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State
+  // 유저 정보를 담기 위한 State
   const [user, setUser] = useState({
     si: '',
     gu: '',
@@ -41,6 +42,10 @@ function MyPage({navigation}: MyPageScreenProps) {
     phone: '',
     imageUrl: '',
   });
+  //로그아웃 버튼 클릭시 로그인창으로 화면전환
+  const loggedout = () => {
+    dispatch(userSlice.actions.setLogout(false));
+  };
   // 유저정보를 받아오는 기능.
   useEffect(() => {
     dispatch(userInfo('a')).then(async res => {
@@ -58,99 +63,173 @@ function MyPage({navigation}: MyPageScreenProps) {
         imageUrl: res.payload?.imageUrl,
       });
     });
-  }, [user.nickname]);
+  }, [user.nickname, user.imageUrl, photo]);
+
+  // 이미지 불러오기
+  const showPicker = async () => {
+    const grantedcamera = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'App Camera Permission',
+        message: 'App neds access to your camera',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    const grantedstorage = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'App Camera Permission',
+        message: 'App neds access to your camera',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    if (
+      grantedcamera === PermissionsAndroid.RESULTS.GRANTED &&
+      grantedstorage === PermissionsAndroid.RESULTS.GRANTED
+    ) {
+      console.log('Camera & storage permission given');
+      Alert.alert(
+        '프로필',
+        '프로필 사진 변경하기',
+        [
+          {
+            text: '사진 촬영',
+            onPress: async () => {
+              const result = await launchCamera({
+                mediaType: 'photo',
+                cameraType: 'back',
+              });
+              if (result.didCancel) {
+                return null;
+              }
+              const localUri = result.assets[0].uri;
+              const uriPath = localUri?.split('//').pop();
+              const imageName = localUri?.split('/').pop();
+
+              dispatch(
+                userChange({user: {...user, imageUrl: 'file://' + localUri}}),
+              ).then(res => {
+                if (res.meta.requestStatus === 'fulfilled') {
+                  setPhoto('file://' + localUri);
+                }
+              });
+            },
+          },
+          {
+            text: '갤러리',
+            onPress: async () => {
+              const result = await launchImageLibrary();
+              if (result.didCancel) {
+                return null;
+              }
+              const localUri = result.assets[0].uri;
+              const uriPath = localUri?.split('//').pop();
+              const imageName = localUri?.split('/').pop();
+
+              dispatch(
+                userChange({user: {...user, imageUrl: 'file://' + localUri}}),
+              ).then(res => {
+                if (res.meta.requestStatus === 'fulfilled') {
+                  setPhoto('file://' + localUri);
+                }
+              });
+            },
+          },
+        ],
+        {cancelable: true},
+      );
+    } else {
+      console.log('Camera permission denied');
+    }
+  };
+  // 이미지 불러오기 종료
+
   return (
     <View style={styles.container}>
       <View style={styles.containerUp}>
-        <View style={styles.containerTop}>
-          <View>
-            <FontAwesomeIcon
-              icon={faArrowLeft}
-              size={30}
-              style={styles.backIcon}
-            />
-          </View>
-
-          <View style={styles.myPageHeader}>
-            <Text style={styles.myPageText}>마이 페이지</Text>
-          </View>
-        </View>
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
-            <Image
-              source={require('../../../assets/user.png')}
-              style={styles.userImg}
-            />
-            <Text style={styles.userName}>{user.nickname} 님</Text>
-          </View>
-
-          <View style={styles.containerRank}>
-            <View style={styles.userRank}>
-              <View>
-                <Text style={styles.title}>총 고도</Text>
-                <Text style={styles.info}>1823m</Text>
-              </View>
-              <View>
-                <Text style={styles.title}>전체 랭킹</Text>
-                <Text style={styles.info}>2위</Text>
-              </View>
-              <View>
-                <Text style={styles.title}>최근 등반한 산</Text>
-                <Text style={styles.info}>계룡산</Text>
-              </View>
+            {user.imageUrl !== null ? (
+              <Image source={{uri: user.imageUrl}} style={styles.userImg} />
+            ) : (
+              <Image
+                source={require('../../../assets/jjang.png')}
+                style={styles.userImg}
+              />
+            )}
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.userName}>{user.nickname} 님</Text>
+              <Pressable onPress={showPicker}>
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  size={12}
+                  style={styles.camera}
+                />
+              </Pressable>
             </View>
           </View>
         </View>
       </View>
 
       <View style={styles.containerBottom}>
-        <View style={styles.mentStart}>
-          <View style={styles.line} />
+        <View>
+          <ScrollView>
+            <Pressable
+              onPress={() => navigation.push('UserInfoChange', {user, setUser})}
+              style={styles.menuHeight}>
+              <View style={styles.menuStyle}>
+                <Text style={styles.goMenuText}>개인 정보 수정</Text>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  size={20}
+                  style={styles.angleIcon}
+                />
+              </View>
+            </Pressable>
 
-          <Pressable
-            onPress={() => navigation.push('UserInfoChange', {user, setUser})}>
-            <View style={styles.menuStyle}>
-              <Text style={styles.goMenuText}>개인 정보 수정</Text>
-              <FontAwesomeIcon
-                icon={faAngleRight}
-                size={15}
-                style={styles.angleIcon}
-              />
-            </View>
-          </Pressable>
+            <Pressable
+              onPress={() => navigation.push('PasswordChange')}
+              style={styles.menuHeight}>
+              <View style={styles.menuStyle}>
+                <Text style={styles.goMenuText}>비밀번호 변경</Text>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  size={20}
+                  style={styles.angleIcon}
+                />
+              </View>
+            </Pressable>
 
-          <Pressable onPress={() => navigation.push('PasswordChange')}>
-            <View style={styles.menuStyle}>
-              <Text style={styles.goMenuText}>비밀번호 변경</Text>
-              <FontAwesomeIcon
-                icon={faAngleRight}
-                size={15}
-                style={styles.angleIcon}
-              />
-            </View>
-          </Pressable>
+            <Pressable
+              onPress={() => navigation.push('Notice')}
+              style={styles.menuHeight}>
+              <View style={styles.menuStyle}>
+                <Text style={styles.goMenuText}>공지사항</Text>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  size={20}
+                  style={styles.angleIcon}
+                />
+              </View>
+            </Pressable>
 
-          <Pressable onPress={() => navigation.push('Notice')}>
-            <View style={styles.menuStyle}>
-              <Text style={styles.goMenuText}>공지사항</Text>
-              <FontAwesomeIcon
-                icon={faAngleRight}
-                size={15}
-                style={styles.angleIcon}
-              />
-            </View>
-          </Pressable>
-
-          <View style={styles.menuStyle}>
-            <Text style={styles.goMenuText} onPress={loggedout}>
-              로그아웃
-            </Text>
-            <FontAwesomeIcon
-              icon={faAngleRight}
-              size={15}
-              style={styles.angleIcon}
-            />
-          </View>
+            <Pressable style={styles.menuHeight}>
+              <View style={styles.menuStyle}>
+                <Text style={styles.goMenuText} onPress={loggedout}>
+                  로그아웃
+                </Text>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  size={20}
+                  style={styles.angleIcon}
+                />
+              </View>
+            </Pressable>
+          </ScrollView>
         </View>
       </View>
     </View>
@@ -158,6 +237,13 @@ function MyPage({navigation}: MyPageScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  camera: {
+    marginTop: 13,
+    marginLeft: 5,
+  },
+  menuHeight: {
+    marginVertical: 23,
+  },
   myPageHeader: {
     marginLeft: 10,
   },
@@ -167,31 +253,26 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   containerUp: {
     flex: 1,
   },
-  containerTop: {
-    flex: 1,
-  },
   containerBottom: {
-    flex: 1,
+    flex: 2,
   },
   containerDown: {
     flex: 3,
   },
-  containerRank: {
-    flex: 0.5,
-  },
   userInfo: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   userImg: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
   },
   userName: {
     fontSize: 13,
@@ -217,20 +298,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   line: {
-    marginTop: 15,
+    marginTop: 1,
     borderBottomColor: 'gray',
     borderBottomWidth: 3,
-  },
-  mentStart: {
-    flex: 1,
-    justifyContent: 'space-around',
   },
   goMenuText: {
     marginLeft: 30,
     color: 'black',
-    fontSize: 15,
+    fontSize: 20,
   },
   angleIcon: {
+    marginTop: 3,
     marginRight: 50,
   },
   menuStyle: {
