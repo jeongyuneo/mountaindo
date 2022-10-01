@@ -81,9 +81,17 @@ public class MemberController {
         return ResponseEntity.ok()
                 .body(memberService.login(loginRequest));
     }
+
     @GetMapping("/email/1")
     public ResponseEntity<Message> sendEmailValidationToken(@RequestParam String email) {
         Message message = memberService.sendEmailValidationToken(email);
+        return ResponseEntity.ok()
+                .body(message);
+    }
+
+    @PostMapping("/email/2")
+    public ResponseEntity<Message> validateSignUpEmail(@RequestBody EmailAuthRequest emailAuthRequest) {
+        Message message = memberService.validateSignUpEmail(emailAuthRequest);
         return ResponseEntity.ok()
                 .body(message);
     }
