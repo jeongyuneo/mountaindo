@@ -43,6 +43,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import {faFlag} from '@fortawesome/free-regular-svg-icons';
+import FindMountain from './src/pages/hiking/FindMountain';
 
 export type LoggedInParamList = {
   Welcome: any;
@@ -68,6 +69,7 @@ export type LoggedInParamList = {
   VisitedDetail: any;
   MainDetail: any;
   AddressChangeForm: any;
+  FindMountain: any;
 };
 
 export type RootStackParamList = {
@@ -194,6 +196,23 @@ function VisitedTab() {
   );
 }
 
+function HikingTab() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="FindMountain"
+        component={FindMountain}
+        options={{title: '산 검색'}}
+      />
+      <Stack.Screen
+        name="Hiking"
+        component={Hiking}
+        options={{title: '등산'}}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppInner() {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn); // 로그인 여부 확인
   const isSurveyed = useSelector((state: RootState) => state.user.isSurveyed); // 설문조사 여부 확인
@@ -217,6 +236,8 @@ function AppInner() {
         tabBarStyle: {
           position: 'absolute',
         },
+        tabBarHideOnKeyboard: true,
+        unmountOnBlur: true,
       }}>
       <Tab.Screen
         name="Main"
@@ -233,9 +254,10 @@ function AppInner() {
         }}
       />
       <Tab.Screen
-        name="Hiking"
-        component={Hiking}
+        name="HikingTab"
+        component={HikingTab}
         options={{
+          unmountOnBlur: false,
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon

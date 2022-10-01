@@ -4,7 +4,6 @@ import React from 'react';
 import {
   Modal,
   StyleSheet,
-  Text,
   Pressable,
   View,
   Image,
