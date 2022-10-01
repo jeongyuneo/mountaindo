@@ -1,12 +1,15 @@
 package com.hanssarang.backend.member.controller;
 
+import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.service.MemberService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/members")
@@ -77,5 +80,11 @@ public class MemberController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok()
                 .body(memberService.login(loginRequest));
+    }
+    @GetMapping("/email/1")
+    public ResponseEntity<Message> sendEmailValidationToken(@RequestParam String email) {
+        Message message = memberService.sendEmailValidationToken(email);
+        return ResponseEntity.ok()
+                .body(message);
     }
 }
