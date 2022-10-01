@@ -42,11 +42,10 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
-    private static final String MY_LEVEL = "등린이";
-    private static final String VISITED_MOUNTAIN = "없음";
-    private static final String PREFERRED_MOUNTAIN_LOCATION = "내 주변";
-    private static final String PREFERRED_MOUNTAIN_STYLE = "무리없는 등산";
-    private static final String PREFERRED_CLIMBING_TIME = "1 ~ 2시간";
+    private static final int LEVEL = 1;
+    private static final int PREFERRED_MOUNTAIN_LOCATION = 2;
+    private static final int PREFERRED_HIKING_STYLE = 2;
+    private static final int PREFERRED_HIKING_TIME = 1;
     private static final String NICKNAME_PARAMETER_NAME = "nickname";
     private static final String MEMBER_EMAIL_PARAMETER_NAME = "email";
 
@@ -57,7 +56,7 @@ public class MemberControllerTest extends ApiDocument {
     private EmailResponse emailResponse;
     private SignUpRequest signUpRequest;
     private SignUpResponse signUpResponse;
-    private InitialSurveyRequest initialSurveyRequest;
+    private SurveyRequest surveyRequest;
     private FindingEmailRequest findingEmailRequest;
     private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
@@ -107,12 +106,11 @@ public class MemberControllerTest extends ApiDocument {
         signUpResponse = SignUpResponse.builder()
                 .token(JwtUtil.generateToken(ID, NICKNAME))
                 .build();
-        initialSurveyRequest = InitialSurveyRequest.builder()
-                .myLevel(MY_LEVEL)
-                .visitedMountain(VISITED_MOUNTAIN)
+        surveyRequest = SurveyRequest.builder()
+                .level(LEVEL)
                 .preferredMountainLocation(PREFERRED_MOUNTAIN_LOCATION)
-                .preferredMountainStyle(PREFERRED_MOUNTAIN_STYLE)
-                .preferredClimbingTime(PREFERRED_CLIMBING_TIME)
+                .preferredHikingStyle(PREFERRED_HIKING_STYLE)
+                .preferredHikingTime(PREFERRED_HIKING_TIME)
                 .build();
         findingEmailRequest = FindingEmailRequest.builder()
                 .name(NAME)
@@ -293,9 +291,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveySuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).createInitialSurvey(anyInt(), any(InitialSurveyRequest.class));
+        willDoNothing().given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
-        ResultActions resultActions = 사전_설문조사_저장_요청(initialSurveyRequest);
+        ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
         사전_설문조사_저장_성공(resultActions);
     }
@@ -304,9 +302,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveyFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SURVEY)).given(memberService).createInitialSurvey(anyInt(), any(InitialSurveyRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_SURVEY)).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
-        ResultActions resultActions = 사전_설문조사_저장_요청(initialSurveyRequest);
+        ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
         사전_설문조사_저장_실패(resultActions, new Message(FAIL_TO_SURVEY));
     }
@@ -511,24 +509,24 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("signup-fail"));
     }
 
-    private ResultActions 사전_설문조사_저장_요청(InitialSurveyRequest initialSurveyRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/members/initial-survey")
+    private ResultActions 사전_설문조사_저장_요청(SurveyRequest surveyRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/survey")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(initialSurveyRequest)));
+                .content(toJson(surveyRequest)));
     }
 
     private void 사전_설문조사_저장_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(toDocument("create-initial-survey-success"));
+                .andDo(toDocument("create-survey-success"));
     }
 
     private void 사전_설문조사_저장_실패(ResultActions resultActions, Message message) throws Exception {
         resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
-                .andDo(toDocument("create-initial-survey-fail"));
+                .andDo(toDocument("create-survey-fail"));
     }
 
     private ResultActions 아이디_찾기_요청(FindingEmailRequest findingEmailRequest) throws Exception {
