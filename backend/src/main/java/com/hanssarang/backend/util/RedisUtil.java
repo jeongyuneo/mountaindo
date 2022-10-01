@@ -35,9 +35,6 @@ public class RedisUtil {
     }
 
     public static boolean validateData(String key, String value) {
-        if (getData(key).equals(value)) {
-            return true;
-        }
-        return false;
+        return getData(key).equals(value);
     }
 }
