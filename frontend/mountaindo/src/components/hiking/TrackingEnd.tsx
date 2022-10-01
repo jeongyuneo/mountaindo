@@ -1,27 +1,44 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import ResultMap from './ResultMap';
 import Share from 'react-native-share';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import {faShareFromSquare} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faDownload} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCloud,
+  faCloudRain,
+  faSnowflake,
+  faSun,
+  faWind,
+} from '@fortawesome/free-solid-svg-icons';
 
 import KakaoShareLink from 'react-native-kakao-share-link';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
+import ShareModal from './ShareModal';
 
 type Props = {
   timer: any;
   coords: any;
-
+  setCoords: any;
   totalDist: any;
   totalHigh: any;
   today: any;
+  trailName: string;
+  currentWeather: any;
 };
 
-function TrackingEnd({timer, coords, totalDist, totalHigh, today}: Props) {
+function TrackingEnd({
+  timer,
+  coords,
+  totalDist,
+  totalHigh,
+  today,
+  trailName,
+  currentWeather,
+}: Props) {
+  const [modalVisible, setModalVisible] = useState(false);
   const captureRef = useRef<any>(); // 캡쳐할 영역의 값을 가져오기 위한 ref
 
   // 지정된 영역 캡쳐해서 uri 생성
@@ -111,44 +128,92 @@ function TrackingEnd({timer, coords, totalDist, totalHigh, today}: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <AppTextBold style={styles.titleText}>등산 종료</AppTextBold>
-      </View>
       <View>
-        <ViewShot
-          style={styles.mapContainer}
-          ref={captureRef}
-          options={{format: 'jpg', quality: 0.9}}>
-          <ResultMap coords={coords} />
+        <ViewShot ref={captureRef} options={{format: 'jpg', quality: 0.9}}>
+          <View style={styles.mapContainer}>
+            <ResultMap coords={coords} />
+          </View>
+          <View style={styles.textLabelGroup}>
+            <View style={styles.iconGroup}>
+              {currentWeather === '눈' ? (
+                <FontAwesomeIcon
+                  icon={faSnowflake}
+                  size={15}
+                  color={'skyblue'}
+                  style={styles.weatherIcon}
+                />
+              ) : currentWeather === '흐림' ? (
+                <FontAwesomeIcon
+                  icon={faCloud}
+                  size={15}
+                  color={'grey'}
+                  style={styles.weatherIcon}
+                />
+              ) : currentWeather === '비' ? (
+                <FontAwesomeIcon
+                  icon={faCloudRain}
+                  size={15}
+                  color={'grey'}
+                  style={styles.weatherIcon}
+                />
+              ) : currentWeather === '바람' ? (
+                <FontAwesomeIcon
+                  icon={faWind}
+                  size={15}
+                  color={'skyblue'}
+                  style={styles.weatherIcon}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faSun}
+                  size={15}
+                  color={'#FFCC29'}
+                  style={styles.weatherIcon}
+                />
+              )}
+              <AppTextBold style={styles.trailText}>{trailName}</AppTextBold>
+            </View>
+            <View>
+              <AppTextBold style={styles.todayText}>{today}</AppTextBold>
+            </View>
+          </View>
+
+          <View style={styles.textContainer}>
+            <View style={styles.textGroup}>
+              <AppTextBold style={styles.resultText}>{timer}</AppTextBold>
+              <AppText style={styles.text}>소요시간</AppText>
+            </View>
+            <View style={styles.textGroup}>
+              <AppTextBold style={styles.resultText}>
+                {totalDist} km
+              </AppTextBold>
+              <AppText style={styles.text}>총 거리</AppText>
+            </View>
+            <View style={styles.textGroup}>
+              <AppTextBold style={styles.resultText}>{totalHigh} m</AppTextBold>
+              <AppText style={styles.text}>총 고도</AppText>
+            </View>
+          </View>
         </ViewShot>
       </View>
-      <View style={styles.shareGroup}>
-        <Pressable onPress={kakaoShare} style={styles.shareButton}>
-          <AppText>카카오톡 공유하기</AppText>
-        </Pressable>
-        <Pressable onPress={() => onCapture(null)} style={styles.shareButton}>
-          <FontAwesomeIcon icon={faShareFromSquare} size={15} />
-        </Pressable>
-        <Pressable onPress={onSave} style={styles.shareButton}>
-          <FontAwesomeIcon icon={faDownload} size={15} />
+      <View style={styles.shareButtonView}>
+        <Pressable
+          style={styles.shareButton}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <AppTextBold style={styles.shareButtonText}>공유하기</AppTextBold>
         </Pressable>
       </View>
-      <View style={styles.textContainer}>
-        <View style={styles.textLabelGroup}>
-          <AppText style={styles.text}>일시</AppText>
-          <AppText style={styles.text}>장소</AppText>
-          <AppText style={styles.text}>소요시간</AppText>
-          <AppText style={styles.text}>총 거리</AppText>
-          <AppText style={styles.text}>총 고도</AppText>
-        </View>
-        <View style={styles.textGroup}>
-          <AppText style={styles.text}>{today}</AppText>
-          <AppText style={styles.text}>대전광역시 계룡산</AppText>
-          <AppText style={styles.text}>{timer}</AppText>
-          <AppText style={styles.text}>{totalDist} km</AppText>
-          <AppText style={styles.text}>{totalHigh} m</AppText>
-        </View>
-      </View>
+      {modalVisible && (
+        <ShareModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          onCapture={onCapture}
+          onSave={onSave}
+          kakaoShare={kakaoShare}
+        />
+      )}
     </View>
   );
 }
@@ -157,16 +222,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     height: Dimensions.get('window').height,
-  },
-  title: {
-    margin: 10,
-  },
-  titleText: {
-    fontSize: 20,
-  },
-  image: {
-    width: Dimensions.get('window').width,
-    height: 200,
   },
   mapContainer: {
     width: Dimensions.get('window').width,
@@ -177,23 +232,54 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: 'row',
     marginBottom: 10,
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   textLabelGroup: {
-    flex: 0.3,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+    marginHorizontal: 10,
   },
   textGroup: {
-    flex: 0.7,
+    alignItems: 'center',
   },
   text: {
     fontSize: 13,
-    margin: 5,
   },
-  shareGroup: {
+  weatherIcon: {
+    marginBottom: 5,
+  },
+  trailText: {
+    fontSize: 15,
+    marginLeft: 5,
+  },
+  iconGroup: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  todayText: {
+    fontSize: 15,
+  },
+  resultText: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  shareButtonView: {
+    alignItems: 'center',
+    marginTop: 50,
   },
   shareButton: {
-    padding: 10,
+    width: 300,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: 'center',
+    backgroundColor: '#57d696',
+    alignItems: 'center',
+  },
+  shareButtonText: {
+    color: 'white',
   },
 });
 export default TrackingEnd;

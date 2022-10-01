@@ -42,6 +42,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import {faFlag} from '@fortawesome/free-regular-svg-icons';
+import FindMountain from './src/pages/hiking/FindMountain';
 
 export type LoggedInParamList = {
   Welcome: any;
@@ -66,6 +67,7 @@ export type LoggedInParamList = {
   VisitedDetail: any;
   MainDetail: any;
   AddressChangeForm: any;
+  FindMountain: any;
 };
 
 export type RootStackParamList = {
@@ -179,7 +181,7 @@ function VisitedTab() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Completed"
+        name="Complete"
         component={TopTab}
         options={{headerShown: false}}
       />
@@ -187,6 +189,23 @@ function VisitedTab() {
         name="VisitedDetail"
         component={VisitedDetail}
         options={{title: '방문한 산 상세'}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function HikingTab() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="FindMountain"
+        component={FindMountain}
+        options={{title: '산 검색'}}
+      />
+      <Stack.Screen
+        name="Hiking"
+        component={Hiking}
+        options={{title: '등산'}}
       />
     </Stack.Navigator>
   );
@@ -215,6 +234,8 @@ function AppInner() {
         tabBarStyle: {
           position: 'absolute',
         },
+        tabBarHideOnKeyboard: true,
+        unmountOnBlur: true,
       }}>
       <Tab.Screen
         name="MountainList"
@@ -232,9 +253,10 @@ function AppInner() {
         }}
       />
       <Tab.Screen
-        name="Hiking"
-        component={Hiking}
+        name="HikingTab"
+        component={HikingTab}
         options={{
+          unmountOnBlur: false,
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <FontAwesomeIcon
