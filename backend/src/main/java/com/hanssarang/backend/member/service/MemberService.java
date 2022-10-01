@@ -19,6 +19,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 
 @RequiredArgsConstructor
@@ -154,11 +157,9 @@ public class MemberService {
     }
 
     private String createPassword() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            stringBuilder.append(CHAR_SET[(int) (CHAR_SET.length * Math.random())]);
-        }
-        return stringBuilder.toString();
+        return IntStream.range(0, 10)
+                .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
+                .collect(Collectors.joining());
     }
 
     public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
@@ -176,7 +177,7 @@ public class MemberService {
     }
 
     public Message sendEmailValidationToken(String email) {
-        String emailValidateToken = createAuthToken();
+        String emailValidateToken = createPassword();
         RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
         sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
                 TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
@@ -185,17 +186,9 @@ public class MemberService {
 
     public Message validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
-            throw new NotEqualException(TOKEN_NOT_EQUAL);
+            throw new NotEqualException(VALIDATION_TOKEN);
         }
         return new Message(SUCCESS_MESSAGE);
-    }
-
-    private String createAuthToken() {
-        StringBuilder token = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            token.append(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]);
-        }
-        return token.toString();
     }
 
     private void sendMailMessage(String email, String subject, String message) {
