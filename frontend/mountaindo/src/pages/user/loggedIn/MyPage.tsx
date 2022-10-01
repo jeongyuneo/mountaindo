@@ -71,7 +71,7 @@ function MyPage({navigation}: MyPageScreenProps) {
       PermissionsAndroid.PERMISSIONS.CAMERA,
       {
         title: 'App Camera Permission',
-        message: 'App neds access to your camera',
+        message: 'App needs access to your camera',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
@@ -81,7 +81,7 @@ function MyPage({navigation}: MyPageScreenProps) {
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
         title: 'App Camera Permission',
-        message: 'App neds access to your camera',
+        message: 'App needs access to your camera',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
@@ -161,7 +161,7 @@ function MyPage({navigation}: MyPageScreenProps) {
                 style={styles.userImg}
               />
             )}
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.userNickName}>
               <Text style={styles.userName}>{user.nickname} 님</Text>
               <Pressable onPress={showPicker}>
                 <FontAwesomeIcon
@@ -237,6 +237,9 @@ function MyPage({navigation}: MyPageScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  userNickName: {
+    flexDirection: 'row',
+  },
   camera: {
     marginTop: 13,
     marginLeft: 5,
