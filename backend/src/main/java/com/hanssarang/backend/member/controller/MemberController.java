@@ -1,6 +1,5 @@
 package com.hanssarang.backend.member.controller;
 
-import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.service.MemberService;
 import com.hanssarang.backend.util.JwtUtil;
@@ -83,14 +82,14 @@ public class MemberController {
     }
 
     @PostMapping("/email/1")
-    public ResponseEntity<Message> sendEmailValidationToken(@RequestParam String email) {
-        return ResponseEntity.ok()
-                .body(memberService.sendEmailValidationToken(email));
+    public ResponseEntity<Void> sendEmailValidationToken(@RequestParam String email) {
+        memberService.sendEmailValidationToken(email);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/email/2")
-    public ResponseEntity<Message> validateSignUpEmail(@RequestBody EmailAuthRequest emailAuthRequest) {
-        return ResponseEntity.ok()
-                .body(memberService.validateSignUpEmail(emailAuthRequest));
+    public ResponseEntity<Void> validateSignUpEmail(@RequestBody EmailAuthRequest emailAuthRequest) {
+        memberService.validateSignUpEmail(emailAuthRequest);
+        return ResponseEntity.ok().build();
     }
 }
