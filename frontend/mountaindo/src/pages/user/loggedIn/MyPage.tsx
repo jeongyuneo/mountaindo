@@ -28,8 +28,16 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
+
   const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State
   // 유저 정보를 담기 위한 State
+
+  //로그아웃 버튼 클릭시 로그인창으로 화면전환
+  const loggedout = async () => {
+    dispatch(userSlice.actions.setLogout(false));
+    await AsyncStorage.clear();
+  };
+
   const [user, setUser] = useState({
     si: '',
     gu: '',

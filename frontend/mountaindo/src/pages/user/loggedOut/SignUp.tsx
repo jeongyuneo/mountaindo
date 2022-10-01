@@ -175,17 +175,11 @@ function SignUp() {
         nickName,
       }),
     )
-      .then(res => {
-        console.log('SIGNUP RES ===> ', res);
-        Alert.alert('알림', '회원가입되었습니다.');
-        // 임시: 회원가입 후 로그인 요청 -> 토큰 값 반환 -> 후에 백에서 자동로그인 처리 예정
-        dispatch(login({email, password}))
-          .then(async res2 => {
-            await AsyncStorage.setItem('token', res2.payload.token);
-          })
-          .catch(err => {
-            console.log('LOGIN ERR ==>', err);
-          });
+      .then(async res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          Alert.alert('알림', '회원가입되었습니다.');
+          await AsyncStorage.setItem('token', res.payload.token);
+        }
       })
       .catch(err => {
         console.log('SIGNUP ERR ===> ', err);

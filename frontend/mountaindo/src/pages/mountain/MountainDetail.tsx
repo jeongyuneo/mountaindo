@@ -5,7 +5,6 @@ import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
 import CourseList from '../../components/mountainDetail/CourseList';
-import CourseListDummy from '../../components/mountainDetail/CourseListDummy';
 import Facilites from '../../components/mountainDetail/Facilities';
 import RankingList from '../../components/mountainDetail/RankingList';
 import WeatherForecast from '../../components/mountainDetail/WeatherForecast';
@@ -18,26 +17,25 @@ type MountainDetailScreenProps = NativeStackScreenProps<
   'MountainDetail'
 >;
 
-function MountainDetail({navigation}: MountainDetailScreenProps) {
+function MountainDetail({navigation, route}: MountainDetailScreenProps) {
   const moveToCourseDetail = (
-    id: number,
-    trail: string,
+    trailId: number,
+    name: string,
+    length: string,
     level: string,
-    timeDuration: string,
-    totalDistance: number,
-    imageSrc: any,
+    imageUrl: any,
   ) => {
     navigation.navigate('CourseDetail', {
-      id,
-      trail,
+      trailId,
+      name,
+      length,
       level,
-      timeDuration,
-      totalDistance,
-      imageSrc,
+      imageUrl,
     });
   };
   const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
   const [myRanking, setMyRanking] = useState<Rankings | null>(null); // 내 랭킹 정보를 저장할 변수
+  const sentData: any = route?.params;
 
   const dispatch = useAppDispatch();
 
@@ -54,6 +52,7 @@ function MountainDetail({navigation}: MountainDetailScreenProps) {
       })
       .catch(err => console.log(err));
   }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Image
@@ -61,15 +60,21 @@ function MountainDetail({navigation}: MountainDetailScreenProps) {
         source={require('../../assets/gyeryongMountain.jpg')}
       />
       <View style={styles.titleWrapper}>
-        <AppTextBold style={styles.titleText}>계룡산</AppTextBold>
+        <AppTextBold style={styles.titleText}>
+          {sentData.mountainDetail.name}
+        </AppTextBold>
       </View>
       <View style={styles.infoWrapper}>
-        <AppText style={styles.text}>위치: 대전 광역시 유성구</AppText>
-        <AppText style={styles.text}>고도: 800m</AppText>
+        <AppText style={styles.text}>
+          위치: {sentData.mountainDetail.address}
+        </AppText>
+        <AppText style={styles.text}>
+          고도: {sentData.mountainDetail.height}m
+        </AppText>
       </View>
       <WeatherForecast />
       <CourseList
-        CourseListDummy={CourseListDummy}
+        trailList={sentData.mountainDetail.trails}
         moveToCourseDetail={moveToCourseDetail}
       />
       <RankingList rankingList={rankingList} myRanking={myRanking} />

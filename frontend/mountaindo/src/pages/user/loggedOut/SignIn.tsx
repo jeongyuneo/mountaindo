@@ -51,14 +51,16 @@ function SignIn({navigation}: SignInScreenProps) {
     //로그인 버튼 클릭 시 서버 전송
     dispatch(login({email, password}))
       .then(async res => {
-        // 토큰값 정보
-        await AsyncStorage.setItem('token', res.payload.token);
+        if (res.meta.requestStatus === 'fulfilled') {
+          await AsyncStorage.setItem('token', res.payload.token);
+        } else {
+          Alert.alert('알림', '로그인에 실패하였습니다. ');
+        }
       })
       .catch(err => {
         console.log('LOGIN ERR ===> ', err);
+        Alert.alert('알림', '로그인에 실패하였습니다. ');
       });
-    // Alert.alert('알림', '로그인 되었습니다.');
-    console.log('로그인 성공');
   }, [dispatch, email, password]);
 
   // 이메일 유효성 검사

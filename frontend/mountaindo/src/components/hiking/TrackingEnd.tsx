@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import ResultMap from './ResultMap';
@@ -21,12 +21,12 @@ import ShareModal from './ShareModal';
 type Props = {
   timer: any;
   coords: any;
-  setCoords: any;
   totalDist: any;
   totalHigh: any;
   today: any;
   trailName: string;
   currentWeather: any;
+  moveToTrackingEnd: any;
 };
 
 function TrackingEnd({
@@ -37,6 +37,7 @@ function TrackingEnd({
   today,
   trailName,
   currentWeather,
+  moveToTrackingEnd,
 }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const captureRef = useRef<any>(); // 캡쳐할 영역의 값을 가져오기 위한 ref
@@ -126,6 +127,10 @@ function TrackingEnd({
     }
   };
 
+  useEffect(() => {
+    setModalVisible(false);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View>
@@ -133,68 +138,66 @@ function TrackingEnd({
           <View style={styles.mapContainer}>
             <ResultMap coords={coords} />
           </View>
-          <View style={styles.textLabelGroup}>
-            <View style={styles.iconGroup}>
-              {currentWeather === '눈' ? (
-                <FontAwesomeIcon
-                  icon={faSnowflake}
-                  size={15}
-                  color={'skyblue'}
-                  style={styles.weatherIcon}
-                />
-              ) : currentWeather === '흐림' ? (
-                <FontAwesomeIcon
-                  icon={faCloud}
-                  size={15}
-                  color={'grey'}
-                  style={styles.weatherIcon}
-                />
-              ) : currentWeather === '비' ? (
-                <FontAwesomeIcon
-                  icon={faCloudRain}
-                  size={15}
-                  color={'grey'}
-                  style={styles.weatherIcon}
-                />
-              ) : currentWeather === '바람' ? (
-                <FontAwesomeIcon
-                  icon={faWind}
-                  size={15}
-                  color={'skyblue'}
-                  style={styles.weatherIcon}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faSun}
-                  size={15}
-                  color={'#FFCC29'}
-                  style={styles.weatherIcon}
-                />
-              )}
-              <AppTextBold style={styles.trailText}>{trailName}</AppTextBold>
-            </View>
-            <View>
-              <AppTextBold style={styles.todayText}>{today}</AppTextBold>
-            </View>
-          </View>
-
-          <View style={styles.textContainer}>
-            <View style={styles.textGroup}>
-              <AppTextBold style={styles.resultText}>{timer}</AppTextBold>
-              <AppText style={styles.text}>소요시간</AppText>
-            </View>
-            <View style={styles.textGroup}>
-              <AppTextBold style={styles.resultText}>
-                {totalDist} km
-              </AppTextBold>
-              <AppText style={styles.text}>총 거리</AppText>
-            </View>
-            <View style={styles.textGroup}>
-              <AppTextBold style={styles.resultText}>{totalHigh} m</AppTextBold>
-              <AppText style={styles.text}>총 고도</AppText>
-            </View>
-          </View>
         </ViewShot>
+        <View style={styles.textLabelGroup}>
+          <View style={styles.iconGroup}>
+            {currentWeather === '눈' ? (
+              <FontAwesomeIcon
+                icon={faSnowflake}
+                size={15}
+                color={'skyblue'}
+                style={styles.weatherIcon}
+              />
+            ) : currentWeather === '흐림' ? (
+              <FontAwesomeIcon
+                icon={faCloud}
+                size={15}
+                color={'grey'}
+                style={styles.weatherIcon}
+              />
+            ) : currentWeather === '비' ? (
+              <FontAwesomeIcon
+                icon={faCloudRain}
+                size={15}
+                color={'grey'}
+                style={styles.weatherIcon}
+              />
+            ) : currentWeather === '바람' ? (
+              <FontAwesomeIcon
+                icon={faWind}
+                size={15}
+                color={'skyblue'}
+                style={styles.weatherIcon}
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faSun}
+                size={15}
+                color={'#FFCC29'}
+                style={styles.weatherIcon}
+              />
+            )}
+            <AppTextBold style={styles.trailText}>{trailName}</AppTextBold>
+          </View>
+          <View>
+            <AppTextBold style={styles.todayText}>{today}</AppTextBold>
+          </View>
+        </View>
+
+        <View style={styles.textContainer}>
+          <View style={styles.textGroup}>
+            <AppTextBold style={styles.resultText}>{timer}</AppTextBold>
+            <AppText style={styles.text}>소요시간</AppText>
+          </View>
+          <View style={styles.textGroup}>
+            <AppTextBold style={styles.resultText}>{totalDist} km</AppTextBold>
+            <AppText style={styles.text}>총 거리</AppText>
+          </View>
+          <View style={styles.textGroup}>
+            <AppTextBold style={styles.resultText}>{totalHigh} m</AppTextBold>
+            <AppText style={styles.text}>총 고도</AppText>
+          </View>
+        </View>
       </View>
       <View style={styles.shareButtonView}>
         <Pressable
@@ -202,16 +205,20 @@ function TrackingEnd({
           onPress={() => {
             setModalVisible(!modalVisible);
           }}>
-          <AppTextBold style={styles.shareButtonText}>공유하기</AppTextBold>
+          <AppTextBold style={styles.shareButtonText}>
+            기록 저장하기
+          </AppTextBold>
         </Pressable>
       </View>
       {modalVisible && (
         <ShareModal
+          moveToTrackingEnd={moveToTrackingEnd}
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
           onCapture={onCapture}
           onSave={onSave}
           kakaoShare={kakaoShare}
+          getPhotoUri={getPhotoUri}
         />
       )}
     </View>

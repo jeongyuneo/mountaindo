@@ -10,14 +10,12 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
 
     @Query(value = "select m.* " +
             "from mountain m " +
-            "inner join (select h.trail_id, count(h.trail_id) count, t.mountain_id " +
+            "left join (select h.trail_id, count(h.trail_id) count, t.mountain_id " +
             "            from hiking h " +
-            "            inner join trail t " +
+            "            right join trail t " +
             "            on t.trail_id = h.trail_id " +
-            "            group by t.trail_id) v " +
+            "            group by t.mountain_id) v " +
             "on m.mountain_id = v.mountain_id " +
-            "group by m.mountain_id " +
-            "having sum(v.count) " +
             "order by v.count desc", nativeQuery = true)
     List<Mountain> findAllPopularity(String sort);
 

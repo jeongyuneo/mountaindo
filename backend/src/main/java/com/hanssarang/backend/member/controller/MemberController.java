@@ -4,9 +4,11 @@ import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.service.MemberService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/members")
@@ -28,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
         return ResponseEntity.ok()
                 .body(memberService.signUp(signUpRequest));
@@ -45,12 +47,12 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getMemberEmail(findingEmailRequest));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<MemberResponse> getMember(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity.ok(memberService.getMember(JwtUtil.getMemberId(token)));
     }
 
-    @PatchMapping()
+    @PatchMapping
     public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
         return ResponseEntity.ok().body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest));
     }
@@ -67,7 +69,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<Void> deleteMember(@RequestHeader(AUTHORIZATION) String token) {
         memberService.deleteMember(JwtUtil.getMemberId(token));
         return ResponseEntity.ok().build();
@@ -77,5 +79,17 @@ public class MemberController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok()
                 .body(memberService.login(loginRequest));
+    }
+
+    @PostMapping("/email/1")
+    public ResponseEntity<Void> sendEmailValidationToken(@RequestParam String email) {
+        memberService.sendEmailValidationToken(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/email/2")
+    public ResponseEntity<Void> validateSignUpEmail(@RequestBody EmailAuthRequest emailAuthRequest) {
+        memberService.validateSignUpEmail(emailAuthRequest);
+        return ResponseEntity.ok().build();
     }
 }
