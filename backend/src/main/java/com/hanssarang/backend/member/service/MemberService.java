@@ -6,8 +6,8 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
-import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
-import com.hanssarang.backend.survey.domain.Survey;
+import com.hanssarang.backend.member.controller.dto.InitialSurveyRequest;
+import com.hanssarang.backend.member.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +54,17 @@ public class MemberService {
     }
 
     public void createInitialSurvey(int memberId, InitialSurveyRequest initialSurveyRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Survey survey = Survey.builder()
+                .level(initialSurveyRequest.getLevel())
+                .preferredMountainLocation(initialSurveyRequest.getPreferredMountainLocation())
+                .preferredHikingStyle(initialSurveyRequest.getPreferredHikingStyle())
+                .preferredHikingTime(initialSurveyRequest.getPreferredHikingTime())
+                .isActive(true)
+                .build();
+        member.submit(survey);
+        memberRepository.save(member);
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
@@ -127,20 +138,6 @@ public class MemberService {
                 .isCompletedSurvey(member.isCompletedSurvey())
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
-    }
-
-    public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        Survey survey = Survey.builder()
-                .level(createSurveyRequest.getLevel())
-                .preferredMountainLocation(createSurveyRequest.getPreferredMountainLocation())
-                .preferredHikingStyle(createSurveyRequest.getPreferredHikingStyle())
-                .preferredHikingTime(createSurveyRequest.getPreferredHikingTime())
-                .isActive(true)
-                .build();
-        member.submit(survey);
-        memberRepository.save(member);
     }
 
     private String createTemporaryPassword() {

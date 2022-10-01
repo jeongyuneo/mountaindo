@@ -8,9 +8,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InitialSurveyRequest {
 
-    private String myLevel;
-    private String visitedMountain;
-    private String preferredMountainLocation;
-    private String preferredMountainStyle;
-    private String preferredClimbingTime;
+    private int level;
+    private int preferredMountainLocation;
+    private int preferredHikingStyle;
+    private int preferredHikingTime;
 }
