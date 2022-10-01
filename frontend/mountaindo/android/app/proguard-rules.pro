@@ -8,6 +8,6 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
--keep class com.ssafy.mountaindo.BuildConfig { *; }
+-keep class com.mountain.mountaindo.BuildConfig { *; }
 -keep class com.kakao.sdk.**.model.* { <fields>; }
 -keep class * extends com.google.gson.TypeAdapter

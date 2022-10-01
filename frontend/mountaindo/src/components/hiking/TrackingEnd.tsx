@@ -85,8 +85,8 @@ function TrackingEnd({timer, coords, totalDist, totalHigh, today}: Props) {
           title: '등산 기록',
           imageUrl: uri,
           link: {
-            mobileWebUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
-            webUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+            mobileWebUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
+            webUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
             androidExecutionParams: [],
             iosExecutionParams: [],
           },
@@ -96,8 +96,8 @@ function TrackingEnd({timer, coords, totalDist, totalHigh, today}: Props) {
           {
             title: '앱에서 보기',
             link: {
-              mobileWebUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
-              webUrl: 'http://j7b201.p.ssafy.io:8080/docs/index.html',
+              mobileWebUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
+              webUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
               androidExecutionParams: [],
               iosExecutionParams: [],
             },
