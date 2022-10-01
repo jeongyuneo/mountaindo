@@ -51,6 +51,7 @@ class MountainControllerTest extends ApiDocument {
     private static final int GOING_DOWN_TIME = 4;
     private static final String RISK = "경사가 가파릅니다.";
     private static final String NAME_ORDER = "name";
+    private static final int PAGE = 1;
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
@@ -98,9 +99,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsSuccess() throws Exception {
         // given
-        willReturn(mountainListResponses).given(mountainService).getMountains(NAME_ORDER);
+        willReturn(mountainListResponses).given(mountainService).getMountains(anyString(), anyInt());
         // when
-        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER);
+        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, PAGE);
         // then
         산_목록_조회_성공(resultActions, mountainListResponses);
     }
@@ -109,9 +110,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains(NAME_ORDER);
+        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains(anyString(), anyInt());
         // when
-        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER);
+        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, PAGE);
         // then
         산_목록_조회_실패(resultActions, new Message(FAIL_TO_GET_MOUNTAINS));
     }
@@ -226,8 +227,8 @@ class MountainControllerTest extends ApiDocument {
         등산로_검색_실패(resultActions, new Message(FAIL_TO_SEARCH_TRAIL));
     }
 
-    private ResultActions 산_목록_조회_요청(String sort) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort)
+    private ResultActions 산_목록_조회_요청(String sort, int page) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort + "&page=" + page)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
