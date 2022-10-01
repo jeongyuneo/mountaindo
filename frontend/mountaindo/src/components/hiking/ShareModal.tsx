@@ -14,6 +14,8 @@ interface Props {
   kakaoShare: any;
   onCapture: any;
   onSave: any;
+  getPhotoUri: any;
+  moveToTrackingEnd: any;
 }
 
 const ShareModal = ({
@@ -22,6 +24,8 @@ const ShareModal = ({
   kakaoShare,
   onCapture,
   onSave,
+  getPhotoUri,
+  moveToTrackingEnd,
 }: Props) => {
   return (
     <View style={styles.centeredView}>
@@ -39,6 +43,14 @@ const ShareModal = ({
           style={styles.centeredView}>
           <View style={styles.modalView}>
             <View>
+              <Pressable
+                style={styles.shareButton}
+                onPress={async () => {
+                  const uri = await getPhotoUri();
+                  moveToTrackingEnd(uri);
+                }}>
+                <AppText style={styles.shareText}>내 기록 저장하기</AppText>
+              </Pressable>
               <Pressable onPress={kakaoShare} style={styles.shareButton}>
                 <AppText style={styles.shareText}>
                   카카오톡으로 공유하기
@@ -79,7 +91,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 300,
-    height: 250,
+    height: 300,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,

@@ -200,7 +200,7 @@ function HikingTab() {
       <Stack.Screen
         name="FindMountain"
         component={FindMountain}
-        options={{title: '산 검색'}}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Hiking"
@@ -265,7 +265,6 @@ function AppInner() {
               color={focused ? '#7FB77E' : 'black'}
             />
           ),
-          unmountOnBlur: true,
         }}
       />
       <Tab.Screen

@@ -13,6 +13,7 @@ export const endHiking = createAsyncThunk(
         accumulatedHeight: args.accumulatedHeight,
         distance: args.distance,
         useTime: args.useTime,
+        imageUrl: args.imageUrl,
       });
       return response.data;
     } catch (err: any) {

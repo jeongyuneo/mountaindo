@@ -22,6 +22,16 @@ import TrackingStart from '../../components/hiking/TrackingStart';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
 
+// timer에 저장한 시간 포멧팅 함수
+export const formatTime = (timer: any) => {
+  const getSeconds = `0${timer % 60}`.slice(-2);
+  const minutes = `${Math.floor(timer / 60)}`;
+  const getMinutes = `0${Number(minutes) % 60}`.slice(-2);
+  const getHours = `0${Math.floor(timer / 3600)}`.slice(-2);
+
+  return `${getHours}:${getMinutes}:${getSeconds}`;
+};
+
 function Hiking({navigation, route}: HikingScreenProps) {
   // 내 현재 경도, 위도 값을 저장할 변수
   const [myPosition, setMyPosition] = useState<{
@@ -36,7 +46,6 @@ function Hiking({navigation, route}: HikingScreenProps) {
   const [currentWeather, setCurrentWeather] = useState(''); // 현재 날씨를 저장할 변수(흐림, 맑음, 비, 맑음, 눈)
 
   const [isHikingEnd, setIsHikingEnd] = useState(false); // 등산 기록 종료 여부를 확인하는 변수
-  const [timer, setTimer] = useState(0); // 타이머 저장 변수
   const [isSuccess, setIsSuccess] = useState(false);
   const [endTime, setEndTime] = useState('');
 
@@ -83,16 +92,6 @@ function Hiking({navigation, route}: HikingScreenProps) {
       });
     }
   }, [isTracking, navigation, isHikingEnd, isSuccess, isFocused]);
-
-  // timer에 저장한 시간 포멧팅 함수
-  const formatTime = () => {
-    const getSeconds = `0${timer % 60}`.slice(-2);
-    const minutes = `${Math.floor(timer / 60)}`;
-    const getMinutes = `0${Number(minutes) % 60}`.slice(-2);
-    const getHours = `0${Math.floor(timer / 3600)}`.slice(-2);
-
-    return `${getHours}:${getMinutes}:${getSeconds}`;
-  };
 
   // 이전좌표와 현재좌표 값을 비교해서 거리구하기
   const getDistance = () => {
@@ -257,7 +256,7 @@ function Hiking({navigation, route}: HikingScreenProps) {
   }
 
   // 기록 종료 시 TrackingEnd 이동 함수
-  const moveToTrackingEnd = (time: any) => {
+  const moveToTrackingEnd = (uri: any) => {
     getLocation();
     dispatch(
       endHiking({
@@ -269,14 +268,13 @@ function Hiking({navigation, route}: HikingScreenProps) {
         endPoint: myPosition,
         accumulatedHeight: totalHigh,
         distance: totalDist.toFixed(2),
-        useTime: time,
+        useTime: endTime,
+        imageUrl: uri,
       }),
     )
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          setIsSuccess(true);
-          setEndTime(time);
-          // setCoords([]); // 등산 기록 종료 후 리스트 초기화
+          Alert.alert('알림', '등산 기록이 저장되었습니다.');
         } else {
           Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
         }
@@ -314,19 +312,17 @@ function Hiking({navigation, route}: HikingScreenProps) {
     />
   ) : isTracking && !isHikingEnd && !isSuccess ? (
     <TrackingRoute
-      moveToTrackingEnd={moveToTrackingEnd}
       setIsTracking={setIsTracking}
       totalDist={totalDist.toFixed(2)}
       setTracking={setTracking}
       tracking={tracking}
       currentWeather={currentWeather}
-      timer={timer}
-      formatTime={formatTime}
-      setTimer={setTimer}
       endTracking={endTracking}
       coords={coords}
       myPosition={myPosition}
       trailName={trailName}
+      setIsSuccess={setIsSuccess}
+      setEndTime={setEndTime}
     />
   ) : !isTracking && !isHikingEnd && isSuccess ? (
     <TrackingEnd
@@ -338,9 +334,9 @@ function Hiking({navigation, route}: HikingScreenProps) {
       ]}
       totalDist={totalDist.toFixed(2)}
       totalHigh={totalHigh}
-      setCoords={setCoords}
       trailName={trailName}
       currentWeather={currentWeather}
+      moveToTrackingEnd={moveToTrackingEnd}
     />
   ) : (
     <ScrollView

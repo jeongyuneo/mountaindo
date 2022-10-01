@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, StyleSheet, Pressable, View} from 'react-native';
+import {Modal, StyleSheet, Pressable, View, ScrollView} from 'react-native';
 import {Trails} from '../../pages/hiking/FindMountain';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
@@ -36,28 +36,28 @@ const TrailListModal = ({
         <Pressable style={styles.centeredView}>
           <View style={styles.modalView}>
             {isMountain === 2 && isTrailList && trailList?.length > 0 ? (
-              <View style={styles.searchContainer}>
-                {mountainName && (
-                  <AppTextBold style={styles.mountainText}>
-                    {mountainName}의 등산 코스
-                  </AppTextBold>
-                )}
-                <AppTextBold style={styles.chooseText}>
-                  등산 코스를 선택해주세요
-                </AppTextBold>
-                {trailList.map((item, index) => (
-                  <Pressable
-                    key={index}
-                    style={styles.searchList}
-                    onPress={() => {
-                      moveToHiking(item.trailId, item.name);
-                    }}>
-                    <AppTextBold key={index} style={styles.searchText}>
-                      {item?.name}
+              <ScrollView>
+                <View style={styles.searchContainer}>
+                  {mountainName && (
+                    <AppTextBold style={styles.mountainText}>
+                      {mountainName}의 등산 코스
                     </AppTextBold>
-                  </Pressable>
-                ))}
-              </View>
+                  )}
+                  <AppTextBold style={styles.chooseText}>
+                    등산 코스를 선택해주세요
+                  </AppTextBold>
+                  {trailList.map((item, index) => (
+                    <Pressable
+                      key={index}
+                      style={styles.searchList}
+                      onPress={() => {
+                        moveToHiking(item.trailId, item.name);
+                      }}>
+                      <AppTextBold key={index}>{item?.name}</AppTextBold>
+                    </Pressable>
+                  ))}
+                </View>
+              </ScrollView>
             ) : isMountain === 1 ? (
               <View style={styles.searchContainer}>
                 <AppText style={styles.text}>검색 결과가 없습니다.</AppText>
@@ -111,10 +111,6 @@ const styles = StyleSheet.create({
   },
   mountainText: {
     marginLeft: 5,
-  },
-  searchText: {
-    // color: 'white',
-    // fontSize: 15,
   },
   text: {
     fontSize: 15,

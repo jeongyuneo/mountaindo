@@ -1,5 +1,6 @@
+import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Pressable,
@@ -105,9 +106,24 @@ function FindMountain({navigation}: FindMountainScreenProps) {
     });
     setSearch('');
     setIsMountain(0);
+    setMountainName('');
+    setMountainList([]);
     setTrailList([]);
     setIsTrailList(false);
+    setModalVisible(false);
   };
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setSearch('');
+    setIsMountain(0);
+    setMountainName('');
+    setMountainList([]);
+    setTrailList([]);
+    setIsTrailList(false);
+    setModalVisible(false);
+  }, [isFocused]);
   return (
     <DismissKeyboardView>
       <View style={styles.container}>
@@ -127,6 +143,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
               clearButtonMode="while-editing"
               onSubmitEditing={onSearch}
               blurOnSubmit={false}
+              autoFocus={true}
             />
           </View>
           <ScrollView>
