@@ -15,6 +15,7 @@ import AppText from '../../components/AppText';
 import MountainListItem from '../../components/mountain/MountainListItem';
 import SearchedMountainListItem from '../../components/mountain/SearchedMountainListItem';
 import {
+  getMountainDetail,
   getMountainList,
   getSearchedMountain,
 } from '../../slices/mountainSlice/mountain';
@@ -32,6 +33,15 @@ export type MountainType = {
   imageUrl: string;
   mountainId: number;
   name: string;
+};
+
+export type MountainDetailType = {
+  address: string;
+  height: number;
+  hot: boolean;
+  imageUrl: string;
+  name: string;
+  trails: [];
 };
 
 function Mountain({navigation}: MountainScreenProps) {
@@ -79,8 +89,23 @@ function Mountain({navigation}: MountainScreenProps) {
       });
   };
 
+  // 산 상세 API 요청 보내기
+  const dispatchMountainDetail = (mountainId: number) => {
+    dispatch(getMountainDetail({mountainId: mountainId}))
+      .then(res => {
+        console.log('MOUNTAIN_DETAIL', res);
+        if (res.meta.requestStatus === 'fulfilled') {
+          navigation.navigate('MountainDetail', {
+            mountainDetail: res.payload,
+          });
+        }
+      })
+      .catch((err: any) => {
+        console.log('MOUNTAIN_DETAIL', err);
+      });
+  };
+
   useEffect(() => {
-    console.log(1);
     dispatchMountainList();
   }, []);
 
@@ -148,14 +173,19 @@ function Mountain({navigation}: MountainScreenProps) {
         {!!searchResult && isResult === 2 ? (
           <View>
             {searchResult.map(item => (
-              <SearchedMountainListItem
-                address={item.address}
-                height={item.height}
-                hot={item.hot}
-                imageUrl={item.imageUrl}
-                mountainId={item.mountainId}
-                name={item.name}
-              />
+              <Pressable
+                onPress={() => {
+                  dispatchMountainDetail(item.mountainId);
+                }}>
+                <SearchedMountainListItem
+                  address={item.address}
+                  height={item.height}
+                  hot={item.hot}
+                  imageUrl={item.imageUrl}
+                  mountainId={item.mountainId}
+                  name={item.name}
+                />
+              </Pressable>
             ))}
           </View>
         ) : isResult === 0 ? (
@@ -170,14 +200,19 @@ function Mountain({navigation}: MountainScreenProps) {
                   mountainId: number;
                   name: string;
                 }) => (
-                  <MountainListItem
-                    address={item.address}
-                    height={item.height}
-                    hot={item.hot}
-                    imageUrl={item.imageUrl}
-                    mountainId={item.mountainId}
-                    name={item.name}
-                  />
+                  <Pressable
+                    onPress={() => {
+                      dispatchMountainDetail(item.mountainId);
+                    }}>
+                    <MountainListItem
+                      address={item.address}
+                      height={item.height}
+                      hot={item.hot}
+                      imageUrl={item.imageUrl}
+                      mountainId={item.mountainId}
+                      name={item.name}
+                    />
+                  </Pressable>
                 ),
               )}
           </View>
