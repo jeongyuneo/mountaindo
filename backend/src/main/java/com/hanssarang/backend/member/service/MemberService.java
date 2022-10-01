@@ -119,7 +119,9 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         String newPassword = createPassword();
         member.updatePassword(passwordEncoder, newPassword);
-        // 이메일 전송
+        memberRepository.save(member);
+        sendMailMessage(member.getEmail(), ISSUANCE_OF_TEMPORARY_PASSWORD,
+                TEMPORARY_PASSWORD + newPassword + LOGIN_WITH_TEMPORARY_PASSWORD);
     }
 
     public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
