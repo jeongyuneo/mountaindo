@@ -26,5 +26,5 @@ public class ErrorMessage {
 
     public static final String WRONG_PATH = "잘못된 경로입니다.";
 
-    public static final String TOKEN_NOT_EQUAL = "이메일 인증번호가 일치하지 않습니다.";
+    public static final String VALIDATION_TOKEN = "이메일 인증번호가 일치하지 않습니다.";
 }
