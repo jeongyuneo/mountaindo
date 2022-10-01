@@ -182,4 +182,11 @@ public class MemberService {
                 TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
         return new Message(SUCCESS_MESSAGE);
     }
+
+    public Message validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
+        if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
+            throw new NotEqualException(TOKEN_NOT_EQUAL);
+        }
+        return new Message(SUCCESS_MESSAGE);
+    }
 }
