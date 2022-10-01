@@ -1,4 +1,4 @@
-package com.ssafy.mountaindo.newarchitecture;
+package com.mountain.mountaindo.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.ssafy.mountaindo.BuildConfig;
-import com.ssafy.mountaindo.newarchitecture.components.MainComponentsRegistry;
-import com.ssafy.mountaindo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.mountain.mountaindo.BuildConfig;
+import com.mountain.mountaindo.newarchitecture.components.MainComponentsRegistry;
+import com.mountain.mountaindo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

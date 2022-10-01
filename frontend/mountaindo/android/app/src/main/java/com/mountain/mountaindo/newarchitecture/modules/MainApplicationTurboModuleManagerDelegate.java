@@ -1,4 +1,4 @@
-package com.ssafy.mountaindo.newarchitecture.modules;
+package com.mountain.mountaindo.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
