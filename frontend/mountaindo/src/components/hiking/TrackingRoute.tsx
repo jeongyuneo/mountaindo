@@ -8,29 +8,42 @@ import {
   faWind,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Alert, Dimensions, Pressable, StyleSheet, View} from 'react-native';
+import {formatTime} from '../../pages/hiking/Hiking';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 import HikingAnimation from './HikingAnimation';
 import StopWatch from './StopWatch';
 
+interface Props {
+  setIsTracking: any;
+  totalDist: any;
+  setTracking: any;
+  tracking: any;
+  currentWeather: any;
+  endTracking: any;
+  coords: any;
+  myPosition: any;
+  trailName: any;
+  setIsSuccess: any;
+  setEndTime: any;
+}
 function TrackingRoute({
-  moveToTrackingEnd,
   setIsTracking,
   totalDist,
   setTracking,
   tracking,
   currentWeather,
-  timer,
-  setTimer,
   endTracking,
   coords,
   myPosition,
-  formatTime,
   trailName,
-}: any) {
+  setIsSuccess,
+  setEndTime,
+}: Props) {
   const increment = useRef<any>(null); // ref의 current에서 setInterval 호출하여 사용하기 위해 변수 생성, 컴포넌트가 재렌더링되지 않음
+  const [timer, setTimer] = useState(0); // 타이머 저장 변수
 
   // 타이머 시작 함수
   const handleStart = () => {
@@ -39,7 +52,7 @@ function TrackingRoute({
       tracking
         ? (increment.current = setInterval(() => {
             setTimer((timer: any) => timer + 1);
-          }, 1000))
+          }, 100))
         : clearInterval(increment.current);
     }
   };
@@ -97,6 +110,7 @@ function TrackingRoute({
             onPress: () => {
               handleReset();
               endTracking();
+              setEndTime(formatTime(timer));
             },
           },
           {
@@ -111,9 +125,9 @@ function TrackingRoute({
         {
           text: '네',
           onPress: () => {
-            moveToTrackingEnd(formatTime());
             handleReset();
-            endTracking();
+            setIsSuccess(true);
+            setEndTime(formatTime(timer));
           },
         },
         {
@@ -176,7 +190,7 @@ function TrackingRoute({
         <AppText style={styles.explainText}>km</AppText>
       </View>
       <View style={styles.timeContainer}>
-        <StopWatch formatTime={formatTime} />
+        <StopWatch formatTime={formatTime} timer={timer} />
       </View>
 
       <View style={styles.icon}>
