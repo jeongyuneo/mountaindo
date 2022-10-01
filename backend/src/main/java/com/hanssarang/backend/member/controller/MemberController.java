@@ -28,7 +28,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Void> signUp(@RequestBody SignUpRequest signUpRequest) {
         memberService.signUp(signUpRequest);
         return ResponseEntity.ok().build();
@@ -45,12 +45,12 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.getMemberEmail(findingEmailRequest));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<MemberResponse> getMember(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity.ok(memberService.getMember(JwtUtil.getMemberId(token)));
     }
 
-    @PatchMapping()
+    @PatchMapping
     public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
         return ResponseEntity.ok().body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest));
     }
@@ -67,7 +67,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<Void> deleteMember(@RequestHeader(AUTHORIZATION) String token) {
         memberService.deleteMember(JwtUtil.getMemberId(token));
         return ResponseEntity.ok().build();
