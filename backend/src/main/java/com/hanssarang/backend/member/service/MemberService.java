@@ -174,4 +174,12 @@ public class MemberService {
         member.submit(survey);
         memberRepository.save(member);
     }
+
+    public Message sendEmailValidationToken(String email) {
+        String emailValidateToken = createAuthToken();
+        RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
+        sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
+                TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
+        return new Message(SUCCESS_MESSAGE);
+    }
 }
