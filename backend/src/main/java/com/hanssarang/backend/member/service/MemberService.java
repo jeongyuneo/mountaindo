@@ -2,6 +2,7 @@ package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
+import com.hanssarang.backend.common.exception.NotEqualException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
@@ -9,7 +10,10 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
 import com.hanssarang.backend.survey.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
+import com.hanssarang.backend.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +33,15 @@ public class MemberService {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
             '!', '@', '#', '$', '%', '^', '&', '*'};
+    private static final String ADMIN_EMAIL = "mountaindo201@naver.com";
+    private static final String JOIN_MOUNTAINDO_MESSAGE = "MountainDo: 회원가입 인증번호 안내";
+    private static final String CONFIRMATION_NUMBER = "\n해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+    private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
+    private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
+    private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
+    private static final String SUCCESS_MESSAGE = "succeeded";
 
+    private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -96,9 +108,11 @@ public class MemberService {
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(passwordUpdateVerificationRequest.getEmail(), passwordUpdateVerificationRequest.getName())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        String newPassword = createTemporaryPassword();
+        String newPassword = createRandomString();
         member.updatePassword(passwordEncoder, newPassword);
-        // 이메일 전송
+        memberRepository.save(member);
+        sendMailMessage(member.getEmail(), ISSUANCE_OF_TEMPORARY_PASSWORD,
+                TEMPORARY_PASSWORD + newPassword + LOGIN_WITH_TEMPORARY_PASSWORD);
     }
 
     public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
@@ -129,6 +143,12 @@ public class MemberService {
                 .build();
     }
 
+    private String createRandomString() {
+        return IntStream.range(0, 10)
+                .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
+                .collect(Collectors.joining());
+    }
+
     public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
@@ -143,15 +163,31 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    private String createTemporaryPassword() {
-        return IntStream.range(0, 10)
-                .mapToObj(n -> String.valueOf(CHAR_SET[(int) (CHAR_SET.length * Math.random())]))
-                .collect(Collectors.joining());
-    }
-
     private void validatePassword(Member member, String password) {
         if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new BadRequestException(NOT_EQUAL_PASSWORD);
         }
+    }
+
+    public void sendEmailValidationToken(String email) {
+        String emailValidateToken = createRandomString();
+        RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
+        sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
+                TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
+    }
+
+    public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
+        if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
+            throw new NotEqualException(VALIDATION_TOKEN_NOT_EQUAL);
+        }
+    }
+
+    private void sendMailMessage(String email, String subject, String message) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(ADMIN_EMAIL);
+        simpleMailMessage.setTo(email);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(message);
+        javaMailSender.send(simpleMailMessage);
     }
 }
