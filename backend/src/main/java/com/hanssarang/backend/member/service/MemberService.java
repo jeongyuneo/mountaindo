@@ -189,4 +189,12 @@ public class MemberService {
         }
         return new Message(SUCCESS_MESSAGE);
     }
+
+    private String createAuthToken() {
+        StringBuilder token = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            token.append(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]);
+        }
+        return token.toString();
+    }
 }
