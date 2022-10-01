@@ -183,7 +183,7 @@ function VisitedTab() {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Completed"
+        name="Complete"
         component={TopTab}
         options={{headerShown: false}}
       />

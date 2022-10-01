@@ -12,6 +12,7 @@ import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
 import DismissKeyboardView from '../../components/DismissKeyboardView';
+import TrailListModal from '../../components/hiking/TrailListModal';
 import {mountainDetail, searchMountain} from '../../slices/hikingSlice/hiking';
 import {useAppDispatch} from '../../store';
 
@@ -23,6 +24,15 @@ export type Trails = {
   imageUrl: any;
 };
 
+type Mountain = {
+  address: string;
+  height: any;
+  hot: boolean;
+  imageUrl: any;
+  mountainId: number;
+  name: string;
+};
+
 type FindMountainScreenProps = NativeStackScreenProps<
   LoggedInParamList,
   'FindMountain'
@@ -32,9 +42,12 @@ function FindMountain({navigation}: FindMountainScreenProps) {
   const [search, setSearch] = useState('');
   const [isMountain, setIsMountain] = useState(0); // 0: 검색 전, 1: 검색 결과 없음, 2: 검색 결과 있음
   const [mountainName, setMountainName] = useState('');
+  const [mountainList, setMountainList] = useState<Mountain[] | []>([]);
 
   const [trailList, setTrailList] = useState<Trails[] | []>([]);
   const [isTrailList, setIsTrailList] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -47,6 +60,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             setTrailList(res.payload?.trails);
             setMountainName(res.payload?.name);
             setIsTrailList(true);
+            setModalVisible(!modalVisible);
           } else {
             setIsTrailList(false);
           }
@@ -65,7 +79,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
         if (res.meta.requestStatus === 'fulfilled') {
           if (res.payload?.length > 0) {
             setIsMountain(2);
-            getTrailList(res.payload[0].mountainId);
+            setMountainList(res.payload);
           } else {
             setIsMountain(1);
           }
@@ -82,6 +96,17 @@ function FindMountain({navigation}: FindMountainScreenProps) {
       setIsMountain(0);
     }
     setSearch(text.trim());
+  };
+
+  const moveToHiking = (id: number, name: string) => {
+    navigation.navigate('Hiking', {
+      trailId: id,
+      trailName: name,
+    });
+    setSearch('');
+    setIsMountain(0);
+    setTrailList([]);
+    setIsTrailList(false);
   };
   return (
     <DismissKeyboardView>
@@ -105,29 +130,14 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             />
           </View>
           <ScrollView>
-            {isMountain === 2 && isTrailList && trailList?.length > 0 ? (
+            {isMountain == 2 && mountainList?.length > 0 ? (
               <View style={styles.searchContainer}>
-                {mountainName && (
-                  <AppTextBold style={styles.mountainText}>
-                    {mountainName}의 등산 코스
-                  </AppTextBold>
-                )}
-                <AppTextBold style={styles.chooseText}>
-                  등산 코스를 선택해주세요
-                </AppTextBold>
-                {trailList.map((item, index) => (
+                {mountainList.map((item, index) => (
                   <Pressable
                     key={index}
                     style={styles.searchList}
                     onPress={() => {
-                      navigation.navigate('Hiking', {
-                        trailId: item.trailId,
-                        trailName: item.name,
-                      });
-                      setSearch('');
-                      setIsMountain(0);
-                      setTrailList([]);
-                      setIsTrailList(false);
+                      getTrailList(item.mountainId);
                     }}>
                     <AppTextBold key={index} style={styles.searchText}>
                       {item?.name}
@@ -145,6 +155,15 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             )}
           </ScrollView>
         </View>
+        <TrailListModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          isMountain={isMountain}
+          isTrailList={isTrailList}
+          trailList={trailList}
+          mountainName={mountainName}
+          moveToHiking={moveToHiking}
+        />
       </View>
     </DismissKeyboardView>
   );
