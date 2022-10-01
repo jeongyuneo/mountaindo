@@ -7,7 +7,24 @@ export const getMountainList = createAsyncThunk(
   'mountainSlice/getMountainList',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.get('api/v1/mountains');
+      const response = await axiosService.get('api/v1/mountains?sort=name');
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 검색한 산 불러오기
+export const getSearchedMountain = createAsyncThunk(
+  'mountainSlice/getSearchedMountain',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      console.log('args', args);
+      const response = await axiosService.get(
+        `api/v1/mountains/search/2?keyword=${args.keyword}`,
+      );
+      console.log('response', response);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
