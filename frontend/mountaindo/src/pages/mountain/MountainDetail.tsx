@@ -19,20 +19,18 @@ type MountainDetailScreenProps = NativeStackScreenProps<
 
 function MountainDetail({navigation, route}: MountainDetailScreenProps) {
   const moveToCourseDetail = (
-    id: number,
-    trail: string,
+    trailId: number,
+    name: string,
+    length: string,
     level: string,
-    timeDuration: string,
-    totalDistance: number,
-    imageSrc: any,
+    imageUrl: any,
   ) => {
     navigation.navigate('CourseDetail', {
-      id,
-      trail,
+      trailId,
+      name,
+      length,
       level,
-      timeDuration,
-      totalDistance,
-      imageSrc,
+      imageUrl,
     });
   };
   const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
@@ -71,7 +69,7 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
           위치: {sentData.mountainDetail.address}
         </AppText>
         <AppText style={styles.text}>
-          고도: {sentData.mountainDetail.height}
+          고도: {sentData.mountainDetail.height}m
         </AppText>
       </View>
       <WeatherForecast />
