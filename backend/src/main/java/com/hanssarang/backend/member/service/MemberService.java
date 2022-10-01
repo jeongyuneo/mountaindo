@@ -119,7 +119,7 @@ public class MemberService {
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(passwordUpdateVerificationRequest.getEmail(), passwordUpdateVerificationRequest.getName())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        String newPassword = randomString();
+        String newPassword = createRandomString();
         member.updatePassword(passwordEncoder, newPassword);
         memberRepository.save(member);
         sendMailMessage(member.getEmail(), ISSUANCE_OF_TEMPORARY_PASSWORD,
@@ -155,7 +155,7 @@ public class MemberService {
                 .build();
     }
 
-    private String randomString() {
+    private String createRandomString() {
         return IntStream.range(0, 10)
                 .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
                 .collect(Collectors.joining());
@@ -176,7 +176,7 @@ public class MemberService {
     }
 
     public void sendEmailValidationToken(String email) {
-        String emailValidateToken = randomString();
+        String emailValidateToken = createRandomString();
         RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
         sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
                 TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
