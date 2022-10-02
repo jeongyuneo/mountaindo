@@ -9,5 +9,5 @@ import lombok.*;
 public class EmailAuthRequest {
 
     private String email;
-    private String authToken;
+    private String token;
 }
