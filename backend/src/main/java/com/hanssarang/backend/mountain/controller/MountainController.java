@@ -18,9 +18,9 @@ public class MountainController {
     private final MountainService mountainService;
 
     @GetMapping
-    public ResponseEntity<List<MountainListResponse>> getMountains(@RequestHeader("Authorization") String token, @RequestParam String sort) {
+    public ResponseEntity<List<MountainListResponse>> getMountains(@RequestHeader("Authorization") String token, @RequestParam String sort, @RequestParam int page) {
         return ResponseEntity.ok()
-                .body(mountainService.getMountains(sort));
+                .body(mountainService.getMountains(sort, page));
     }
 
     @GetMapping("/{mountainId}")
