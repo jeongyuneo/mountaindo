@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   Pressable,
@@ -24,19 +23,34 @@ import userSlice, {userChange, userInfo} from '../../../slices/userSlice/user';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
-
   const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State
-  // 유저 정보를 담기 위한 State
-
   //로그아웃 버튼 클릭시 로그인창으로 화면전환
-  const loggedout = async () => {
-    dispatch(userSlice.actions.setLogout(false));
-    await AsyncStorage.clear();
+  const loggedout = () => {
+    Alert.alert(
+      '로그아웃',
+      '로그아웃 하시겠어요?',
+      [
+        {
+          text: '예',
+          onPress: async () => {
+            dispatch(userSlice.actions.setLogout(false));
+            await AsyncStorage.clear();
+          },
+        },
+        {
+          text: '아니오',
+          style: 'cancel',
+        },
+      ],
+      {cancelable: true},
+    );
   };
 
   const [user, setUser] = useState({
@@ -162,12 +176,14 @@ function MyPage({navigation}: MyPageScreenProps) {
               <Image source={{uri: user.imageUrl}} style={styles.userImg} />
             ) : (
               <Image
-                source={require('../../../assets/jjang.png')}
+                source={require('../../../assets/user.png')}
                 style={styles.userImg}
               />
             )}
             <View style={styles.userNickName}>
-              <Text style={styles.userName}>{user.nickname} 님</Text>
+              <AppTextBold style={styles.userName}>
+                {user.nickname} 님
+              </AppTextBold>
               <Pressable onPress={showPicker}>
                 <FontAwesomeIcon
                   icon={faCamera}
@@ -187,7 +203,7 @@ function MyPage({navigation}: MyPageScreenProps) {
               onPress={() => navigation.push('UserInfoChange', {user, setUser})}
               style={styles.menuHeight}>
               <View style={styles.menuStyle}>
-                <Text style={styles.goMenuText}>개인 정보 수정</Text>
+                <AppText style={styles.goMenuText}>개인 정보 수정</AppText>
                 <FontAwesomeIcon
                   icon={faAngleRight}
                   size={20}
@@ -200,7 +216,7 @@ function MyPage({navigation}: MyPageScreenProps) {
               onPress={() => navigation.push('PasswordChange')}
               style={styles.menuHeight}>
               <View style={styles.menuStyle}>
-                <Text style={styles.goMenuText}>비밀번호 변경</Text>
+                <AppText style={styles.goMenuText}>비밀번호 변경</AppText>
                 <FontAwesomeIcon
                   icon={faAngleRight}
                   size={20}
@@ -213,7 +229,7 @@ function MyPage({navigation}: MyPageScreenProps) {
               onPress={() => navigation.push('Notice')}
               style={styles.menuHeight}>
               <View style={styles.menuStyle}>
-                <Text style={styles.goMenuText}>공지사항</Text>
+                <AppText style={styles.goMenuText}>공지사항</AppText>
                 <FontAwesomeIcon
                   icon={faAngleRight}
                   size={20}
@@ -222,11 +238,9 @@ function MyPage({navigation}: MyPageScreenProps) {
               </View>
             </Pressable>
 
-            <Pressable style={styles.menuHeight}>
+            <Pressable style={styles.menuHeight} onPress={loggedout}>
               <View style={styles.menuStyle}>
-                <Text style={styles.goMenuText} onPress={loggedout}>
-                  로그아웃
-                </Text>
+                <AppText style={styles.goMenuText}>로그아웃</AppText>
                 <FontAwesomeIcon
                   icon={faAngleRight}
                   size={20}
@@ -284,7 +298,6 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 13,
-    fontWeight: 'bold',
     color: 'black',
     paddingTop: 10,
   },

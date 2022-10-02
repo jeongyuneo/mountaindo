@@ -1,7 +1,9 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useState} from 'react';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 import LocationPicker from '../../../components/user/LocationPicker';
 import {userChange} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -54,30 +56,38 @@ function AddressChangeForm({navigation, route}: AddressChangeFormScreenProps) {
       : selectedCity && selectedCity2;
 
   return (
-    <View style={styles.container}>
-      <LocationPicker
-        setSelectedCity={setSelectedCity}
-        setSelectedCity2={setSelectedCity2}
-        userInfo={route.params?.user}
-      />
-      <Pressable
-        disabled={!canGoNext}
-        onPress={onSubmit}
-        style={
-          canGoNext
-            ? StyleSheet.compose(
-                styles.addressChangeButton,
-                styles.addressChangeButtonActive,
-              )
-            : styles.addressChangeButton
-        }>
-        <Text style={styles.addressChangeButtonText}>주소 변경</Text>
-      </Pressable>
+    <View style={styles.backColor}>
+      <View style={styles.container}>
+        <LocationPicker
+          setSelectedCity={setSelectedCity}
+          setSelectedCity2={setSelectedCity2}
+          userInfo={route.params?.user}
+        />
+        <Pressable
+          disabled={!canGoNext}
+          onPress={onSubmit}
+          style={
+            canGoNext
+              ? StyleSheet.compose(
+                  styles.addressChangeButton,
+                  styles.addressChangeButtonActive,
+                )
+              : styles.addressChangeButton
+          }>
+          <AppTextBold style={styles.addressChangeButtonText}>
+            주소 변경
+          </AppTextBold>
+        </Pressable>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  backColor: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   container: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -90,11 +100,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   addressChangeButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   addressChangeButtonText: {
     textAlign: 'center',
     color: 'white',
+    fontSize: 20,
   },
 });
 
