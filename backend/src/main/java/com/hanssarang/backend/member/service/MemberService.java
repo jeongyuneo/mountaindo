@@ -165,11 +165,11 @@ public class MemberService {
         }
     }
 
-    public void sendEmailValidationToken(EmailRequest emailRequest) {
+    public void sendEmailValidationToken(EmailValidationRequest emailValidationRequest) {
         String emailValidateToken = createRandomString();
-        RedisUtil.setDataExpired(emailRequest.getEmail(), emailValidateToken, 60 * 3L);
-        sendMailMessage(emailRequest.getEmail(), JOIN_MOUNTAINDO_MESSAGE,
-                CERTIFICATION_NUMBER + emailValidateToken + CONFIRMATION_NUMBER);
+        RedisUtil.setDataExpired(emailValidationRequest.getEmail(), emailValidateToken, 60 * 3L);
+        sendMailMessage(emailValidationRequest.getEmail(), JOIN_MOUNTAINDO_MESSAGE,
+                CERTIFICATION_NUMBER_MESSAGE + emailValidateToken + CONFIRMATION_NUMBER);
     }
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
