@@ -182,7 +182,7 @@ export const findPassword = createAsyncThunk(
   'userSlice/findPassword',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.post('/api/v1/members/password', {
+      const response = await axiosService.patch('/api/v1/members/password', {
         name: args.name,
         email: args.email,
       });
