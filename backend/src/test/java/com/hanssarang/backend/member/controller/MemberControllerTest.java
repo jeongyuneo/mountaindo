@@ -405,6 +405,29 @@ public class MemberControllerTest extends ApiDocument {
         이메일_인증번호_전송_실패(resultActions, new Message(FAIL_TO_SEND_EMAIL));
     }
 
+    @DisplayName("이메일 인증번호 검증 - 성공")
+    @Test
+    void validateSignUpEmailSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).validateSignUpEmail(any(EmailAuthRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_검증_요청(
+                emailAuthRequest);
+        // then
+        이메일_인증번호_검증_성공(resultActions);
+    }
+
+    @DisplayName("이메일 인증번호 검증 - 실패")
+    @Test
+    void validateSignUpEmailFail() throws Exception {
+        // given
+        willThrow(new BadRequestException(NOT_EQUAL_VALIDATION_TOKEN)).given(memberService).validateSignUpEmail(any(EmailAuthRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_검증_요청(emailAuthRequest);
+        // then
+        이메일_인증번호_검증_실패(resultActions, new Message(NOT_EQUAL_VALIDATION_TOKEN));
+    }
+
     private ResultActions 회원정보_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/members")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -633,5 +656,24 @@ public class MemberControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("send-validation-token-fail"));
+    }
+
+    private ResultActions 이메일_인증번호_검증_요청(EmailAuthRequest emailAuthRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/email/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(emailAuthRequest)));
+    }
+
+    private void 이메일_인증번호_검증_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("validate-signup-email-success"));
+    }
+
+    private void 이메일_인증번호_검증_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("validate-signup-email-fail"));
     }
 }
