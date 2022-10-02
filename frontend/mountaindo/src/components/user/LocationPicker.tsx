@@ -19,13 +19,9 @@ interface Props {
 
 function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
   // 도 / 광역시 / 특별시 저장 변수 (props로 받아온 정보가 있는 경우 해당 정보를 초기값으로 설정)
-  const [category, setCategory] = useState(
-    userInfo?.address.value ? userInfo.address.value : '',
-  );
+  const [category, setCategory] = useState(userInfo?.si ? userInfo.si : '');
   // 시 / 군 저장 변수 (props로 받아온 정보가 있는 경우 해당 정보를 초기값으로 설정)
-  const [city, setCity] = useState(
-    userInfo?.address.cityValue ? userInfo.address.cityValue : '',
-  );
+  const [city, setCity] = useState(userInfo?.gu ? userInfo.gu : '');
 
   // 선택한 상위 컴포넌트에 하위 도시가 존재할 경우 저장할 변수
   const [cityList, setCityListTest] = useState<RegionType | null>(null);
@@ -47,8 +43,8 @@ function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
 
   // 처음 렌더링될 때 userInfo에 사용자 주소 데이터 존재할 경우 화면에 보여줌
   useEffect(() => {
-    if (userInfo?.address.value) {
-      setCityList(userInfo.address.value);
+    if (userInfo?.si) {
+      setCityList(userInfo.si);
     }
   }, []);
   return (
