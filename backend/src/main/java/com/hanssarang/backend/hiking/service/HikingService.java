@@ -9,10 +9,12 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
+import com.hanssarang.backend.util.ImageUtil;
 import com.hanssarang.backend.util.PathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +98,7 @@ public class HikingService {
     }
 
     @Transactional
-    public void createHiking(int memberId, HikingRequest hikingRequest) {
+    public void createHiking(int memberId, HikingRequest hikingRequest, MultipartFile multipartFile) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         Trail trail = trailRepository.findById(hikingRequest.getTrailId())
@@ -108,6 +110,7 @@ public class HikingService {
                         .accumulatedHeight(hikingRequest.getAccumulatedHeight())
                         .useTime(hikingRequest.getUseTime())
                         .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
+                        .imageUrl(ImageUtil.saveImage(member.getEmail(), trail.getId(), multipartFile))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
                         .build()
