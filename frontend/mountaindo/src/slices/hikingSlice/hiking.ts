@@ -81,7 +81,9 @@ export const visitedTrailList = createAsyncThunk(
 
 const hikingSlice = createSlice({
   name: 'hiking',
-  initialState: {},
+  initialState: {
+    isPending: false,
+  },
   reducers: {},
   extraReducers: builder => {
     builder
@@ -103,11 +105,17 @@ const hikingSlice = createSlice({
       .addCase(mountainDetail.rejected, (state, {payload}) => {
         console.log('mountainDetail Rejected ==>', payload);
       })
+      .addCase(completedMountainList.pending, (state, {payload}) => {
+        console.log('completedMountainList Pending ==> ', payload);
+        state.isPending = true;
+      })
       .addCase(completedMountainList.fulfilled, (state, {payload}) => {
         console.log('completedMountainList Fulfilled ==> ', payload);
+        state.isPending = false;
       })
       .addCase(completedMountainList.rejected, (state, {payload}) => {
         console.log('completedMountainList Rejected ==>', payload);
+        state.isPending = false;
       })
       .addCase(visitedTrailList.fulfilled, (state, {payload}) => {
         console.log('visitedTrailList Fulfilled ==> ', payload);
