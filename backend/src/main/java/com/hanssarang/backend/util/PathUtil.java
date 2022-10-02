@@ -1,9 +1,12 @@
 package com.hanssarang.backend.util;
 
+import com.hanssarang.backend.hiking.controller.dto.PathResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.WRONG_PATH;
 
@@ -44,6 +47,8 @@ public enum PathUtil {
     private static final String COORDINATE_DELIMITER = ", ";
     private static final String MULTILINESTRING_COORDINATE_DELIMITER = "\\), \\(";
     private static final String DELETE = "";
+    private static final String OPENING_PARENTHESIS = "(";
+    private static final String CLOSING_PARENTHESIS = ")";
     private static final int TYPE = 0;
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
@@ -62,6 +67,16 @@ public enum PathUtil {
                 .filter(value -> value.type.equals(path.split(PATH_DELIMITER)[TYPE]))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(WRONG_PATH));
+    }
+
+    public static String toLineStringForm(List<PathResponse> path) {
+        return LINESTRING.type
+                + PATH_DELIMITER
+                + OPENING_PARENTHESIS
+                + path.stream()
+                .map(point -> point.getLatitude() + PATH_DELIMITER + point.getLongitude())
+                .collect(Collectors.joining(COORDINATE_DELIMITER))
+                + CLOSING_PARENTHESIS;
     }
 
     protected boolean isInEndPoint(String path, double latitude2, double longitude2) {
