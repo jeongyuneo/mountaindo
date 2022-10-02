@@ -137,7 +137,7 @@ public class MemberControllerTest extends ApiDocument {
                 .build();
         emailAuthRequest = EmailAuthRequest.builder()
                 .email(EMAIL)
-                .authToken(ACCESS_TOKEN)
+                .token(ACCESS_TOKEN)
                 .build();
     }
 
