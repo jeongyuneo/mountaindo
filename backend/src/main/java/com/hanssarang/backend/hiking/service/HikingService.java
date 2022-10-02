@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,10 +38,11 @@ public class HikingService {
     private final HikingRepository hikingRepository;
 
     public List<HikingListResponse> getHikings(int memberId) {
-        memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        List<Hiking> hikings = hikingRepository.findAllHikings(memberId);
-        return hikings.stream()
+        return member.getHikings()
+                .stream()
+                .sorted(Comparator.comparing(Hiking::getCreatedDate).reversed())
                 .map(hiking -> HikingListResponse.builder()
                         .hikingId(hiking.getId())
                         .trailName(hiking.getTrail().getName())
