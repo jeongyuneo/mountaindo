@@ -69,7 +69,6 @@ public class MountainService {
                                 .name(trail.getName())
                                 .length(trail.getLength())
                                 .level(trail.getLevel().toString())
-                                .imageUrl(trail.getImageUrl())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

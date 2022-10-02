@@ -31,7 +31,6 @@ public class Trail extends BaseEntity {
     private int goingDownTime;
 
     private String risk;
-    private String imageUrl;
 
     @NotNull
     @Enumerated(EnumType.STRING)
