@@ -1,4 +1,4 @@
-package com.hanssarang.backend.survey.controller.dto;
+package com.hanssarang.backend.member.controller.dto;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateSurveyRequest {
+public class SurveyRequest {
 
     private int level;
     private int preferredMountainLocation;

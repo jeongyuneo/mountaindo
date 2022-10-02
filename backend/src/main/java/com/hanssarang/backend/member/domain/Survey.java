@@ -1,7 +1,6 @@
-package com.hanssarang.backend.survey.domain;
+package com.hanssarang.backend.member.domain;
 
 import com.hanssarang.backend.common.domain.BaseEntity;
-import com.hanssarang.backend.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -36,9 +36,9 @@ public class MemberController {
                 .body(memberService.signUp(signUpRequest));
     }
 
-    @PostMapping("/initial-survey")
-    public ResponseEntity<Void> createInitialSurvey(@RequestHeader(AUTHORIZATION) String token, @RequestBody InitialSurveyRequest initialSurveyRequest) {
-        memberService.createInitialSurvey(JwtUtil.getMemberId(token), initialSurveyRequest);
+    @PostMapping("/survey")
+    public ResponseEntity<Void> createSurvey(@RequestHeader(AUTHORIZATION) String token, @RequestBody SurveyRequest surveyRequest) {
+        memberService.createSurvey(JwtUtil.getMemberId(token), surveyRequest);
         return ResponseEntity.ok().build();
     }
 
