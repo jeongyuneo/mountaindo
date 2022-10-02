@@ -12,5 +12,4 @@ public class TrailListResponse {
     private String name;
     private double length;
     private String level;
-    private String imageUrl;
 }
