@@ -19,8 +19,8 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "group by m.mountain_id " +
             "having sum(v.count) " +
             "order by v.count desc " +
-            "LIMIT :limit " +
-            "OFFSET :offset", nativeQuery = true)
+            "limit :limit " +
+            "offset :offset", nativeQuery = true)
     List<Mountain> findAllPopularity(int offset, int limit);
 
     @Query(value = "select m.* " +
@@ -33,7 +33,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "on m.mountain_id = v.mountain_id " +
             "group by m.mountain_id " +
             "having sum(v.count) " +
-            "LIMIT 10", nativeQuery = true)
+            "limit 10", nativeQuery = true)
     List<Mountain> findIsHot();
 
     List<Mountain> findByNameContaining(String keyword);
