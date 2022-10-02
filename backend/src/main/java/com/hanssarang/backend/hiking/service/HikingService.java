@@ -24,11 +24,6 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 @Service
 public class HikingService {
 
-    private static final String LINESTRING = "LINESTRING ";
-    private static final String OPENING_PARENTHESIS = "(";
-    private static final String CLOSING_PARENTHESIS = ")";
-    private static final String DELIMITER = " ";
-    private static final String REST = ",";
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
 
@@ -123,14 +118,5 @@ public class HikingService {
     private boolean isCompleted(String path, PathResponse endPoint) {
         return PathUtil.find(path)
                 .isCompleted(path, endPoint.getLatitude(), endPoint.getLongitude());
-    }
-
-    private String toLineStringForm(List<PathResponse> path) {
-        return LINESTRING
-                + OPENING_PARENTHESIS
-                + path.stream()
-                .map(point -> point.getLatitude() + DELIMITER + point.getLongitude())
-                .collect(Collectors.joining(REST + DELIMITER))
-                + CLOSING_PARENTHESIS;
     }
 }
