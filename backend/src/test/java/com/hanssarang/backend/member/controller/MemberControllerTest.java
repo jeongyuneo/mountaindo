@@ -3,6 +3,7 @@ package com.hanssarang.backend.member.controller;
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
@@ -59,6 +60,8 @@ public class MemberControllerTest extends ApiDocument {
     private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
     private LoginResponse loginResponse;
+    private EmailAuthRequest emailAuthRequest;
+    private EmailValidationRequest emailValidationRequest;
 
     @MockBean
     private MemberService memberService;
@@ -128,6 +131,13 @@ public class MemberControllerTest extends ApiDocument {
                 .nickname(NICKNAME)
                 .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
+                .build();
+        emailValidationRequest = EmailValidationRequest.builder()
+                .email(EMAIL)
+                .build();
+        emailAuthRequest = EmailAuthRequest.builder()
+                .email(EMAIL)
+                .authToken(ACCESS_TOKEN)
                 .build();
     }
 
@@ -373,6 +383,28 @@ public class MemberControllerTest extends ApiDocument {
         로그인_실패(resultActions, new Message(NOT_FOUND_MEMBER));
     }
 
+    @DisplayName("이메일 인증번호 전송 - 성공")
+    @Test
+    void sendValidationTokenSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).sendEmailValidationToken(any(EmailValidationRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_전송_요청(emailValidationRequest);
+        // then
+        이메일_인증번호_전송_성공(resultActions);
+    }
+
+    @DisplayName("이메일 인증번호 전송 - 실패")
+    @Test
+    void sendValidationTokenFail() throws Exception {
+        // given
+        willThrow(new BadRequestException(FAIL_TO_SEND_EMAIL)).given(memberService).sendEmailValidationToken(any(EmailValidationRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_전송_요청(emailValidationRequest);
+        // then
+        이메일_인증번호_전송_실패(resultActions, new Message(FAIL_TO_SEND_EMAIL));
+    }
+
     private ResultActions 회원정보_조회_요청() throws Exception {
         return mockMvc.perform(get("/api/v1/members")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
@@ -582,5 +614,24 @@ public class MemberControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("login-fail"));
+    }
+
+    private ResultActions 이메일_인증번호_전송_요청(EmailValidationRequest emailValidationRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/email/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(emailValidationRequest)));
+    }
+
+    private void 이메일_인증번호_전송_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("send-validation-token-success"));
+    }
+
+    private void 이메일_인증번호_전송_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("send-validation-token-fail"));
     }
 }
