@@ -1,15 +1,16 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
 import {
-  Text,
   View,
   TextInput,
   Pressable,
   Alert,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
 import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import {findPassword} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -129,15 +130,19 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             blurOnSubmit={false}
           />
         </View>
-        <View style={styles.findIdButton}>
-          <Pressable onPress={() => navigation.push('FindId')}>
-            <AppText>아이디 찾기</AppText>
-          </Pressable>
-        </View>
-        <View style={styles.findIdButton}>
-          <Pressable onPress={() => navigation.push('SignIn')}>
-            <AppText>로그인</AppText>
-          </Pressable>
+        <View style={styles.navigationGroup}>
+          <View style={styles.findIdButton}>
+            <Pressable onPress={() => navigation.push('FindId')}>
+              <AppTextBold style={styles.findIdButtonText}>
+                아이디 찾기
+              </AppTextBold>
+            </Pressable>
+          </View>
+          <View style={styles.findIdButton}>
+            <Pressable onPress={() => navigation.push('SignIn')}>
+              <AppTextBold style={styles.findIdButtonText}>로그인</AppTextBold>
+            </Pressable>
+          </View>
         </View>
         <View>
           <Pressable
@@ -161,8 +166,11 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
 
 const styles = StyleSheet.create({
   inputGroup: {
-    marginTop: 30,
-    marginHorizontal: 20,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingTop: 30,
   },
   inputView: {
     marginVertical: 10,
@@ -170,20 +178,29 @@ const styles = StyleSheet.create({
   input: {
     borderBottomWidth: 1,
     fontFamily: 'NanumBarunGothic',
+    fontSize: 12,
+  },
+  navigationGroup: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   findIdButton: {
     alignItems: 'flex-end',
     marginVertical: 10,
+    marginHorizontal: 10,
+  },
+  findIdButtonText: {
+    fontSize: 12,
   },
   findPasswordButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 20,
-    marginVertical: 10,
+    backgroundColor: '#c5c5c5',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 30,
   },
   buttonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   buttonText: {
     textAlign: 'center',

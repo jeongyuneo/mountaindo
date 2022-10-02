@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
@@ -83,59 +84,53 @@ function SignIn({navigation}: SignInScreenProps) {
     <DismissKeyboardView>
       <View style={styles.container}>
         <View style={styles.titleSettings}>
-          <View>
-            <AppTextBold style={styles.mountainTitle}>MountainDo</AppTextBold>
-            <AppText style={styles.mountainText}>건강한 삶의 친구!</AppText>
-            <AppText style={styles.mountainText}>
-              등산로 추천으로 재밌는 코스를 즐겨보세요!
-            </AppText>
-          </View>
+          <AppTextBold style={styles.mountainTitle}>MountainDo</AppTextBold>
+          <AppText style={styles.mountainText}>건강한 삶의 친구!</AppText>
+          <AppText style={styles.mountainText}>
+            등산로 추천으로 재밌는 코스를 즐겨보세요!
+          </AppText>
         </View>
 
         <View style={styles.containerSession}>
-          <View>
-            <View style={styles.textPadding}>
+          <View style={styles.textPadding}>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={onChangeEmail}
+              placeholder="이메일을 입력해주세요"
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              autoComplete="email"
+              textContentType="emailAddress"
+              value={email}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={emailRef}
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.emailInfoCheck}>
+            <AppTextBold style={styles.emailInfoText}>{emailCheck}</AppTextBold>
+          </View>
+
+          <View style={styles.textPadding}>
+            <KeyboardAvoidingView>
               <TextInput
                 style={styles.textInput}
-                onChangeText={onChangeEmail}
-                placeholder="이메일을 입력해주세요"
+                placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
                 placeholderTextColor="#666"
                 importantForAutofill="yes"
-                autoComplete="email"
-                textContentType="emailAddress"
-                value={email}
-                returnKeyType="next"
+                onChangeText={onChangePassword}
+                value={password}
+                autoComplete="password"
+                textContentType="password"
+                secureTextEntry
+                returnKeyType="send"
                 clearButtonMode="while-editing"
-                ref={emailRef}
-                onSubmitEditing={() => passwordRef.current?.focus()}
-                blurOnSubmit={false}
+                ref={passwordRef}
+                onSubmitEditing={onSubmit}
               />
-            </View>
-            <View style={styles.emailInfoCheck}>
-              <AppTextBold style={styles.emailInfoText}>
-                {emailCheck}
-              </AppTextBold>
-            </View>
-
-            <View style={styles.textPadding}>
-              <KeyboardAvoidingView>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="비밀번호를 입력해주세요(영문,숫자,특수문자)"
-                  placeholderTextColor="#666"
-                  importantForAutofill="yes"
-                  onChangeText={onChangePassword}
-                  value={password}
-                  autoComplete="password"
-                  textContentType="password"
-                  secureTextEntry
-                  returnKeyType="send"
-                  clearButtonMode="while-editing"
-                  ref={passwordRef}
-                  onSubmitEditing={onSubmit}
-                />
-              </KeyboardAvoidingView>
-            </View>
+            </KeyboardAvoidingView>
           </View>
 
           <View style={styles.userInfoCreate}>
@@ -176,24 +171,27 @@ function SignIn({navigation}: SignInScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginHorizontal: 20,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    paddingHorizontal: 20,
+    backgroundColor: 'white',
   },
   containerSession: {
-    flex: 2,
+    flex: 3,
   },
   titleSettings: {
     flex: 1,
     justifyContent: 'center',
     marginLeft: 10,
-    marginTop: 50,
-    marginBottom: 30,
+    marginTop: 40,
   },
   mountainTitle: {
-    fontSize: 40,
+    marginBottom: 20,
+    fontSize: 30,
+    color: '#57d696',
   },
   mountainText: {
-    fontSize: 14,
+    fontSize: 12,
   },
   textPadding: {
     paddingHorizontal: 10,
@@ -201,7 +199,8 @@ const styles = StyleSheet.create({
   textInput: {
     borderBottomWidth: 1,
     borderBottomColor: 'black',
-    fontWeight: 'normal',
+    fontFamily: 'NanumBarunGothic',
+    fontSize: 12,
   },
   userInfoCreate: {
     marginTop: 20,
@@ -209,7 +208,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   userInfoText: {
-    color: 'black',
     fontSize: 12,
   },
   emailInfoCheck: {
@@ -222,14 +220,14 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   loginButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 130,
+    backgroundColor: '#c5c5c5',
+    borderRadius: 30,
+    paddingHorizontal: 100,
     paddingVertical: 10,
-    borderRadius: 20,
-    marginBottom: 10,
+    width: '100%',
   },
   loginButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   buttonZone: {
     alignItems: 'center',
@@ -237,6 +235,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
+    textAlign: 'center',
     fontSize: 15,
   },
 });

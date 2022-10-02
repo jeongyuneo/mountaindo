@@ -23,6 +23,7 @@ import {useAppDispatch} from '../../../store';
 import userSlice, {userChange, userInfo} from '../../../slices/userSlice/user';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
@@ -50,10 +51,6 @@ function MyPage({navigation}: MyPageScreenProps) {
     phone: '',
     imageUrl: '',
   });
-  //로그아웃 버튼 클릭시 로그인창으로 화면전환
-  const loggedout = () => {
-    dispatch(userSlice.actions.setLogout(false));
-  };
   // 유저정보를 받아오는 기능.
   useEffect(() => {
     dispatch(userInfo('a')).then(async res => {

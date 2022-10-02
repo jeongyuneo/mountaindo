@@ -420,6 +420,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     paddingVertical: 10,
     marginBottom: 40,
+    width: '100%',
   },
   registerButtonActive: {
     backgroundColor: '#57d696',
@@ -427,12 +428,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     paddingVertical: 10,
     marginBottom: 40,
+    width: '100%',
   },
   registerButtonText: {
+    textAlign: 'center',
     color: 'white',
   },
   location: {
-    marginVertical: 30,
+    marginTop: 30,
   },
   locationText: {
     fontSize: 12,
