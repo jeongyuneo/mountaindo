@@ -107,7 +107,7 @@ public class HikingService {
                         .distance(hikingRequest.getDistance())
                         .accumulatedHeight(hikingRequest.getAccumulatedHeight())
                         .useTime(hikingRequest.getUseTime())
-                        .path(toLineStringForm(hikingRequest.getPath()))
+                        .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
                         .build()
