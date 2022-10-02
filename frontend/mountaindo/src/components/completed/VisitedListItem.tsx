@@ -1,21 +1,23 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 import {TrailType} from './VisitedList';
 
 // VisitedList에서 받아온 정보 타입 설정
 interface Props {
-  mountain: string;
-  location: string;
-  trailList: TrailType[];
+  mountainName: string;
+  address: string;
+  lastHikingDate: string;
+  lastHikingTrailName: string;
   moveToVisitedDetail: any;
 }
 
 function VisitedListItem({
-  mountain,
-  location,
-  trailList,
+  mountainName,
+  address,
+  lastHikingDate,
+  lastHikingTrailName,
   moveToVisitedDetail,
 }: Props) {
   return (
@@ -23,11 +25,11 @@ function VisitedListItem({
     <Pressable
       style={styles.item}
       onPress={() => {
-        moveToVisitedDetail(trailList, mountain, location);
+        moveToVisitedDetail();
       }}>
       <View style={styles.textContainer}>
-        <AppTextBold style={styles.title}>{mountain}</AppTextBold>
-        <AppText style={styles.content}>{location}</AppText>
+        <AppTextBold style={styles.title}>{mountainName}</AppTextBold>
+        <AppText style={styles.content}>{address}</AppText>
       </View>
       <View>
         <Image

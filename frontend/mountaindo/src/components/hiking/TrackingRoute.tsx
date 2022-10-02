@@ -52,7 +52,7 @@ function TrackingRoute({
       tracking
         ? (increment.current = setInterval(() => {
             setTimer((timer: any) => timer + 1);
-          }, 100))
+          }, 1000))
         : clearInterval(increment.current);
     }
   };

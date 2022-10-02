@@ -17,7 +17,7 @@ import AppTextBold from '../AppTextBold';
 interface Props {
   modalVisible: boolean;
   setModalVisible: any;
-  mountain?: string;
+  mountain?: any;
   trails?: any;
 }
 
@@ -38,7 +38,7 @@ const CompletedMountainModal = ({
     }
   };
   // mountain 정보가 있으면 완등한 산의 모달 없으면 방문한 등산로 모달
-  return mountain ? (
+  return mountain?.mountainName ? (
     <View style={styles.centeredView}>
       <Modal
         animationType="none"
@@ -49,8 +49,11 @@ const CompletedMountainModal = ({
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <AppText style={styles.modalText}>완등한 산 정보</AppText>
-            <AppText style={styles.modalText}>{mountain}</AppText>
+            <AppTextBold style={styles.modalText}>
+              {mountain.mountainName}
+            </AppTextBold>
+            <AppText style={styles.dateText}>{mountain.lastHikingDate}</AppText>
+            <AppText style={styles.addressText}>{mountain.address}</AppText>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
@@ -126,7 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
+    width: 200,
+    height: 200,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -140,6 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+    marginTop: 10,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
@@ -176,6 +181,16 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     alignSelf: 'flex-end',
+  },
+  mountainNameText: {
+    fontSize: 16,
+  },
+  addressText: {
+    fontSize: 13,
+  },
+  dateText: {
+    fontSize: 13,
+    marginVertical: 5,
   },
 });
 
