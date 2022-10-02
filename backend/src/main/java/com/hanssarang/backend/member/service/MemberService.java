@@ -7,8 +7,7 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
-import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
-import com.hanssarang.backend.survey.domain.Survey;
+import com.hanssarang.backend.member.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
 import com.hanssarang.backend.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -65,14 +64,25 @@ public class MemberService {
                 .build();
     }
 
-    public void createInitialSurvey(int memberId, InitialSurveyRequest initialSurveyRequest) {
+    public void createSurvey(int memberId, SurveyRequest surveyRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Survey survey = Survey.builder()
+                .level(surveyRequest.getLevel())
+                .preferredMountainLocation(surveyRequest.getPreferredMountainLocation())
+                .preferredHikingStyle(surveyRequest.getPreferredHikingStyle())
+                .preferredHikingTime(surveyRequest.getPreferredHikingTime())
+                .isActive(true)
+                .build();
+        member.submit(survey);
+        memberRepository.save(member);
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
         Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(
-                findingEmailRequest.getName(),
-                findingEmailRequest.getBirth(),
-                findingEmailRequest.getPhone())
+                        findingEmailRequest.getName(),
+                        findingEmailRequest.getBirth(),
+                        findingEmailRequest.getPhone())
                 .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
         return EmailResponse.builder()
                 .email(member.getEmail())
@@ -147,20 +157,6 @@ public class MemberService {
         return IntStream.range(0, 10)
                 .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
                 .collect(Collectors.joining());
-    }
-
-    public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        Survey survey = Survey.builder()
-                .level(createSurveyRequest.getLevel())
-                .preferredMountainLocation(createSurveyRequest.getPreferredMountainLocation())
-                .preferredHikingStyle(createSurveyRequest.getPreferredHikingStyle())
-                .preferredHikingTime(createSurveyRequest.getPreferredHikingTime())
-                .isActive(true)
-                .build();
-        member.submit(survey);
-        memberRepository.save(member);
     }
 
     private void validatePassword(Member member, String password) {

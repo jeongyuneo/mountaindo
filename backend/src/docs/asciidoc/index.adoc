@@ -109,21 +109,21 @@ include::{snippets}/check-nickname-fail/http-response.adoc[]
 
 ==== 사전설문 저장
 ----
-/api/v1/members/initial-survey
+/api/v1/members/survey
 ----
 
 ===== 성공
 .request
-include::{snippets}/create-initial-survey-success/http-request.adoc[]
+include::{snippets}/create-survey-success/http-request.adoc[]
 
 .response
-include::{snippets}/create-initial-survey-success/http-response.adoc[]
+include::{snippets}/create-survey-success/http-response.adoc[]
 ===== 실패
 .request
-include::{snippets}/create-initial-survey-fail/http-request.adoc[]
+include::{snippets}/create-survey-fail/http-request.adoc[]
 
 .response
-include::{snippets}/create-initial-survey-fail/http-response.adoc[]
+include::{snippets}/create-survey-fail/http-response.adoc[]
 
 ==== 아이디 찾기
 ----
