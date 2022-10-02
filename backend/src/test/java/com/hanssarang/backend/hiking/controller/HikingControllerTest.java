@@ -156,7 +156,7 @@ public class HikingControllerTest extends ApiDocument {
         // when
         ResultActions resultActions = 완등목록_조회_요청();
         // then
-        완등목록_조회_성공(resultActions, hikingListResponses);
+        완등목록_조회_성공(resultActions, completedHikingListResponses);
     }
 
     @DisplayName("완등 목록 조회 - 사용자 조회 실패")
@@ -235,9 +235,9 @@ public class HikingControllerTest extends ApiDocument {
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
-    private void 완등목록_조회_성공(ResultActions resultActions, List<HikingListResponse> hikingListResponse) throws Exception {
+    private void 완등목록_조회_성공(ResultActions resultActions, List<CompletedHikingListResponse> completedHikingListResponses) throws Exception {
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(hikingListResponse)))
+                .andExpect(content().json(toJson(completedHikingListResponses)))
                 .andDo(print())
                 .andDo(toDocument("get-completed-hikings-success"));
     }
