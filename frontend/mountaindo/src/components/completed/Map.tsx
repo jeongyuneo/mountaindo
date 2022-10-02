@@ -3,22 +3,18 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useRef} from 'react';
 import {StyleSheet} from 'react-native';
 import NaverMapView, {LayerGroup, Marker} from 'react-native-nmap';
+import {CompletedMountainList} from '../../pages/completed/Completed';
 
 // 경도, 위도 값이 저장된 리스트, 모달 관련 타입 설정
 type Props = {
-  completedMountainLocation: {
-    id: number;
-    latitude: number;
-    longitude: number;
-    mountain: string;
-  }[];
+  mountainList: CompletedMountainList[];
   modalVisible: boolean;
   setModalVisible: any;
   setModalNumber: any;
 };
 
 function Map({
-  completedMountainLocation,
+  mountainList,
   modalVisible,
   setModalVisible,
   setModalNumber,
@@ -26,10 +22,9 @@ function Map({
   const mapView = useRef<any>(null); // NaverMapView의 설정을 바꾸기 위해 ref 설정 변수
   // 지도의 중심 좌표 설정
   const myPosition = {
-    latitude: 36,
-    longitude: 127,
+    latitude: 35.5,
+    longitude: 127.5,
   };
-
   return (
     <NaverMapView
       ref={mapView}
@@ -49,22 +44,22 @@ function Map({
         longitude: myPosition.longitude,
       }}>
       {/* completedMountainLocation의 길이가 0 이상일 때만 반복문을 돌면서 마커 생성 */}
-      {completedMountainLocation.length > 0 &&
-        completedMountainLocation.map(pos => (
+      {mountainList.length > 0 &&
+        mountainList.map((item, index) => (
           <Marker
             onClick={() => {
               setModalVisible(!modalVisible);
-              setModalNumber(pos.id);
+              setModalNumber(index);
             }}
             coordinate={{
-              latitude: pos.latitude,
-              longitude: pos.longitude,
+              latitude: item.longitude,
+              longitude: item.latitude,
             }}
-            key={pos.id}
+            key={index}
             width={15}
             height={15}
             anchor={{x: 0.5, y: 0.5}}
-            caption={{text: pos.mountain}}>
+            caption={{text: item.mountainName}}>
             <FontAwesomeIcon icon={faFlag} size={25} color={'#7FB77E'} />
           </Marker>
         ))}

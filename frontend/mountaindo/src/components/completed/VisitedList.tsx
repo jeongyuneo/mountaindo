@@ -1,5 +1,6 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
+import {VisitedListType} from '../../pages/completed/Visited';
 import VisitedListItem from './VisitedListItem';
 
 export type TrailType = {
@@ -15,26 +16,22 @@ export type TrailType = {
 
 // Visited 페이지에서 받아온 정보 타입 설정
 interface Props {
-  visitedMountainList: {
-    id: number;
-    mountain: string;
-    location: string;
-    trailList: TrailType[];
-  }[];
   moveToVisitedDetail: any;
+  visitedTrail: VisitedListType[];
 }
 
-function VisitedList({visitedMountainList, moveToVisitedDetail}: Props) {
+function VisitedList({moveToVisitedDetail, visitedTrail}: Props) {
   return (
     // visitedMountainList의 길이가 0이상일 경우 map으로 VisitedListItem에 전달
     <ScrollView>
-      {visitedMountainList.length > 0 &&
-        visitedMountainList.map(item => (
+      {visitedTrail.length > 0 &&
+        visitedTrail.map((item, index) => (
           <VisitedListItem
-            key={item.id}
-            mountain={item.mountain}
-            location={item.location}
-            trailList={item.trailList}
+            key={index}
+            mountainName={item.mountainName}
+            address={item.address}
+            lastHikingDate={item.lastHikingDate}
+            lastHikingTrailName={item.lastHikingTrailDate}
             moveToVisitedDetail={moveToVisitedDetail}
           />
         ))}
