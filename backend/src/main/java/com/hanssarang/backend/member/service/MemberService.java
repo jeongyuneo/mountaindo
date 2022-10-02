@@ -34,10 +34,11 @@ public class MemberService {
             '!', '@', '#', '$', '%', '^', '&', '*'};
     private static final String ADMIN_EMAIL = "mountaindo201@naver.com";
     private static final String JOIN_MOUNTAINDO_MESSAGE = "MountainDo: 회원가입 인증번호 안내";
+    private static final String CERTIFICATION_NUMBER_MESSAGE = "인증번호: ";
     private static final String CONFIRMATION_NUMBER = "\n해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
     private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
-    private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
     private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
+    private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
 
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
@@ -164,11 +165,11 @@ public class MemberService {
         }
     }
 
-    public void sendEmailValidationToken(String email) {
+    public void sendEmailValidationToken(EmailValidationRequest emailValidationRequest) {
         String emailValidateToken = createRandomString();
-        RedisUtil.setDataExpired(email, emailValidateToken, 60 * 3L);
-        sendMailMessage(email, JOIN_MOUNTAINDO_MESSAGE,
-                TEMPORARY_PASSWORD + emailValidateToken + CONFIRMATION_NUMBER);
+        RedisUtil.setDataExpired(emailValidationRequest.getEmail(), emailValidateToken, 60 * 3L);
+        sendMailMessage(emailValidationRequest.getEmail(), JOIN_MOUNTAINDO_MESSAGE,
+                CERTIFICATION_NUMBER_MESSAGE + emailValidateToken + CONFIRMATION_NUMBER);
     }
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
