@@ -11,7 +11,11 @@ import {
 import {RootStackParamList} from '../../../../AppInner';
 import AppText from '../../../components/AppText';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
-import {findPassword} from '../../../slices/userSlice/user';
+import {
+  emailAuth,
+  emailRequest,
+  findPassword,
+} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
 // navigation을 사용하기 위해 type 설정
@@ -92,13 +96,39 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
       });
   }, [email, name, checkEmail, emailValid]);
 
+  // 이메일 인증
+  const rsquestEmail = () => {
+    dispatch(emailRequest({email})).then(res => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        Alert.alert('이메일 요청', `해당 이메일에서\n 인증번호를 확인하세요!`);
+      }
+    });
+  };
+
+  const [certification, setCertification] = useState('');
+  const [rePass, setRePass] = useState(false);
+  const onChangeCertification = useCallback(text => {
+    setCertification(text.trim());
+  }, []);
+  // 이메일 인증확인
+  const authEmail = () => {
+    dispatch(emailAuth({email: email, authToken: certification})).then(res => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        Alert.alert('인증', '인증성공');
+        setRePass(true);
+      } else {
+        Alert.alert('인증실패', '인증번호가 일치하지않습니다.');
+      }
+    });
+  };
+
   const canGoNext = email && name && emailValid; // 버튼 disabled 확인할 변수
   return (
     <DismissKeyboardView>
       <View style={styles.inputGroup}>
-        <View style={styles.inputView}>
+        <View style={styles.emailinputView}>
           <TextInput
-            style={styles.input}
+            style={styles.emailinput}
             onChangeText={onChangeEmail}
             placeholder="이메일을 입력해주세요"
             placeholderTextColor="#666"
@@ -112,6 +142,25 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             onSubmitEditing={() => nameRef.current?.focus()}
             blurOnSubmit={false}
           />
+          <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
+            <Text style={styles.checkEmailText}>인증요청</Text>
+          </Pressable>
+        </View>
+        <View style={styles.emailinputView}>
+          <TextInput
+            style={styles.emailinput}
+            onChangeText={onChangeCertification}
+            placeholder="인증번호를 입력해주세요."
+            placeholderTextColor="#666"
+            textContentType="none"
+            value={certification}
+            returnKeyType="next"
+            clearButtonMode="while-editing"
+            blurOnSubmit={false}
+          />
+          <Pressable style={styles.checkEmailActive} onPress={authEmail}>
+            <Text style={styles.checkEmailText}>인증</Text>
+          </Pressable>
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -140,19 +189,33 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
           </Pressable>
         </View>
         <View>
-          <Pressable
-            disabled={!canGoNext}
-            onPress={onSubmit}
-            style={
-              canGoNext
-                ? StyleSheet.compose(
-                    styles.findPasswordButton,
-                    styles.buttonActive,
-                  )
-                : styles.findPasswordButton
-            }>
-            <AppText style={styles.buttonText}>비밀번호 재설정</AppText>
-          </Pressable>
+          {rePass ? (
+            <Pressable
+              disabled={!canGoNext}
+              onPress={onSubmit}
+              style={
+                canGoNext
+                  ? StyleSheet.compose(
+                      styles.findPasswordButton,
+                      styles.buttonActive,
+                    )
+                  : styles.findPasswordButton
+              }>
+              <AppText style={styles.buttonText}>비밀번호 재설정</AppText>
+            </Pressable>
+          ) : (
+            <Pressable
+              style={
+                canGoNext
+                  ? StyleSheet.compose(
+                      styles.findPasswordButton,
+                      styles.buttonActive,
+                    )
+                  : styles.findPasswordButton
+              }>
+              <AppText style={styles.buttonText}>비밀번호 재설정</AppText>
+            </Pressable>
+          )}
         </View>
       </View>
     </DismissKeyboardView>
@@ -160,6 +223,31 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  authinputText: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#c5c5c5',
+    width: 200,
+    fontSize: 12,
+  },
+  emailinputView: {
+    marginVertical: 10,
+    flexDirection: 'row',
+  },
+  checkEmailText: {
+    color: 'white',
+  },
+  checkEmailActive: {
+    backgroundColor: '#57d696',
+    borderRadius: 30,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    marginTop: 10,
+  },
+  emailinput: {
+    borderBottomWidth: 1,
+    fontFamily: 'NanumBarunGothic',
+    width: 230,
+  },
   inputGroup: {
     marginTop: 30,
     marginHorizontal: 20,
