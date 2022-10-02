@@ -4,11 +4,9 @@ import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.service.MemberService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/members")
@@ -36,9 +34,9 @@ public class MemberController {
                 .body(memberService.signUp(signUpRequest));
     }
 
-    @PostMapping("/initial-survey")
-    public ResponseEntity<Void> createInitialSurvey(@RequestHeader(AUTHORIZATION) String token, @RequestBody InitialSurveyRequest initialSurveyRequest) {
-        memberService.createInitialSurvey(JwtUtil.getMemberId(token), initialSurveyRequest);
+    @PostMapping("/survey")
+    public ResponseEntity<Void> createSurvey(@RequestHeader(AUTHORIZATION) String token, @RequestBody SurveyRequest surveyRequest) {
+        memberService.createSurvey(JwtUtil.getMemberId(token), surveyRequest);
         return ResponseEntity.ok().build();
     }
 

@@ -13,6 +13,8 @@ import DatePicker from '../../../components/user/DatePicker';
 import LocationPicker from '../../../components/user/LocationPicker';
 import {
   checkCertification,
+  emailAuth,
+  emailRequest,
   login,
   signUp,
 } from '../../../slices/userSlice/user';
@@ -105,6 +107,26 @@ function SignUp() {
         Alert.alert('알림', err.message);
       });
   }, [disabledEmail, dispatch, email]);
+
+  // 이메일 인증
+  const rsquestEmail = () => {
+    dispatch(emailRequest({email})).then(res => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        Alert.alert('이메일 요청', `해당 이메일에서\n 인증번호를 확인하세요!`);
+      }
+    });
+  };
+
+  // 이메일 인증확인
+  const authEmail = () => {
+    dispatch(emailAuth({email: email, authToken: certification})).then(res => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        Alert.alert('인증', '인증성공');
+      } else {
+        Alert.alert('인증실패', '인증번호가 일치하지않습니다.');
+      }
+    });
+  };
 
   const onSubmit = useCallback(async () => {
     if (!email || !email.trim()) {
@@ -234,13 +256,20 @@ function SignUp() {
           <Pressable
             style={!disabledEmail ? styles.checkEmailActive : styles.checkEmail}
             onPress={pressCertificationButton}>
+            <Text style={styles.checkEmailText}>중복확인</Text>
+          </Pressable>
+          <Pressable
+            style={
+              checkEmail === 1 ? styles.checkEmailActive : styles.checkEmail
+            }
+            onPress={rsquestEmail}>
             <Text style={styles.checkEmailText}>인증</Text>
           </Pressable>
         </View>
         <View>
           <View style={styles.inputWrapper}>
             <TextInput
-              style={styles.inputText}
+              style={styles.authinputText}
               onChangeText={onChangeCertification}
               placeholder="인증번호를 입력해주세요."
               placeholderTextColor="#666"
@@ -252,6 +281,9 @@ function SignUp() {
               onSubmitEditing={() => passwordRef.current?.focus()}
               blurOnSubmit={false}
             />
+            <Pressable style={styles.checkEmailActive} onPress={authEmail}>
+              <Text style={styles.checkEmailText}>인증확인</Text>
+            </Pressable>
           </View>
           <View style={styles.inputWrapper}>
             <TextInput
@@ -363,6 +395,12 @@ function SignUp() {
 }
 
 const styles = StyleSheet.create({
+  authinputText: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#c5c5c5',
+    width: 200,
+    fontSize: 12,
+  },
   wrapper: {
     backgroundColor: 'white',
     paddingHorizontal: 40,
@@ -381,7 +419,7 @@ const styles = StyleSheet.create({
   emailInputText: {
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
-    width: 230,
+    width: 150,
     fontSize: 12,
   },
   checkEmail: {

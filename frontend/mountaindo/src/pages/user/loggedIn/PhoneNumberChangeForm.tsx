@@ -9,6 +9,8 @@ import {
   Alert,
 } from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 import {userChange} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
@@ -53,10 +55,12 @@ function PhoneNumberChangeForm({
         user: {...route.params?.user, phone: phone},
       }),
     ).then(res => {
-      route.params?.setUser({
-        ...route.params?.user,
-        phone: phone,
-      });
+      if (res.meta.requestStatus === 'fulfilled') {
+        route.params?.setUser({
+          ...route.params?.user,
+          phone: phone,
+        });
+      }
     });
 
     navigation.navigate('MyPage');
@@ -64,42 +68,50 @@ function PhoneNumberChangeForm({
   }, [navigation, phone, route.params]);
   const canGoNext = phone; // 버튼 disabled 확인할 변수
   return (
-    <View style={styles.container}>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangPhoneNumber}
-          placeholder="휴대폰 번호를 입력해주세요 ex) 010-1234-5678"
-          placeholderTextColor="#666"
-          importantForAutofill="yes"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          value={phone}
-          returnKeyType="send"
-          clearButtonMode="while-editing"
-          ref={phoneNumberRef}
-          onSubmitEditing={onSubmit}
-          blurOnSubmit={false}
-        />
+    <View style={styles.backColor}>
+      <View style={styles.container}>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangPhoneNumber}
+            placeholder="휴대폰 번호를 입력해주세요 ex) 010-1234-5678"
+            placeholderTextColor="#666"
+            importantForAutofill="yes"
+            autoComplete="tel"
+            textContentType="telephoneNumber"
+            value={phone}
+            returnKeyType="send"
+            clearButtonMode="while-editing"
+            ref={phoneNumberRef}
+            onSubmitEditing={onSubmit}
+            blurOnSubmit={false}
+          />
+        </View>
+        <Pressable
+          disabled={!canGoNext}
+          onPress={onSubmit}
+          style={
+            canGoNext
+              ? StyleSheet.compose(
+                  styles.phoneNumberChangeButton,
+                  styles.phoneNumberChangeButtonActive,
+                )
+              : styles.phoneNumberChangeButton
+          }>
+          <AppTextBold style={styles.phoneNumberChangeButtonText}>
+            전화번호 변경
+          </AppTextBold>
+        </Pressable>
       </View>
-      <Pressable
-        disabled={!canGoNext}
-        onPress={onSubmit}
-        style={
-          canGoNext
-            ? StyleSheet.compose(
-                styles.phoneNumberChangeButton,
-                styles.phoneNumberChangeButtonActive,
-              )
-            : styles.phoneNumberChangeButton
-        }>
-        <Text style={styles.phoneNumberChangeButtonText}>전화번호 변경</Text>
-      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  backColor: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
   container: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -108,6 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   input: {
+    fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     color: 'black',
   },
@@ -119,11 +132,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   phoneNumberChangeButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   phoneNumberChangeButtonText: {
     textAlign: 'center',
     color: 'white',
+    fontSize: 20,
   },
 });
 

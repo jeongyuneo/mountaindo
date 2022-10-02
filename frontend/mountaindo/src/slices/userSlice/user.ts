@@ -11,7 +11,42 @@ const initialState = {
   isLoggedIn: false,
 };
 
-// 회원정보 수정
+// 이메일 인증
+export const emailRequest = createAsyncThunk(
+  'userSlice/emailRequest',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.post(
+        `/api/v1/members/email/1?email=${args.email}`,
+        {
+          // BackEnd코드 수정 후 수정해야할 코드
+          // email:args.email,
+        },
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 이메일 인증번호 요청
+export const emailAuth = createAsyncThunk(
+  'userSlice/emailAuth',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.post('/api/v1/members/email/2', {
+        email: args.email,
+        authToken: args.authToken,
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+//회원정보 수정
 export const userChange = createAsyncThunk(
   'userSlice/userChange',
   async (args: any, {rejectWithValue}) => {
@@ -287,6 +322,18 @@ const userSlice = createSlice({
       })
       .addCase(userChange.rejected, (state, {payload}) => {
         console.log('passwordChange Rejected ==>', payload);
+      })
+      .addCase(emailRequest.fulfilled, (state, {payload}) => {
+        console.log('emailRequest Fulfilled ==> ', payload);
+      })
+      .addCase(emailRequest.rejected, (state, {payload}) => {
+        console.log('emailRequest Rejected ==>', payload);
+      })
+      .addCase(emailAuth.fulfilled, (state, {payload}) => {
+        console.log('emailAuth Fulfilled ==> ', payload);
+      })
+      .addCase(emailAuth.rejected, (state, {payload}) => {
+        console.log('emailAuth Rejected ==>', payload);
       });
   },
 });

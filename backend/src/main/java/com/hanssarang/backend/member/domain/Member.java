@@ -3,7 +3,6 @@ package com.hanssarang.backend.member.domain;
 import com.hanssarang.backend.common.domain.Address;
 import com.hanssarang.backend.common.domain.BaseEntity;
 import com.hanssarang.backend.hiking.domain.Hiking;
-import com.hanssarang.backend.survey.domain.Survey;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -7,8 +7,7 @@ import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
-import com.hanssarang.backend.survey.controller.dto.CreateSurveyRequest;
-import com.hanssarang.backend.survey.domain.Survey;
+import com.hanssarang.backend.member.domain.Survey;
 import com.hanssarang.backend.util.JwtUtil;
 import com.hanssarang.backend.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,6 @@ public class MemberService {
     private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
     private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
     private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
-    private static final String SUCCESS_MESSAGE = "succeeded";
 
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
@@ -47,13 +45,13 @@ public class MemberService {
 
     public void checkEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new DuplicationException(FAIL_TO_CHECK_EMAIL);
+            throw new DuplicationException(DUPLICATED_EMAIL);
         }
     }
 
     public void checkNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new DuplicationException(FAIL_TO_CHECK_NICKNAME);
+            throw new DuplicationException(DUPLICATED_NICKNAME);
         }
     }
 
@@ -65,7 +63,18 @@ public class MemberService {
                 .build();
     }
 
-    public void createInitialSurvey(int memberId, InitialSurveyRequest initialSurveyRequest) {
+    public void createSurvey(int memberId, SurveyRequest surveyRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Survey survey = Survey.builder()
+                .level(surveyRequest.getLevel())
+                .preferredMountainLocation(surveyRequest.getPreferredMountainLocation())
+                .preferredHikingStyle(surveyRequest.getPreferredHikingStyle())
+                .preferredHikingTime(surveyRequest.getPreferredHikingTime())
+                .isActive(true)
+                .build();
+        member.submit(survey);
+        memberRepository.save(member);
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
@@ -73,7 +82,7 @@ public class MemberService {
                 findingEmailRequest.getName(),
                 findingEmailRequest.getBirth(),
                 findingEmailRequest.getPhone())
-                .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         return EmailResponse.builder()
                 .email(member.getEmail())
                 .build();
@@ -149,20 +158,6 @@ public class MemberService {
                 .collect(Collectors.joining());
     }
 
-    public void createSurvey(int memberId, CreateSurveyRequest createSurveyRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        Survey survey = Survey.builder()
-                .level(createSurveyRequest.getLevel())
-                .preferredMountainLocation(createSurveyRequest.getPreferredMountainLocation())
-                .preferredHikingStyle(createSurveyRequest.getPreferredHikingStyle())
-                .preferredHikingTime(createSurveyRequest.getPreferredHikingTime())
-                .isActive(true)
-                .build();
-        member.submit(survey);
-        memberRepository.save(member);
-    }
-
     private void validatePassword(Member member, String password) {
         if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new BadRequestException(NOT_EQUAL_PASSWORD);
@@ -178,7 +173,7 @@ public class MemberService {
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
-            throw new NotEqualException(VALIDATION_TOKEN_NOT_EQUAL);
+            throw new NotEqualException(NOT_EQUAL_VALIDATION_TOKEN);
         }
     }
 

@@ -3,8 +3,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppText from '../../../components/AppText';
+import AppTextBold from '../../../components/AppTextBold';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import userSlice, {signOut} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -17,33 +19,24 @@ type UserInfoChangeScreenProps = NativeStackScreenProps<
 
 function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
   // 화면에 띄워줄 임시 사용자 정보 [주소 변경 API 미연결  하여 아직 지우지 않았습니다.]
-  const [userInfo, setUserInfo] = useState({
-    name: '사용자 이름',
-    nickname: '사용자 별명',
-    email: 'aaa@aaa.aaa',
-    birth: '2022-09-15',
-    phoneNumber: '010-0000-0000',
-    address: {value: '충청남도', cityValue: '아산시'},
-  });
   const dispatch = useAppDispatch();
   useEffect(() => {}, [route.params?.user]);
   return (
-    <DismissKeyboardView>
+    <DismissKeyboardView style={styles.backColor}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
           <View style={styles.textLabelGroup}>
-            <Text style={styles.textLabel}>이름</Text>
-            <Text style={styles.textLabel}>닉네임</Text>
-            <Text style={styles.textLabel}>이메일</Text>
-            <Text style={styles.textLabel}>생년월일</Text>
-            <Text style={styles.textLabel}>전화번호</Text>
-            <Text style={styles.textLabel}>실 거주지</Text>
+            <AppTextBold style={styles.textLabel}>이름</AppTextBold>
+            <AppTextBold style={styles.textLabel}>닉네임</AppTextBold>
+            <AppTextBold style={styles.textLabel}>이메일</AppTextBold>
+            <AppTextBold style={styles.textLabel}>생년월일</AppTextBold>
+            <AppTextBold style={styles.textLabel}>전화번호</AppTextBold>
+            <AppTextBold style={styles.textLabel}>실 거주지</AppTextBold>
           </View>
           <View style={styles.textGroup}>
-            <Text style={styles.text}>{route.params?.user.name}</Text>
+            <AppText style={styles.text}>{route.params?.user.name}</AppText>
             {/* 우측 화살표를 눌러서 닉네임 변경 페이지로 이동
-                params로 user정보를 전달
-              */}
+                params로 user정보를 전달 */}
             <Pressable
               style={styles.goToChangeForm}
               onPress={() =>
@@ -52,15 +45,17 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
                   setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{route.params?.user.nickname}</Text>
+              <AppText style={styles.text}>
+                {route.params?.user.nickname}
+              </AppText>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
                 style={styles.icon}
               />
             </Pressable>
-            <Text style={styles.text}>{route.params?.user.email}</Text>
-            <Text style={styles.text}>{route.params?.user.birth}</Text>
+            <AppText style={styles.text}>{route.params?.user.email}</AppText>
+            <AppText style={styles.text}>{route.params?.user.birth}</AppText>
             {/* 우측 화살표를 눌러서 전화번호 변경 페이지로 이동
                 params로 user정보를 전달
               */}
@@ -72,7 +67,7 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
                   setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{route.params?.user.phone}</Text>
+              <AppText style={styles.text}>{route.params?.user.phone}</AppText>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
@@ -83,11 +78,14 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
               style={styles.goToChangeForm}
               onPress={() =>
                 navigation.navigate('AddressChangeForm', {
-                  userInfo: userInfo,
-                  setUserInfo: setUserInfo,
+                  user: route.params?.user,
+                  setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{route.params?.user.fullAddress}</Text>
+              <View style={styles.textStyle}>
+                <AppText style={styles.text}>{route.params?.user.si}</AppText>
+                <AppText style={styles.gutext}>{route.params?.user.gu}</AppText>
+              </View>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
@@ -99,19 +97,35 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
         <Pressable
           style={styles.button}
           onPress={() => {
-            dispatch(signOut(''))
-              .then(async res => {
-                // 회원 탈퇴 요청 성공 시 => AsyncStorage에서 token제거, logout처리
-                if (res.meta.requestStatus === 'fulfilled') {
-                  await AsyncStorage.removeItem('token');
-                  dispatch(userSlice.actions.setLogout(''));
-                }
-              })
-              .catch(err => {
-                console.log(err);
-              });
+            Alert.alert(
+              '회원탈퇴',
+              '회원탈퇴 하시겠어요?',
+              [
+                {
+                  text: '예',
+                  onPress: async () => {
+                    dispatch(signOut(''))
+                      .then(async res => {
+                        // 회원 탈퇴 요청 성공 시 => AsyncStorage에서 token제거, logout처리
+                        if (res.meta.requestStatus === 'fulfilled') {
+                          await AsyncStorage.removeItem('token');
+                          dispatch(userSlice.actions.setLogout(''));
+                        }
+                      })
+                      .catch(err => {
+                        console.log(err);
+                      });
+                  },
+                },
+                {
+                  text: '아니오',
+                  style: 'cancel',
+                },
+              ],
+              {cancelable: true},
+            );
           }}>
-          <Text>회원 탈퇴</Text>
+          <AppText>회원 탈퇴</AppText>
         </Pressable>
       </View>
     </DismissKeyboardView>
@@ -119,6 +133,16 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  backColor: {
+    backgroundColor: 'white',
+  },
+  textStyle: {
+    flexDirection: 'row',
+  },
+  gutext: {
+    marginVertical: 15,
+    marginLeft: 5,
+  },
   container: {
     marginHorizontal: 20,
     marginTop: 30,
@@ -137,16 +161,17 @@ const styles = StyleSheet.create({
     flex: 0.7,
   },
   textLabel: {
-    fontWeight: '700',
+    fontWeight: '900',
     color: 'black',
-    marginVertical: 10,
+    marginVertical: 11.5,
+    marginBottom: 16.5,
   },
   goToChangeForm: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   text: {
-    marginVertical: 10,
+    marginVertical: 15.2,
   },
   textInput: {
     padding: 0,

@@ -42,13 +42,10 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
-    private static final String MY_LEVEL = "등린이";
-    private static final String VISITED_MOUNTAIN = "없음";
-    private static final String PREFERRED_MOUNTAIN_LOCATION = "내 주변";
-    private static final String PREFERRED_MOUNTAIN_STYLE = "무리없는 등산";
-    private static final String PREFERRED_CLIMBING_TIME = "1 ~ 2시간";
-    private static final String NICKNAME_PARAMETER_NAME = "nickname";
-    private static final String MEMBER_EMAIL_PARAMETER_NAME = "email";
+    private static final int LEVEL = 1;
+    private static final int PREFERRED_MOUNTAIN_LOCATION = 2;
+    private static final int PREFERRED_HIKING_STYLE = 2;
+    private static final int PREFERRED_HIKING_TIME = 1;
 
     private MemberResponse memberResponse;
     private UpdateRequest updateRequest;
@@ -57,7 +54,7 @@ public class MemberControllerTest extends ApiDocument {
     private EmailResponse emailResponse;
     private SignUpRequest signUpRequest;
     private SignUpResponse signUpResponse;
-    private InitialSurveyRequest initialSurveyRequest;
+    private SurveyRequest surveyRequest;
     private FindingEmailRequest findingEmailRequest;
     private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
@@ -107,12 +104,11 @@ public class MemberControllerTest extends ApiDocument {
         signUpResponse = SignUpResponse.builder()
                 .token(JwtUtil.generateToken(ID, NICKNAME))
                 .build();
-        initialSurveyRequest = InitialSurveyRequest.builder()
-                .myLevel(MY_LEVEL)
-                .visitedMountain(VISITED_MOUNTAIN)
+        surveyRequest = SurveyRequest.builder()
+                .level(LEVEL)
                 .preferredMountainLocation(PREFERRED_MOUNTAIN_LOCATION)
-                .preferredMountainStyle(PREFERRED_MOUNTAIN_STYLE)
-                .preferredClimbingTime(PREFERRED_CLIMBING_TIME)
+                .preferredHikingStyle(PREFERRED_HIKING_STYLE)
+                .preferredHikingTime(PREFERRED_HIKING_TIME)
                 .build();
         findingEmailRequest = FindingEmailRequest.builder()
                 .name(NAME)
@@ -238,11 +234,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void checkNicknameFail() throws Exception {
         // given
-        willThrow(new DuplicationException(FAIL_TO_CHECK_NICKNAME)).given(memberService).checkNickname(anyString());
+        willThrow(new DuplicationException(DUPLICATED_NICKNAME)).given(memberService).checkNickname(anyString());
         // when
         ResultActions resultActions = 닉네임_중복체크_요청(NICKNAME);
         // then
-        닉네임_중복체크_실패(resultActions, new Message(FAIL_TO_CHECK_NICKNAME));
+        닉네임_중복체크_실패(resultActions, new Message(DUPLICATED_NICKNAME));
     }
 
     @DisplayName("이메일 중복체크 - 성공")
@@ -260,11 +256,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void checkEmailFail() throws Exception {
         // given
-        willThrow(new DuplicationException(FAIL_TO_CHECK_EMAIL)).given(memberService).checkEmail(anyString());
+        willThrow(new DuplicationException(DUPLICATED_EMAIL)).given(memberService).checkEmail(anyString());
         // when
         ResultActions resultActions = 이메일_중복체크_요청(EMAIL);
         // then
-        이메일_중복체크_실패(resultActions, new Message(FAIL_TO_CHECK_EMAIL));
+        이메일_중복체크_실패(resultActions, new Message(DUPLICATED_EMAIL));
     }
 
     @DisplayName("회원가입 - 성공")
@@ -293,9 +289,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveySuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).createInitialSurvey(anyInt(), any(InitialSurveyRequest.class));
+        willDoNothing().given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
-        ResultActions resultActions = 사전_설문조사_저장_요청(initialSurveyRequest);
+        ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
         사전_설문조사_저장_성공(resultActions);
     }
@@ -304,11 +300,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveyFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SURVEY)).given(memberService).createInitialSurvey(anyInt(), any(InitialSurveyRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_SURVEY)).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
-        ResultActions resultActions = 사전_설문조사_저장_요청(initialSurveyRequest);
+        ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
-        사전_설문조사_저장_실패(resultActions, new Message(FAIL_TO_SURVEY));
+        사전_설문조사_저장_실패(resultActions, new Message(FAIL_TO_CREATE_SURVEY));
     }
 
     @DisplayName("아이디 찾기 - 성공")
@@ -326,11 +322,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void getMemberIdFail() throws Exception {
         // given
-        willThrow(new NotFoundException(FAIL_TO_FIND_EMAIL)).given(memberService).getMemberEmail(any(FindingEmailRequest.class));
+        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(memberService).getMemberEmail(any(FindingEmailRequest.class));
         // when
         ResultActions resultActions = 아이디_찾기_요청(findingEmailRequest);
         // then
-        아이디_찾기_실패(resultActions, new Message(FAIL_TO_FIND_EMAIL));
+        아이디_찾기_실패(resultActions, new Message(NOT_FOUND_MEMBER));
     }
 
     @DisplayName("비밀번호 재설정 - 성공")
@@ -456,8 +452,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 이메일_중복체크_요청(String email) throws Exception {
-        return mockMvc.perform(get("/api/v1/members/email")
-                .param(MEMBER_EMAIL_PARAMETER_NAME, email));
+        return mockMvc.perform(get("/api/v1/members/email?email=" + email));
     }
 
     private void 이메일_중복체크_성공(ResultActions resultActions) throws Exception {
@@ -474,8 +469,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 닉네임_중복체크_요청(String nickname) throws Exception {
-        return mockMvc.perform(get("/api/v1/members/nickname")
-                .param(NICKNAME_PARAMETER_NAME, nickname));
+        return mockMvc.perform(get("/api/v1/members/nickname?nickname=" + nickname));
     }
 
     private void 닉네임_중복체크_성공(ResultActions resultActions) throws Exception {
@@ -511,24 +505,24 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("signup-fail"));
     }
 
-    private ResultActions 사전_설문조사_저장_요청(InitialSurveyRequest initialSurveyRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/members/initial-survey")
+    private ResultActions 사전_설문조사_저장_요청(SurveyRequest surveyRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/survey")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(initialSurveyRequest)));
+                .content(toJson(surveyRequest)));
     }
 
     private void 사전_설문조사_저장_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(toDocument("create-initial-survey-success"));
+                .andDo(toDocument("create-survey-success"));
     }
 
     private void 사전_설문조사_저장_실패(ResultActions resultActions, Message message) throws Exception {
         resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
-                .andDo(toDocument("create-initial-survey-fail"));
+                .andDo(toDocument("create-survey-fail"));
     }
 
     private ResultActions 아이디_찾기_요청(FindingEmailRequest findingEmailRequest) throws Exception {

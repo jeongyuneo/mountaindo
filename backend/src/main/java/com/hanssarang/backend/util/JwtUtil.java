@@ -34,12 +34,8 @@ public class JwtUtil {
         return (int) getAllClaims(getActualToken(token)).get("id");
     }
 
-    public static void validateToken(String token) {
-        try {
-            getAllClaims(getActualToken(token));
-        } catch (ExpiredJwtException e) {
-            throw new WrongAccessException(EXPIRED_TOKEN);
-        }
+    public static void validate(String token) {
+        getAllClaims(getActualToken(token));
     }
 
     private static String createToken(Claims claims) {
@@ -64,11 +60,11 @@ public class JwtUtil {
     }
 
     private static String getActualToken(String token) {
-        checkValidation(token);
+        validateAuthorization(token);
         return token.split(DELIMITER)[TOKEN];
     }
 
-    private static void checkValidation(String token) {
+    private static void validateAuthorization(String token) {
         if (!token.startsWith(AUTHORIZATION_TYPE + DELIMITER)) {
             throw new WrongAccessException(WRONG_TOKEN);
         }
