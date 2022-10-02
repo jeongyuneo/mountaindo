@@ -9,6 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import {userChange} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
@@ -63,39 +64,47 @@ function NicknameChangeForm({
 
   const canGoNext = nickname; // 버튼 disabled 확인할 변수
   return (
-    <View style={styles.container}>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeNickname}
-          importantForAutofill="yes"
-          autoComplete="name"
-          textContentType="name"
-          value={nickname}
-          returnKeyType="next"
-          clearButtonMode="while-editing"
-          ref={nicknameRef}
-          blurOnSubmit={false}
-        />
+    <View style={styles.backColor}>
+      <View style={styles.container}>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeNickname}
+            importantForAutofill="yes"
+            autoComplete="name"
+            textContentType="name"
+            value={nickname}
+            returnKeyType="next"
+            clearButtonMode="while-editing"
+            ref={nicknameRef}
+            blurOnSubmit={false}
+          />
+        </View>
+        <Pressable
+          disabled={!canGoNext}
+          onPress={onSubmit}
+          style={
+            canGoNext
+              ? StyleSheet.compose(
+                  styles.nicknameChangeButton,
+                  styles.nicknameChangeButtonActive,
+                )
+              : styles.nicknameChangeButton
+          }>
+          <AppTextBold style={styles.nicknameChangeButtonText}>
+            닉네임 변경
+          </AppTextBold>
+        </Pressable>
       </View>
-      <Pressable
-        disabled={!canGoNext}
-        onPress={onSubmit}
-        style={
-          canGoNext
-            ? StyleSheet.compose(
-                styles.nicknameChangeButton,
-                styles.nicknameChangeButtonActive,
-              )
-            : styles.nicknameChangeButton
-        }>
-        <Text style={styles.nicknameChangeButtonText}>닉네임 변경</Text>
-      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  backColor: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
   container: {
     marginVertical: 10,
     marginHorizontal: 20,
@@ -104,6 +113,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   input: {
+    fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     color: 'black',
   },
@@ -115,11 +125,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   nicknameChangeButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   nicknameChangeButtonText: {
     textAlign: 'center',
     color: 'white',
+    fontSize: 20,
   },
 });
 
