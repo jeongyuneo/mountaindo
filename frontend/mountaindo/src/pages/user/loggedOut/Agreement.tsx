@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable, Dimensions} from 'react-native';
 import AgreementModal1 from '../../../components/user/AgreementModal1';
 import AgreementModal2 from '../../../components/user/AgreementModal2';
 import AgreementModal3 from '../../../components/user/AgreementModal3';
@@ -8,6 +8,8 @@ import {RootStackParamList} from '../../../../AppInner';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faSquareCheck} from '@fortawesome/free-solid-svg-icons';
 import {faSquare} from '@fortawesome/free-regular-svg-icons';
+import AppTextBold from '../../../components/AppTextBold';
+import AppText from '../../../components/AppText';
 
 type AgreementScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -81,12 +83,12 @@ function Agreement({navigation}: AgreementScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View>
-        <Text style={styles.title}>MountainDo</Text>
+        <AppTextBold style={styles.title}>MountainDo</AppTextBold>
         <View style={styles.subTitle}>
-          <Text style={styles.subTitleText}>마운틴두 이용약관 동의</Text>
-          <Text style={styles.subTitleText}>
+          <AppText style={styles.subTitleText}>마운틴두 이용약관 동의</AppText>
+          <AppText style={styles.subTitleText}>
             서비스의 이용을 위하여 필수 약관 동의가 필요합니다.
-          </Text>
+          </AppText>
         </View>
       </View>
       <View>
@@ -94,7 +96,7 @@ function Agreement({navigation}: AgreementScreenProps) {
           <Pressable
             style={styles.agreeList}
             onPress={() => setVisibleModal1(true)}>
-            <Text style={styles.agreementText}>(필수) 서비스 이용약관</Text>
+            <AppText>(필수) 서비스 이용약관</AppText>
             {isSelected1 ? (
               <Pressable onPress={() => singleCheck(false, 0)}>
                 <FontAwesomeIcon
@@ -121,9 +123,7 @@ function Agreement({navigation}: AgreementScreenProps) {
           <Pressable
             style={styles.agreeList}
             onPress={() => setVisibleModal2(true)}>
-            <Text style={styles.agreementText}>
-              (필수) 개인정보 수집 및 목적
-            </Text>
+            <AppText>(필수) 개인정보 수집 및 목적</AppText>
             {isSelected2 ? (
               <Pressable onPress={() => singleCheck(false, 1)}>
                 <FontAwesomeIcon
@@ -150,9 +150,7 @@ function Agreement({navigation}: AgreementScreenProps) {
           <Pressable
             style={styles.agreeList}
             onPress={() => setVisibleModal3(true)}>
-            <Text style={styles.agreementText}>
-              (필수) 위치기반 서비스 이용약관
-            </Text>
+            <AppText>(필수) 위치기반 서비스 이용약관</AppText>
             {isSelected3 ? (
               <Pressable onPress={() => singleCheck(false, 2)}>
                 <FontAwesomeIcon
@@ -192,14 +190,14 @@ function Agreement({navigation}: AgreementScreenProps) {
             <FontAwesomeIcon icon={faSquare} style={styles.iconSquare} />
           </Pressable>
         )}
-        <Text style={styles.agreeAllText}>모두 동의합니다.</Text>
+        <AppTextBold style={styles.agreeAllText}>모두 동의합니다.</AppTextBold>
       </View>
       <View style={styles.buttonZone}>
         <Pressable
           style={canGoNext ? styles.startButtonActive : styles.startButton}
           disabled={!canGoNext}
           onPress={() => navigation.navigate('SignUp')}>
-          <Text style={styles.startButtonText}>시작하기</Text>
+          <AppText style={styles.startButtonText}>시작하기</AppText>
         </Pressable>
       </View>
     </View>
@@ -208,22 +206,21 @@ function Agreement({navigation}: AgreementScreenProps) {
 
 const styles = StyleSheet.create({
   wrapper: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     backgroundColor: 'white',
     padding: 40,
   },
   title: {
     marginTop: 40,
-    marginBottom: 30,
+    marginBottom: 20,
     fontSize: 30,
-    fontWeight: 'bold',
     color: '#57d696',
   },
   subTitle: {
     marginBottom: 30,
-    color: 'black',
   },
   subTitleText: {
-    color: 'black',
     fontSize: 12,
   },
   agreeList: {
@@ -231,10 +228,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  agreementText: {
-    color: 'black',
-  },
+  agreementText: {},
   line: {
     marginTop: 10,
     flexDirection: 'row',
@@ -249,12 +245,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 8,
+    alignItems: 'center',
   },
   agreeAllText: {
     marginTop: 6,
     marginHorizontal: 5,
-    color: 'black',
-    fontWeight: 'bold',
   },
   buttonZone: {
     marginTop: 10,
@@ -267,9 +262,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     paddingVertical: 10,
     marginTop: 50,
+    width: '100%',
   },
   startButtonText: {
     color: 'white',
+    textAlign: 'center',
   },
   startButtonActive: {
     backgroundColor: '#57d696',
@@ -277,6 +274,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     paddingVertical: 10,
     marginTop: 50,
+    width: '100%',
   },
   iconSquare: {
     color: '#c5c5c5',

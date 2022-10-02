@@ -85,7 +85,14 @@ const Top = createMaterialTopTabNavigator();
 // 방문한 산의 top tab
 function TopTab() {
   return (
-    <Top.Navigator>
+    <Top.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: '#D3D3D3',
+        tabBarIndicatorStyle: {
+          backgroundColor: '#57d696',
+        },
+      }}>
       <Top.Screen
         name="Completed"
         component={Completed}
@@ -103,7 +110,15 @@ function TopTab() {
 // 유저 관련 bottom tab에 연결되는 페이지
 function UserTab() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
       <Stack.Screen
         name="MyPage"
         component={MyPage}
@@ -151,7 +166,15 @@ function UserTab() {
 // 산 bottom tab에 연결되는 페이지
 function MountainTab() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
       <Stack.Screen
         name="Mountain"
         component={Mountain}
@@ -179,7 +202,15 @@ function MountainTab() {
 // 방문한 산 bottom tab에 연결되는 페이지
 function VisitedTab() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
       <Stack.Screen
         name="Complete"
         component={TopTab}
@@ -196,7 +227,15 @@ function VisitedTab() {
 
 function HikingTab() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
       <Stack.Screen
         name="FindMountain"
         component={FindMountain}
@@ -205,7 +244,12 @@ function HikingTab() {
       <Stack.Screen
         name="Hiking"
         component={Hiking}
-        options={{title: '등산'}}
+        options={{
+          title: '등산',
+          headerTitleStyle: {
+            fontFamily: 'NanumBarunGothic',
+          },
+        }}
       />
     </Stack.Navigator>
   );
@@ -338,7 +382,15 @@ function AppInner() {
       </Stack.Group>
     </Stack.Navigator>
   ) : (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
       <Stack.Group screenOptions={{headerShown: false}}>
         <Stack.Screen
           name="SignIn"
