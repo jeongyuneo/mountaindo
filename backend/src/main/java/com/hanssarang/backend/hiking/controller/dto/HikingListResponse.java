@@ -3,6 +3,7 @@ package com.hanssarang.backend.hiking.controller.dto;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -10,8 +11,10 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HikingListResponse {
 
-    private String mountainName;
-    private String address;
+    private int hikingId;
+    private String trailName;
     private LocalDate lastHikingDate;
-    private String lastHikingTrailName;
+    private LocalTime useTime;
+    private String level;
+    private String mountainName;
 }
