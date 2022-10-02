@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AppText from '../AppText';
 
 // props로 받은 정보의 type 지정
 interface Props {
@@ -34,14 +35,14 @@ function DatePicker({setCheck, setSelectedDate, selectedDate}: Props) {
   return (
     <View>
       <Pressable onPress={showDatePicker} style={styles.dateButton}>
-        <Text
+        <AppText
           style={
             selectedDate
               ? StyleSheet.compose(styles.buttonText, styles.buttonTextActive)
               : styles.buttonText
           }>
           {selectedDate ? selectedDate : '생년월일을 입력해주세요'}
-        </Text>
+        </AppText>
       </Pressable>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
@@ -57,15 +58,12 @@ function DatePicker({setCheck, setSelectedDate, selectedDate}: Props) {
 const styles = StyleSheet.create({
   dateButton: {
     borderBottomWidth: 1,
-    borderBottomColor: '#c5c5c5',
   },
   buttonText: {
     paddingVertical: 15,
-    color: 'grey',
     fontSize: 12,
   },
   buttonTextActive: {
-    color: 'black',
     fontSize: 12,
   },
 });

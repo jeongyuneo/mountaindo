@@ -61,7 +61,7 @@ function TrackingStart({
           <FontAwesomeIcon
             icon={faCloudRain}
             size={15}
-            color={'grey'}
+            color={'skyblue'}
             style={styles.weatherIcon}
           />
         ) : currentWeather === '바람' ? (
