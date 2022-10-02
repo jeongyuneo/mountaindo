@@ -34,7 +34,7 @@ public class MemberService {
             '!', '@', '#', '$', '%', '^', '&', '*'};
     private static final String ADMIN_EMAIL = "mountaindo201@naver.com";
     private static final String JOIN_MOUNTAINDO_MESSAGE = "MountainDo: 회원가입 인증번호 안내";
-    private static final String CERTIFICATION_NUMBER = "인증번호: ";
+    private static final String CERTIFICATION_NUMBER_MESSAGE = "인증번호: ";
     private static final String CONFIRMATION_NUMBER = "\n해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
     private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
     private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
