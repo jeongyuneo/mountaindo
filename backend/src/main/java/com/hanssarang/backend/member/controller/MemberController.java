@@ -4,11 +4,9 @@ import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.service.MemberService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/members")

@@ -47,8 +47,6 @@ public class MemberControllerTest extends ApiDocument {
     private static final String PREFERRED_MOUNTAIN_LOCATION = "내 주변";
     private static final String PREFERRED_MOUNTAIN_STYLE = "무리없는 등산";
     private static final String PREFERRED_CLIMBING_TIME = "1 ~ 2시간";
-    private static final String NICKNAME_PARAMETER_NAME = "nickname";
-    private static final String MEMBER_EMAIL_PARAMETER_NAME = "email";
 
     private MemberResponse memberResponse;
     private UpdateRequest updateRequest;
@@ -456,8 +454,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 이메일_중복체크_요청(String email) throws Exception {
-        return mockMvc.perform(get("/api/v1/members/email")
-                .param(MEMBER_EMAIL_PARAMETER_NAME, email));
+        return mockMvc.perform(get("/api/v1/members/email?email=" + email));
     }
 
     private void 이메일_중복체크_성공(ResultActions resultActions) throws Exception {
@@ -474,8 +471,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 닉네임_중복체크_요청(String nickname) throws Exception {
-        return mockMvc.perform(get("/api/v1/members/nickname")
-                .param(NICKNAME_PARAMETER_NAME, nickname));
+        return mockMvc.perform(get("/api/v1/members/nickname?nickname=" + nickname));
     }
 
     private void 닉네임_중복체크_성공(ResultActions resultActions) throws Exception {

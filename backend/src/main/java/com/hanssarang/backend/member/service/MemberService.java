@@ -39,7 +39,6 @@ public class MemberService {
     private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
     private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
     private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
-    private static final String SUCCESS_MESSAGE = "succeeded";
 
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
