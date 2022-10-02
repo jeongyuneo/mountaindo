@@ -4,42 +4,36 @@ import AppTextBold from '../AppTextBold';
 import CourseItem from './CourseItem';
 
 interface Props {
-  CourseListDummy: {
-    id: number;
-    mountain: string;
-    location: string;
-    trailList: {
-      id: number;
-      trail: string;
-      level: string;
-      timeDuration: string;
-      location: string;
-      visitedDate: string;
-      totalDistance: number;
-      totalHigh: number;
-      imageSrc: any;
-    }[];
+  trailList: {
+    trailId: number;
+    name: string;
+    length: number;
+    level: string;
+    imageUrl: any;
   }[];
   moveToCourseDetail: any;
 }
 
-function CourseList({CourseListDummy, moveToCourseDetail}: Props) {
+function CourseList({trailList, moveToCourseDetail}: Props) {
   return (
     <View style={styles.courseList}>
       <AppTextBold style={styles.courseText}>코스 목록</AppTextBold>
       <View style={styles.courseListWrapper}>
         <ScrollView horizontal={true}>
-          {CourseListDummy[0].trailList.map(item => (
-            <CourseItem
-              id={item.id}
-              trail={item.trail}
-              level={item.level}
-              timeDuration={item.timeDuration}
-              totalDistance={item.totalDistance}
-              imageSrc={item.imageSrc}
-              moveToCourseDetail={moveToCourseDetail}
-            />
-          ))}
+          {trailList?.length > 0 ? (
+            trailList.map(item => (
+              <CourseItem
+                trailId={item.trailId}
+                name={item.name}
+                length={item.length}
+                level={item.level}
+                imageUrl={item.imageUrl}
+                moveToCourseDetail={moveToCourseDetail}
+              />
+            ))
+          ) : (
+            <></>
+          )}
         </ScrollView>
       </View>
     </View>

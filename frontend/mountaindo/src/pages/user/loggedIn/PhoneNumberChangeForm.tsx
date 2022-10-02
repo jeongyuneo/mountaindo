@@ -53,10 +53,12 @@ function PhoneNumberChangeForm({
         user: {...route.params?.user, phone: phone},
       }),
     ).then(res => {
-      route.params?.setUser({
-        ...route.params?.user,
-        phone: phone,
-      });
+      if (res.meta.requestStatus === 'fulfilled') {
+        route.params?.setUser({
+          ...route.params?.user,
+          phone: phone,
+        });
+      }
     });
 
     navigation.navigate('MyPage');

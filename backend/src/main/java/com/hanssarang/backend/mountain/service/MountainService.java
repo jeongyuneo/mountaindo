@@ -10,6 +10,7 @@ import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
 @Service
 public class MountainService {
 
+    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 50;
     private static final String NAME = "name";
     private static final String HEIGHT = "height";
     private static final String HIGH_HEIGHT = "high-height";
@@ -36,16 +38,16 @@ public class MountainService {
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
 
-    public List<MountainListResponse> getMountains(String sort) {
+    public List<MountainListResponse> getMountains(String sort, int page) {
         List<Mountain> mountains = null;
         if (sort.equals(NAME)) {
-            mountains = mountainRepository.findAll(Sort.by(Sort.Direction.ASC, NAME));
+            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
         } else if (sort.equals(HIGH_HEIGHT)) {
-            mountains = mountainRepository.findAll(Sort.by(Sort.Direction.DESC, HEIGHT));
+            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
         } else if (sort.equals(LOW_HEIGHT)) {
-            mountains = mountainRepository.findAll(Sort.by(Sort.Direction.ASC, HEIGHT));
+            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).ascending())).getContent();
         } else if (sort.equals(POPULARITY)) {
-            mountains = mountainRepository.findAllPopularity(sort);
+            mountains = mountainRepository.findAllPopularity(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE);
         }
         return getMountainListResponses(mountains);
     }

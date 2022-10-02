@@ -3,43 +3,35 @@ import {View, StyleSheet, Image, Pressable} from 'react-native';
 import AppText from '../AppText';
 
 interface Props {
-  id: number;
-  trail: string;
+  trailId: number;
+  name: string;
+  length: number;
   level: string;
-  timeDuration: string;
-  totalDistance: number;
-  imageSrc: any;
+  imageUrl: any;
   moveToCourseDetail: any;
 }
 
 function CourseItem({
-  id,
-  trail,
+  trailId,
+  name,
+  length,
   level,
-  timeDuration,
-  totalDistance,
-  imageSrc,
+  imageUrl,
   moveToCourseDetail,
 }: Props) {
   return (
     <View style={styles.courseItemWrapper}>
       <Pressable
         onPress={() => {
-          moveToCourseDetail(
-            id,
-            trail,
-            level,
-            timeDuration,
-            totalDistance,
-            imageSrc,
-          );
+          moveToCourseDetail(trailId, name, length, level, imageUrl);
         }}>
-        <AppText style={styles.trailText}>{trail}</AppText>
-        <Image source={imageSrc} style={styles.imageSrc} />
+        <AppText style={styles.trailText}>{name}</AppText>
+        <Image
+          source={require('../../assets/gyeryongTrailCourse.jpg')}
+          style={styles.imageSrc}
+        />
         <AppText style={styles.levelText}>난이도: {level}</AppText>
-        <AppText style={styles.timeDurationText}>
-          이동 시간: {timeDuration}
-        </AppText>
+        <AppText style={styles.timeDurationText}>길이: {length}</AppText>
       </Pressable>
     </View>
   );
