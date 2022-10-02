@@ -9,6 +9,7 @@ import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class HikingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createHiking(@RequestHeader("Authorization") String token, @RequestBody HikingRequest hikingRequest) {
-        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest);
+    public ResponseEntity<Void> createHiking(@RequestHeader("Authorization") String token, @RequestPart HikingRequest hikingRequest, @RequestPart("file") MultipartFile multipartFile) {
+        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest, multipartFile);
         return ResponseEntity.ok().build();
     }
 }
