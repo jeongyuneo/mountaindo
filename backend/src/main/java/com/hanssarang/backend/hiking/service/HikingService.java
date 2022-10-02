@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,22 +40,18 @@ public class HikingService {
     public List<HikingListResponse> getHikings(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        List<HikingListResponse> hikingListResponses = new ArrayList<>();
-        member.getHikings()
+        return member.getHikings()
                 .stream()
-                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getName()))
-                .forEach((mountainName, hikings) -> {
-                    Hiking lastHiking = hikings.get(hikings.size() - 1);
-                    hikingListResponses.add(
-                            HikingListResponse.builder()
-                                    .mountainName(mountainName)
-                                    .address(lastHiking.getTrail().getMountain().getAddress().getFullAddress())
-                                    .lastHikingDate(lastHiking.getCreatedDate().toLocalDate())
-                                    .lastHikingTrailName(lastHiking.getTrail().getName())
-                                    .build()
-                    );
-                });
-        return hikingListResponses;
+                .sorted(Comparator.comparing(Hiking::getCreatedDate).reversed())
+                .map(hiking -> HikingListResponse.builder()
+                        .hikingId(hiking.getId())
+                        .trailName(hiking.getTrail().getName())
+                        .lastHikingDate(hiking.getCreatedDate().toLocalDate())
+                        .useTime(hiking.getUseTime())
+                        .level(hiking.getTrail().getLevel().toString())
+                        .mountainName(hiking.getTrail().getMountain().getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public HikingResponse getHiking(int memberId, int hikingId) {
