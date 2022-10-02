@@ -85,9 +85,14 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
                 navigation.navigate('AddressChangeForm', {
                   userInfo: userInfo,
                   setUserInfo: setUserInfo,
+                  user: route.params?.user,
+                  setUser: route.params?.setUser,
                 })
               }>
-              <Text style={styles.text}>{route.params?.user.fullAddress}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.text}>{route.params?.user.si}</Text>
+                <Text style={styles.gutext}>{route.params?.user.gu}</Text>
+              </View>
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={15}
@@ -119,6 +124,10 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  gutext: {
+    marginVertical: 10,
+    marginLeft: 5,
+  },
   container: {
     marginHorizontal: 20,
     marginTop: 30,
