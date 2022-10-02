@@ -37,24 +37,19 @@ public class HikingService {
     private final HikingRepository hikingRepository;
 
     public List<HikingListResponse> getHikings(int memberId) {
-        Member member = memberRepository.findById(memberId)
+        memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        List<HikingListResponse> hikingListResponses = new ArrayList<>();
-        member.getHikings()
-                .stream()
-                .collect(Collectors.groupingBy(hiking -> hiking.getTrail().getMountain().getName()))
-                .forEach((mountainName, hikings) -> {
-                    Hiking lastHiking = hikings.get(hikings.size() - 1);
-                    hikingListResponses.add(
-                            HikingListResponse.builder()
-                                    .mountainName(mountainName)
-                                    .address(lastHiking.getTrail().getMountain().getAddress().getFullAddress())
-                                    .lastHikingDate(lastHiking.getCreatedDate().toLocalDate())
-                                    .lastHikingTrailName(lastHiking.getTrail().getName())
-                                    .build()
-                    );
-                });
-        return hikingListResponses;
+        List<Hiking> hikings = hikingRepository.findAllHikings(memberId);
+        return hikings.stream()
+                .map(hiking -> HikingListResponse.builder()
+                        .hikingId(hiking.getId())
+                        .trailName(hiking.getTrail().getName())
+                        .lastHikingDate(hiking.getCreatedDate().toLocalDate())
+                        .useTime(hiking.getUseTime())
+                        .level(hiking.getTrail().getLevel().toString())
+                        .mountainName(hiking.getTrail().getMountain().getName())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public HikingResponse getHiking(int memberId, int hikingId) {
