@@ -89,7 +89,7 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
                   setUser: route.params?.setUser,
                 })
               }>
-              <View style={{flexDirection: 'row'}}>
+              <View style={styles.textStyle}>
                 <Text style={styles.text}>{route.params?.user.si}</Text>
                 <Text style={styles.gutext}>{route.params?.user.gu}</Text>
               </View>
@@ -124,6 +124,9 @@ function UserInfoChange({navigation, route}: UserInfoChangeScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  textStyle: {
+    flexDirection: 'row',
+  },
   gutext: {
     marginVertical: 10,
     marginLeft: 5,
