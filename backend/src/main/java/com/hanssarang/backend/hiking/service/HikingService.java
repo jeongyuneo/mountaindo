@@ -9,10 +9,12 @@ import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
+import com.hanssarang.backend.util.ImageUtil;
 import com.hanssarang.backend.util.PathUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,11 +27,6 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 @Service
 public class HikingService {
 
-    private static final String LINESTRING = "LINESTRING ";
-    private static final String OPENING_PARENTHESIS = "(";
-    private static final String CLOSING_PARENTHESIS = ")";
-    private static final String DELIMITER = " ";
-    private static final String REST = ",";
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
 
@@ -98,7 +95,7 @@ public class HikingService {
     }
 
     @Transactional
-    public void createHiking(int memberId, HikingRequest hikingRequest) {
+    public void createHiking(int memberId, HikingRequest hikingRequest, MultipartFile multipartFile) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         Trail trail = trailRepository.findById(hikingRequest.getTrailId())
@@ -109,7 +106,8 @@ public class HikingService {
                         .distance(hikingRequest.getDistance())
                         .accumulatedHeight(hikingRequest.getAccumulatedHeight())
                         .useTime(hikingRequest.getUseTime())
-                        .path(toLineStringForm(hikingRequest.getPath()))
+                        .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
+                        .imageUrl(ImageUtil.saveImage(member.getEmail(), trail.getId(), multipartFile))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
                         .build()
@@ -120,14 +118,5 @@ public class HikingService {
     private boolean isCompleted(String path, PathResponse endPoint) {
         return PathUtil.find(path)
                 .isCompleted(path, endPoint.getLatitude(), endPoint.getLongitude());
-    }
-
-    private String toLineStringForm(List<PathResponse> path) {
-        return LINESTRING
-                + OPENING_PARENTHESIS
-                + path.stream()
-                .map(point -> point.getLatitude() + DELIMITER + point.getLongitude())
-                .collect(Collectors.joining(REST + DELIMITER))
-                + CLOSING_PARENTHESIS;
     }
 }

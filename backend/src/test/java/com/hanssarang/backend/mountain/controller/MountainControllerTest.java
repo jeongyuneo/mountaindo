@@ -82,7 +82,6 @@ class MountainControllerTest extends ApiDocument {
                                 .name(TRAIL_NAME)
                                 .length(LENGTH)
                                 .level(LEVEL)
-                                .imageUrl(IMAGE_URL)
                                 .build())
                         .collect(Collectors.toList()))
                 .build();

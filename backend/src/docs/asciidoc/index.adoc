@@ -485,6 +485,19 @@ include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
 /api/v1/hikings
 ----
 
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|hikingRequest
+|application/json
+|등산 기록
+
+|file
+|multipart
+|등산 기록 이미지
+|===
+
 ===== 성공
 .request
 include::{snippets}/create-hiking-success/http-request.adoc[]

@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,7 +27,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,6 +51,7 @@ public class HikingControllerTest extends ApiDocument {
     private static final double DISTANCE = 100.3;
     private static final String IMAGE_URL = "{image url}";
     private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
+    private static final String LEVEL = "중";
 
     private HikingRequest hikingRequest;
     private List<HikingListResponse> hikingListResponses;
@@ -72,10 +75,12 @@ public class HikingControllerTest extends ApiDocument {
                 .build();
         hikingListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> HikingListResponse.builder()
-                        .mountainName(MOUNTAIN_NAME)
-                        .address(ADDRESS)
+                        .hikingId(ID)
+                        .trailName(TRAIL_NAME)
                         .lastHikingDate(LAST_HIKING_DATE)
-                        .lastHikingTrailName(LAST_HIKING_TRAIL_NAME)
+                        .useTime(USE_TIME)
+                        .level(LEVEL)
+                        .mountainName(MOUNTAIN_NAME)
                         .build())
                 .collect(Collectors.toList());
         completedHikingListResponses = IntStream.range(0, 3)
@@ -169,7 +174,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingSuccess() throws Exception {
         // given
-        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
+        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
@@ -180,7 +185,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_HIKING)).given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_HIKING)).given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
@@ -245,10 +250,11 @@ public class HikingControllerTest extends ApiDocument {
     }
 
     private ResultActions 등산기록_저장_요청(HikingRequest hikingRequest) throws Exception {
-        return mockMvc.perform(post("/api/v1/hikings")
+        return mockMvc.perform(multipart("/api/v1/hikings")
+                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
+                .file(new MockMultipartFile("hikingRequest", "", "application/json", toJson(hikingRequest).getBytes()))
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(hikingRequest)));
+                .contentType(MediaType.MULTIPART_FORM_DATA));
     }
 
     private void 등산기록_저장_성공(ResultActions resultActions) throws Exception {

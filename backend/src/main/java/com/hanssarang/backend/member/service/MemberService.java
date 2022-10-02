@@ -45,13 +45,13 @@ public class MemberService {
 
     public void checkEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
-            throw new DuplicationException(FAIL_TO_CHECK_EMAIL);
+            throw new DuplicationException(DUPLICATED_EMAIL);
         }
     }
 
     public void checkNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new DuplicationException(FAIL_TO_CHECK_NICKNAME);
+            throw new DuplicationException(DUPLICATED_NICKNAME);
         }
     }
 
@@ -79,10 +79,10 @@ public class MemberService {
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
         Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(
-                        findingEmailRequest.getName(),
-                        findingEmailRequest.getBirth(),
-                        findingEmailRequest.getPhone())
-                .orElseThrow(() -> new NotFoundException(FAIL_TO_FIND_EMAIL));
+                findingEmailRequest.getName(),
+                findingEmailRequest.getBirth(),
+                findingEmailRequest.getPhone())
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
         return EmailResponse.builder()
                 .email(member.getEmail())
                 .build();
@@ -173,7 +173,7 @@ public class MemberService {
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
-            throw new NotEqualException(VALIDATION_TOKEN_NOT_EQUAL);
+            throw new NotEqualException(NOT_EQUAL_VALIDATION_TOKEN);
         }
     }
 
