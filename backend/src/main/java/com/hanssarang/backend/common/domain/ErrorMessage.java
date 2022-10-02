@@ -20,11 +20,6 @@ public class ErrorMessage {
     public static final String NOT_FOUND_TRAIL = "해당 등산로를 찾을 수 없습니다.";
 
     public static final String NOT_EQUAL_PASSWORD = "비밀번호가 일치하지 않습니다.";
-    public static final String NOT_FOUND_MEMBER = "사용자를 찾을 수 없습니다.";
-    public static final String NOT_FOUND_HIKING = "등산 정보를 찾을 수 없습니다.";
-    public static final String NOT_FOUND_MOUNTAIN = "해당 산을 찾을 수 없습니다.";
-    public static final String NOT_FOUND_TRAIL = "해당 등산로를 찾을 수 없습니다.";
-
     public static final String NOT_EQUAL_VALIDATION_TOKEN = "이메일 인증번호가 일치하지 않습니다.";
 
     public static final String DUPLICATED_EMAIL = "중복된 이메일이 있습니다.";
