@@ -64,7 +64,13 @@ function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
         style={styles.picker}>
         {region &&
           region.map(item => (
-            <Picker.Item key={item.id} label={item.value} value={item.value} />
+            <Picker.Item
+              key={item.id}
+              label={item.value}
+              value={item.value}
+              fontFamily={'NanumBarunGothic'}
+              style={styles.pickerItem}
+            />
           ))}
       </Picker>
       {/* 하위 시 / 군 */}
@@ -78,7 +84,13 @@ function LocationPicker({setSelectedCity, setSelectedCity2, userInfo}: Props) {
         {cityList?.city &&
           cityList.city.length > 0 &&
           cityList.city.map(item => (
-            <Picker.Item key={item.id} label={item.value} value={item.value} />
+            <Picker.Item
+              key={item.id}
+              label={item.value}
+              value={item.value}
+              fontFamily={'NanumBarunGothic'}
+              style={styles.pickerItem}
+            />
           ))}
       </Picker>
     </View>
@@ -92,6 +104,9 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: Dimensions.get('window').width / 2 - 20,
+  },
+  pickerItem: {
+    fontSize: 12,
   },
 });
 
