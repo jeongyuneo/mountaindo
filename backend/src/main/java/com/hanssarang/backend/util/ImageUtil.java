@@ -1,5 +1,6 @@
 package com.hanssarang.backend.util;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.FileSaveException;
 import lombok.AccessLevel;
@@ -12,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FILE;
-import static com.hanssarang.backend.common.domain.ErrorMessage.WRONG_CONTENT_TYPE;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageUtil {
@@ -50,7 +50,7 @@ public class ImageUtil {
 
     private static void validateContentType(String contentType) {
         if (isWrongContentType(contentType)) {
-            throw new BadRequestException(WRONG_CONTENT_TYPE);
+            throw new BadRequestException(ErrorMessage.WRONG_CONTENT_TYPE);
         }
     }
 
