@@ -19,6 +19,11 @@ public class ImageUtil {
 
     private static final String IMAGE_ROOT_PATH = "/home/ubuntu/img";
     private static final String DELIMITER = "-";
+    private static final String POINT = ".";
+    private static final String SEPARATOR = "/";
+    private static final String IMAGE_JPG = "image/jpg";
+    private static final String IMAGE_JPEG = "image/jpeg";
+    private static final String IMAGE_PNG = "image/png";
 
     public static String saveImage(MultipartFile multipartFile, String path) {
         validateContentType(multipartFile.getContentType());
@@ -50,6 +55,6 @@ public class ImageUtil {
     }
 
     private static boolean isWrongContentType(String contentType) {
-        return !(contentType.contains("image/jpg") || contentType.contains("image/jpeg") || contentType.contains("image/png"));
+        return !(contentType.contains(IMAGE_JPG) || contentType.contains(IMAGE_JPEG) || contentType.contains(IMAGE_PNG));
     }
 }
