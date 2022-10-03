@@ -348,7 +348,7 @@ include::{snippets}/get-trail-fail/http-request.adoc[]
 .response
 include::{snippets}/get-trail-fail/http-response.adoc[]
 
-==== 산/등산로 검색
+==== 산 검색
 ----
 /api/v1/mountains/search/1
 ----
@@ -360,34 +360,16 @@ include::{snippets}/get-trail-fail/http-response.adoc[]
 |keyword
 |String
 |검색 키워드
-|===
 
-===== 성공
-.request
-include::{snippets}/search-mountain-or-trail-success/http-request.adoc[]
-
-.response
-include::{snippets}/search-mountain-or-trail-success/http-response.adoc[]
-===== 실패
-.request
-include::{snippets}/search-mountain-or-trail-fail/http-request.adoc[]
-
-.response
-include::{snippets}/search-mountain-or-trail-fail/http-response.adoc[]
-
-==== 산 검색
-----
-/api/v1/mountains/search/2
-----
-
-[cols="2,2,3"]
-|===
-|Parameter |Type |Description
-
-|keyword
+|sort
 |String
-|검색 키워드
+|정렬 조건
+
+|si
+|String
+|시/도
 |===
+
 
 ===== 성공
 .request
@@ -404,7 +386,7 @@ include::{snippets}/search-mountain-fail/http-response.adoc[]
 
 ==== 등산로 검색
 ----
-/api/v1/mountains/search/3
+/api/v1/mountains/search/2
 ----
 
 [cols="2,2,3"]
@@ -414,6 +396,14 @@ include::{snippets}/search-mountain-fail/http-response.adoc[]
 |keyword
 |String
 |검색 키워드
+
+|sort
+|String
+|정렬 조건
+
+|si
+|String
+|시/도
 |===
 
 ===== 성공
