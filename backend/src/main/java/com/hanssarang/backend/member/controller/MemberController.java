@@ -6,13 +6,14 @@ import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import static com.hanssarang.backend.common.domain.Message.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/members")
 public class MemberController {
-
-    private static final String AUTHORIZATION = "Authorization";
 
     private final MemberService memberService;
 
@@ -42,7 +43,8 @@ public class MemberController {
 
     @PostMapping("/email")
     public ResponseEntity<EmailResponse> getMemberEmail(@RequestBody FindingEmailRequest findingEmailRequest) {
-        return ResponseEntity.ok().body(memberService.getMemberEmail(findingEmailRequest));
+        return ResponseEntity.ok()
+                .body(memberService.getMemberEmail(findingEmailRequest));
     }
 
     @GetMapping
@@ -50,18 +52,19 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMember(JwtUtil.getMemberId(token)));
     }
 
-    @PatchMapping
-    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
-        return ResponseEntity.ok().body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest));
+    @PostMapping("/update")
+    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestPart UpdateRequest updateRequest, @RequestPart("file") MultipartFile multipartFile) {
+        return ResponseEntity.ok()
+                .body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest, multipartFile));
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/update/password")
     public ResponseEntity<Void> updatePassword(@RequestBody PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         memberService.updatePassword(passwordUpdateVerificationRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/mypage/password")
+    @PatchMapping("/update/mypage/password")
     public ResponseEntity<Void> updatePasswordInMyPage(@RequestHeader(AUTHORIZATION) String token, @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
         memberService.updatePasswordInMyPage(JwtUtil.getMemberId(token), passwordUpdateRequest);
         return ResponseEntity.ok().build();

@@ -1,5 +1,6 @@
 package com.hanssarang.backend.hiking.service;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
@@ -13,8 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 
 @RequiredArgsConstructor
 @Service
@@ -93,6 +92,6 @@ public class RankingService {
         return IntStream.rangeClosed(1, members.size())
                 .filter(ranking -> members.get(ranking - 1).getId() == memberId)
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
     }
 }

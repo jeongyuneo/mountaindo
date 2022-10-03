@@ -42,7 +42,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
     dispatch(survey({survey1, survey2, survey3, survey4}))
       .then(res => {
         console.log(res);
-        dispatch(userSlice.actions.setIsSurveyed());
+        dispatch(userSlice.actions.setIsSurveyed(''));
       })
       .catch(err => {
         console.log(err);

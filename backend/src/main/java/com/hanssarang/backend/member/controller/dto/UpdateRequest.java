@@ -13,5 +13,4 @@ public class UpdateRequest {
     private String phone;
     private Address address;
     private String nickname;
-    private String imageUrl;
 }

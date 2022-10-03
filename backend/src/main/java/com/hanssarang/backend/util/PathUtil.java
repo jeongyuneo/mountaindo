@@ -1,5 +1,7 @@
 package com.hanssarang.backend.util;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
+import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.hiking.controller.dto.PathResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -7,8 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.hanssarang.backend.common.domain.ErrorMessage.WRONG_PATH;
 
 @RequiredArgsConstructor
 public enum PathUtil {
@@ -66,7 +66,7 @@ public enum PathUtil {
         return Arrays.stream(values())
                 .filter(value -> value.type.equals(path.split(PATH_DELIMITER)[TYPE]))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(WRONG_PATH));
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.WRONG_PATH));
     }
 
     public static String toLineStringForm(List<PathResponse> path) {

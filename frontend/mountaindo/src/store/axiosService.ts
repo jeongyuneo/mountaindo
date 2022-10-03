@@ -13,7 +13,6 @@ const axiosService = axios.create({
 axiosService.interceptors.request.use(
   async (config: any) => {
     const token = await AsyncStorage.getItem('token');
-    config.headers['Content-Type'] = 'application/json; charset=utf-8';
     config.headers['Authorization'] = `Bearer ${token}`;
     return config;
   },
@@ -30,6 +29,9 @@ axiosService.interceptors.response.use(
   async err => {
     const status = err.response ? err.response.status : null;
     if (status === 401) {
+      // 인터셉터 작동 확인용 에러
+      console.log('401에러 인터셉터 로그인 처리');
+
       userSlice.actions.setLogout(false);
       await AsyncStorage.clear();
     }
