@@ -19,9 +19,11 @@ import mountainSlice, {
   getMountainDetail,
   getMountainList,
   getSearchedMountain,
+  getSearchedTrail,
 } from '../../slices/mountainSlice/mountain';
 import {useAppDispatch} from '../../store';
 import {RootState} from '../../store/reducer';
+import SearchSubjectPicker from '../../components/mountain/SearchSubjectPicker';
 
 type MountainScreenProps = NativeStackScreenProps<
   LoggedInParamList,
@@ -65,6 +67,7 @@ function Mountain({navigation}: MountainScreenProps) {
   const [isHighHeight, setIsHighHeight] = useState(false);
   const [isLowHeight, setIsLowHeight] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState('산');
   const mountainList: MountainListType = useSelector(
     (state: RootState) => state.mountain.mountainList,
   );
@@ -95,21 +98,37 @@ function Mountain({navigation}: MountainScreenProps) {
 
   // 특정 산 검색 API 요청 보내가
   const dispatchSearchedMountain = () => {
-    dispatch(getSearchedMountain({keyword: searchInput}))
-      .then(res => {
-        console.log('SEARCHED_MOUNTAIN RES ==>', res);
-        if (res.meta.requestStatus === 'fulfilled') {
-          if (res.payload.length > 0) {
-            setIsResult(2);
-            setSearchResult(res.payload);
-          } else {
-            setIsResult(1);
+    if (selectedSubject === '산') {
+      dispatch(getSearchedMountain({keyword: searchInput}))
+        .then(res => {
+          if (res.meta.requestStatus === 'fulfilled') {
+            if (res.payload.length > 0) {
+              setIsResult(2);
+              setSearchResult(res.payload);
+            } else {
+              setIsResult(1);
+            }
           }
-        }
-      })
-      .catch((err: any) => {
-        console.log('SEARCHED_MOUNTAIN ERR ==>', err);
-      });
+        })
+        .catch((err: any) => {
+          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+        });
+    } else if (selectedSubject === '등산로') {
+      dispatch(getSearchedTrail({keyword: searchInput}))
+        .then(res => {
+          if (res.meta.requestStatus === 'fulfilled') {
+            if (res.payload.length > 0) {
+              setIsResult(2);
+              setSearchResult(res.payload);
+            } else {
+              setIsResult(1);
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+        });
+    }
   };
 
   // 산 상세 API 요청 보내기
@@ -150,21 +169,29 @@ function Mountain({navigation}: MountainScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View>
-        <View style={styles.iconSearchWrapper}>
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            style={styles.iconMagnifying}
-          />
-          <TextInput
-            style={styles.searchInputText}
-            onChangeText={onChangeSearch}
-            placeholder="검색할 산 이름을 입력해주세요"
-            textContentType="none"
-            returnKeyType="send"
-            clearButtonMode="while-editing"
-            onSubmitEditing={dispatchSearchedMountain}
-            blurOnSubmit={false}
-          />
+        <View style={styles.iconInputPikerWrapper}>
+          <View style={styles.iconSearchWrapper}>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              style={styles.iconMagnifying}
+            />
+            <TextInput
+              style={styles.searchInputText}
+              onChangeText={onChangeSearch}
+              placeholder="검색할 산/등산로 이름을 입력해주세요"
+              textContentType="none"
+              returnKeyType="send"
+              clearButtonMode="while-editing"
+              onSubmitEditing={dispatchSearchedMountain}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.searchSubjectPicker}>
+            <SearchSubjectPicker
+              selectedSubject={selectedSubject}
+              setSelectedSubject={setSelectedSubject}
+            />
+          </View>
         </View>
         <View>
           <ScrollView horizontal={true}>
@@ -346,16 +373,25 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 15,
   },
-  iconSearchWrapper: {
+  iconInputPikerWrapper: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     borderBottomWidth: 1,
     marginBottom: 10,
+  },
+  iconSearchWrapper: {
+    flexDirection: 'row',
   },
   iconMagnifying: {
     marginTop: 15,
   },
   searchInputText: {
     paddingHorizontal: 10,
+  },
+  searchSubjectPicker: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: 20,
   },
   citiesWrapper: {
     flexDirection: 'row',

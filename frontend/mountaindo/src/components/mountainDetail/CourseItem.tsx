@@ -1,5 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Image, Pressable} from 'react-native';
+import {getTrailDetail} from '../../slices/mountainSlice/mountain';
+import {useAppDispatch} from '../../store';
 import AppText from '../AppText';
 
 interface Props {
@@ -19,11 +21,31 @@ function CourseItem({
   imageUrl,
   moveToCourseDetail,
 }: Props) {
+  const dispatch = useAppDispatch();
+
+  const dispatchTrailDetail = (trailIdArg: number) => {
+    dispatch(getTrailDetail({trailId: trailIdArg}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          moveToCourseDetail(
+            res.payload?.name,
+            res.payload?.length,
+            res.payload?.goingUpTime,
+            res.payload?.goingDownTime,
+            res.payload?.risk,
+          );
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
   return (
     <View style={styles.courseItemWrapper}>
       <Pressable
         onPress={() => {
-          moveToCourseDetail(trailId, name, length, level, imageUrl);
+          dispatchTrailDetail(trailId);
         }}>
         <AppText style={styles.trailText}>{name}</AppText>
         <Image
@@ -31,7 +53,7 @@ function CourseItem({
           style={styles.imageSrc}
         />
         <AppText style={styles.levelText}>난이도: {level}</AppText>
-        <AppText style={styles.timeDurationText}>길이: {length}</AppText>
+        <AppText style={styles.levelText}>길이: {length}</AppText>
       </Pressable>
     </View>
   );

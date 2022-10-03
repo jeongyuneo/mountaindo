@@ -10,25 +10,28 @@ type CourseDetailScreenProps = NativeStackScreenProps<
 
 function CourseItem({route}: CourseDetailScreenProps) {
   // 페이지 이동 시 함께 전달된 param에 해당 정보가 있는 경우 변수에 할당
-  const name = route.params?.name;
-  const length = route.params?.length;
-  const level = route.params?.level;
-  const imageUrl = route.params?.imageUrl;
+  const trailName = route.params?.trailName;
+  const trailLength = route.params?.trailLength;
+  const goingUpTime = route.params?.goingUpTime;
+  const goingDownTime = route.params?.goingDownTime;
+  const risk = route.params?.risk;
 
   // 네 개의 값 중 하나라도 없다면 return
   useEffect(() => {
-    if (!name || !length || !level) {
+    if (!trailName || !trailLength || !goingUpTime || !goingDownTime || !risk) {
       return;
     }
   }, [
-    route.params?.name,
-    route.params?.length,
-    route.params?.level,
-    route.params?.imageUrl,
-    name,
-    length,
-    level,
-    imageUrl,
+    route.params?.trailName,
+    route.params?.trailLength,
+    route.params?.goingUpTime,
+    route.params?.goingDownTime,
+    route.params?.risk,
+    trailName,
+    trailLength,
+    goingUpTime,
+    goingDownTime,
+    risk,
   ]);
   return (
     <View>
@@ -36,9 +39,11 @@ function CourseItem({route}: CourseDetailScreenProps) {
         source={require('../../assets/gyeryongTrailCourse.jpg')}
         style={styles.imageSrc}
       />
-      <Text style={styles.titleText}>{name}</Text>
-      <Text style={styles.contentText}>난이도 : {level}</Text>
-      <Text style={styles.contentText}>총 길이 : {length}km</Text>
+      <Text style={styles.titleText}>{trailName}</Text>
+      <Text style={styles.contentText}>총 길이 : {trailLength}km</Text>
+      <Text style={styles.contentText}>상행 시간 : {goingUpTime} 시간</Text>
+      <Text style={styles.contentText}>하행 시간 : {goingDownTime} 시간</Text>
+      {risk ? <Text style={styles.contentText}>위험도: {risk}</Text> : <></>}
     </View>
   );
 }

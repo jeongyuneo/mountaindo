@@ -37,6 +37,21 @@ export const getSearchedMountain = createAsyncThunk(
   },
 );
 
+// 검색한 등산로 불러오기 API
+export const getSearchedTrail = createAsyncThunk(
+  'mountainSlice/getSearchTrail',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        `api/v1/mountains/search/3?keyword=${args.keyword}`,
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 // 산 상세 정보 불러오기 API
 export const getMountainDetail = createAsyncThunk(
   'mountainSlice/getMountainDetail',
@@ -45,6 +60,22 @@ export const getMountainDetail = createAsyncThunk(
       const response = await axiosService.get(
         `api/v1/mountains/${args.mountainId}`,
       );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 등산로 상세 정보 불러오기 API
+export const getTrailDetail = createAsyncThunk(
+  'mountainSlice/getTrailDetail',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        `api/v1/mountains/trail/${args.trailId}`,
+      );
+      console.log(response);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -82,11 +113,23 @@ const mountainSlice = createSlice({
       .addCase(getSearchedMountain.rejected, (state, {payload}) => {
         console.log('getSearchedMountainRejected ==>', payload);
       })
+      .addCase(getSearchedTrail.fulfilled, (state, {payload}) => {
+        console.log('getSearchedTrailFulfilled ==> ', payload);
+      })
+      .addCase(getSearchedTrail.rejected, (state, {payload}) => {
+        console.log('getSearchedTrailRejected ==>', payload);
+      })
       .addCase(getMountainDetail.fulfilled, (state, {payload}) => {
         console.log('getMountainDetailFulfilled ==> ', payload);
       })
       .addCase(getMountainDetail.rejected, (state, {payload}) => {
         console.log('getMountainDetailRejected ==>', payload);
+      })
+      .addCase(getTrailDetail.fulfilled, (state, {payload}) => {
+        console.log('getTrailDetailFulfilled ==> ', payload);
+      })
+      .addCase(getTrailDetail.rejected, (state, {payload}) => {
+        console.log('getTrailDetailRejected ==>', payload);
       });
   },
 });
