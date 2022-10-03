@@ -256,24 +256,39 @@ function Hiking({navigation, route}: HikingScreenProps) {
   }
 
   // 기록 종료 시 TrackingEnd 이동 함수
-  const moveToTrackingEnd = (uri: any) => {
+  const moveToTrackingEnd = async (uri: any) => {
     getLocation();
-    dispatch(
-      endHiking({
-        trailId,
-        path: [
-          ...coords,
-          {latitude: myPosition.latitude, longitude: myPosition.longitude},
-        ],
-        endPoint: myPosition,
-        accumulatedHeight: totalHigh,
-        distance: totalDist.toFixed(2),
-        useTime: endTime,
-        imageUrl: uri,
-      }),
-    )
+    const hikingRequest = new FormData();
+    const hikingRequestDto = {
+      trailId: trailId,
+      path: [
+        ...coords,
+        {latitude: myPosition.latitude, longitude: myPosition.longitude},
+      ],
+      endPoint: myPosition,
+      accumulatedHeight: totalHigh,
+      distance: totalDist.toFixed(2),
+      useTime: endTime,
+    };
+    const json = JSON.stringify(hikingRequestDto);
+    const blob = new Blob([json], {
+      type: 'application/json',
+      lastModified: 0,
+    });
+    const file = await uri;
+    hikingRequest.append('hikingRequest', blob);
+    hikingRequest.append('file', file);
+
+    for (var key of hikingRequest.getParts()) {
+      //  폼데이터 확인용 로그
+      console.log(key);
+    }
+
+    dispatch(endHiking({hikingRequest}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
+          // 이미지 저장 완료 여부 확인용 로그
+          console.log(res);
           Alert.alert('알림', '등산 기록이 저장되었습니다.');
         } else {
           Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
