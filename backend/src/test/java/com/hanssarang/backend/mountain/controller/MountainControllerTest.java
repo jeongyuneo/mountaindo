@@ -190,9 +190,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchTrailSuccess() throws Exception {
         // given
-        willReturn(mountainListResponses).given(mountainService).searchTrail(anyString());
+        willReturn(mountainListResponses).given(mountainService).searchTrail(anyString(), anyString(), anyString());
         // when
-        ResultActions resultActions = 등산로_검색_요청(NAME);
+        ResultActions resultActions = 등산로_검색_요청(TRAIL_KEYWORD, SORT, SI);
         // then
         등산로_검색_성공(resultActions, mountainListResponses);
     }
@@ -201,9 +201,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchTrailFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_TRAIL.getMessage())).given(mountainService).searchTrail(anyString());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_TRAIL.getMessage())).given(mountainService).searchTrail(anyString(), anyString(), anyString());
         // when
-        ResultActions resultActions = 등산로_검색_요청(TRAIL_NAME);
+        ResultActions resultActions = 등산로_검색_요청(TRAIL_KEYWORD, SORT, SI);
         // then
         등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_TRAIL));
     }
@@ -284,8 +284,8 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("search-mountain-fail"));
     }
 
-    private ResultActions 등산로_검색_요청(String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/3?keyword=" + keyword)
+    private ResultActions 등산로_검색_요청(String keyword, String sort, String si) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/2?keyword=" + keyword + "&sort=" + sort + "&si=" + si)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
