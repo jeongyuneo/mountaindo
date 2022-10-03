@@ -6,6 +6,7 @@ import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,7 +43,8 @@ public class MemberController {
 
     @PostMapping("/email")
     public ResponseEntity<EmailResponse> getMemberEmail(@RequestBody FindingEmailRequest findingEmailRequest) {
-        return ResponseEntity.ok().body(memberService.getMemberEmail(findingEmailRequest));
+        return ResponseEntity.ok()
+                .body(memberService.getMemberEmail(findingEmailRequest));
     }
 
     @GetMapping
