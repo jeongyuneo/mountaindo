@@ -413,8 +413,7 @@ public class MemberControllerTest extends ApiDocument {
         // given
         willDoNothing().given(memberService).validateSignUpEmail(any(EmailAuthRequest.class));
         // when
-        ResultActions resultActions = 이메일_인증번호_검증_요청(
-                emailAuthRequest);
+        ResultActions resultActions = 이메일_인증번호_검증_요청(emailAuthRequest);
         // then
         이메일_인증번호_검증_성공(resultActions);
     }
@@ -669,13 +668,13 @@ public class MemberControllerTest extends ApiDocument {
     private void 이메일_인증번호_검증_성공(ResultActions resultActions) throws Exception {
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(toDocument("validate-signup-email-success"));
+                .andDo(toDocument("validate-temporary-token-success"));
     }
 
     private void 이메일_인증번호_검증_실패(ResultActions resultActions, Message message) throws Exception {
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
-                .andDo(toDocument("validate-signup-email-fail"));
+                .andDo(toDocument("validate-temporary-token-fail"));
     }
 }
