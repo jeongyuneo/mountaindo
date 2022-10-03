@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FILE;
@@ -33,8 +32,7 @@ public class ImageUtil {
         if (!imageFile.exists()) {
             imageFile.mkdir();
         }
-        imageUploadPath.append(File.separator).append(UUID.randomUUID()).append(DELIMITER).append(LocalDateTime.now())
-                .append(POINT).append(extractExt(multipartFile.getContentType()));
+        imageUploadPath.append(File.separator).append(UUID.randomUUID()).append(POINT).append(extractExt(multipartFile.getContentType()));
         String imageUrl = imageUploadPath.toString();
         try {
             multipartFile.transferTo(new File(imageUrl));
