@@ -39,7 +39,7 @@ public class MountainController {
     public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader("Authorization") String token,
                                                                      @RequestParam String keyword,
                                                                      @RequestParam String sort,
-                                                                     @RequestParam(required = false) String si) {
+                                                                     @RequestParam String si) {
         return ResponseEntity.ok()
                 .body(mountainService.searchMountain(keyword, sort, si));
     }
@@ -48,7 +48,7 @@ public class MountainController {
     public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader("Authorization") String token,
                                                                   @RequestParam String keyword,
                                                                   @RequestParam String sort,
-                                                                  @RequestParam(required = false) String si) {
+                                                                  @RequestParam String si) {
         return ResponseEntity.ok()
                 .body(mountainService.searchTrail(keyword, sort, si));
     }
