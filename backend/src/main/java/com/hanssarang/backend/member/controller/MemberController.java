@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/members")
 public class MemberController {
 
-    private static final String AUTHORIZATION = "Authorization";
-
     private final MemberService memberService;
 
     @GetMapping("/email")
