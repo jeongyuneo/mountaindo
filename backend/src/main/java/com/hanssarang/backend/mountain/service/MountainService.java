@@ -38,16 +38,29 @@ public class MountainService {
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
 
-    public List<MountainListResponse> getMountains(String sort, int page) {
+    public List<MountainListResponse> getMountains(String sort, String si, int page) {
         List<Mountain> mountains = null;
-        if (sort.equals(NAME)) {
-            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
-        } else if (sort.equals(HIGH_HEIGHT)) {
-            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
-        } else if (sort.equals(LOW_HEIGHT)) {
-            mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).ascending())).getContent();
-        } else if (sort.equals(POPULARITY)) {
-            mountains = mountainRepository.findAllPopularity(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE);
+        if (si.equals(ALL_AREA)) {
+            if (sort.equals(NAME)) {
+                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
+            } else if (sort.equals(HIGH_HEIGHT)) {
+                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findMountainsExceptZeroHeight(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE);
+            } else if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findAllPopularity(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE);
+            }
+        } else {
+            if (sort.equals(NAME)) {
+                mountains = mountainRepository.findMountainsFilterBySiOrderByName(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE, si);
+            } else if (sort.equals(HIGH_HEIGHT)) {
+                mountains = mountainRepository.findMountainsFilterBySiOrderByHeightDesc(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE, si);
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findMountainsFilterBySiExceptZeroHeight(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE, si);
+            } else if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findMountainsFilteredBySiOrderByPopularityDesc(page * MOUNTAIN_LIST_RESPONSE_SIZE, MOUNTAIN_LIST_RESPONSE_SIZE, si);
+            }
+
         }
         return getMountainListResponses(mountains);
     }

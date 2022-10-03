@@ -12,8 +12,13 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "from mountain m ";
     String SEARCH_BY_KEYWORD = "where m.name like concat('%',:keyword,'%') ";
     String FILTER_BY_SI = "m.si like concat('%',:si,'%') ";
-    String EXCEPT_ZERO_HEIGHT = "and m.height != 0 ";
+    String EXCEPT_ZERO_HEIGHT = "m.height != 0 ";
+    String ORDER_BY_NAME_ASC = "order by m.name ";
+    String ORDER_BY_HEIGHT_DESC = "order by m.height desc ";
+    String ORDER_BY_HEIGHT_ASC = "order by m.height ";
     String ORDER_BY_COUNT_DESC = "order by v.count desc ";
+    String PAGING = "limit :limit " +
+            "offset :offset";
     String LEFT_JOIN_WITH_HIKING = "left join (select count(h.trail_id) count, t.mountain_id " +
             "   from hiking h " +
             "   right join trail t " +
@@ -29,10 +34,47 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     String WHERE = "where ";
 
     @Query(value = FIND_MOUNTAINS +
+            WHERE +
+            EXCEPT_ZERO_HEIGHT +
+            ORDER_BY_HEIGHT_ASC +
+            PAGING, nativeQuery = true)
+    List<Mountain> findMountainsExceptZeroHeight(int offset, int limit);
+
+    @Query(value = FIND_MOUNTAINS +
+            WHERE +
+            FILTER_BY_SI +
+            ORDER_BY_NAME_ASC +
+            PAGING, nativeQuery = true)
+    List<Mountain> findMountainsFilterBySiOrderByName(int offset, int limit, String si);
+
+    @Query(value = FIND_MOUNTAINS +
+            WHERE +
+            FILTER_BY_SI +
+            ORDER_BY_HEIGHT_DESC +
+            PAGING, nativeQuery = true)
+    List<Mountain> findMountainsFilterBySiOrderByHeightDesc(int offset, int limit, String si);
+
+    @Query(value = FIND_MOUNTAINS +
+            WHERE +
+            FILTER_BY_SI +
+            AND +
+            EXCEPT_ZERO_HEIGHT +
+            ORDER_BY_HEIGHT_ASC +
+            PAGING, nativeQuery = true)
+    List<Mountain> findMountainsFilterBySiExceptZeroHeight(int offset, int limit, String si);
+
+    @Query(value = FIND_MOUNTAINS +
+            LEFT_JOIN_WITH_HIKING +
+            WHERE +
+            FILTER_BY_SI +
+            ORDER_BY_COUNT_DESC +
+            PAGING, nativeQuery = true)
+    List<Mountain> findMountainsFilteredBySiOrderByPopularityDesc(int offset, int limit, String si);
+
+    @Query(value = FIND_MOUNTAINS +
             LEFT_JOIN_WITH_HIKING +
             ORDER_BY_COUNT_DESC +
-            "limit :limit " +
-            "offset :offset", nativeQuery = true)
+            PAGING, nativeQuery = true)
     List<Mountain> findAllPopularity(int offset, int limit);
 
     @Query(value = FIND_MOUNTAINS +
@@ -48,6 +90,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
 
     @Query(value = FIND_MOUNTAINS +
             SEARCH_BY_KEYWORD +
+            AND +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchMountainExceptZeroHeight(@Param("keyword") String keyword);
 
@@ -61,6 +104,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             SEARCH_BY_KEYWORD +
             AND +
             FILTER_BY_SI +
+            AND +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchMountainAndFilterBySiExceptZeroHeight(@Param("keyword") String keyword, @Param("si") String si);
 
@@ -90,6 +134,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
 
     @Query(value = FIND_MOUNTAINS +
             INNER_JOIN_WITH_TRAIL +
+            WHERE +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchTrailExceptZeroHeight(@Param("keyword") String keyword);
 
@@ -97,6 +142,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             INNER_JOIN_WITH_TRAIL +
             WHERE +
             FILTER_BY_SI +
+            AND +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchTrailAndFilterBySiExceptZeroHeight(String keyword, String si);
 
