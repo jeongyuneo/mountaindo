@@ -102,9 +102,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsSuccess() throws Exception {
         // given
-        willReturn(mountainListResponses).given(mountainService).getMountains(anyString(), anyInt());
+        willReturn(mountainListResponses).given(mountainService).getMountains(anyString(), anyString(), anyInt());
         // when
-        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, PAGE);
+        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, SI, PAGE);
         // then
         산_목록_조회_성공(resultActions, mountainListResponses);
     }
@@ -113,9 +113,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_MOUNTAINS.getMessage())).given(mountainService).getMountains(anyString(), anyInt());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_MOUNTAINS.getMessage())).given(mountainService).getMountains(anyString(), anyString(), anyInt());
         // when
-        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, PAGE);
+        ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, SI, PAGE);
         // then
         산_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_MOUNTAINS));
     }
@@ -208,8 +208,8 @@ class MountainControllerTest extends ApiDocument {
         등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_TRAIL));
     }
 
-    private ResultActions 산_목록_조회_요청(String sort, int page) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort + "&page=" + page)
+    private ResultActions 산_목록_조회_요청(String sort, String si, int page) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort + "&si=" + si + "&page=" + page)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
