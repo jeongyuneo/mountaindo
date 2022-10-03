@@ -31,7 +31,7 @@ import Visited from './src/pages/completed/Visited';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -42,6 +42,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {faFlag} from '@fortawesome/free-regular-svg-icons';
 import FindMountain from './src/pages/hiking/FindMountain';
+import {Dimensions, StyleSheet, View} from 'react-native';
+import {LoadingAnimationB} from './src/components/completed/LoadingAnimation';
 
 export type LoggedInParamList = {
   Welcome: any;
@@ -263,92 +265,111 @@ function AppInner() {
   // isLoggedIn && isSurveyed면 기본 bottom tab에 연결된 화면 렌더링
   // isLoggedIn && !isSurveyed면 설문조사 화면 렌더링
   // 그 외엔 로그인 전에 접속할 수 있는 페이지 렌더링
+  const [isTimeOut, setIsTimeOut] = useState(true);
+  // 타이머 시작 함수
+  const handleStart = () => {
+    setTimeout(() => {
+      setIsTimeOut(false);
+    }, 1000);
+  };
+
+  if (isLoggedIn) {
+    handleStart();
+  }
+
   return isLoggedIn && isSurveyed ? (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarInactiveTintColor: 'black',
-        tabBarActiveTintColor: 'black',
-        tabBarStyle: {
-          position: 'absolute',
-        },
-        tabBarHideOnKeyboard: true,
-        unmountOnBlur: true,
-      }}>
-      <Tab.Screen
-        name="MountainList"
-        component={MountainTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faMountain}
-              size={20}
-              color={focused ? '#7FB77E' : 'black'}
-            />
-          ),
+    isTimeOut ? (
+      <View style={styles.loading}>
+        <LoadingAnimationB />
+      </View>
+    ) : (
+      <Tab.Navigator
+        screenOptions={{
+          tabBarInactiveTintColor: 'black',
+          tabBarActiveTintColor: 'black',
+          tabBarStyle: {
+            position: 'absolute',
+          },
+          tabBarHideOnKeyboard: true,
           unmountOnBlur: true,
         }}
-      />
-      <Tab.Screen
-        name="HikingTab"
-        component={HikingTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faPersonHiking}
-              size={20}
-              color={focused ? '#7FB77E' : 'black'}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Main"
-        component={Main}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faHome}
-              size={20}
-              color={focused ? '#7FB77E' : 'black'}
-            />
-          ),
-          unmountOnBlur: true,
-        }}
-      />
-      <Tab.Screen
-        name="VisitedTab"
-        component={VisitedTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faFlag}
-              size={20}
-              color={focused ? '#7FB77E' : 'black'}
-            />
-          ),
-          unmountOnBlur: true,
-        }}
-      />
-      <Tab.Screen
-        name="User"
-        component={UserTab}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <FontAwesomeIcon
-              icon={faUser}
-              size={20}
-              color={focused ? '#7FB77E' : 'black'}
-            />
-          ),
-          unmountOnBlur: true,
-        }}
-      />
-    </Tab.Navigator>
+        initialRouteName="Main">
+        <Tab.Screen
+          name="MountainList"
+          component={MountainTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faMountain}
+                size={20}
+                color={focused ? '#7FB77E' : 'black'}
+              />
+            ),
+            unmountOnBlur: true,
+          }}
+        />
+        <Tab.Screen
+          name="HikingTab"
+          component={HikingTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faPersonHiking}
+                size={20}
+                color={focused ? '#7FB77E' : 'black'}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Main"
+          component={Main}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faHome}
+                size={20}
+                color={focused ? '#7FB77E' : 'black'}
+              />
+            ),
+            unmountOnBlur: true,
+          }}
+        />
+        <Tab.Screen
+          name="VisitedTab"
+          component={VisitedTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faFlag}
+                size={20}
+                color={focused ? '#7FB77E' : 'black'}
+              />
+            ),
+            unmountOnBlur: true,
+          }}
+        />
+        <Tab.Screen
+          name="User"
+          component={UserTab}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({focused}) => (
+              <FontAwesomeIcon
+                icon={faUser}
+                size={20}
+                color={focused ? '#7FB77E' : 'black'}
+              />
+            ),
+            unmountOnBlur: true,
+          }}
+        />
+      </Tab.Navigator>
+    )
   ) : isLoggedIn && !isSurveyed ? (
     <Stack.Navigator>
       <Stack.Group screenOptions={{headerShown: false}}>
@@ -421,5 +442,17 @@ function AppInner() {
     </Stack.Navigator>
   );
 }
-
+const styles = StyleSheet.create({
+  loading: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    top: 150,
+    borderRadius: 50,
+    overflow: 'hidden',
+    left: Dimensions.get('window').width / 2 - 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default AppInner;

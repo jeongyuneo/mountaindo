@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {useSelector} from 'react-redux';
 import CompletedMountainModal from '../../components/completed/CompletedMountainModal';
-import LoadingAnimation from '../../components/completed/LoadingAnimation';
+import {LoadingAnimationA} from '../../components/completed/LoadingAnimation';
 import Map from '../../components/completed/Map';
 import {completedMountainList} from '../../slices/hikingSlice/hiking';
 import {useAppDispatch} from '../../store';
@@ -55,7 +55,7 @@ function Completed() {
     <View style={styles.container}>
       {isPending || isTimeOut ? (
         <View style={styles.loading}>
-          <LoadingAnimation />
+          <LoadingAnimationA />
         </View>
       ) : (
         <View style={styles.mapContainer}>
