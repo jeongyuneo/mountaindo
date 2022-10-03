@@ -52,6 +52,10 @@ class MountainControllerTest extends ApiDocument {
     private static final String RISK = "경사가 가파릅니다.";
     private static final String NAME_ORDER = "name";
     private static final int PAGE = 1;
+    private static final String MOUNTAIN_KEYWORD = "가련";
+    private static final String TRAIL_KEYWORD = "구간";
+    private static final String SORT = "high-height";
+    private static final String SI = "전라북도";
 
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
@@ -186,9 +190,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainSuccess() throws Exception {
         // given
-        willReturn(mountainListResponses).given(mountainService).searchMountain(anyString());
+        willReturn(mountainListResponses).given(mountainService).searchMountain(anyString(), anyString(), anyString());
         // when
-        ResultActions resultActions = 산_검색_요청(NAME);
+        ResultActions resultActions = 산_검색_요청(MOUNTAIN_KEYWORD, SORT, SI);
         // then
         산_검색_성공(resultActions, mountainListResponses);
     }
@@ -197,9 +201,9 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN.getMessage())).given(mountainService).searchMountain(anyString());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN.getMessage())).given(mountainService).searchMountain(anyString(), anyString(), anyString());
         // when
-        ResultActions resultActions = 산_검색_요청(NAME);
+        ResultActions resultActions = 산_검색_요청(MOUNTAIN_KEYWORD, SORT, SI);
         // then
         산_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN));
     }
@@ -283,27 +287,8 @@ class MountainControllerTest extends ApiDocument {
                 .andDo(toDocument("get-trail-fail"));
     }
 
-    private ResultActions 산_또는_등산로_검색_요청(String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/1?keyword=" + keyword)
-                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
-    }
-
-    private void 산_또는_등산로_검색_성공(ResultActions resultActions, List<MountainListResponse> mountainListResponses) throws Exception {
-        resultActions.andExpect(status().isOk())
-                .andExpect(content().json(toJson(mountainListResponses)))
-                .andDo(print())
-                .andDo(toDocument("search-mountain-or-trail-success"));
-    }
-
-    private void 산_또는_등산로_검색_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isInternalServerError())
-                .andExpect(content().json(toJson(message)))
-                .andDo(print())
-                .andDo(toDocument("search-mountain-or-trail-fail"));
-    }
-
-    private ResultActions 산_검색_요청(String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/2?keyword=" + keyword)
+    private ResultActions 산_검색_요청(String keyword, String sort, String si) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/search/1?keyword=" + keyword + "&sort=" + sort + "&si=" + si)
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
