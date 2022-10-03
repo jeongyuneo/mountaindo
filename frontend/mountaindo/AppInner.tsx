@@ -282,7 +282,6 @@ function AppInner() {
 
   if (isLoggedIn) {
     handleStart();
-    console.log('스패너시작');
   }
 
   return isLoggedIn && isSurveyed ? (
