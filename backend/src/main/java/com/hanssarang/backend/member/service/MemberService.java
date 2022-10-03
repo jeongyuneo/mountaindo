@@ -1,5 +1,6 @@
 package com.hanssarang.backend.member.service;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotEqualException;
@@ -55,7 +56,7 @@ public class MemberService {
 
     public void checkNickname(String nickname) {
         if (memberRepository.existsByNickname(nickname)) {
-            throw new DuplicationException(DUPLICATED_NICKNAME);
+            throw new DuplicationException(ErrorMessage.DUPLICATED_NICKNAME);
         }
     }
 
@@ -86,7 +87,7 @@ public class MemberService {
                 findingEmailRequest.getName(),
                 findingEmailRequest.getBirth(),
                 findingEmailRequest.getPhone())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         return EmailResponse.builder()
                 .email(member.getEmail())
                 .build();
@@ -121,7 +122,7 @@ public class MemberService {
 
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         Member member = memberRepository.findByEmailAndNameAndIsActiveTrue(passwordUpdateVerificationRequest.getEmail(), passwordUpdateVerificationRequest.getName())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         String newPassword = createRandomString();
         member.updatePassword(passwordEncoder, newPassword);
         memberRepository.save(member);
@@ -146,7 +147,7 @@ public class MemberService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         Member member = memberRepository.findByEmailAndIsActiveTrue(loginRequest.getEmail())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         validatePassword(member, loginRequest.getPassword());
         return LoginResponse.builder()
                 .memberId(member.getId())
@@ -165,7 +166,7 @@ public class MemberService {
 
     private void validatePassword(Member member, String password) {
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new BadRequestException(NOT_EQUAL_PASSWORD);
+            throw new BadRequestException(ErrorMessage.NOT_EQUAL_PASSWORD);
         }
     }
 
@@ -178,7 +179,7 @@ public class MemberService {
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
-            throw new NotEqualException(NOT_EQUAL_VALIDATION_TOKEN);
+            throw new NotEqualException(ErrorMessage.NOT_EQUAL_VALIDATION_TOKEN);
         }
     }
 
