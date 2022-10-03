@@ -50,9 +50,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMember(JwtUtil.getMemberId(token)));
     }
 
-    @PatchMapping
-    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
-        return ResponseEntity.ok().body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest));
+    @PostMapping("/update")
+    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestPart UpdateRequest updateRequest, @RequestPart("file") MultipartFile multipartFile) {
+        return ResponseEntity.ok()
+                .body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest, multipartFile));
     }
 
     @PatchMapping("/password")
