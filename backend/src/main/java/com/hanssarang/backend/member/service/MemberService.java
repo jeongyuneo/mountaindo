@@ -69,8 +69,7 @@ public class MemberService {
     }
 
     public void createSurvey(int memberId, SurveyRequest surveyRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         Survey survey = Survey.builder()
                 .level(surveyRequest.getLevel())
                 .preferredMountainLocation(surveyRequest.getPreferredMountainLocation())
@@ -94,8 +93,7 @@ public class MemberService {
     }
 
     public MemberResponse getMember(int memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         return MemberResponse.builder()
                 .email(member.getEmail())
                 .name(member.getName())
@@ -108,8 +106,7 @@ public class MemberService {
     }
 
     public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest, MultipartFile multipartFile) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         String imageUrl = ImageUtil.saveImage(multipartFile, PROFILE);
         member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname(), imageUrl);
         memberRepository.save(member);
@@ -131,16 +128,14 @@ public class MemberService {
     }
 
     public void updatePasswordInMyPage(int memberId, PasswordUpdateRequest passwordUpdateRequest) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         validatePassword(member, passwordUpdateRequest.getPassword());
         member.updatePassword(passwordEncoder, passwordUpdateRequest.getNewPassword());
         memberRepository.save(member);
     }
 
     public void deleteMember(int memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         member.delete();
         memberRepository.save(member);
     }
@@ -158,18 +153,6 @@ public class MemberService {
                 .build();
     }
 
-    private String createRandomString() {
-        return IntStream.range(0, 10)
-                .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
-                .collect(Collectors.joining());
-    }
-
-    private void validatePassword(Member member, String password) {
-        if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new BadRequestException(ErrorMessage.NOT_EQUAL_PASSWORD);
-        }
-    }
-
     public void sendEmailValidationToken(EmailValidationRequest emailValidationRequest) {
         String emailValidateToken = createRandomString();
         RedisUtil.setDataExpired(emailValidationRequest.getEmail(), emailValidateToken, 60 * 3L);
@@ -180,6 +163,23 @@ public class MemberService {
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
         if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken())) {
             throw new NotEqualException(ErrorMessage.NOT_EQUAL_VALIDATION_TOKEN);
+        }
+    }
+
+    private Member findMember(int memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
+    }
+
+    private String createRandomString() {
+        return IntStream.range(0, 10)
+                .mapToObj(i -> String.valueOf(CHAR_SET[(int) (Math.random() * (CHAR_SET.length))]))
+                .collect(Collectors.joining());
+    }
+
+    private void validatePassword(Member member, String password) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new BadRequestException(ErrorMessage.NOT_EQUAL_PASSWORD);
         }
     }
 
