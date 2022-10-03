@@ -127,6 +127,19 @@ function TrackingEnd({
     }
   };
 
+  const getImageFile = async () => {
+    const uri = await getPhotoUri();
+    const url = uri.slice(7);
+
+    const file = {
+      uri: uri,
+      type: 'image/jpg',
+      name: 'reusltImage.jpg',
+    };
+
+    return file;
+  };
+
   useEffect(() => {
     setModalVisible(false);
   }, []);
@@ -219,6 +232,7 @@ function TrackingEnd({
           onSave={onSave}
           kakaoShare={kakaoShare}
           getPhotoUri={getPhotoUri}
+          imageFile={getImageFile()}
         />
       )}
     </View>
