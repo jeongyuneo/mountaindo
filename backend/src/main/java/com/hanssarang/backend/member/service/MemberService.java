@@ -172,9 +172,7 @@ public class MemberService {
     }
 
     public void validateSignUpEmail(EmailAuthRequest emailAuthRequest) {
-        if (!RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getToken())) {
-            throw new NotEqualException(NOT_EQUAL_VALIDATION_TOKEN);
-        }
+        RedisUtil.validateData(emailAuthRequest.getEmail(), emailAuthRequest.getAuthToken());
     }
 
     private void sendMailMessage(String email, String subject, String message) {
