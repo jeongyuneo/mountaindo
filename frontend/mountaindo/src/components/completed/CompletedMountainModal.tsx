@@ -1,4 +1,8 @@
-import {faShareFromSquare} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCloudArrowDown,
+  faShareFromSquare,
+  faShareNodes,
+} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
 import {
@@ -73,44 +77,65 @@ const CompletedMountainModal = ({
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Pressable onPress={onShare} style={styles.shareButton}>
-                <FontAwesomeIcon icon={faShareFromSquare} size={15} />
-              </Pressable>
+          <Pressable
+            style={styles.centeredView}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.visitedModalView}>
+              <View style={styles.shareButton}>
+                <Pressable onPress={onShare}>
+                  <FontAwesomeIcon
+                    icon={faShareNodes}
+                    size={15}
+                    style={styles.icon}
+                  />
+                </Pressable>
+                <Pressable>
+                  <FontAwesomeIcon
+                    icon={faCloudArrowDown}
+                    size={15}
+                    style={styles.icon}
+                  />
+                </Pressable>
+              </View>
               <View>
                 <Image
                   source={require('../../assets/jjang.png')}
                   style={styles.mountainImage}
                 />
               </View>
+              <View style={styles.titleView}>
+                <AppTextBold style={styles.trailName}>
+                  {trails.trailName}
+                </AppTextBold>
+                <AppText style={styles.mountainName}>
+                  {trails.mountainName}
+                </AppText>
+              </View>
+              <AppText style={styles.mountainName}>{trails.address}</AppText>
               <View style={styles.textContainer}>
                 <View style={styles.textItem}>
                   <AppTextBold style={styles.text}>
-                    {trails?.totalDistance} km
+                    {trails.distance} km
                   </AppTextBold>
                   <AppText style={styles.label}>총 거리</AppText>
                 </View>
                 <View style={styles.textItem}>
                   <AppTextBold style={styles.text}>
-                    {trails?.timeDuration}
+                    {trails.useTime}
                   </AppTextBold>
                   <AppText style={styles.label}>소요 시간</AppText>
                 </View>
                 <View style={styles.textItem}>
                   <AppTextBold style={styles.text}>
-                    {trails?.totalHigh} km
+                    {trails.accumulatedHeight} km
                   </AppTextBold>
                   <AppText style={styles.label}>총 고도</AppText>
                 </View>
               </View>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <AppText style={styles.textStyle}>닫기</AppText>
-              </Pressable>
             </View>
-          </View>
+          </Pressable>
         </Modal>
       </View>
     )
@@ -123,6 +148,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  visitedModalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    width: 270,
+    height: 350,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
   modalView: {
     margin: 20,
@@ -161,13 +202,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   mountainImage: {
-    width: 200,
+    width: '100%',
     height: 150,
   },
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginVertical: 30,
+    marginVertical: 20,
   },
   textItem: {
     marginHorizontal: 5,
@@ -181,9 +222,8 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     alignSelf: 'flex-end',
-  },
-  mountainNameText: {
-    fontSize: 16,
+    flexDirection: 'row',
+    marginBottom: 5,
   },
   addressText: {
     fontSize: 13,
@@ -191,6 +231,21 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 13,
     marginVertical: 5,
+  },
+  titleView: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    marginVertical: 7,
+  },
+  trailName: {
+    fontSize: 15,
+  },
+  mountainName: {
+    fontSize: 12,
+  },
+  icon: {
+    marginHorizontal: 5,
   },
 });
 
