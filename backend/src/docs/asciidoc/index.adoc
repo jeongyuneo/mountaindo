@@ -270,15 +270,22 @@ include::{snippets}/delete-member-fail/http-response.adoc[]
 /api/v1/mountains
 ----
 
-[cols="1,1,4a,1"]
+[cols="1,1,4a"]
 |===
-|Parameter |Type |Description |Required
+|Parameter |Type |Description
 
 |sort
 |String
 |산 목록 정렬 방식 +
 name(이름순), popularity(인기순), high-height(고도 높은순), low-height(고도 낮은순)
-|X
+
+|si
+|String
+|시/도
+
+|page
+|int
+|페이지 번호
 |===
 
 ===== 성공
