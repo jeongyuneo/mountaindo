@@ -16,13 +16,10 @@ export const emailRequest = createAsyncThunk(
   'userSlice/emailRequest',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.post(
-        `/api/v1/members/email/1?email=${args.email}`,
-        {
-          // BackEnd코드 수정 후 수정해야할 코드
-          // email:args.email,
-        },
-      );
+      const response = await axiosService.post(`/api/v1/members/email/1`, {
+        // BackEnd코드 수정 후 수정해야할 코드
+        email: args.email,
+      });
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
