@@ -391,11 +391,7 @@ function SignUp() {
               실 거주지의 주소를 선택해주세요
             </AppText>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}>
+          <View style={styles.addressSt}>
             <LocationPicker
               setSelectedCity={setSelectedCity}
               setSelectedCity2={setSelectedCity2}
@@ -418,6 +414,10 @@ function SignUp() {
 }
 
 const styles = StyleSheet.create({
+  addressSt: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   authinputText: {
     fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,

@@ -7,7 +7,6 @@ import {
   Alert,
   StyleSheet,
   Dimensions,
-  Text,
 } from 'react-native';
 import {RootStackParamList} from '../../../../AppInner';
 import AppText from '../../../components/AppText';
@@ -147,7 +146,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             blurOnSubmit={false}
           />
           <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
-            <Text style={styles.checkEmailText}>인증요청</Text>
+            <AppText style={styles.checkEmailText}>인증요청</AppText>
           </Pressable>
         </View>
         <View style={styles.emailinputView}>
@@ -164,11 +163,11 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
           />
           {auth ? (
             <Pressable style={styles.checkEmailActive} onPress={authEmail}>
-              <Text style={styles.checkEmailText}>인증</Text>
+              <AppText style={styles.checkEmailText}>인증</AppText>
             </Pressable>
           ) : (
             <Pressable style={styles.checkEmail}>
-              <Text style={styles.checkEmailText}>인증</Text>
+              <AppText style={styles.checkEmailText}>인증</AppText>
             </Pressable>
           )}
         </View>
