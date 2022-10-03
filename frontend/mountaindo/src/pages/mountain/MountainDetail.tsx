@@ -72,7 +72,9 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
           고도: {sentData.mountainDetail.height}m
         </AppText>
       </View>
-      <WeatherForecast />
+      <WeatherForecast
+        location={sentData.mountainDetail.address.split(' ')[0]}
+      />
       <CourseList
         trailList={sentData.mountainDetail.trails}
         moveToCourseDetail={moveToCourseDetail}
