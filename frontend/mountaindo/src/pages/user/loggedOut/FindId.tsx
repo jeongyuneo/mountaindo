@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   findIdButton: {
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
     borderRadius: 30,
     paddingHorizontal: 100,
     paddingVertical: 10,
