@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message {
 
+    public static final String AUTHORIZATION = "Authorization";
+
     private String message;
 }
