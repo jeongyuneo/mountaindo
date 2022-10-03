@@ -29,6 +29,7 @@ public class HikingService {
 
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
+    private static final String HIKING = "hiking";
 
     private final MemberRepository memberRepository;
     private final TrailRepository trailRepository;
@@ -107,7 +108,7 @@ public class HikingService {
                         .accumulatedHeight(hikingRequest.getAccumulatedHeight())
                         .useTime(hikingRequest.getUseTime())
                         .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
-                        .imageUrl(ImageUtil.saveImage(member.getEmail(), trail.getId(), multipartFile))
+                        .imageUrl(ImageUtil.saveImage(multipartFile, HIKING))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
                         .build()
