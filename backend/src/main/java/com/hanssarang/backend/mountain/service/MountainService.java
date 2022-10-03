@@ -16,9 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
@@ -34,6 +33,7 @@ public class MountainService {
     private static final String HIGH_HEIGHT = "high-height";
     private static final String LOW_HEIGHT = "low-height";
     private static final String POPULARITY = "popularity";
+    private static final String ALL_AREA = "전체";
 
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
@@ -87,23 +87,72 @@ public class MountainService {
                 .build();
     }
 
-    public List<MountainListResponse> getMountainsByArea(String si) {
-        return getMountainListResponses(mountainRepository.findBySi(si));
-    }
-
-    public List<MountainListResponse> searchMountainOrTrail(String keyword) {
-        Set<Mountain> mountains = new HashSet<>();
-        mountains.addAll(mountainRepository.findByNameContaining(keyword));
-        mountains.addAll(mountainRepository.findByTrailNameContaining(keyword));
+    public List<MountainListResponse> searchMountain(String keyword, String sort, String si) {
+        List<Mountain> mountains = null;
+        if (si.equals(ALL_AREA)) {
+            if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findMountainsOrderByPopularityDesc(keyword);
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findBySearchMountainExceptZeroHeight(keyword);
+                mountains.sort(Comparator.comparing(Mountain::getHeight));
+            } else {
+                mountains = mountainRepository.findBySearchMountain(keyword);
+                if (sort.equals(NAME)) {
+                    mountains.sort(Comparator.comparing(Mountain::getName));
+                } else if (sort.equals(HIGH_HEIGHT)) {
+                    mountains.sort(Comparator.comparing(Mountain::getHeight).reversed());
+                }
+            }
+        } else {
+            if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findFilteredMountainsOrderByPopularityDesc(keyword, si);
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findBySearchMountainAndFilterBySiExceptZeroHeight(keyword, si);
+                mountains.sort(Comparator.comparing(Mountain::getHeight));
+            } else {
+                mountains = mountainRepository.findBySearchMountainAndFilterBySi(keyword, si);
+                if (sort.equals(NAME)) {
+                    mountains.sort(Comparator.comparing(Mountain::getName));
+                } else if (sort.equals(HIGH_HEIGHT)) {
+                    mountains.sort(Comparator.comparing(Mountain::getHeight).reversed());
+                }
+            }
+        }
         return getMountainListResponses(mountains);
     }
 
-    public List<MountainListResponse> searchMountain(String keyword) {
-        return getMountainListResponses(mountainRepository.findByNameContaining(keyword));
-    }
-
-    public List<MountainListResponse> searchTrail(String keyword) {
-        return getMountainListResponses(mountainRepository.findByTrailNameContaining(keyword));
+    public List<MountainListResponse> searchTrail(String keyword, String sort, String si) {
+        List<Mountain> mountains = null;
+        if (si.equals(ALL_AREA)) {
+            if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findBySearchTrailOrderByPopularityDesc(keyword);
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findBySearchTrailExceptZeroHeight(keyword);
+                mountains.sort(Comparator.comparing(Mountain::getHeight));
+            } else {
+                mountains = mountainRepository.findBySearchTrail(keyword);
+                if (sort.equals(NAME)) {
+                    mountains.sort(Comparator.comparing(Mountain::getName));
+                } else if (sort.equals(HIGH_HEIGHT)) {
+                    mountains.sort(Comparator.comparing(Mountain::getHeight).reversed());
+                }
+            }
+        } else {
+            if (sort.equals(POPULARITY)) {
+                mountains = mountainRepository.findFilteredMountainsBySearchTrailOrderByPopularityDesc(keyword, si);
+            } else if (sort.equals(LOW_HEIGHT)) {
+                mountains = mountainRepository.findBySearchTrailAndFilterBySiExceptZeroHeight(keyword, si);
+                mountains.sort(Comparator.comparing(Mountain::getHeight));
+            } else {
+                mountains = mountainRepository.findBySearchTrailAndFilterBySi(keyword, si);
+                if (sort.equals(NAME)) {
+                    mountains.sort(Comparator.comparing(Mountain::getName));
+                } else if (sort.equals(HIGH_HEIGHT)) {
+                    mountains.sort(Comparator.comparing(Mountain::getHeight).reversed());
+                }
+            }
+        }
+        return getMountainListResponses(mountains);
     }
 
     private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains) {
