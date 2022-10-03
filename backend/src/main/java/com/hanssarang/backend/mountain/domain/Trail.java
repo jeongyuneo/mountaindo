@@ -1,14 +1,14 @@
 package com.hanssarang.backend.mountain.domain;
 
 import com.hanssarang.backend.common.domain.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.hanssarang.backend.member.domain.MemberBasedRecommendation;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -42,4 +42,8 @@ public class Trail extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "trail", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<MemberBasedRecommendation> memberBasedRecommendations = new ArrayList<>();
 }
