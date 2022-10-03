@@ -8,6 +8,7 @@ import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
 import com.hanssarang.backend.member.domain.Survey;
+import com.hanssarang.backend.util.ImageUtil;
 import com.hanssarang.backend.util.JwtUtil;
 import com.hanssarang.backend.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,6 +41,7 @@ public class MemberService {
     private static final String ISSUANCE_OF_TEMPORARY_PASSWORD = "MountainDo: 임시 비밀번호 발급";
     private static final String TEMPORARY_PASSWORD = "임시 비밀번호: ";
     private static final String LOGIN_WITH_TEMPORARY_PASSWORD = "\n임시 비밀번호로 로그인 후 비밀번호를 변경 부탁드립니다.";
+    private static final String PROFILE = "profile";
 
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
@@ -103,14 +106,15 @@ public class MemberService {
                 .build();
     }
 
-    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest) {
+    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest, MultipartFile multipartFile) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname(), updateRequest.getImageUrl());
+        String imageUrl = ImageUtil.saveImage(multipartFile, PROFILE);
+        member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname(), imageUrl);
         memberRepository.save(member);
         return UpdateResponse.builder()
                 .nickname(member.getNickname())
-                .imageUrl(member.getImageUrl())
+                .imageUrl(imageUrl)
                 .token(JwtUtil.generateToken(memberId, member.getNickname()))
                 .build();
     }
