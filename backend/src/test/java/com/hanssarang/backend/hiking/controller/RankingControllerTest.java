@@ -1,6 +1,7 @@
 package com.hanssarang.backend.hiking.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
@@ -17,7 +18,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MEMBER;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
@@ -84,11 +84,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void getRankingsFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).getRankings(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(rankingService).getRankings(anyInt());
         // when
         ResultActions resultActions = 전체랭킹_조회_요청(ID);
         // then
-        전체랭킹_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        전체랭킹_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("전체 랭킹 내 사용자 검색 - 성공")
@@ -106,11 +106,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void searchRankingFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).searchRanking(anyString());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(rankingService).searchRanking(anyString());
         // when
         ResultActions resultActions = 전체랭킹내_사용자_검색_요청(NICKNAME);
         // then
-        전체랭킹내_사용자_검색_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        전체랭킹내_사용자_검색_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("산 랭킹 조회 - 성공")
@@ -128,11 +128,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void getRankingsOfMountainFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).getRankingsOfMountain(anyInt(), anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(rankingService).getRankingsOfMountain(anyInt(), anyInt());
         // when
         ResultActions resultActions = 산랭킹_조회_요청(ID);
         // then
-        산랭킹_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        산랭킹_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("산 랭킹 내 사용자 검색 - 성공")
@@ -150,11 +150,11 @@ public class RankingControllerTest extends ApiDocument {
     @Test
     void searchRankingOfMountainFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(rankingService).searchRankingOfMountain(anyInt(), anyString());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(rankingService).searchRankingOfMountain(anyInt(), anyString());
         // when
         ResultActions resultActions = 산랭킹내_사용자_검색_요청(ID, NICKNAME);
         // then
-        산랭킹내_사용자_검색_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        산랭킹내_사용자_검색_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     private ResultActions 전체랭킹_조회_요청(int memberId) throws Exception {
