@@ -63,7 +63,7 @@ public class MemberControllerTest extends ApiDocument {
     private LoginRequest loginRequest;
     private LoginResponse loginResponse;
     private EmailAuthRequest emailAuthRequest;
-    private SendVerificationNumberRequest sendVerificationTokenRequest;
+    private VerificationNumberBySendingEmailRequest sendVerificationTokenRequest;
 
     @MockBean
     private MemberService memberService;
@@ -134,7 +134,7 @@ public class MemberControllerTest extends ApiDocument {
                 .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
                 .build();
-        sendVerificationTokenRequest = SendVerificationNumberRequest.builder()
+        sendVerificationTokenRequest = VerificationNumberBySendingEmailRequest.builder()
                 .email(EMAIL)
                 .build();
         emailAuthRequest = EmailAuthRequest.builder()
@@ -389,7 +389,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void sendValidationTokenSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).sendEmailValidationToken(any(SendVerificationNumberRequest.class));
+        willDoNothing().given(memberService).sendEmailValidationToken(any(VerificationNumberBySendingEmailRequest.class));
         // when
         ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
         // then
@@ -400,7 +400,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void sendValidationTokenFail() throws Exception {
         // given
-        willThrow(new MailSendException(FAIL_TO_SEND_EMAIL)).given(memberService).sendEmailValidationToken(any(SendVerificationNumberRequest.class));
+        willThrow(new MailSendException(FAIL_TO_SEND_EMAIL)).given(memberService).sendEmailValidationToken(any(VerificationNumberBySendingEmailRequest.class));
         // when
         ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
         // then
@@ -640,10 +640,10 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("login-fail"));
     }
 
-    private ResultActions 이메일_인증번호_전송_요청(SendVerificationNumberRequest sendVerificationNumberRequest) throws Exception {
+    private ResultActions 이메일_인증번호_전송_요청(VerificationNumberBySendingEmailRequest verificationNumberBySendingEmailRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/members/email/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(sendVerificationNumberRequest)));
+                .content(toJson(verificationNumberBySendingEmailRequest)));
     }
 
     private void 이메일_인증번호_전송_성공(ResultActions resultActions) throws Exception {
