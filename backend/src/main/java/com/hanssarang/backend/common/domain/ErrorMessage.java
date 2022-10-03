@@ -13,6 +13,7 @@ public class ErrorMessage {
     public static final String FAIL_TO_SEARCH_TRAIL = "등산로 검색에 실패했습니다.";
     public static final String FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL = "산 또는 등산로 검색에 실패했습니다.";
     public static final String FAIL_TO_CREATE_HIKING = "등산 정보 저장에 실패했습니다.";
+    public static final String FAIL_TO_SEND_EMAIL = "이메일 전송에 실패했습니다.";
 
     public static final String NOT_FOUND_MEMBER = "사용자를 찾을 수 없습니다.";
     public static final String NOT_FOUND_HIKING = "등산 정보를 찾을 수 없습니다.";

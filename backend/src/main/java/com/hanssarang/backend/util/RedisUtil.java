@@ -1,5 +1,6 @@
 package com.hanssarang.backend.util;
 
+import com.hanssarang.backend.common.exception.NotEqualException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
+
+import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_EQUAL_VALIDATION_TOKEN;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
@@ -34,7 +37,9 @@ public class RedisUtil {
                 .set(key, value, expireDuration);
     }
 
-    public static boolean validateData(String key, String value) {
-        return getData(key).equals(value);
+    public static void validateData(String key, String value) {
+        if (!getData(key).equals(value)) {
+            throw new NotEqualException(NOT_EQUAL_VALIDATION_TOKEN);
+        }
     }
 }
