@@ -21,7 +21,7 @@ public class ImageUtil {
     private static final String DELIMITER = "-";
 
     public static String saveImage(MultipartFile multipartFile, String path) {
-        validateContentType(multipartFile);
+        validateContentType(multipartFile.getContentType());
         StringBuilder imageUploadPath = new StringBuilder(new File(IMAGE_ROOT_PATH).getAbsolutePath());
         imageUploadPath.append(File.separator).append(path);
         File imageFile = new File(imageUploadPath.toString());
