@@ -1,6 +1,7 @@
 package com.hanssarang.backend.mountain.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.willReturn;
@@ -109,11 +109,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_GET_MOUNTAINS)).given(mountainService).getMountains(anyString(), anyInt());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_MOUNTAINS.getMessage())).given(mountainService).getMountains(anyString(), anyInt());
         // when
         ResultActions resultActions = 산_목록_조회_요청(NAME_ORDER, PAGE);
         // then
-        산_목록_조회_실패(resultActions, new Message(FAIL_TO_GET_MOUNTAINS));
+        산_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_MOUNTAINS));
     }
 
     @DisplayName("산 상세 조회 - 성공")
@@ -131,11 +131,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getMountainFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MOUNTAIN)).given(mountainService).getMountain(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MOUNTAIN)).given(mountainService).getMountain(anyInt());
         // when
         ResultActions resultActions = 산_상세_조회_요청(ID);
         // then
-        산_상세_조회_실패(resultActions, new Message(NOT_FOUND_MOUNTAIN));
+        산_상세_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MOUNTAIN));
     }
 
     @DisplayName("등산로 상세 조회 - 성공")
@@ -153,11 +153,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getTrailFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_TRAIL)).given(mountainService).getTrail(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL)).given(mountainService).getTrail(anyInt());
         // when
         ResultActions resultActions = 등산로_상세_조회_요청(ID);
         // then
-        등산로_상세_조회_실패(resultActions, new Message(NOT_FOUND_TRAIL));
+        등산로_상세_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_TRAIL));
     }
 
     @DisplayName("산/등산로 검색 - 성공")
@@ -175,11 +175,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainOrTrailFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL)).given(mountainService).searchMountainOrTrail(anyString());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL.getMessage())).given(mountainService).searchMountainOrTrail(anyString());
         // when
         ResultActions resultActions = 산_또는_등산로_검색_요청(NAME);
         // then
-        산_또는_등산로_검색_실패(resultActions, new Message(FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL));
+        산_또는_등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL));
     }
 
     @DisplayName("산 검색 - 성공")
@@ -197,11 +197,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchMountainFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SEARCH_MOUNTAIN)).given(mountainService).searchMountain(anyString());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN.getMessage())).given(mountainService).searchMountain(anyString());
         // when
         ResultActions resultActions = 산_검색_요청(NAME);
         // then
-        산_검색_실패(resultActions, new Message(FAIL_TO_SEARCH_MOUNTAIN));
+        산_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN));
     }
 
     @DisplayName("등산로 검색 - 성공")
@@ -219,11 +219,11 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void searchTrailFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SEARCH_TRAIL)).given(mountainService).searchTrail(anyString());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_TRAIL.getMessage())).given(mountainService).searchTrail(anyString());
         // when
         ResultActions resultActions = 등산로_검색_요청(TRAIL_NAME);
         // then
-        등산로_검색_실패(resultActions, new Message(FAIL_TO_SEARCH_TRAIL));
+        등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_TRAIL));
     }
 
     private ResultActions 산_목록_조회_요청(String sort, int page) throws Exception {

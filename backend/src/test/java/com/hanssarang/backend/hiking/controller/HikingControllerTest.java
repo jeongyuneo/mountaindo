@@ -1,6 +1,7 @@
 package com.hanssarang.backend.hiking.controller;
 
 import com.hanssarang.backend.ApiDocument;
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.*;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -119,11 +119,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getHikingsFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(hikingService).getHikings(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(hikingService).getHikings(anyInt());
         // when
         ResultActions resultActions = 등산목록_조회_요청();
         // then
-        등산목록_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        등산목록_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("등산 상세 조회 - 성공")
@@ -141,11 +141,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getHikingFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_HIKING)).given(hikingService).getHiking(anyInt(), anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_HIKING)).given(hikingService).getHiking(anyInt(), anyInt());
         // when
         ResultActions resultActions = 등산상세_조회_요청(ID);
         // then
-        등산상세_조회_실패(resultActions, new Message(NOT_FOUND_HIKING));
+        등산상세_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_HIKING));
     }
 
     @DisplayName("완등 목록 조회 - 성공")
@@ -163,11 +163,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void getCompletedHikingsFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(hikingService).getCompletedHikings(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(hikingService).getCompletedHikings(anyInt());
         // when
         ResultActions resultActions = 완등목록_조회_요청();
         // then
-        완등목록_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        완등목록_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("등산 기록 저장 - 성공")
@@ -185,11 +185,11 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_HIKING)).given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_HIKING.getMessage())).given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
-        등산기록_저장_실패(resultActions, new Message(FAIL_TO_CREATE_HIKING));
+        등산기록_저장_실패(resultActions, new Message(ErrorMessage.FAIL_TO_CREATE_HIKING));
     }
 
     private ResultActions 등산목록_조회_요청() throws Exception {

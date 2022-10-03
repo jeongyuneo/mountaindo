@@ -2,7 +2,9 @@ package com.hanssarang.backend.member.controller;
 
 import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.Address;
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.domain.Message;
+import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
@@ -14,12 +16,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mail.MailSendException;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,6 +46,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
+    private static final String AUTH_TOKEN = "good";
     private static final int LEVEL = 1;
     private static final int PREFERRED_MOUNTAIN_LOCATION = 2;
     private static final int PREFERRED_HIKING_STYLE = 2;
@@ -59,6 +64,8 @@ public class MemberControllerTest extends ApiDocument {
     private PasswordUpdateVerificationRequest passwordUpdateVerificationRequest;
     private LoginRequest loginRequest;
     private LoginResponse loginResponse;
+    private EmailAuthRequest emailAuthRequest;
+    private VerificationNumberBySendingEmailRequest sendVerificationTokenRequest;
 
     @MockBean
     private MemberService memberService;
@@ -79,7 +86,6 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
-                .imageUrl(IMAGE_URL)
                 .build();
         updateResponse = UpdateResponse.builder()
                 .nickname(NICKNAME)
@@ -88,6 +94,7 @@ public class MemberControllerTest extends ApiDocument {
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
                 .password(PASSWORD)
+                .newPassword(PASSWORD + PASSWORD)
                 .build();
         emailResponse = EmailResponse.builder()
                 .email(EMAIL)
@@ -129,6 +136,13 @@ public class MemberControllerTest extends ApiDocument {
                 .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
                 .build();
+        sendVerificationTokenRequest = VerificationNumberBySendingEmailRequest.builder()
+                .email(EMAIL)
+                .build();
+        emailAuthRequest = EmailAuthRequest.builder()
+                .email(EMAIL)
+                .authToken(AUTH_TOKEN)
+                .build();
     }
 
     @DisplayName("회원 정보 조회 - 성공")
@@ -146,18 +160,18 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void getMemberFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(memberService).getMember(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(memberService).getMember(anyInt());
         // when
         ResultActions resultActions = 회원정보_조회_요청();
         // then
-        회원정보_조회_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        회원정보_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("회원정보 수정 - 성공")
     @Test
     void updateMemberSuccess() throws Exception {
         // given
-        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
+        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
@@ -168,11 +182,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_MEMBER.getMessage())).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
-        회원정보_수정_실패(resultActions, new Message(FAIL_TO_UPDATE_MEMBER));
+        회원정보_수정_실패(resultActions, new Message(ErrorMessage.FAIL_TO_UPDATE_MEMBER));
     }
 
     @DisplayName("마이페이지에서 비밀번호 재설정 - 성공")
@@ -190,11 +204,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordInMyPageFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePasswordInMyPage(anyInt(), any(PasswordUpdateRequest.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_PASSWORD.getMessage())).given(memberService).updatePasswordInMyPage(anyInt(), any(PasswordUpdateRequest.class));
         // when
         ResultActions resultActions = 마이페이지_비밀번호_재설정_요청(passwordUpdateRequest);
         // then
-        마이페이지_비밀번호_재설정_실패(resultActions, new Message(FAIL_TO_UPDATE_PASSWORD));
+        마이페이지_비밀번호_재설정_실패(resultActions, new Message(ErrorMessage.FAIL_TO_UPDATE_PASSWORD));
     }
 
     @DisplayName("회원탈퇴 - 성공")
@@ -212,11 +226,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void deleteMemberFail() throws Exception {
         // give
-        willThrow(new UnexpectedRollbackException(FAIL_TO_DELETE_MEMBER)).given(memberService).deleteMember(anyInt());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_DELETE_MEMBER.getMessage())).given(memberService).deleteMember(anyInt());
         // when
         ResultActions resultActions = 회원탈퇴_요청();
         // then
-        회원탈퇴_실패(resultActions, new Message(FAIL_TO_DELETE_MEMBER));
+        회원탈퇴_실패(resultActions, new Message(ErrorMessage.FAIL_TO_DELETE_MEMBER));
     }
 
     @DisplayName("닉네임 중복체크 - 성공")
@@ -234,11 +248,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void checkNicknameFail() throws Exception {
         // given
-        willThrow(new DuplicationException(DUPLICATED_NICKNAME)).given(memberService).checkNickname(anyString());
+        willThrow(new DuplicationException(ErrorMessage.DUPLICATED_NICKNAME)).given(memberService).checkNickname(anyString());
         // when
         ResultActions resultActions = 닉네임_중복체크_요청(NICKNAME);
         // then
-        닉네임_중복체크_실패(resultActions, new Message(DUPLICATED_NICKNAME));
+        닉네임_중복체크_실패(resultActions, new Message(ErrorMessage.DUPLICATED_NICKNAME));
     }
 
     @DisplayName("이메일 중복체크 - 성공")
@@ -256,11 +270,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void checkEmailFail() throws Exception {
         // given
-        willThrow(new DuplicationException(DUPLICATED_EMAIL)).given(memberService).checkEmail(anyString());
+        willThrow(new DuplicationException(ErrorMessage.DUPLICATED_EMAIL)).given(memberService).checkEmail(anyString());
         // when
         ResultActions resultActions = 이메일_중복체크_요청(EMAIL);
         // then
-        이메일_중복체크_실패(resultActions, new Message(DUPLICATED_EMAIL));
+        이메일_중복체크_실패(resultActions, new Message(ErrorMessage.DUPLICATED_EMAIL));
     }
 
     @DisplayName("회원가입 - 성공")
@@ -278,11 +292,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void signUpFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_SIGNUP)).given(memberService).signUp(any(SignUpRequest.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SIGNUP.getMessage())).given(memberService).signUp(any(SignUpRequest.class));
         // when
         ResultActions resultActions = 회원가입_요청(signUpRequest);
         // then
-        회원가입_실패(resultActions, new Message(FAIL_TO_SIGNUP));
+        회원가입_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SIGNUP));
     }
 
     @DisplayName("사전 설문조사 저장 - 성공")
@@ -300,11 +314,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveyFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_CREATE_SURVEY)).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_SURVEY.getMessage())).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
         ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
-        사전_설문조사_저장_실패(resultActions, new Message(FAIL_TO_CREATE_SURVEY));
+        사전_설문조사_저장_실패(resultActions, new Message(ErrorMessage.FAIL_TO_CREATE_SURVEY));
     }
 
     @DisplayName("아이디 찾기 - 성공")
@@ -322,11 +336,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void getMemberIdFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(memberService).getMemberEmail(any(FindingEmailRequest.class));
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(memberService).getMemberEmail(any(FindingEmailRequest.class));
         // when
         ResultActions resultActions = 아이디_찾기_요청(findingEmailRequest);
         // then
-        아이디_찾기_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        아이디_찾기_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
     }
 
     @DisplayName("비밀번호 재설정 - 성공")
@@ -344,11 +358,11 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updatePasswordFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_PASSWORD)).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_PASSWORD.getMessage())).given(memberService).updatePassword(any(PasswordUpdateVerificationRequest.class));
         // when
         ResultActions resultActions = 비밀번호_재설정_요청(passwordUpdateVerificationRequest);
         // then
-        비밀번호_재설정_실패(resultActions, new Message(FAIL_TO_UPDATE_PASSWORD));
+        비밀번호_재설정_실패(resultActions, new Message(ErrorMessage.FAIL_TO_UPDATE_PASSWORD));
     }
 
     @DisplayName("로그인 - 성공")
@@ -366,11 +380,55 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void loginFail() throws Exception {
         // given
-        willThrow(new NotFoundException(NOT_FOUND_MEMBER)).given(memberService).login(any(LoginRequest.class));
+        willThrow(new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER)).given(memberService).login(any(LoginRequest.class));
         // when
         ResultActions resultActions = 로그인_요청(loginRequest);
         // then
-        로그인_실패(resultActions, new Message(NOT_FOUND_MEMBER));
+        로그인_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_MEMBER));
+    }
+
+    @DisplayName("이메일 인증번호 전송 - 성공")
+    @Test
+    void sendValidationTokenSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).sendEmailValidationToken(any(VerificationNumberBySendingEmailRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
+        // then
+        이메일_인증번호_전송_성공(resultActions);
+    }
+
+    @DisplayName("이메일 인증번호 전송 - 실패")
+    @Test
+    void sendValidationTokenFail() throws Exception {
+        // given
+        willThrow(new MailSendException(ErrorMessage.FAIL_TO_SEND_EMAIL.getMessage())).given(memberService).sendEmailValidationToken(any(VerificationNumberBySendingEmailRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
+        // then
+        이메일_인증번호_전송_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEND_EMAIL));
+    }
+
+    @DisplayName("이메일 인증번호 검증 - 성공")
+    @Test
+    void validateSignUpEmailSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).validateSignUpEmail(any(EmailAuthRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_검증_요청(emailAuthRequest);
+        // then
+        이메일_인증번호_검증_성공(resultActions);
+    }
+
+    @DisplayName("이메일 인증번호 검증 - 실패")
+    @Test
+    void validateSignUpEmailFail() throws Exception {
+        // given
+        willThrow(new BadRequestException(ErrorMessage.NOT_EQUAL_VALIDATION_TOKEN)).given(memberService).validateSignUpEmail(any(EmailAuthRequest.class));
+        // when
+        ResultActions resultActions = 이메일_인증번호_검증_요청(emailAuthRequest);
+        // then
+        이메일_인증번호_검증_실패(resultActions, new Message(ErrorMessage.NOT_EQUAL_VALIDATION_TOKEN));
     }
 
     private ResultActions 회원정보_조회_요청() throws Exception {
@@ -393,10 +451,11 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 회원정보_수정_요청(UpdateRequest updateRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members")
+        return mockMvc.perform(multipart("/api/v1/members/update")
+                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
+                .file(new MockMultipartFile("updateRequest", "", "application/json", toJson(updateRequest).getBytes()))
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(updateRequest)));
+                .contentType(MediaType.MULTIPART_FORM_DATA));
     }
 
     private void 회원정보_수정_성공(ResultActions resultActions, UpdateResponse updateResponse) throws Exception {
@@ -414,7 +473,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 마이페이지_비밀번호_재설정_요청(PasswordUpdateRequest passwordUpdateRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members/mypage/password")
+        return mockMvc.perform(patch("/api/v1/members/update/mypage/password")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(passwordUpdateRequest)));
@@ -546,7 +605,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members/password")
+        return mockMvc.perform(patch("/api/v1/members/update/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(passwordUpdateVerificationRequest)));
     }
@@ -582,5 +641,43 @@ public class MemberControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("login-fail"));
+    }
+
+    private ResultActions 이메일_인증번호_전송_요청(VerificationNumberBySendingEmailRequest verificationNumberBySendingEmailRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/email/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(verificationNumberBySendingEmailRequest)));
+    }
+
+    private void 이메일_인증번호_전송_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("send-validation-token-success"));
+    }
+
+    private void 이메일_인증번호_전송_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("send-validation-token-fail"));
+    }
+
+    private ResultActions 이메일_인증번호_검증_요청(EmailAuthRequest emailAuthRequest) throws Exception {
+        return mockMvc.perform(post("/api/v1/members/email/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(emailAuthRequest)));
+    }
+
+    private void 이메일_인증번호_검증_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("validate-temporary-token-success"));
+    }
+
+    private void 이메일_인증번호_검증_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("validate-temporary-token-fail"));
     }
 }

@@ -1,5 +1,6 @@
 package com.hanssarang.backend.util;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.WrongAccessException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,8 +18,6 @@ public class JwtUtil {
     private static final String JWT_HEADER = "Authorization";
     private static final String SECRET = "ssafy second semester second project - mountaindo";
     private static final long TOKEN_EXPIRE_TIME = 60 * 60 * 1000L;
-    private static final String WRONG_TOKEN = "잘못된 토큰 값입니다.";
-    private static final String EXPIRED_TOKEN = "로그인 정보가 만료되었습니다.";
     private static final String AUTHORIZATION_TYPE = "Bearer";
     private static final String DELIMITER = " ";
     private static final int TOKEN = 1;
@@ -55,7 +54,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new WrongAccessException(EXPIRED_TOKEN);
+            throw new WrongAccessException(ErrorMessage.EXPIRED_TOKEN);
         }
     }
 
@@ -66,7 +65,7 @@ public class JwtUtil {
 
     private static void validateAuthorization(String token) {
         if (!token.startsWith(AUTHORIZATION_TYPE + DELIMITER)) {
-            throw new WrongAccessException(WRONG_TOKEN);
+            throw new WrongAccessException(ErrorMessage.WRONG_TOKEN);
         }
     }
 }

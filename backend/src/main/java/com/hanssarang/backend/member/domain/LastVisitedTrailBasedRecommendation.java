@@ -15,9 +15,9 @@ import javax.validation.constraints.NotNull;
 @SuperBuilder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "member_based_recommendation_id"))
+@AttributeOverride(name = "id", column = @Column(name = "last_visited_trail_based_recommendation_id"))
 @Entity
-public class MemberBasedRecommendation extends BaseEntity {
+public class LastVisitedTrailBasedRecommendation extends BaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

@@ -202,6 +202,19 @@ include::{snippets}/get-member-fail/http-response.adoc[]
 /api/v1/members
 ----
 
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|updateRequest
+|application/json
+|수정할 회원 정보
+
+|file
+|multipart
+|프로필 이미지
+|===
+
 ===== 성공
 .request
 include::{snippets}/update-member-success/http-request.adoc[]
@@ -444,9 +457,9 @@ include::{snippets}/get-hikings-fail/http-response.adoc[]
 |===
 |Path Variable |Type |Description
 
-|email
-|String
-|이메일
+|hikingId
+|int
+|등산 기록 아이디
 |===
 
 ===== 성공
