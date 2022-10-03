@@ -2,7 +2,6 @@ package com.hanssarang.backend.member.service;
 
 import com.hanssarang.backend.common.exception.BadRequestException;
 import com.hanssarang.backend.common.exception.DuplicationException;
-import com.hanssarang.backend.common.exception.NotEqualException;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.member.controller.dto.*;
 import com.hanssarang.backend.member.domain.Member;
@@ -165,10 +164,10 @@ public class MemberService {
         }
     }
 
-    public void sendEmailValidationToken(EmailValidationRequest emailValidationRequest) {
+    public void sendEmailValidationToken(SendVerificationNumberRequest sendVerificationNumberRequest) {
         String emailValidateToken = createRandomString();
-        RedisUtil.setDataExpired(emailValidationRequest.getEmail(), emailValidateToken, 60 * 3L);
-        sendMailMessage(emailValidationRequest.getEmail(), JOIN_MOUNTAINDO_MESSAGE,
+        RedisUtil.setDataExpired(sendVerificationNumberRequest.getEmail(), emailValidateToken, 60 * 3L);
+        sendMailMessage(sendVerificationNumberRequest.getEmail(), JOIN_MOUNTAINDO_MESSAGE,
                 CERTIFICATION_NUMBER_MESSAGE + emailValidateToken + CONFIRMATION_NUMBER);
     }
 
