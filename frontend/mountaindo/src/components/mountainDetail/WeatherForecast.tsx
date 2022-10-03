@@ -211,7 +211,6 @@ function WeatherForecast({location}: Props) {
   const getShortlyWeather = async () => {
     try {
       const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${API_KEY}&numOfRows=1500&pageNo=1&base_date=${todayNum}&base_time=0500&nx=${x}&ny=${y}&dataType=JSON`;
-      console.log('url =>', url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item;
@@ -296,7 +295,6 @@ function WeatherForecast({location}: Props) {
   const getWeeklyWeather = async () => {
     try {
       const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=${weatherCode}&tmFc=${todayNum}0600&dataType=JSON`;
-      console.log(url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item[0];
@@ -339,7 +337,6 @@ function WeatherForecast({location}: Props) {
   const getWeeklyTemp = async () => {
     try {
       const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=${tempCode}&tmFc=${todayNum}0600&dataType=JSON`;
-      console.log(url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item[0];
@@ -363,7 +360,6 @@ function WeatherForecast({location}: Props) {
     if (todayNum === 0 || !x || !y || !weatherCode || !tempCode) {
       return;
     }
-    console.log('data ==>', x, y, weatherCode, tempCode);
     getShortlyWeather();
     getWeeklyWeather();
     getWeeklyTemp();
