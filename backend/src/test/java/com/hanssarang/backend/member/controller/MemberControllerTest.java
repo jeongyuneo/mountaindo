@@ -400,9 +400,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void sendValidationTokenFail() throws Exception {
         // given
-        willThrow(new BadRequestException(FAIL_TO_SEND_EMAIL)).given(memberService).sendEmailValidationToken(any(EmailValidationRequest.class));
+        willThrow(new MailSendException(FAIL_TO_SEND_EMAIL)).given(memberService).sendEmailValidationToken(any(SendVerificationNumberRequest.class));
         // when
-        ResultActions resultActions = 이메일_인증번호_전송_요청(emailValidationRequest);
+        ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
         // then
         이메일_인증번호_전송_실패(resultActions, new Message(FAIL_TO_SEND_EMAIL));
     }
@@ -641,10 +641,10 @@ public class MemberControllerTest extends ApiDocument {
                 .andDo(toDocument("login-fail"));
     }
 
-    private ResultActions 이메일_인증번호_전송_요청(EmailValidationRequest emailValidationRequest) throws Exception {
+    private ResultActions 이메일_인증번호_전송_요청(SendVerificationNumberRequest sendVerificationNumberRequest) throws Exception {
         return mockMvc.perform(post("/api/v1/members/email/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(emailValidationRequest)));
+                .content(toJson(sendVerificationNumberRequest)));
     }
 
     private void 이메일_인증번호_전송_성공(ResultActions resultActions) throws Exception {
@@ -654,7 +654,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private void 이메일_인증번호_전송_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isBadRequest())
+        resultActions.andExpect(status().isInternalServerError())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("send-validation-token-fail"));
