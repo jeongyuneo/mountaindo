@@ -1,5 +1,6 @@
 package com.hanssarang.backend.hiking.service;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.controller.dto.*;
 import com.hanssarang.backend.hiking.domain.Hiking;
@@ -21,8 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.hanssarang.backend.common.domain.ErrorMessage.*;
-
 @RequiredArgsConstructor
 @Service
 public class HikingService {
@@ -36,8 +35,7 @@ public class HikingService {
     private final HikingRepository hikingRepository;
 
     public List<HikingListResponse> getHikings(int memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         return member.getHikings()
                 .stream()
                 .sorted(Comparator.comparing(Hiking::getCreatedDate).reversed())
@@ -53,8 +51,7 @@ public class HikingService {
     }
 
     public HikingResponse getHiking(int memberId, int hikingId) {
-        Hiking hiking = hikingRepository.findByIdAndMemberId(hikingId, memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_HIKING));
+        Hiking hiking = findHiking(memberId, hikingId);
         Trail trail = hiking.getTrail();
         Mountain mountain = trail.getMountain();
         return HikingResponse.builder()
@@ -70,8 +67,7 @@ public class HikingService {
 
     @Transactional(readOnly = true)
     public List<CompletedHikingListResponse> getCompletedHikings(int memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
+        Member member = findMember(memberId);
         List<CompletedHikingListResponse> completedHikingListResponses = new ArrayList<>();
         member.getHikings()
                 .stream()
@@ -97,10 +93,8 @@ public class HikingService {
 
     @Transactional
     public void createHiking(int memberId, HikingRequest hikingRequest, MultipartFile multipartFile) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER));
-        Trail trail = trailRepository.findById(hikingRequest.getTrailId())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_TRAIL));
+        Member member = findMember(memberId);
+        Trail trail = findTrail(hikingRequest);
         member.addHiking(
                 Hiking.builder()
                         .trail(trail)
@@ -114,6 +108,21 @@ public class HikingService {
                         .build()
         );
         memberRepository.save(member);
+    }
+
+    private Member findMember(int memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
+    }
+
+    private Trail findTrail(HikingRequest hikingRequest) {
+        return trailRepository.findById(hikingRequest.getTrailId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
+    }
+
+    private Hiking findHiking(int memberId, int hikingId) {
+        return hikingRepository.findByIdAndMemberId(hikingId, memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_HIKING));
     }
 
     private boolean isCompleted(String path, PathResponse endPoint) {
