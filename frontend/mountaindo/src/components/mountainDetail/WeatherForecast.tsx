@@ -4,10 +4,23 @@ import axios from 'axios';
 import Config from 'react-native-config';
 import AppTextBold from '../AppTextBold';
 import AppText from '../AppText';
+import {
+  ShortlyWeatherLocation,
+  TemperatureLocation,
+  WeatherLocation,
+} from './WeatherLocation';
 
-function WeatherForecast() {
+interface Props {
+  location: string;
+}
+
+function WeatherForecast({location}: Props) {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [x, setX] = useState('');
+  const [y, setY] = useState('');
+  const [weatherCode, setWeatherCode] = useState('');
+  const [tempCode, setTempCode] = useState('');
   const [todayDate, setDate] = useState(0); // 날짜
   const [todayDay, setDay] = useState(0); // 요일
   const [date1After, setDate1After] = useState(0); // 1일 뒤 날짜
@@ -47,6 +60,26 @@ function WeatherForecast() {
 
   // 날씨 API 키 가져오기
   const API_KEY = Config.WEATHER_API_KEY;
+
+  // 산 위치 코드 가져오기
+  const getLocationCode = () => {
+    ShortlyWeatherLocation.map(item => {
+      if (item.value === location) {
+        setX(item.x.toString());
+        setY(item.y.toString());
+      }
+    });
+    WeatherLocation.map(item => {
+      if (item.value === location) {
+        setWeatherCode(item.code);
+      }
+    });
+    TemperatureLocation.map(item => {
+      if (item.value === location) {
+        setTempCode(item.code);
+      }
+    });
+  };
 
   // 주간 날짜, 요일 구하는 함수
   const getDayAndDate = () => {
@@ -177,7 +210,8 @@ function WeatherForecast() {
   // 오늘, 내일, 모레까지의 기상 전망 데이터 받아서 state 세팅
   const getShortlyWeather = async () => {
     try {
-      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${API_KEY}&numOfRows=1500&pageNo=1&base_date=${todayNum}&base_time=0500&nx=55&ny=127&dataType=JSON`;
+      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${API_KEY}&numOfRows=1500&pageNo=1&base_date=${todayNum}&base_time=0500&nx=${x}&ny=${y}&dataType=JSON`;
+      console.log('url =>', url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item;
@@ -261,7 +295,8 @@ function WeatherForecast() {
   // 3일 후부터 5일 후까지 기상 전망 데이터 받아서 set state
   const getWeeklyWeather = async () => {
     try {
-      const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=11B00000&tmFc=${todayNum}0600&dataType=JSON`;
+      const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=${weatherCode}&tmFc=${todayNum}0600&dataType=JSON`;
+      console.log(url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item[0];
@@ -303,7 +338,8 @@ function WeatherForecast() {
   // 3일 후부터 5일 후까지 기온 전망 데이터 받아서 set state
   const getWeeklyTemp = async () => {
     try {
-      const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=11C20401&tmFc=${todayNum}0600&dataType=JSON`;
+      const url = `http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=${API_KEY}&numOfRows=10&pageNo=1&regId=${tempCode}&tmFc=${todayNum}0600&dataType=JSON`;
+      console.log(url);
       const response = await axios.get(url);
       let data: any = JSON.stringify(response);
       let item: any = JSON.parse(data).data.response.body.items.item[0];
@@ -323,13 +359,19 @@ function WeatherForecast() {
 
   useEffect(() => {
     getDayAndDate();
-    if (todayNum === 0) {
+    getLocationCode();
+    if (todayNum === 0 || !x || !y || !weatherCode || !tempCode) {
       return;
     }
+    console.log('data ==>', x, y, weatherCode, tempCode);
     getShortlyWeather();
     getWeeklyWeather();
     getWeeklyTemp();
-  }, [todayNum]);
+  }, [todayNum, x, y, weatherCode, tempCode]);
+
+  useEffect(() => {
+    getLocationCode();
+  }, []);
 
   return (
     <View>
