@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   Pressable,
@@ -20,6 +19,8 @@ import {
 } from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppTextBold from '../../../components/AppTextBold';
+import AppText from '../../../components/AppText';
 
 function SignUp() {
   const dispatch = useAppDispatch();
@@ -108,11 +109,13 @@ function SignUp() {
       });
   }, [disabledEmail, dispatch, email]);
 
+  const [authmail, setAuthmail] = useState(false);
   // 이메일 인증
   const rsquestEmail = () => {
     dispatch(emailRequest({email})).then(res => {
       if (res.meta.requestStatus === 'fulfilled') {
         Alert.alert('이메일 요청', `해당 이메일에서\n 인증번호를 확인하세요!`);
+        setAuthmail(true);
       }
     });
   };
@@ -238,7 +241,7 @@ function SignUp() {
   return (
     <DismissKeyboardView style={styles.wrapper}>
       <ScrollView>
-        <Text style={styles.title}>회원가입</Text>
+        <AppTextBold style={styles.title}>회원가입</AppTextBold>
         <View style={styles.emailInputWrapper}>
           <TextInput
             style={styles.emailInputText}
@@ -253,18 +256,27 @@ function SignUp() {
             onSubmitEditing={() => certificationRef.current?.focus()}
             blurOnSubmit={false}
           />
-          <Pressable
-            style={!disabledEmail ? styles.checkEmailActive : styles.checkEmail}
-            onPress={pressCertificationButton}>
-            <Text style={styles.checkEmailText}>중복확인</Text>
-          </Pressable>
-          <Pressable
-            style={
-              checkEmail === 1 ? styles.checkEmailActive : styles.checkEmail
-            }
-            onPress={rsquestEmail}>
-            <Text style={styles.checkEmailText}>인증</Text>
-          </Pressable>
+          {!disabledEmail ? (
+            <Pressable
+              style={styles.checkEmailActive}
+              onPress={pressCertificationButton}>
+              <AppText style={styles.checkEmailText}>중복확인</AppText>
+            </Pressable>
+          ) : (
+            <Pressable style={styles.checkEmail}>
+              <AppText style={styles.checkEmailText}>중복확인</AppText>
+            </Pressable>
+          )}
+
+          {checkEmail === 1 ? (
+            <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
+              <AppText style={styles.checkEmailText}>인증</AppText>
+            </Pressable>
+          ) : (
+            <Pressable style={styles.checkEmail}>
+              <AppText style={styles.checkEmailText}>인증</AppText>
+            </Pressable>
+          )}
         </View>
         <View>
           <View style={styles.inputWrapper}>
@@ -281,9 +293,15 @@ function SignUp() {
               onSubmitEditing={() => passwordRef.current?.focus()}
               blurOnSubmit={false}
             />
-            <Pressable style={styles.checkEmailActive} onPress={authEmail}>
-              <Text style={styles.checkEmailText}>인증확인</Text>
-            </Pressable>
+            {authmail ? (
+              <Pressable style={styles.checkEmailActive} onPress={authEmail}>
+                <AppText style={styles.checkEmailText}>인증확인</AppText>
+              </Pressable>
+            ) : (
+              <Pressable style={styles.checkEmail}>
+                <AppText style={styles.checkEmailText}>인증확인</AppText>
+              </Pressable>
+            )}
           </View>
           <View style={styles.inputWrapper}>
             <TextInput
@@ -369,9 +387,15 @@ function SignUp() {
             selectedDate={selectedDate}
           />
           <View style={styles.location}>
-            <Text style={styles.locationText}>
+            <AppText style={styles.locationText}>
               실 거주지의 주소를 선택해주세요
-            </Text>
+            </AppText>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
             <LocationPicker
               setSelectedCity={setSelectedCity}
               setSelectedCity2={setSelectedCity2}
@@ -383,10 +407,9 @@ function SignUp() {
             style={
               canGoNext ? styles.registerButtonActive : styles.registerButton
             }
-            disabled={!canGoNext}>
-            <Text style={styles.registerButtonText} onPress={onSubmit}>
-              가입하기
-            </Text>
+            disabled={!canGoNext}
+            onPress={onSubmit}>
+            <AppText style={styles.registerButtonText}>가입하기</AppText>
           </Pressable>
         </View>
       </ScrollView>
@@ -396,6 +419,7 @@ function SignUp() {
 
 const styles = StyleSheet.create({
   authinputText: {
+    fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
     width: 200,
@@ -403,13 +427,12 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     backgroundColor: 'white',
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
   },
   title: {
     marginTop: 40,
     marginBottom: 10,
     color: '#57d696',
-    fontWeight: 'bold',
     fontSize: 25,
   },
   emailInputWrapper: {
@@ -417,9 +440,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   emailInputText: {
+    fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
-    width: 150,
+    width: 180,
     fontSize: 12,
   },
   checkEmail: {
@@ -443,6 +467,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   inputText: {
+    fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
     width: '100%',
@@ -453,7 +478,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerButton: {
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
     borderRadius: 30,
     paddingHorizontal: 100,
     paddingVertical: 10,
