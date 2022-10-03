@@ -80,8 +80,8 @@ public class MemberController {
     }
 
     @PostMapping("/email/1")
-    public ResponseEntity<Void> sendEmailValidationToken(@RequestBody SendVerificationNumberRequest sendVerificationNumberRequest) {
-        memberService.sendEmailValidationToken(sendVerificationNumberRequest);
+    public ResponseEntity<Void> sendEmailValidationToken(@RequestBody VerificationNumberBySendingEmailRequest verificationNumberBySendingEmailRequest) {
+        memberService.sendEmailValidationToken(verificationNumberBySendingEmailRequest);
         return ResponseEntity.ok().build();
     }
 
