@@ -14,19 +14,17 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     String ADD_FILTER_BY_SI = "m.si like concat('%',:si,'%') ";
     String EXCEPT_ZERO_HEIGHT = "and m.height != 0 ";
     String ORDER_BY_COUNT_DESC = "order by v.count desc ";
-    String LEFT_JOIN_WITH_HIKING =
-            "left join (select count(h.trail_id) count, t.mountain_id " +
-                    "   from hiking h " +
-                    "   right join trail t " +
-                    "   on t.trail_id = h.trail_id " +
-                    "   group by t.mountain_id) v " +
-                    "on m.mountain_id = v.mountain_id ";
-    String INNER_JOIN_WITH_TRAIL =
-            "inner join (select distinct t.mountain_id " +
-                    "   from trail t " +
-                    "   where t.name like concat('%',:keyword,'%') " +
-                    "   and t.mountain_id is not null) v " +
-                    "   on m.mountain_id = v.mountain_id ";
+    String LEFT_JOIN_WITH_HIKING = "left join (select count(h.trail_id) count, t.mountain_id " +
+            "   from hiking h " +
+            "   right join trail t " +
+            "   on t.trail_id = h.trail_id " +
+            "   group by t.mountain_id) v " +
+            "on m.mountain_id = v.mountain_id ";
+    String INNER_JOIN_WITH_TRAIL = "inner join (select distinct t.mountain_id " +
+            "   from trail t " +
+            "   where t.name like concat('%',:keyword,'%') " +
+            "   and t.mountain_id is not null) v " +
+            "   on m.mountain_id = v.mountain_id ";
     String AND = "and ";
     String WHERE = "where ";
 
