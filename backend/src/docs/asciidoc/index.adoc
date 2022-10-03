@@ -304,7 +304,7 @@ include::{snippets}/get-mountains-fail/http-response.adoc[]
 |Path Variable |Type |Description
 
 |mountainId
-|Integer
+|int
 |산 아이디
 |===
 
@@ -331,7 +331,7 @@ include::{snippets}/get-mountain-fail/http-response.adoc[]
 |Path Variable |Type |Description
 
 |trailId
-|Integer
+|int
 |등산로 아이디
 |===
 
