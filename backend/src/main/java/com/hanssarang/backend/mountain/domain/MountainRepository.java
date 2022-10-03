@@ -10,8 +10,8 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
 
     String FIND_MOUNTAINS = "select m.* " +
             "from mountain m ";
-    String ADD_SEARCH_BY_KEYWORD = "where m.name like concat('%',:keyword,'%') ";
-    String ADD_FILTER_BY_SI = "m.si like concat('%',:si,'%') ";
+    String SEARCH_BY_KEYWORD = "where m.name like concat('%',:keyword,'%') ";
+    String FILTER_BY_SI = "m.si like concat('%',:si,'%') ";
     String EXCEPT_ZERO_HEIGHT = "and m.height != 0 ";
     String ORDER_BY_COUNT_DESC = "order by v.count desc ";
     String LEFT_JOIN_WITH_HIKING = "left join (select count(h.trail_id) count, t.mountain_id " +
@@ -43,38 +43,38 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     List<Mountain> findIsHot();
 
     @Query(value = FIND_MOUNTAINS +
-            ADD_SEARCH_BY_KEYWORD, nativeQuery = true)
+            SEARCH_BY_KEYWORD, nativeQuery = true)
     List<Mountain> findBySearchMountain(@Param("keyword") String keyword);
 
     @Query(value = FIND_MOUNTAINS +
-            ADD_SEARCH_BY_KEYWORD +
+            SEARCH_BY_KEYWORD +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchMountainExceptZeroHeight(@Param("keyword") String keyword);
 
     @Query(value = FIND_MOUNTAINS +
-            ADD_SEARCH_BY_KEYWORD +
+            SEARCH_BY_KEYWORD +
             AND +
-            ADD_FILTER_BY_SI, nativeQuery = true)
+            FILTER_BY_SI, nativeQuery = true)
     List<Mountain> findBySearchMountainAndFilterBySi(@Param("keyword") String keyword, @Param("si") String si);
 
     @Query(value = FIND_MOUNTAINS +
-            ADD_SEARCH_BY_KEYWORD +
+            SEARCH_BY_KEYWORD +
             AND +
-            ADD_FILTER_BY_SI +
+            FILTER_BY_SI +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchMountainAndFilterBySiExceptZeroHeight(@Param("keyword") String keyword, @Param("si") String si);
 
     @Query(value = FIND_MOUNTAINS +
             LEFT_JOIN_WITH_HIKING +
-            ADD_SEARCH_BY_KEYWORD +
+            SEARCH_BY_KEYWORD +
             ORDER_BY_COUNT_DESC, nativeQuery = true)
     List<Mountain> findMountainsOrderByPopularityDesc(@Param("keyword") String keyword);
 
     @Query(value = FIND_MOUNTAINS +
             LEFT_JOIN_WITH_HIKING +
-            ADD_SEARCH_BY_KEYWORD +
+            SEARCH_BY_KEYWORD +
             AND +
-            ADD_FILTER_BY_SI +
+            FILTER_BY_SI +
             ORDER_BY_COUNT_DESC, nativeQuery = true)
     List<Mountain> findFilteredMountainsOrderByPopularityDesc(@Param("keyword") String keyword, @Param("si") String si);
 
@@ -85,7 +85,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     @Query(value = FIND_MOUNTAINS +
             INNER_JOIN_WITH_TRAIL +
             WHERE +
-            ADD_FILTER_BY_SI, nativeQuery = true)
+            FILTER_BY_SI, nativeQuery = true)
     List<Mountain> findBySearchTrailAndFilterBySi(@Param("keyword") String keyword, @Param("si") String si);
 
     @Query(value = FIND_MOUNTAINS +
@@ -96,7 +96,7 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
     @Query(value = FIND_MOUNTAINS +
             INNER_JOIN_WITH_TRAIL +
             WHERE +
-            ADD_FILTER_BY_SI +
+            FILTER_BY_SI +
             EXCEPT_ZERO_HEIGHT, nativeQuery = true)
     List<Mountain> findBySearchTrailAndFilterBySiExceptZeroHeight(String keyword, String si);
 
