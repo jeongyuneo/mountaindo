@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mail.MailSendException;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
@@ -43,6 +44,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final String IMAGE_URL = "{image url}";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
+    private static final String AUTH_TOKEN = "good";
     private static final int LEVEL = 1;
     private static final int PREFERRED_MOUNTAIN_LOCATION = 2;
     private static final int PREFERRED_HIKING_STYLE = 2;
@@ -61,7 +63,7 @@ public class MemberControllerTest extends ApiDocument {
     private LoginRequest loginRequest;
     private LoginResponse loginResponse;
     private EmailAuthRequest emailAuthRequest;
-    private EmailValidationRequest emailValidationRequest;
+    private SendVerificationNumberRequest sendVerificationTokenRequest;
 
     @MockBean
     private MemberService memberService;
@@ -132,12 +134,12 @@ public class MemberControllerTest extends ApiDocument {
                 .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
                 .build();
-        emailValidationRequest = EmailValidationRequest.builder()
+        sendVerificationTokenRequest = SendVerificationNumberRequest.builder()
                 .email(EMAIL)
                 .build();
         emailAuthRequest = EmailAuthRequest.builder()
                 .email(EMAIL)
-                .token(ACCESS_TOKEN)
+                .authToken(AUTH_TOKEN)
                 .build();
     }
 
@@ -387,9 +389,9 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void sendValidationTokenSuccess() throws Exception {
         // given
-        willDoNothing().given(memberService).sendEmailValidationToken(any(EmailValidationRequest.class));
+        willDoNothing().given(memberService).sendEmailValidationToken(any(SendVerificationNumberRequest.class));
         // when
-        ResultActions resultActions = 이메일_인증번호_전송_요청(emailValidationRequest);
+        ResultActions resultActions = 이메일_인증번호_전송_요청(sendVerificationTokenRequest);
         // then
         이메일_인증번호_전송_성공(resultActions);
     }
