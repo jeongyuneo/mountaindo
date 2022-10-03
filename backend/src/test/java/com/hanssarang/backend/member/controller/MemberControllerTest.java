@@ -417,7 +417,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 마이페이지_비밀번호_재설정_요청(PasswordUpdateRequest passwordUpdateRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members/mypage/password")
+        return mockMvc.perform(patch("/api/v1/members/update/mypage/password")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(passwordUpdateRequest)));
@@ -549,7 +549,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 비밀번호_재설정_요청(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members/password")
+        return mockMvc.perform(patch("/api/v1/members/update/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(passwordUpdateVerificationRequest)));
     }
