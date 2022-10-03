@@ -44,15 +44,12 @@ function SearchSubjectPicker({selectedSubject, setSelectedSubject}: Props) {
 const styles = StyleSheet.create({
   pickerGroup: {
     flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
   picker: {
     width: Dimensions.get('window').width / 2 - 60,
-    // width: 120,
   },
   pickerItem: {
     fontSize: 12,
-    // width: 10,
   },
 });
 

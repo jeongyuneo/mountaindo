@@ -27,8 +27,6 @@ function CourseItem({
     dispatch(getTrailDetail({trailId: trailIdArg}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          console.log('res', res);
-          console.log('name', res.payload?.name);
           moveToCourseDetail(
             res.payload?.name,
             res.payload?.length,
