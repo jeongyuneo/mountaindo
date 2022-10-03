@@ -78,6 +78,21 @@ export const visitedTrailList = createAsyncThunk(
   },
 );
 
+// 방문한 등산 코스 상세 조회
+export const visitedTrailDetail = createAsyncThunk(
+  'userSlice/visitedTrailDetail',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        `/api/v1/hikings/1/${args.hikingId}`,
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 const hikingSlice = createSlice({
   name: 'hiking',
   initialState: {
@@ -121,6 +136,12 @@ const hikingSlice = createSlice({
       })
       .addCase(visitedTrailList.rejected, (state, {payload}) => {
         console.log('visitedTrailList Rejected ==>', payload);
+      })
+      .addCase(visitedTrailDetail.fulfilled, (state, {payload}) => {
+        console.log('visitedTrailDetail Fulfilled ==> ', payload);
+      })
+      .addCase(visitedTrailDetail.rejected, (state, {payload}) => {
+        console.log('visitedTrailDetail Rejected ==>', payload);
       });
   },
 });

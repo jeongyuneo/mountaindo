@@ -1,69 +1,136 @@
+import {faStar as regularStar} from '@fortawesome/free-regular-svg-icons';
+import {faStar} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
 import {Image, Pressable, StyleSheet, View} from 'react-native';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
-import {TrailType} from './VisitedList';
 
-// VisitedList에서 받아온 정보 타입 설정
 interface Props {
-  mountainName: string;
-  address: string;
+  hikingId: number;
+  trailName: string;
   lastHikingDate: string;
-  lastHikingTrailName: string;
+  useTime: string;
+  level: string;
+  mountainName: string;
   moveToVisitedDetail: any;
 }
 
 function VisitedListItem({
-  mountainName,
-  address,
+  hikingId,
+  trailName,
   lastHikingDate,
-  lastHikingTrailName,
+  useTime,
+  level,
+  mountainName,
   moveToVisitedDetail,
 }: Props) {
   return (
     // 개별 아이템 클릭 시 디테일페이지로 이동(등산로 정보, 산 이름, 주소 정보 포함)
     <Pressable
-      style={styles.item}
+      style={styles.wrapper}
       onPress={() => {
-        moveToVisitedDetail();
+        moveToVisitedDetail(hikingId);
       }}>
-      <View style={styles.textContainer}>
-        <AppTextBold style={styles.title}>{mountainName}</AppTextBold>
-        <AppText style={styles.content}>{address}</AppText>
-      </View>
-      <View>
+      <View style={styles.imageContentWrapper}>
         <Image
-          source={require('../../assets/mountainOne.png')}
-          style={styles.mountainImg}
+          source={require('../../assets/gyeryongMountain.jpg')}
+          style={styles.image}
         />
+        <View style={styles.contentWrapper}>
+          <View style={styles.titleContainer}>
+            <AppTextBold style={styles.nameText}>{trailName}</AppTextBold>
+            {level === '하' ? (
+              <>
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon
+                  icon={regularStar}
+                  size={15}
+                  color={'yellow'}
+                />
+                <FontAwesomeIcon
+                  icon={regularStar}
+                  size={15}
+                  color={'yellow'}
+                />
+              </>
+            ) : level === '중' ? (
+              <>
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon
+                  icon={regularStar}
+                  size={15}
+                  color={'yellow'}
+                />
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+              </>
+            )}
+          </View>
+          <View style={styles.contentsContainer}>
+            <AppText style={styles.mountainName}>{lastHikingDate}</AppText>
+            <AppText style={styles.mountainName}>{mountainName}</AppText>
+          </View>
+          <AppText style={styles.heightText}>소요 시간: {useTime}</AppText>
+        </View>
       </View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  item: {
+  titleContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 15,
-    marginHorizontal: 20,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'grey',
+    marginBottom: 7,
   },
-  textContainer: {
-    flexDirection: 'column',
+  wrapper: {
+    marginVertical: 5,
+    borderRadius: 20,
+    padding: 10,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  imageContentWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  contentsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
-  title: {
-    fontSize: 25,
+  contentWrapper: {
+    marginLeft: 20,
   },
-  content: {
-    fontSize: 13,
+  nameText: {
+    fontSize: 18,
+    marginRight: 5,
   },
-  mountainImg: {
+  image: {
+    height: 60,
     width: 80,
-    height: 80,
+    borderRadius: 15,
+  },
+  heightText: {
+    fontSize: 12,
+    marginTop: 5,
+  },
+  mountainName: {
+    fontSize: 12,
   },
 });
 
