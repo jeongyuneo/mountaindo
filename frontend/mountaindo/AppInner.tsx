@@ -28,7 +28,6 @@ import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
-import VisitedDetail from './src/pages/completed/VisitedDetail';
 import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
@@ -64,7 +63,6 @@ export type LoggedInParamList = {
   MountainDetail: any;
   CourseDetail: any;
   Visited: any;
-  VisitedDetail: any;
   MainDetail: any;
   AddressChangeForm: any;
   FindMountain: any;
@@ -101,7 +99,7 @@ function TopTab() {
       <Top.Screen
         name="Visited"
         component={Visited}
-        options={{title: '방문한 산'}}
+        options={{title: '등산 기록'}}
       />
     </Top.Navigator>
   );
@@ -215,11 +213,6 @@ function VisitedTab() {
         name="Complete"
         component={TopTab}
         options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="VisitedDetail"
-        component={VisitedDetail}
-        options={{title: '방문한 산 상세'}}
       />
     </Stack.Navigator>
   );
