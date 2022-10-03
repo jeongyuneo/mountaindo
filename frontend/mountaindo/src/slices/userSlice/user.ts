@@ -17,7 +17,6 @@ export const emailRequest = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.post(`/api/v1/members/email/1`, {
-        // BackEnd코드 수정 후 수정해야할 코드
         email: args.email,
       });
       return response.data;
