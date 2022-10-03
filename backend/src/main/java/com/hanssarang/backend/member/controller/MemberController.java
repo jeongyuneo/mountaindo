@@ -58,13 +58,13 @@ public class MemberController {
                 .body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest, multipartFile));
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/update/password")
     public ResponseEntity<Void> updatePassword(@RequestBody PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {
         memberService.updatePassword(passwordUpdateVerificationRequest);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/mypage/password")
+    @PatchMapping("/update/mypage/password")
     public ResponseEntity<Void> updatePasswordInMyPage(@RequestHeader(AUTHORIZATION) String token, @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
         memberService.updatePasswordInMyPage(JwtUtil.getMemberId(token), passwordUpdateRequest);
         return ResponseEntity.ok().build();
