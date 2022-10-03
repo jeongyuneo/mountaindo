@@ -2,17 +2,26 @@ import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Pressable, ScrollView, StyleSheet, TextInput} from 'react-native';
+import {
+  View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  FlatList,
+} from 'react-native';
+import {useSelector} from 'react-redux';
 import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import MountainListItem from '../../components/mountain/MountainListItem';
 import SearchedMountainListItem from '../../components/mountain/SearchedMountainListItem';
-import {
+import mountainSlice, {
   getMountainDetail,
   getMountainList,
   getSearchedMountain,
 } from '../../slices/mountainSlice/mountain';
 import {useAppDispatch} from '../../store';
+import {RootState} from '../../store/reducer';
 
 type MountainScreenProps = NativeStackScreenProps<
   LoggedInParamList,
@@ -48,7 +57,6 @@ export type MountainDetailType = {
 
 function Mountain({navigation}: MountainScreenProps) {
   const dispatch = useAppDispatch();
-  const [mountainList, setMountainList] = useState<MountainType[] | []>([]);
   const [isResult, setIsResult] = useState(0); // 0 : 검색 전, 1: 검색 결과 없음, 2: 검색 결과 있음
   const [searchInput, setSearchInput] = useState('');
   const [searchResult, setSearchResult] = useState<MountainType[] | []>([]);
@@ -56,37 +64,34 @@ function Mountain({navigation}: MountainScreenProps) {
   const [isPopularity, setIsPopularity] = useState(false);
   const [isHighHeight, setIsHighHeight] = useState(false);
   const [isLowHeight, setIsLowHeight] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const mountainList: MountainListType = useSelector(
+    (state: RootState) => state.mountain.mountainList,
+  );
+  const page = useSelector((state: RootState) => state.mountain.page);
+  const standard = useSelector((state: RootState) => state.mountain.standard);
 
   const onChangeSearch = useCallback(text => {
     setSearchInput(text.trim());
   }, []);
 
-  // 전체 산 목록 API 요청 보내기 (이름순)
-  const dispatchMountainList: any = useCallback((standard: string) => {
-    dispatch(getMountainList({standard: standard}))
-      .then(res => {
-        console.log('MOUNTAINLIST RES ==>', res);
-        if (res.meta.requestStatus === 'fulfilled') {
-          // 고도 낮은 순으로 정렬할 때 고도가 0인 데이터는 제거하기
-          if (standard === 'low-height') {
-            const mountainListByLowHeight: MountainListType = [];
-            res.payload.map((item: any) => {
-              if (item.height !== 0) {
-                mountainListByLowHeight.push(item);
-              }
-            });
-            if (mountainListByLowHeight?.length > 0) {
-              setMountainList(mountainListByLowHeight);
-            }
-          } else {
-            setMountainList(res.payload);
+  // 전체 산 목록 API 요청 보내기 (이름순, 인기순, 고도 높은 순, 고도 낮은 순)
+  const dispatchMountainList: any = useCallback(
+    (standardArg: any, pageArg: number) => {
+      dispatch(getMountainList({standard: standardArg, page: pageArg}))
+        .then(res => {
+          if (res.meta.requestStatus === 'fulfilled') {
+            dispatch(
+              mountainSlice.actions.setStandard({standard: standardArg}),
+            );
           }
-        }
-      })
-      .catch((err: any) => {
-        console.log('MOUNTAINLIST ERR ==>', err);
-      });
-  }, []);
+        })
+        .catch((err: any) => {
+          console.log('MOUNTAINLIST ERR ==>', err);
+        });
+    },
+    [],
+  );
 
   // 특정 산 검색 API 요청 보내가
   const dispatchSearchedMountain = () => {
@@ -123,13 +128,28 @@ function Mountain({navigation}: MountainScreenProps) {
       });
   };
 
+  const getData = (standardArg: string, pageArg: number) => {
+    setLoading(true);
+    dispatchMountainList(standardArg, pageArg);
+    setLoading(false);
+  };
+
+  const onEndReached = () => {
+    if (!loading) {
+      getData(standard, page);
+    }
+  };
+
   useEffect(() => {
-    dispatchMountainList('name');
+    dispatch(mountainSlice.actions.setInitialMountainList());
+    dispatch(mountainSlice.actions.setInitialPage());
+    dispatch(mountainSlice.actions.setStandard({standard: 'name'}));
+    dispatchMountainList('name', 0);
   }, []);
 
   return (
     <View style={styles.wrapper}>
-      <ScrollView>
+      <View>
         <View style={styles.iconSearchWrapper}>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
@@ -146,116 +166,115 @@ function Mountain({navigation}: MountainScreenProps) {
             blurOnSubmit={false}
           />
         </View>
-        <ScrollView horizontal={true}>
-          <View style={styles.citiesWrapper}>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>수도권</AppText>
+        <View>
+          <ScrollView horizontal={true}>
+            <View style={styles.citiesWrapper}>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>수도권</AppText>
+              </View>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>강원도</AppText>
+              </View>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>충청도</AppText>
+              </View>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>경상도</AppText>
+              </View>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>전라도</AppText>
+              </View>
+              <View style={styles.cityWrapper}>
+                <AppText style={styles.cityText}>제주도</AppText>
+              </View>
             </View>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>강원도</AppText>
+          </ScrollView>
+          <ScrollView horizontal={true}>
+            <View style={styles.tagsWrapper}>
+              {isName ? (
+                <Pressable style={styles.tagWrapperActive}>
+                  <AppText style={styles.tagTextActive}>이름순</AppText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    dispatch(mountainSlice.actions.setInitialMountainList());
+                    dispatch(mountainSlice.actions.setInitialPage());
+                    dispatchMountainList('name', 0);
+                    setIsPopularity(false);
+                    setIsName(true);
+                    setIsHighHeight(false);
+                    setIsLowHeight(false);
+                  }}
+                  style={styles.tagWrapper}>
+                  <AppText style={styles.tagText}>이름순</AppText>
+                </Pressable>
+              )}
+              {isPopularity ? (
+                <Pressable style={styles.tagWrapperActive}>
+                  <AppText style={styles.tagTextActive}>인기순</AppText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    dispatch(mountainSlice.actions.setInitialMountainList());
+                    dispatch(mountainSlice.actions.setInitialPage());
+                    dispatchMountainList('popularity', 0);
+                    setIsPopularity(true);
+                    setIsName(false);
+                    setIsHighHeight(false);
+                    setIsLowHeight(false);
+                  }}
+                  style={styles.tagWrapper}>
+                  <AppText style={styles.tagText}>인기순</AppText>
+                </Pressable>
+              )}
+              {isHighHeight ? (
+                <Pressable style={styles.tagWrapperActive}>
+                  <AppText style={styles.tagText2Active}>고도 높은 순</AppText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    dispatch(mountainSlice.actions.setInitialMountainList());
+                    dispatch(mountainSlice.actions.setInitialPage());
+                    dispatchMountainList('high-height', 0);
+                    setIsPopularity(false);
+                    setIsName(false);
+                    setIsHighHeight(true);
+                    setIsLowHeight(false);
+                  }}
+                  style={styles.tagWrapper}>
+                  <AppText style={styles.tagText2}>고도 높은 순</AppText>
+                </Pressable>
+              )}
+              {isLowHeight ? (
+                <Pressable style={styles.tagWrapperActive}>
+                  <AppText style={styles.tagText2Active}>고도 낮은 순</AppText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    dispatch(
+                      mountainSlice.actions.setStandard({
+                        standard: 'low-height',
+                      }),
+                    );
+                    dispatch(mountainSlice.actions.setInitialMountainList());
+                    dispatch(mountainSlice.actions.setInitialPage());
+                    dispatchMountainList('low-height', 0);
+                    setIsPopularity(false);
+                    setIsName(false);
+                    setIsHighHeight(false);
+                    setIsLowHeight(true);
+                  }}
+                  style={styles.tagWrapper}>
+                  <AppText style={styles.tagText2}>고도 낮은 순</AppText>
+                </Pressable>
+              )}
             </View>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>충청도</AppText>
-            </View>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>경상도</AppText>
-            </View>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>전라도</AppText>
-            </View>
-            <View style={styles.cityWrapper}>
-              <AppText style={styles.cityText}>제주도</AppText>
-            </View>
-          </View>
-        </ScrollView>
-        <ScrollView horizontal={true}>
-          <View style={styles.tagsWrapper}>
-            {isName ? (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('name');
-                }}
-                style={styles.tagWrapperActive}>
-                <AppText style={styles.tagTextActive}>이름순</AppText>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('name');
-                  setIsPopularity(false);
-                  setIsName(true);
-                  setIsHighHeight(false);
-                  setIsLowHeight(false);
-                }}
-                style={styles.tagWrapper}>
-                <AppText style={styles.tagText}>이름순</AppText>
-              </Pressable>
-            )}
-            {isPopularity ? (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('popularity');
-                }}
-                style={styles.tagWrapperActive}>
-                <AppText style={styles.tagTextActive}>인기순</AppText>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('popularity');
-                  setIsPopularity(true);
-                  setIsName(false);
-                  setIsHighHeight(false);
-                  setIsLowHeight(false);
-                }}
-                style={styles.tagWrapper}>
-                <AppText style={styles.tagText}>인기순</AppText>
-              </Pressable>
-            )}
-            {isHighHeight ? (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('high-height');
-                }}
-                style={styles.tagWrapperActive}>
-                <AppText style={styles.tagText2Active}>고도 높은 순</AppText>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('high-height');
-                  setIsPopularity(false);
-                  setIsName(false);
-                  setIsHighHeight(true);
-                  setIsLowHeight(false);
-                }}
-                style={styles.tagWrapper}>
-                <AppText style={styles.tagText2}>고도 높은 순</AppText>
-              </Pressable>
-            )}
-            {isLowHeight ? (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('low-height');
-                }}
-                style={styles.tagWrapperActive}>
-                <AppText style={styles.tagText2Active}>고도 낮은 순</AppText>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  dispatchMountainList('low-height');
-                  setIsPopularity(false);
-                  setIsName(false);
-                  setIsHighHeight(false);
-                  setIsLowHeight(true);
-                }}
-                style={styles.tagWrapper}>
-                <AppText style={styles.tagText2}>고도 낮은 순</AppText>
-              </Pressable>
-            )}
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
         {!!searchResult && isResult === 2 ? (
           <View>
             {searchResult.map(item => (
@@ -276,38 +295,47 @@ function Mountain({navigation}: MountainScreenProps) {
           </View>
         ) : isResult === 0 ? (
           <View>
-            {mountainList?.length > 0 &&
-              mountainList.map(
-                (item: {
-                  address: string;
-                  height: number;
-                  hot: boolean;
-                  imageUrl: string;
-                  mountainId: number;
-                  name: string;
-                }) => (
-                  <Pressable
-                    onPress={() => {
-                      dispatchMountainDetail(item.mountainId);
-                    }}>
-                    <MountainListItem
-                      address={item.address}
-                      height={item.height}
-                      hot={item.hot}
-                      imageUrl={item.imageUrl}
-                      mountainId={item.mountainId}
-                      name={item.name}
-                    />
-                  </Pressable>
-                ),
-              )}
+            {mountainList?.length > 0 && (
+              <FlatList
+                data={mountainList}
+                keyExtractor={item => String(item.mountainId)}
+                onEndReached={onEndReached}
+                onEndReachedThreshold={0.6}
+                refreshing={false}
+                renderItem={({item}) => {
+                  const {
+                    address,
+                    height,
+                    hot,
+                    imageUrl,
+                    mountainId,
+                    name,
+                  }: MountainType = item;
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        dispatchMountainDetail(item.mountainId);
+                      }}>
+                      <MountainListItem
+                        address={address}
+                        height={height}
+                        hot={hot}
+                        imageUrl={imageUrl}
+                        mountainId={mountainId}
+                        name={name}
+                      />
+                    </Pressable>
+                  );
+                }}
+              />
+            )}
           </View>
         ) : (
           <View style={styles.searchResultWrapper}>
             <AppText style={styles.searchResult}>검색 결과가 없습니다.</AppText>
           </View>
         )}
-      </ScrollView>
+      </View>
     </View>
   );
 }
