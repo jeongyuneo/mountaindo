@@ -17,7 +17,6 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FIL
 public class ImageUtil {
 
     private static final String IMAGE_ROOT_PATH = "/home/ubuntu/img";
-    private static final String DELIMITER = "-";
     private static final String POINT = ".";
     private static final String SEPARATOR = "/";
     private static final String IMAGE_JPG = "image/jpg";
