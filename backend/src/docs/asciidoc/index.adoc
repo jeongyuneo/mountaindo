@@ -202,6 +202,19 @@ include::{snippets}/get-member-fail/http-response.adoc[]
 /api/v1/members
 ----
 
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|updateRequest
+|application/json
+|수정할 회원 정보
+
+|file
+|multipart
+|프로필 이미지
+|===
+
 ===== 성공
 .request
 include::{snippets}/update-member-success/http-request.adoc[]
