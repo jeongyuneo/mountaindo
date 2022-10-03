@@ -97,11 +97,13 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
       });
   }, [email, name, checkEmail, emailValid]);
 
+  const [auth, setAuth] = useState(false);
   // 이메일 인증
   const rsquestEmail = () => {
     dispatch(emailRequest({email})).then(res => {
       if (res.meta.requestStatus === 'fulfilled') {
         Alert.alert('이메일 요청', `해당 이메일에서\n 인증번호를 확인하세요!`);
+        setAuth(true);
       }
     });
   };
@@ -144,7 +146,7 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             blurOnSubmit={false}
           />
           <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
-            <Text style={styles.checkEmailText}>인증요청</Text>
+            <AppText style={styles.checkEmailText}>인증요청</AppText>
           </Pressable>
         </View>
         <View style={styles.emailinputView}>
@@ -159,9 +161,15 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             blurOnSubmit={false}
           />
-          <Pressable style={styles.checkEmailActive} onPress={authEmail}>
-            <Text style={styles.checkEmailText}>인증</Text>
-          </Pressable>
+          {auth ? (
+            <Pressable style={styles.checkEmailActive} onPress={authEmail}>
+              <AppText style={styles.checkEmailText}>인증</AppText>
+            </Pressable>
+          ) : (
+            <Pressable style={styles.checkEmail}>
+              <AppText style={styles.checkEmailText}>인증</AppText>
+            </Pressable>
+          )}
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -228,6 +236,13 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  checkEmail: {
+    backgroundColor: '#c5c5c5',
+    borderRadius: 30,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
+    marginTop: 10,
+  },
   authinputText: {
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
@@ -281,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   findPasswordButton: {
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
     borderRadius: 30,
     paddingHorizontal: 100,
     paddingVertical: 10,
