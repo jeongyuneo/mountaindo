@@ -164,28 +164,6 @@ class MountainControllerTest extends ApiDocument {
         등산로_상세_조회_실패(resultActions, new Message(ErrorMessage.NOT_FOUND_TRAIL));
     }
 
-    @DisplayName("산/등산로 검색 - 성공")
-    @Test
-    void searchMountainOrTrailSuccess() throws Exception {
-        // given
-        willReturn(mountainListResponses).given(mountainService).searchMountainOrTrail(anyString());
-        // when
-        ResultActions resultActions = 산_또는_등산로_검색_요청(NAME);
-        // then
-        산_또는_등산로_검색_성공(resultActions, mountainListResponses);
-    }
-
-    @DisplayName("산/등산로 검색 - 실패")
-    @Test
-    void searchMountainOrTrailFail() throws Exception {
-        // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL.getMessage())).given(mountainService).searchMountainOrTrail(anyString());
-        // when
-        ResultActions resultActions = 산_또는_등산로_검색_요청(NAME);
-        // then
-        산_또는_등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL));
-    }
-
     @DisplayName("산 검색 - 성공")
     @Test
     void searchMountainSuccess() throws Exception {
