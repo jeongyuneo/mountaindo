@@ -14,8 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -79,7 +81,6 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS)
                 .nickname(NICKNAME)
-                .imageUrl(IMAGE_URL)
                 .build();
         updateResponse = UpdateResponse.builder()
                 .nickname(NICKNAME)
@@ -157,7 +158,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberSuccess() throws Exception {
         // given
-        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
+        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
@@ -168,7 +169,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
+        willThrow(new UnexpectedRollbackException(FAIL_TO_UPDATE_MEMBER)).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
@@ -393,10 +394,11 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 회원정보_수정_요청(UpdateRequest updateRequest) throws Exception {
-        return mockMvc.perform(patch("/api/v1/members")
+        return mockMvc.perform(multipart("/api/v1/members/update")
+                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
+                .file(new MockMultipartFile("updateRequest", "", "application/json", toJson(updateRequest).getBytes()))
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(updateRequest)));
+                .contentType(MediaType.MULTIPART_FORM_DATA));
     }
 
     private void 회원정보_수정_성공(ResultActions resultActions, UpdateResponse updateResponse) throws Exception {
