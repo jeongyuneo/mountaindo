@@ -46,4 +46,9 @@ public interface MountainRepository extends JpaRepository<Mountain, Integer> {
             "            and t.mountain_id is not null) v " +
             "on m.mountain_id = v.mountain_id", nativeQuery = true)
     List<Mountain> findByTrailNameContaining(@Param("keyword") String keyword);
+
+    @Query(value = "select * " +
+            "from mountain " +
+            "where si like concat('%',:si,'%')", nativeQuery = true)
+    List<Mountain> findBySi(String si);
 }

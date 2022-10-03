@@ -37,6 +37,12 @@ public class MountainController {
                 .body(mountainService.getTrail(trailId));
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<MountainListResponse>> getMountainsByArea(@RequestHeader("Authorization") String token, @RequestParam(required = false) String si) {
+        return ResponseEntity.ok()
+                .body(mountainService.getMountainsByArea(si));
+    }
+
     @GetMapping("/search/1")
     public ResponseEntity<List<MountainListResponse>> searchMountainOrTrail(@RequestHeader(AUTHORIZATION) String token, @RequestParam String keyword) {
         return ResponseEntity.ok()

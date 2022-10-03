@@ -87,6 +87,10 @@ public class MountainService {
                 .build();
     }
 
+    public List<MountainListResponse> getMountainsByArea(String si) {
+        return getMountainListResponses(mountainRepository.findBySi(si));
+    }
+
     public List<MountainListResponse> searchMountainOrTrail(String keyword) {
         Set<Mountain> mountains = new HashSet<>();
         mountains.addAll(mountainRepository.findByNameContaining(keyword));
