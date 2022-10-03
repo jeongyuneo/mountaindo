@@ -16,6 +16,7 @@ interface Props {
   onSave: any;
   getPhotoUri: any;
   moveToTrackingEnd: any;
+  imageFile: any;
 }
 
 const ShareModal = ({
@@ -24,8 +25,8 @@ const ShareModal = ({
   kakaoShare,
   onCapture,
   onSave,
-  getPhotoUri,
   moveToTrackingEnd,
+  imageFile,
 }: Props) => {
   return (
     <View style={styles.centeredView}>
@@ -45,9 +46,8 @@ const ShareModal = ({
             <View>
               <Pressable
                 style={styles.shareButton}
-                onPress={async () => {
-                  const uri = await getPhotoUri();
-                  moveToTrackingEnd(uri);
+                onPress={() => {
+                  moveToTrackingEnd(imageFile);
                 }}>
                 <AppText style={styles.shareText}>내 기록 저장하기</AppText>
               </Pressable>

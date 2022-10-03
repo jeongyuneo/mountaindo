@@ -5,17 +5,16 @@ import axiosService from '../../store/axiosService';
 export const endHiking = createAsyncThunk(
   'userSlice/endHiking',
   async (args: any, {rejectWithValue}) => {
-    console.log(args);
     try {
-      const response = await axiosService.post('/api/v1/hikings', {
-        trailId: args.trailId,
-        path: args.path,
-        endPoint: args.endPoint,
-        accumulatedHeight: args.accumulatedHeight,
-        distance: args.distance,
-        useTime: args.useTime,
-        imageUrl: args.imageUrl,
-      });
+      const response = await axiosService.post(
+        '/api/v1/hikings',
+        {hikingRequest: args.hikingRequest},
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
