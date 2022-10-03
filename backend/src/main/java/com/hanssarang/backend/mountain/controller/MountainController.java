@@ -38,20 +38,20 @@ public class MountainController {
     }
 
     @GetMapping("/search/1")
-    public ResponseEntity<List<MountainListResponse>> searchMountainOrTrail(@RequestHeader(AUTHORIZATION) String token, @RequestParam String keyword) {
+    public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader(AUTHORIZATION) String token,
+                                                                     @RequestParam String keyword,
+                                                                     @RequestParam String sort,
+                                                                     @RequestParam String si) {
         return ResponseEntity.ok()
-                .body(mountainService.searchMountainOrTrail(keyword));
+                .body(mountainService.searchMountain(keyword, sort, si));
     }
 
     @GetMapping("/search/2")
-    public ResponseEntity<List<MountainListResponse>> searchMountain(@RequestHeader(AUTHORIZATION) String token, @RequestParam String keyword) {
+    public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader(AUTHORIZATION) String token,
+                                                                  @RequestParam String keyword,
+                                                                  @RequestParam String sort,
+                                                                  @RequestParam String si) {
         return ResponseEntity.ok()
-                .body(mountainService.searchMountain(keyword));
-    }
-
-    @GetMapping("/search/3")
-    public ResponseEntity<List<MountainListResponse>> searchTrail(@RequestHeader(AUTHORIZATION) String token, @RequestParam String keyword) {
-        return ResponseEntity.ok()
-                .body(mountainService.searchTrail(keyword));
+                .body(mountainService.searchTrail(keyword, sort, si));
     }
 }
