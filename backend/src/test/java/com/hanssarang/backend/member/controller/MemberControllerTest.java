@@ -89,6 +89,7 @@ public class MemberControllerTest extends ApiDocument {
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
                 .password(PASSWORD)
+                .newPassword(PASSWORD + PASSWORD)
                 .build();
         emailResponse = EmailResponse.builder()
                 .email(EMAIL)
