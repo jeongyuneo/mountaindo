@@ -100,7 +100,7 @@ public class MemberService {
                 .phone(member.getPhone())
                 .address(member.getAddress().getFullAddress())
                 .nickname(member.getNickname())
-                .imageUrl(member.getImageUrl())
+                .profileImage(ImageUtil.toByteArray(member.getImageUrl()))
                 .build();
     }
 
