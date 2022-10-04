@@ -143,7 +143,7 @@ export const survey = createAsyncThunk(
   'userSlice/survey',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.post('/api/v1/surveys', {
+      const response = await axiosService.post('/api/v1/members/survey', {
         level: args.survey1,
         preferredMountainLocation: args.survey2,
         preferredHikingStyle: args.survey3,
