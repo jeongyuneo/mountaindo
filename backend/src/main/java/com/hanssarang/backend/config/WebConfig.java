@@ -11,8 +11,6 @@ import static com.hanssarang.backend.common.domain.Message.AUTHORIZATION;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private static final String EXCLUDE_PATH = "/api/v1/members/**";
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -25,7 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
-        interceptorRegistry.addInterceptor(new JwtAuthInterceptor())
-                .excludePathPatterns(EXCLUDE_PATH);
+        interceptorRegistry.addInterceptor(new JwtAuthInterceptor());
     }
 }
