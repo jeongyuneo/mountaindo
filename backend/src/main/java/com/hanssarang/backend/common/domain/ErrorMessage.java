@@ -16,7 +16,6 @@ public enum ErrorMessage {
     FAIL_TO_GET_MOUNTAINS("산 목록 조회에 실패했습니다."),
     FAIL_TO_SEARCH_MOUNTAIN("산 검색에 실패했습니다."),
     FAIL_TO_SEARCH_TRAIL("등산로 검색에 실패했습니다."),
-    FAIL_TO_SEARCH_MOUNTAIN_OR_TRAIL("산 또는 등산로 검색에 실패했습니다."),
     FAIL_TO_CREATE_HIKING("등산 정보 저장에 실패했습니다."),
     FAIL_TO_SEND_EMAIL("이메일 전송에 실패했습니다."),
     NOT_FOUND_MEMBER("사용자를 찾을 수 없습니다."),
@@ -30,7 +29,8 @@ public enum ErrorMessage {
     WRONG_PATH("잘못된 경로입니다."),
     WRONG_TOKEN("잘못된 토큰 값입니다."),
     WRONG_CONTENT_TYPE("잘못된 확장자입니다."),
-    EXPIRED_TOKEN("로그인 정보가 만료되었습니다.");
+    EXPIRED_TOKEN("로그인 정보가 만료되었습니다."),
+    NO_TOKEN("토큰이 없습니다.");
 
     private final String message;
 }
