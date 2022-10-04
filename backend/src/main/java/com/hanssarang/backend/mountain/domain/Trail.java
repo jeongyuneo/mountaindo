@@ -2,7 +2,6 @@ package com.hanssarang.backend.mountain.domain;
 
 import com.hanssarang.backend.common.domain.BaseEntity;
 import com.hanssarang.backend.member.domain.LastVisitedTrailBasedRecommendation;
-import com.hanssarang.backend.member.domain.MemberBasedRecommendation;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -43,14 +42,6 @@ public class Trail extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "trail", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<MemberBasedRecommendation> memberBasedRecommendations = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "trail")
-    private List<LastVisitedTrailBasedRecommendation> originals = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "recommendedTrail", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
