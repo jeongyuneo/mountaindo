@@ -56,10 +56,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<MemberBasedRecommendation> memberBasedRecommendations = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<LastVisitedTrailBasedRecommendation> lastVisitedTrailBasedRecommendations = new ArrayList<>();
-
     public void updatePassword(PasswordEncoder passwordEncoder, String newPassword) {
         this.password = passwordEncoder.encode(newPassword);
     }
