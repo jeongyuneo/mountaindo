@@ -22,7 +22,7 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     private static final String LOGIN = "/login";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestURI = request.getRequestURI();
         String requestMethod = request.getMethod();
         if (MEMBER_REQUEST.equals(requestURI) && HttpMethod.POST.matches(requestMethod)
