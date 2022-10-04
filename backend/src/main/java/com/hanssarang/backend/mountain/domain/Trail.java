@@ -49,6 +49,10 @@ public class Trail extends BaseEntity {
     private List<MemberBasedRecommendation> memberBasedRecommendations = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "trail", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "trail")
+    private List<LastVisitedTrailBasedRecommendation> originals = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "recommendedTrail", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<LastVisitedTrailBasedRecommendation> lastVisitedTrailBasedRecommendations = new ArrayList<>();
 }
