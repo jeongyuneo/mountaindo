@@ -106,15 +106,7 @@ function Mountain({navigation}: MountainScreenProps) {
           location: locationArg,
           page: pageArg,
         }),
-      )
-        .then(res => {
-          if (res.meta.requestStatus === 'fulfilled') {
-            console.log('MOUNTAINLIST RES ==>', res);
-          }
-        })
-        .catch((err: any) => {
-          console.log('MOUNTAINLIST ERR ==>', err);
-        });
+      );
     },
     [],
   );
