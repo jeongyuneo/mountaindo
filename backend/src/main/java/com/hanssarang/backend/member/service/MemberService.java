@@ -146,7 +146,6 @@ public class MemberService {
         return LoginResponse.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
-                .imageUrl(member.getImageUrl())
                 .isCompletedSurvey(member.isCompletedSurvey())
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();
