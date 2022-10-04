@@ -15,7 +15,6 @@ export const getMountainList = createAsyncThunk(
       const response = await axiosService.get(
         `api/v1/mountains?sort=${args.standard}&si=${args.location}&page=${args.page}`,
       );
-      console.log('url ==> ', response.request);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -28,8 +27,10 @@ export const getSearchedMountain = createAsyncThunk(
   'mountainSlice/getSearchedMountain',
   async (args: any, {rejectWithValue}) => {
     try {
+      const url = `api/v1/mountains/search/1?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`;
+      console.log(url);
       const response = await axiosService.get(
-        `api/v1/mountains/search/2?keyword=${args.keyword}`,
+        `api/v1/mountains/search/1?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
       return response.data;
     } catch (err: any) {
@@ -43,8 +44,10 @@ export const getSearchedTrail = createAsyncThunk(
   'mountainSlice/getSearchTrail',
   async (args: any, {rejectWithValue}) => {
     try {
+      const url = `api/v1/mountains/search/2?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`;
+      console.log(url);
       const response = await axiosService.get(
-        `api/v1/mountains/search/3?keyword=${args.keyword}`,
+        `api/v1/mountains/search/2?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
       return response.data;
     } catch (err: any) {
