@@ -177,8 +177,7 @@ public class RankingControllerTest extends ApiDocument {
     }
 
     private ResultActions 전체랭킹내_사용자_검색_요청(String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/1?keyword=" + keyword)
-                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+        return mockMvc.perform(get("/api/v1/rankings/1?keyword=" + keyword));
     }
 
     private void 전체랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
@@ -215,8 +214,7 @@ public class RankingControllerTest extends ApiDocument {
     }
 
     private ResultActions 산랭킹내_사용자_검색_요청(int mountainId, String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?keyword=" + keyword)
-                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?keyword=" + keyword));
     }
 
     private void 산랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
