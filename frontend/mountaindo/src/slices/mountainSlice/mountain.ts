@@ -27,8 +27,6 @@ export const getSearchedMountain = createAsyncThunk(
   'mountainSlice/getSearchedMountain',
   async (args: any, {rejectWithValue}) => {
     try {
-      const url = `api/v1/mountains/search/1?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`;
-      console.log(url);
       const response = await axiosService.get(
         `api/v1/mountains/search/1?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
@@ -44,8 +42,6 @@ export const getSearchedTrail = createAsyncThunk(
   'mountainSlice/getSearchTrail',
   async (args: any, {rejectWithValue}) => {
     try {
-      const url = `api/v1/mountains/search/2?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`;
-      console.log(url);
       const response = await axiosService.get(
         `api/v1/mountains/search/2?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
