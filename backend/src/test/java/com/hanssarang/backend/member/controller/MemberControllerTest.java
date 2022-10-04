@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +47,7 @@ public class MemberControllerTest extends ApiDocument {
     private static final String NICKNAME = "나는 부회장";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
     private static final String AUTH_TOKEN = "good";
+    private static final byte[] IMAGE_URL = "{image url}".getBytes(StandardCharsets.UTF_8);
     private static final int LEVEL = 1;
     private static final int PREFERRED_MOUNTAIN_LOCATION = 2;
     private static final int PREFERRED_HIKING_STYLE = 2;
@@ -78,7 +80,7 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS.getFullAddress())
                 .nickname(NICKNAME)
-                .imageUrl(IMAGE_URL)
+                .profileImage(IMAGE_URL)
                 .build();
         updateRequest = UpdateRequest.builder()
                 .name(NAME)
@@ -131,7 +133,6 @@ public class MemberControllerTest extends ApiDocument {
         loginResponse = LoginResponse.builder()
                 .memberId(ID)
                 .nickname(NICKNAME)
-                .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
                 .build();
         sendVerificationTokenRequest = VerificationNumberBySendingEmailRequest.builder()
