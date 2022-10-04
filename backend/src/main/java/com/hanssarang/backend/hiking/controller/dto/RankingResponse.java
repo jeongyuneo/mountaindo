@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RankingResponse {
 
-    private String imageUrl;
+    private byte[] image;
     private int ranking;
     private String nickname;
     private int accumulatedHeight;

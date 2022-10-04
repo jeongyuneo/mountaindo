@@ -6,10 +6,12 @@ import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,18 +60,18 @@ public class RankingService {
     }
 
     private RankingListResponse getRankingListResponse(List<Member> members, int myRanking, Member member) {
+        List<RankingResponse> rankings = new ArrayList<>();
+        IntStream.range(1, members.size())
+                .forEach(ranking -> {
+                    Member currentMember = members.get(ranking - 1);
+                    rankings.add(getRankingResponse(ranking, currentMember));
+                });
         return RankingListResponse.builder()
-                .imageUrl(member.getImageUrl())
+                .image(ImageUtil.toByteArray(member.getImageUrl()))
                 .ranking(myRanking)
                 .nickname(member.getNickname())
                 .accumulatedHeight(member.getAccumulatedHeight())
-                .rankings(members.stream()
-                        .map(currentMember -> RankingResponse.builder()
-                                .imageUrl(currentMember.getImageUrl())
-                                .nickname(currentMember.getNickname())
-                                .accumulatedHeight(currentMember.getAccumulatedHeight())
-                                .build())
-                        .collect(Collectors.toList()))
+                .rankings(rankings)
                 .build();
     }
 
@@ -77,15 +79,19 @@ public class RankingService {
         for (int ranking = 1; ranking <= members.size(); ranking++) {
             Member member = members.get(ranking - 1);
             if (member.getNickname().equals(keyword)) {
-                return RankingResponse.builder()
-                        .ranking(ranking)
-                        .nickname(member.getNickname())
-                        .imageUrl(member.getImageUrl())
-                        .accumulatedHeight(member.getAccumulatedHeight())
-                        .build();
+                return getRankingResponse(ranking, member);
             }
         }
         return RankingResponse.builder().build();
+    }
+
+    private RankingResponse getRankingResponse(int ranking, Member member) {
+        return RankingResponse.builder()
+                .ranking(ranking)
+                .nickname(member.getNickname())
+                .image(ImageUtil.toByteArray(member.getImageUrl()))
+                .accumulatedHeight(member.getAccumulatedHeight())
+                .build();
     }
 
     private int getMyRanking(int memberId, List<Member> members) {

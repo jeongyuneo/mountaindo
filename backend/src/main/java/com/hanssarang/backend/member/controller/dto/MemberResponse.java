@@ -16,5 +16,5 @@ public class MemberResponse {
     private String phone;
     private String address;
     private String nickname;
-    private String imageUrl;
+    private byte[] profileImage;
 }
