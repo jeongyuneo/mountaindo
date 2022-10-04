@@ -111,7 +111,6 @@ public class MemberService {
         memberRepository.save(member);
         return UpdateResponse.builder()
                 .nickname(member.getNickname())
-                .imageUrl(imageUrl)
                 .token(JwtUtil.generateToken(memberId, member.getNickname()))
                 .build();
     }
