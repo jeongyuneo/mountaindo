@@ -3,7 +3,6 @@ package com.hanssarang.backend.hiking.controller.dto;
 import lombok.*;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Getter
 @Builder
@@ -17,5 +16,5 @@ public class HikingResponse {
     private double distance;
     private LocalTime useTime;
     private double accumulatedHeight;
-    private String imageUrl;
+    private byte[] image;
 }
