@@ -35,7 +35,7 @@ public class RankingControllerTest extends ApiDocument {
     private static final int ID = 1;
     private static final String IMAGE_URL = "imageUrl";
     private static final int RANKING = 5;
-    private static final String NICKNAME = "김마운";
+    private static final String NICKNAME = "닉네임";
     private static final int ACCUMULATED_HEIGHT = 1000;
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
 
