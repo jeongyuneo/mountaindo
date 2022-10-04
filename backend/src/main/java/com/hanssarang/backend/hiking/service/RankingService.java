@@ -6,6 +6,7 @@ import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,13 +60,13 @@ public class RankingService {
 
     private RankingListResponse getRankingListResponse(List<Member> members, int myRanking, Member member) {
         return RankingListResponse.builder()
-                .imageUrl(member.getImageUrl())
+                .image(ImageUtil.toByteArray(member.getImageUrl()))
                 .ranking(myRanking)
                 .nickname(member.getNickname())
                 .accumulatedHeight(member.getAccumulatedHeight())
                 .rankings(members.stream()
                         .map(currentMember -> RankingResponse.builder()
-                                .imageUrl(currentMember.getImageUrl())
+                                .image(ImageUtil.toByteArray(currentMember.getImageUrl()))
                                 .nickname(currentMember.getNickname())
                                 .accumulatedHeight(currentMember.getAccumulatedHeight())
                                 .build())
@@ -80,7 +81,7 @@ public class RankingService {
                 return RankingResponse.builder()
                         .ranking(ranking)
                         .nickname(member.getNickname())
-                        .imageUrl(member.getImageUrl())
+                        .image(ImageUtil.toByteArray(member.getImageUrl()))
                         .accumulatedHeight(member.getAccumulatedHeight())
                         .build();
             }
