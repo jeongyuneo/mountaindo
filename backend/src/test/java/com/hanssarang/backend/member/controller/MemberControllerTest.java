@@ -44,7 +44,6 @@ public class MemberControllerTest extends ApiDocument {
     private static final String PHONE = "010-3333-3333";
     private static final Address ADDRESS = Address.builder().si("경기도").gu("수원시").dong("영통구").build();
     private static final String NICKNAME = "나는 부회장";
-    private static final String IMAGE_URL = "{image url}";
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
     private static final String AUTH_TOKEN = "good";
     private static final int LEVEL = 1;
