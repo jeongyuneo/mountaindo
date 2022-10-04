@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -49,7 +50,7 @@ public class HikingControllerTest extends ApiDocument {
     private static final double LONGITUDE = 500.1937;
     private static final double ACCUMULATED_HEIGHT = 320.45;
     private static final double DISTANCE = 100.3;
-    private static final String IMAGE_URL = "{image url}";
+    private static final byte[] IMAGE_URL = "{image url}".getBytes(StandardCharsets.UTF_8);
     private static final LocalTime USE_TIME = LocalTime.parse("16:40:20");
     private static final String LEVEL = "중";
 
@@ -99,7 +100,7 @@ public class HikingControllerTest extends ApiDocument {
                 .trailName(TRAIL_NAME)
                 .distance(DISTANCE)
                 .useTime(USE_TIME)
-                .imageUrl(IMAGE_URL)
+                .image(IMAGE_URL)
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .build();
     }
