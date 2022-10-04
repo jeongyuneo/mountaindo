@@ -129,15 +129,8 @@ function TrackingEnd({
 
   const getImageFile = async () => {
     const uri = await getPhotoUri();
-    const url = uri.slice(7);
 
-    const file = {
-      uri: uri,
-      type: 'image/jpg',
-      name: 'reusltImage.jpg',
-    };
-
-    return file;
+    return uri;
   };
 
   useEffect(() => {
