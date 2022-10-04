@@ -88,7 +88,6 @@ public class MemberControllerTest extends ApiDocument {
                 .build();
         updateResponse = UpdateResponse.builder()
                 .nickname(NICKNAME)
-                .imageUrl(IMAGE_URL)
                 .token(ACCESS_TOKEN)
                 .build();
         passwordUpdateRequest = PasswordUpdateRequest.builder()
