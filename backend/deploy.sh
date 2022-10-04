@@ -2,7 +2,7 @@
 
 ./gradlew build
 
-sudo docker cp mountaindo_deploy:/home/img/. ~
+sudo docker cp mountaindo_deploy:/home/. ~/img
 
 sudo docker stop mountaindo_deploy
 
