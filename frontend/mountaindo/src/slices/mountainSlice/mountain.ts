@@ -4,6 +4,7 @@ const initialState = {
   mountainList: [],
   page: 0,
   standard: 'name',
+  location: '전체',
 };
 
 // 산 전체 목록 가져오기 API (이름순, 인기순, 고도 높은 순, 고도 낮은 순)
@@ -12,9 +13,8 @@ export const getMountainList = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
-        `api/v1/mountains?sort=${args.standard}&page=${args.page}`,
+        `api/v1/mountains?sort=${args.standard}&si=${args.location}&page=${args.page}`,
       );
-      console.log('url ==> ', response.request);
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -28,7 +28,7 @@ export const getSearchedMountain = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
-        `api/v1/mountains/search/2?keyword=${args.keyword}`,
+        `api/v1/mountains/search/1?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
       return response.data;
     } catch (err: any) {
@@ -43,7 +43,7 @@ export const getSearchedTrail = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
-        `api/v1/mountains/search/3?keyword=${args.keyword}`,
+        `api/v1/mountains/search/2?keyword=${args.keyword}&sort=${args.standard}&si=${args.location}`,
       );
       return response.data;
     } catch (err: any) {
@@ -95,6 +95,9 @@ const mountainSlice = createSlice({
     },
     setStandard(state, action) {
       state.standard = action.payload.standard;
+    },
+    setLocation(state, action) {
+      state.location = action.payload.location;
     },
   },
   extraReducers: builder => {

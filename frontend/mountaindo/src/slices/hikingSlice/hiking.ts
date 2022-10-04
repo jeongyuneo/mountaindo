@@ -8,12 +8,7 @@ export const endHiking = createAsyncThunk(
     try {
       const response = await axiosService.post(
         '/api/v1/hikings',
-        {hikingRequest: args.hikingRequest},
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
+        args.hikingRequest,
       );
       return response.data;
     } catch (err: any) {
@@ -28,7 +23,7 @@ export const searchMountain = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
-        `/api/v1/mountains/search/2?keyword=${args.keyword}`,
+        `api/v1/mountains/search/2?keyword=${args.keyword}&sort=name&si=전체`,
       );
       return response.data;
     } catch (err: any) {

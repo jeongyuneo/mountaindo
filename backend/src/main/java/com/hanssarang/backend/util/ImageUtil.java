@@ -2,13 +2,18 @@ package com.hanssarang.backend.util;
 
 import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.BadRequestException;
+import com.hanssarang.backend.common.exception.FileLoadException;
 import com.hanssarang.backend.common.exception.FileSaveException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FILE;
@@ -16,7 +21,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FIL
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageUtil {
 
-    private static final String IMAGE_ROOT_PATH = "/home/ubuntu/img";
+    private static final String IMAGE_ROOT_PATH = "/home";
     private static final String POINT = ".";
     private static final String SEPARATOR = "/";
     private static final String IMAGE_JPG = "image/jpg";
@@ -39,6 +44,18 @@ public class ImageUtil {
             throw new FileSaveException(FAIL_TO_SAVE_FILE);
         }
         return imageUrl;
+    }
+
+    public static byte[] toByteArray(String imageUrl) {
+        try {
+            InputStream imageFile = new FileInputStream(imageUrl);
+            byte[] imageBytes = IOUtils.toByteArray(imageFile);
+            System.out.println(Arrays.toString(imageBytes));
+            imageFile.close();
+            return imageBytes;
+        } catch (IOException e) {
+            throw new FileLoadException(ErrorMessage.FAIL_TO_LOAD_IMAGE);
+        }
     }
 
     private static String extractExt(String contentType) {

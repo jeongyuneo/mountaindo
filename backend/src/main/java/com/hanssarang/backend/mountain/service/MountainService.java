@@ -9,6 +9,7 @@ import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
+import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -73,7 +74,7 @@ public class MountainService {
                 .name(mountain.getName())
                 .height(mountain.getHeight())
                 .address(mountain.getAddress().getFullAddress())
-                .imageUrl(mountain.getImageUrl())
+                .image(ImageUtil.toByteArray(mountain.getImageUrl()))
                 .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                 .trails(mountain.getTrails()
                         .stream()
@@ -175,7 +176,7 @@ public class MountainService {
                         .name(mountain.getName())
                         .height(mountain.getHeight())
                         .address(mountain.getAddress().getFullAddress())
-                        .imageUrl(mountain.getImageUrl())
+                        .image(ImageUtil.toByteArray(mountain.getImageUrl()))
                         .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                         .build())
                 .collect(Collectors.toList());

@@ -31,10 +31,16 @@ function MountainListItem({
         <View style={styles.contentWrapper}>
           <View style={styles.nameIconWrapper}>
             <AppText style={styles.nameText}>{name}</AppText>
-            <View>{hot ? <FontAwesomeIcon icon={faFire} /> : <View />}</View>
+            <View>
+              {hot ? (
+                <FontAwesomeIcon icon={faFire} style={styles.iconFire} />
+              ) : (
+                <></>
+              )}
+            </View>
           </View>
-          <AppText style={styles.heightText}>고도: {height}m</AppText>
-          <AppText style={styles.addressText}>위치: {address}</AppText>
+          <AppText style={styles.heightText}>{height}m</AppText>
+          <AppText style={styles.addressText}>{address}</AppText>
         </View>
       </View>
     </View>
@@ -43,24 +49,25 @@ function MountainListItem({
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginVertical: 5,
-    marginHorizontal: 10,
+    marginVertical: 7,
+    marginHorizontal: 15,
     borderRadius: 20,
-    padding: 10,
+    padding: 5,
     backgroundColor: 'white',
+    elevation: 5,
   },
   imageContentWrapper: {
     flexDirection: 'row',
   },
   contentWrapper: {
-    marginLeft: 20,
+    marginLeft: 25,
   },
   nameIconWrapper: {
     flexDirection: 'row',
     marginBottom: 3,
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 16,
     marginRight: 5,
     fontWeight: 'bold',
   },
@@ -68,6 +75,9 @@ const styles = StyleSheet.create({
     height: 60,
     width: 80,
     borderRadius: 15,
+  },
+  iconFire: {
+    color: 'red',
   },
   heightText: {
     fontSize: 12,
