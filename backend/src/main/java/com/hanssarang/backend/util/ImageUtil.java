@@ -16,7 +16,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FIL
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ImageUtil {
 
-    private static final String IMAGE_ROOT_PATH = "/home/img";
+    private static final String IMAGE_ROOT_PATH = "/home";
     private static final String POINT = ".";
     private static final String SEPARATOR = "/";
     private static final String IMAGE_JPG = "image/jpg";
