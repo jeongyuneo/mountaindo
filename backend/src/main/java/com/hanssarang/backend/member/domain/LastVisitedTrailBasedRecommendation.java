@@ -21,11 +21,11 @@ public class LastVisitedTrailBasedRecommendation extends BaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "trail_id")
+    private Trail trail;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trail_id")
-    private Trail trail;
+    @JoinColumn(name = "recommended_trail_id")
+    private Trail recommendedTrail;
 }
