@@ -35,7 +35,7 @@ public class RankingControllerTest extends ApiDocument {
     private static final int ID = 1;
     private static final String IMAGE_URL = "imageUrl";
     private static final int RANKING = 5;
-    private static final String NICKNAME = "김마운";
+    private static final String NICKNAME = "닉네임";
     private static final int ACCUMULATED_HEIGHT = 1000;
     private static final String ACCESS_TOKEN = JwtUtil.generateToken(ID, NICKNAME);
 
@@ -177,7 +177,8 @@ public class RankingControllerTest extends ApiDocument {
     }
 
     private ResultActions 전체랭킹내_사용자_검색_요청(String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/1?keyword=" + keyword));
+        return mockMvc.perform(get("/api/v1/rankings/1?keyword=" + keyword)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 전체랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
@@ -214,7 +215,8 @@ public class RankingControllerTest extends ApiDocument {
     }
 
     private ResultActions 산랭킹내_사용자_검색_요청(int mountainId, String keyword) throws Exception {
-        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?keyword=" + keyword));
+        return mockMvc.perform(get("/api/v1/rankings/3/" + mountainId + "?keyword=" + keyword)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 산랭킹내_사용자_검색_성공(ResultActions resultActions, RankingResponse rankingResponse) throws Exception {
