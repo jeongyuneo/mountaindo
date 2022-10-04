@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RankingListResponse {
 
-    private String imageUrl;
+    private byte[] image;
     private int ranking;
     private String nickname;
     private int accumulatedHeight;

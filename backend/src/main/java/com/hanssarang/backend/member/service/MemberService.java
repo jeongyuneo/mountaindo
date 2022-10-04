@@ -82,9 +82,9 @@ public class MemberService {
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
         Member member = memberRepository.findByNameAndBirthAndPhoneAndIsActiveTrue(
-                        findingEmailRequest.getName(),
-                        findingEmailRequest.getBirth(),
-                        findingEmailRequest.getPhone())
+                findingEmailRequest.getName(),
+                findingEmailRequest.getBirth(),
+                findingEmailRequest.getPhone())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         return EmailResponse.builder()
                 .email(member.getEmail())
@@ -100,7 +100,7 @@ public class MemberService {
                 .phone(member.getPhone())
                 .address(member.getAddress().getFullAddress())
                 .nickname(member.getNickname())
-                .imageUrl(member.getImageUrl())
+                .profileImage(ImageUtil.toByteArray(member.getImageUrl()))
                 .build();
     }
 
@@ -111,7 +111,6 @@ public class MemberService {
         memberRepository.save(member);
         return UpdateResponse.builder()
                 .nickname(member.getNickname())
-                .imageUrl(imageUrl)
                 .token(JwtUtil.generateToken(memberId, member.getNickname()))
                 .build();
     }
@@ -146,7 +145,6 @@ public class MemberService {
         return LoginResponse.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
-                .imageUrl(member.getImageUrl())
                 .isCompletedSurvey(member.isCompletedSurvey())
                 .token(JwtUtil.generateToken(member.getId(), member.getNickname()))
                 .build();

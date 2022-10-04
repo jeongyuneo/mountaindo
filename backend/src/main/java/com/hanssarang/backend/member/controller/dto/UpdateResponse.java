@@ -9,6 +9,5 @@ import lombok.*;
 public class UpdateResponse {
 
     private String nickname;
-    private String imageUrl;
     private String token;
 }
