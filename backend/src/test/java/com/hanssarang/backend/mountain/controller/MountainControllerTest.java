@@ -209,7 +209,8 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 산_목록_조회_요청(String sort, String si, int page) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort + "&si=" + si + "&page=" + page));
+        return mockMvc.perform(get("/api/v1/mountains?sort=" + sort + "&si=" + si + "&page=" + page)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 산_목록_조회_성공(ResultActions resultActions, List<MountainListResponse> mountains) throws Exception {
@@ -227,7 +228,8 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 산_상세_조회_요청(int mountainId) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/" + mountainId));
+        return mockMvc.perform(get("/api/v1/mountains/" + mountainId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 산_상세_조회_성공(ResultActions resultActions, MountainResponse mountainResponse) throws Exception {
@@ -245,7 +247,8 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 등산로_상세_조회_요청(int trailId) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/trail/" + trailId));
+        return mockMvc.perform(get("/api/v1/mountains/trail/" + trailId)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 등산로_상세_조회_성공(ResultActions resultActions, TrailResponse trailResponse) throws Exception {
@@ -263,7 +266,8 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 산_검색_요청(String keyword, String sort, String si) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/1?keyword=" + keyword + "&sort=" + sort + "&si=" + si));
+        return mockMvc.perform(get("/api/v1/mountains/search/1?keyword=" + keyword + "&sort=" + sort + "&si=" + si)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 산_검색_성공(ResultActions resultActions, List<MountainListResponse> mountainResponses) throws Exception {
@@ -281,7 +285,8 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private ResultActions 등산로_검색_요청(String keyword, String sort, String si) throws Exception {
-        return mockMvc.perform(get("/api/v1/mountains/search/2?keyword=" + keyword + "&sort=" + sort + "&si=" + si));
+        return mockMvc.perform(get("/api/v1/mountains/search/2?keyword=" + keyword + "&sort=" + sort + "&si=" + si)
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
     }
 
     private void 등산로_검색_성공(ResultActions resultActions, List<MountainListResponse> mountainListResponses) throws Exception {
