@@ -126,8 +126,8 @@ export const signUp = createAsyncThunk(
         address: {
           si: args.selectedCity,
           gu: args.selectedCity2,
-          dong: args.selectedCity2,
-          fullAddress: '경기도',
+          dong: null,
+          fullAddress: `${args.selectedCity} ${args.selectedCity2}`,
         },
         nickname: args.nickName,
       });
@@ -221,6 +221,20 @@ export const passwordChange = createAsyncThunk(
   },
 );
 
+// 닉네임 중복 확인
+export const checkNickname = createAsyncThunk(
+  'userSlice/checkNickname',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        `api/v1/members/nickname?nickname=${args.nickname}`,
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -330,6 +344,12 @@ const userSlice = createSlice({
       })
       .addCase(emailAuth.rejected, (state, {payload}) => {
         console.log('emailAuth Rejected ==>', payload);
+      })
+      .addCase(checkNickname.fulfilled, (state, {payload}) => {
+        console.log('checkNickname Fulfilled ==> ', payload);
+      })
+      .addCase(checkNickname.rejected, (state, {payload}) => {
+        console.log('checkNickname Rejected ==>', payload);
       });
   },
 });

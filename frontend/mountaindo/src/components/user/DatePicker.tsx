@@ -58,10 +58,12 @@ function DatePicker({setCheck, setSelectedDate, selectedDate}: Props) {
 const styles = StyleSheet.create({
   dateButton: {
     borderBottomWidth: 1,
+    borderBottomColor: '#D9D9D9',
   },
   buttonText: {
     paddingVertical: 15,
     fontSize: 12,
+    color: 'grey',
   },
   buttonTextActive: {
     fontSize: 12,

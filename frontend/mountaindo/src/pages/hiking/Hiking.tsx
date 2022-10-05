@@ -20,7 +20,7 @@ import {useAppDispatch} from '../../store';
 import {endHiking} from '../../slices/hikingSlice/hiking';
 import TrackingStart from '../../components/hiking/TrackingStart';
 
-type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, 'Hiking'>;
+type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, '등산'>;
 
 // timer에 저장한 시간 포멧팅 함수
 export const formatTime = (timer: any) => {
@@ -410,6 +410,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
 });
 

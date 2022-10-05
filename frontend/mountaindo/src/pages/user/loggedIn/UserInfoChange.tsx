@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flexDirection: 'row',
     marginBottom: 30,
+    alignItems: 'center',
   },
   textLabelGroup: {
     flex: 0.3,
