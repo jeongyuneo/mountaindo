@@ -140,8 +140,8 @@ android {
         applicationId "com.mountain.mountaindo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "5.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         resValue "string", "build_config_package", "com.mountain.mountaindo"
         
@@ -244,6 +244,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            applicationIdSuffix ".dev"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -256,6 +257,26 @@ android {
         // react-native-config 설정
         releaseStaging {
             initWith release
+            matchingFallbacks = ['release']
+        }
+                devDebug {
+            initWith debug
+            applicationIdSuffix ".dev"
+            matchingFallbacks = ['debug']
+        }
+        devRelease {
+            initWith release
+            applicationIdSuffix ".dev"
+            matchingFallbacks = ['release']
+        }
+        stageDebug {
+            initWith debug
+            applicationIdSuffix ".test"
+            matchingFallbacks = ['debug']
+        }
+        stageRelease {
+            initWith release
+            applicationIdSuffix ".test"
             matchingFallbacks = ['release']
         }
     }
@@ -343,6 +364,8 @@ def isNewArchitectureEnabled() {
 project.ext.envConfigFiles = [
         debug: ".env",
         releasestaging: ".env.staging",
-        release: ".env.production"
+        release: ".env.production",
+        productiondebug: ".env.production",
+        productionrelease: ".env.production",
 ]
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
