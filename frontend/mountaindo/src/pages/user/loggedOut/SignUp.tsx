@@ -257,12 +257,14 @@ function SignUp() {
     )
       .then(async res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          Alert.alert('알림', '회원가입되었습니다.');
           await AsyncStorage.setItem('token', res.payload.token);
+          return Alert.alert('알림', '회원가입되었습니다.');
         }
+        return Alert.alert('알림', '회원가입에 실패했습니다.');
       })
       .catch(err => {
         console.log('SIGNUP ERR ===> ', err);
+        return Alert.alert('알림', '회원가입에 실패했습니다.');
       });
   }, [
     email,
