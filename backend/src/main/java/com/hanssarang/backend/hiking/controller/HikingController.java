@@ -1,9 +1,6 @@
 package com.hanssarang.backend.hiking.controller;
 
-import com.hanssarang.backend.hiking.controller.dto.CompletedHikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
-import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
+import com.hanssarang.backend.hiking.controller.dto.*;
 import com.hanssarang.backend.hiking.service.HikingService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +38,9 @@ public class HikingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestBody HikingRequest hikingRequest) {
-        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<HikingIdResponse> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestBody HikingRequest hikingRequest) {
+        return ResponseEntity.ok()
+                .body(hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest));
     }
 
     @PostMapping("/image/{hikingId}")
