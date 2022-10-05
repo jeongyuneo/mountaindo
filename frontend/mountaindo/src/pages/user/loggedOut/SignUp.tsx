@@ -308,6 +308,7 @@ function SignUp() {
             placeholder="이메일을 입력해주세요."
             placeholderTextColor="#666"
             textContentType="emailAddress"
+            autoComplete="email"
             value={email}
             returnKeyType="next"
             clearButtonMode="while-editing"
@@ -365,6 +366,7 @@ function SignUp() {
               placeholder="비밀번호를 입력해주세요(영문, 숫자, 특수문자)"
               placeholderTextColor="#666"
               textContentType="password"
+              autoComplete="password"
               value={password}
               secureTextEntry
               returnKeyType="next"
@@ -381,6 +383,7 @@ function SignUp() {
               placeholder="비밀번호를 재입력해주세요."
               placeholderTextColor="#666"
               textContentType="none"
+              autoComplete="password"
               value={passwordCheck}
               secureTextEntry
               returnKeyType="next"

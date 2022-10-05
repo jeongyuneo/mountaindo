@@ -138,9 +138,9 @@ function Hiking({navigation, route}: HikingScreenProps) {
 
       if (totalHigh > 0) {
         const high = Math.floor(totalHigh - info.coords.altitude);
-        setTotalHigh(high);
+        setTotalHigh(Math.abs(high));
       } else {
-        setTotalHigh(Math.floor(info.coords.altitude));
+        setTotalHigh(Math.abs(Math.floor(info.coords.altitude)));
       }
     });
   };

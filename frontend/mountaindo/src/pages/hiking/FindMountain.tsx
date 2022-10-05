@@ -1,15 +1,18 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Dimensions,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
+import Config from 'react-native-config';
 import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
@@ -17,6 +20,7 @@ import DismissKeyboardView from '../../components/DismissKeyboardView';
 import TrailListModal from '../../components/hiking/TrailListModal';
 import {mountainDetail, searchMountain} from '../../slices/hikingSlice/hiking';
 import {useAppDispatch} from '../../store';
+import axiosService from '../../store/axiosService';
 
 export type Trails = {
   trailId: number;
@@ -65,6 +69,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             setModalVisible(!modalVisible);
           } else {
             setIsTrailList(false);
+            setModalVisible(!modalVisible);
           }
         }
       })
@@ -119,6 +124,29 @@ function FindMountain({navigation}: FindMountainScreenProps) {
 
   const isFocused = useIsFocused();
 
+  const getImage = async () => {
+    const token = AsyncStorage.getItem('token');
+    const response = axiosService
+      .post(
+        '/images/mountain/home/mountain/d0a9434a-ef44-4a2f-9762-8032dccf4335.jpeg',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .then(res => {
+        console.log(res);
+
+        return res;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    console.log(response);
+    return response;
+  };
   useEffect(() => {
     setSearch('');
     setIsMountain(0);
@@ -127,6 +155,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
     setTrailList([]);
     setIsTrailList(false);
     setModalVisible(false);
+    getImage();
   }, [isFocused]);
   return (
     <DismissKeyboardView>
@@ -136,6 +165,10 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             {`오늘 \n등산할 산을 \n검색해주세요`}
           </AppTextBold>
           <View>
+            <Image
+              source={require('../../assets/search_logo.png')}
+              style={styles.image}
+            />
             <TextInput
               style={styles.searchInput}
               onChangeText={onChangeSearchInput}
@@ -149,6 +182,9 @@ function FindMountain({navigation}: FindMountainScreenProps) {
               blurOnSubmit={false}
               autoFocus={true}
             />
+          </View>
+          <View>
+            {/* <Image source={{uri: getImage()}} style={styles.image} /> */}
           </View>
           <ScrollView>
             {isMountain == 2 && mountainList?.length > 0 ? (
@@ -202,7 +238,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 30,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   searchInput: {
     borderColor: 'grey',
@@ -210,6 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     width: 300,
+    position: 'relative',
   },
   chooseText: {
     marginLeft: 5,
@@ -224,6 +261,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 20,
+    width: 300,
   },
   mountainText: {
     marginLeft: 5,
@@ -235,6 +273,17 @@ const styles = StyleSheet.create({
   text: {
     marginVertical: 5,
     fontSize: 15,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  image: {
+    width: 130,
+    height: 130,
+    position: 'absolute',
+    top: -110,
+    right: 0,
   },
 });
 
