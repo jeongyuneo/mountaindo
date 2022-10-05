@@ -145,7 +145,14 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             onSubmitEditing={() => nameRef.current?.focus()}
             blurOnSubmit={false}
           />
-          <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
+          <Pressable
+            style={
+              emailValid
+                ? StyleSheet.compose(styles.checkEmailActive, styles.checkEmail)
+                : styles.checkEmail
+            }
+            disabled={!emailValid}
+            onPress={rsquestEmail}>
             <AppText style={styles.checkEmailText}>인증요청</AppText>
           </Pressable>
         </View>
@@ -161,15 +168,15 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
             clearButtonMode="while-editing"
             blurOnSubmit={false}
           />
-          {auth ? (
-            <Pressable style={styles.checkEmailActive} onPress={authEmail}>
-              <AppText style={styles.checkEmailText}>인증</AppText>
-            </Pressable>
-          ) : (
-            <Pressable style={styles.checkEmail}>
-              <AppText style={styles.checkEmailText}>인증</AppText>
-            </Pressable>
-          )}
+          <Pressable
+            style={
+              auth
+                ? StyleSheet.compose(styles.checkEmail, styles.checkEmailActive)
+                : styles.checkEmail
+            }
+            disabled={!auth}>
+            <AppText style={styles.checkEmailText}>인증</AppText>
+          </Pressable>
         </View>
         <View style={styles.inputView}>
           <TextInput
@@ -237,11 +244,11 @@ function FindPassword({navigation}: FindPasswordScreenProps) {
 
 const styles = StyleSheet.create({
   checkEmail: {
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
     borderRadius: 30,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
     marginTop: 10,
+    flex: 0.3,
+    justifyContent: 'center',
   },
   authinputText: {
     borderBottomWidth: 1,
@@ -255,18 +262,16 @@ const styles = StyleSheet.create({
   },
   checkEmailText: {
     color: 'white',
+    textAlign: 'center',
   },
   checkEmailActive: {
     backgroundColor: '#57d696',
-    borderRadius: 30,
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    marginTop: 10,
   },
   emailinput: {
     borderBottomWidth: 1,
     fontFamily: 'NanumBarunGothic',
-    width: 230,
+    fontSize: 12,
+    flex: 0.7,
   },
   inputGroup: {
     width: Dimensions.get('window').width,

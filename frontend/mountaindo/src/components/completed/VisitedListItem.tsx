@@ -33,50 +33,54 @@ function VisitedListItem({
         moveToVisitedDetail(hikingId);
       }}>
       <View style={styles.imageContentWrapper}>
-        <Image
-          source={require('../../assets/gyeryongMountain.jpg')}
-          style={styles.image}
-        />
-        <View style={styles.contentWrapper}>
-          <View style={styles.titleContainer}>
-            <AppTextBold style={styles.nameText}>{trailName}</AppTextBold>
+        <View>
+          <View style={styles.iconWrapper}>
             {level === '하' ? (
               <>
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
                 <FontAwesomeIcon
                   icon={regularStar}
-                  size={15}
-                  color={'yellow'}
+                  size={12}
+                  color={'#FFD365'}
                 />
                 <FontAwesomeIcon
                   icon={regularStar}
-                  size={15}
-                  color={'yellow'}
+                  size={12}
+                  color={'#FFD365'}
                 />
               </>
             ) : level === '중' ? (
               <>
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
                 <FontAwesomeIcon
                   icon={regularStar}
-                  size={15}
-                  color={'yellow'}
+                  size={12}
+                  color={'#FFD365'}
                 />
               </>
             ) : (
               <>
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
-                <FontAwesomeIcon icon={faStar} size={15} color={'yellow'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
+                <FontAwesomeIcon icon={faStar} size={12} color={'#FFD365'} />
               </>
             )}
           </View>
-          <View style={styles.contentsContainer}>
-            <AppText style={styles.mountainName}>{lastHikingDate}</AppText>
+          <Image
+            source={require('../../assets/gyeryongMountain.jpg')}
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.contentWrapper}>
+          <View style={styles.titleContainer}>
             <AppText style={styles.mountainName}>{mountainName}</AppText>
+            <AppTextBold style={styles.nameText}>{trailName}</AppTextBold>
           </View>
-          <AppText style={styles.heightText}>소요 시간: {useTime}</AppText>
+          <View style={styles.contentsContainer}>
+            <AppText style={styles.mountainName}>소요 시간: {useTime}</AppText>
+          </View>
+          <AppText style={styles.heightText}>{lastHikingDate}</AppText>
         </View>
       </View>
     </Pressable>
@@ -86,13 +90,14 @@ function VisitedListItem({
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     marginBottom: 7,
   },
   wrapper: {
     marginVertical: 5,
     borderRadius: 20,
+    paddingRight: 40,
     padding: 10,
     backgroundColor: 'white',
     shadowColor: '#000',
@@ -114,11 +119,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   contentWrapper: {
-    marginLeft: 20,
+    marginLeft: 15,
+    flexShrink: 1,
   },
   nameText: {
-    fontSize: 18,
-    marginRight: 5,
+    fontSize: 12,
+    marginLeft: 5,
+    flexShrink: 0,
   },
   image: {
     height: 60,
@@ -126,11 +133,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   heightText: {
-    fontSize: 12,
+    fontSize: 10,
     marginTop: 5,
   },
   mountainName: {
     fontSize: 12,
+  },
+  iconWrapper: {
+    flexDirection: 'row',
+    marginBottom: 5,
+    marginLeft: 5,
   },
 });
 
