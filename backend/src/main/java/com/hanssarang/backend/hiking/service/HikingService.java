@@ -28,7 +28,7 @@ public class HikingService {
 
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
-    private static final String HIKING = "hiking";
+    private static final String HIKING_IMAGE = "hiking-image";
 
     private final MemberRepository memberRepository;
     private final TrailRepository trailRepository;
@@ -92,7 +92,7 @@ public class HikingService {
     }
 
     @Transactional
-    public void createHiking(int memberId, HikingRequest hikingRequest, MultipartFile multipartFile) {
+    public void createHiking(int memberId, HikingRequest hikingRequest) {
         Member member = findMember(memberId);
         Trail trail = findTrail(hikingRequest);
         member.addHiking(
@@ -102,7 +102,6 @@ public class HikingService {
                         .accumulatedHeight(hikingRequest.getAccumulatedHeight())
                         .useTime(hikingRequest.getUseTime())
                         .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
-                        .imageUrl(ImageUtil.saveImage(multipartFile, HIKING))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
                         .build()
@@ -128,5 +127,11 @@ public class HikingService {
     private boolean isCompleted(String path, PathResponse endPoint) {
         return PathUtil.find(path)
                 .isCompleted(path, endPoint.getLatitude(), endPoint.getLongitude());
+    }
+
+    public void createImage(int memberId, int hikingId, MultipartFile multipartFile) {
+        Hiking hiking = findHiking(memberId, hikingId);
+        hiking.createImage(ImageUtil.saveImage(multipartFile, HIKING_IMAGE));
+        hikingRepository.save(hiking);
     }
 }
