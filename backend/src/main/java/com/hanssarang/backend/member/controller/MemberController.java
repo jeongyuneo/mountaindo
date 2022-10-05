@@ -53,7 +53,7 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestPart UpdateRequest updateRequest) {
+    public ResponseEntity<UpdateResponse> updateMember(@RequestHeader(AUTHORIZATION) String token, @RequestBody UpdateRequest updateRequest) {
         return ResponseEntity.ok()
                 .body(memberService.updateMember(JwtUtil.getMemberId(token), updateRequest));
     }
