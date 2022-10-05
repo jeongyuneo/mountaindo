@@ -1,15 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  Text,
-  Alert,
-} from 'react-native';
+import {View, TextInput, StyleSheet, Pressable, Alert} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
-import AppText from '../../../components/AppText';
 import AppTextBold from '../../../components/AppTextBold';
 import {userChange} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -54,17 +46,27 @@ function PhoneNumberChangeForm({
       userChange({
         user: {...route.params?.user, phone: phone},
       }),
-    ).then(res => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        route.params?.setUser({
-          ...route.params?.user,
-          phone: phone,
-        });
-      }
-    });
-
-    navigation.navigate('MyPage');
-    return console.log('알림', '전화번호 변경에 성공하였습니다. ');
+    )
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          route.params?.setUser({
+            ...route.params?.user,
+            phone: phone,
+          });
+          navigation.navigate('유저');
+          return Alert.alert('알림', '전화번호 변경에 성공하였습니다.');
+        }
+        return Alert.alert(
+          '알림',
+          `전화번호 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      })
+      .catch(err => {
+        return Alert.alert(
+          '알림',
+          `전화번호 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      });
   }, [navigation, phone, route.params]);
   const canGoNext = phone; // 버튼 disabled 확인할 변수
   return (
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   inputView: {
     marginVertical: 10,
@@ -125,11 +127,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   phoneNumberChangeButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 20,
+    width: '100%',
   },
   phoneNumberChangeButtonActive: {
     backgroundColor: '#57d696',
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
   phoneNumberChangeButtonText: {
     textAlign: 'center',
     color: 'white',
-    fontSize: 20,
+    fontSize: 15,
   },
 });
 

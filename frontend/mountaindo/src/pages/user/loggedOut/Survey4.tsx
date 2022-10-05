@@ -2,9 +2,10 @@ import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import userSlice, {survey} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 import {RootState} from '../../../store/reducer';
@@ -17,8 +18,10 @@ function Survey4({navigation}: Survey4ScreenProps) {
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
   const [isChecked4, setChecked4] = useState(false);
+  const [isChecked5, setChecked5] = useState(false);
   const [isChecked, setChecked] = useState(0);
-  const canGoNext = isChecked1 || isChecked2 || isChecked3 || isChecked4;
+  const canGoNext =
+    isChecked1 || isChecked2 || isChecked3 || isChecked4 || isChecked5;
 
   const survey1 = useSelector((state: RootState) => state.user.survey1);
   const survey2 = useSelector((state: RootState) => state.user.survey2);
@@ -34,6 +37,8 @@ function Survey4({navigation}: Survey4ScreenProps) {
       survey4 = 3;
     } else if (isChecked4) {
       survey4 = 4;
+    } else {
+      survey4 = 5;
     }
     setSurvey();
   };
@@ -52,187 +57,188 @@ function Survey4({navigation}: Survey4ScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 등산 소요시간</Text>
-        <Text style={styles.subTitle}>
+        <AppTextBold style={styles.title}>선호하는 등산 소요시간</AppTextBold>
+        <AppTextBold style={styles.subTitle}>
           등산하는데 어느 정도의 시간을 소요하시나요?
-        </Text>
+        </AppTextBold>
       </View>
-      {isChecked === 0 ? (
-        <View>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked1(!isChecked1);
-              setChecked(1);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked2(!isChecked2);
-              setChecked(2);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked3(!isChecked3);
-              setChecked(3);
-            }}>
-            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked4(!isChecked4);
-              setChecked(4);
-            }}>
-            <Text style={styles.answerBoxText}>3시간 이상</Text>
-          </Pressable>
-        </View>
-      ) : isChecked === 1 ? (
-        <View>
-          <Pressable
-            style={styles.checkedBox}
-            onPress={() => {
-              setChecked1(!isChecked1);
-              setChecked(1);
-            }}>
-            <Text style={styles.checkedBoxText}>1시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked2(!isChecked2);
-              setChecked(2);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked3(!isChecked3);
-              setChecked(3);
-            }}>
-            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked4(!isChecked4);
-              setChecked(4);
-            }}>
-            <Text style={styles.answerBoxText}>3시간 이상</Text>
-          </Pressable>
-        </View>
-      ) : isChecked === 2 ? (
-        <View>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked1(!isChecked1);
-              setChecked(1);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.checkedBox}
-            onPress={() => {
-              setChecked2(!isChecked2);
-              setChecked(2);
-            }}>
-            <Text style={styles.checkedBoxText}>1시간 이상 2시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked3(!isChecked3);
-              setChecked(3);
-            }}>
-            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked4(!isChecked4);
-              setChecked(4);
-            }}>
-            <Text style={styles.answerBoxText}>3시간 이상</Text>
-          </Pressable>
-        </View>
-      ) : isChecked === 3 ? (
-        <View>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked1(!isChecked1);
-              setChecked(1);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked2(!isChecked2);
-              setChecked(2);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.checkedBox}
-            onPress={() => {
-              setChecked3(!isChecked3);
-              setChecked(3);
-            }}>
-            <Text style={styles.checkedBoxText}>2시간 이상 3시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked4(!isChecked4);
-              setChecked(4);
-            }}>
-            <Text style={styles.answerBoxText}>3시간 이상</Text>
-          </Pressable>
-        </View>
-      ) : (
-        <View>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked1(!isChecked1);
-              setChecked(1);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked2(!isChecked2);
-              setChecked(2);
-            }}>
-            <Text style={styles.answerBoxText}>1시간 이상 2시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.answerBox}
-            onPress={() => {
-              setChecked3(!isChecked3);
-              setChecked(3);
-            }}>
-            <Text style={styles.answerBoxText}>2시간 이상 3시간 이내</Text>
-          </Pressable>
-          <Pressable
-            style={styles.checkedBox}
-            onPress={() => {
-              setChecked4(!isChecked4);
-              setChecked(4);
-            }}>
-            <Text style={styles.checkedBoxText}>3시간 이상</Text>
-          </Pressable>
-        </View>
-      )}
+      <View>
+        <Pressable
+          style={
+            isChecked === 0
+              ? styles.answerBox
+              : isChecked === 1
+              ? styles.checkedBox
+              : isChecked === 2
+              ? styles.answerBox
+              : isChecked === 3
+              ? styles.answerBox
+              : isChecked === 4
+              ? styles.answerBox
+              : styles.answerBox
+          }
+          onPress={() => {
+            setChecked1(!isChecked1);
+            setChecked(1);
+          }}>
+          <AppTextBold
+            style={
+              isChecked === 0
+                ? styles.answerBoxText
+                : isChecked === 1
+                ? styles.checkedBoxText
+                : isChecked === 2
+                ? styles.answerBoxText
+                : isChecked === 3
+                ? styles.answerBoxText
+                : isChecked === 4
+                ? styles.answerBoxText
+                : styles.answerBoxText
+            }>
+            3시간 이내
+          </AppTextBold>
+        </Pressable>
+        <Pressable
+          style={
+            isChecked === 0
+              ? styles.answerBox
+              : isChecked === 1
+              ? styles.answerBox
+              : isChecked === 2
+              ? styles.checkedBox
+              : isChecked === 3
+              ? styles.answerBox
+              : isChecked === 4
+              ? styles.answerBox
+              : styles.answerBox
+          }
+          onPress={() => {
+            setChecked2(!isChecked2);
+            setChecked(2);
+          }}>
+          <AppTextBold
+            style={
+              isChecked === 0
+                ? styles.answerBoxText
+                : isChecked === 1
+                ? styles.answerBoxText
+                : isChecked === 2
+                ? styles.checkedBoxText
+                : isChecked === 3
+                ? styles.answerBoxText
+                : isChecked === 4
+                ? styles.answerBoxText
+                : styles.answerBoxText
+            }>
+            3시간 이상 5시간 이내
+          </AppTextBold>
+        </Pressable>
+        <Pressable
+          style={
+            isChecked === 0
+              ? styles.answerBox
+              : isChecked === 1
+              ? styles.answerBox
+              : isChecked === 2
+              ? styles.answerBox
+              : isChecked === 3
+              ? styles.checkedBox
+              : isChecked === 4
+              ? styles.answerBox
+              : styles.answerBox
+          }
+          onPress={() => {
+            setChecked3(!isChecked3);
+            setChecked(3);
+          }}>
+          <AppTextBold
+            style={
+              isChecked === 0
+                ? styles.answerBoxText
+                : isChecked === 1
+                ? styles.answerBoxText
+                : isChecked === 2
+                ? styles.answerBoxText
+                : isChecked === 3
+                ? styles.checkedBoxText
+                : isChecked === 4
+                ? styles.answerBoxText
+                : styles.answerBoxText
+            }>
+            5시간 이상 7시간 이내
+          </AppTextBold>
+        </Pressable>
+        <Pressable
+          style={
+            isChecked === 0
+              ? styles.answerBox
+              : isChecked === 1
+              ? styles.answerBox
+              : isChecked === 2
+              ? styles.answerBox
+              : isChecked === 3
+              ? styles.answerBox
+              : isChecked === 4
+              ? styles.checkedBox
+              : styles.answerBox
+          }
+          onPress={() => {
+            setChecked4(!isChecked4);
+            setChecked(4);
+          }}>
+          <AppTextBold
+            style={
+              isChecked === 0
+                ? styles.answerBoxText
+                : isChecked === 1
+                ? styles.answerBoxText
+                : isChecked === 2
+                ? styles.answerBoxText
+                : isChecked === 3
+                ? styles.answerBoxText
+                : isChecked === 4
+                ? styles.checkedBoxText
+                : styles.answerBoxText
+            }>
+            7시간 이상 10시간 이내
+          </AppTextBold>
+        </Pressable>
+        <Pressable
+          style={
+            isChecked === 0
+              ? styles.answerBox
+              : isChecked === 1
+              ? styles.answerBox
+              : isChecked === 2
+              ? styles.answerBox
+              : isChecked === 3
+              ? styles.answerBox
+              : isChecked === 4
+              ? styles.answerBox
+              : styles.checkedBox
+          }
+          onPress={() => {
+            setChecked4(!isChecked5);
+            setChecked(5);
+          }}>
+          <AppTextBold
+            style={
+              isChecked === 0
+                ? styles.answerBoxText
+                : isChecked === 1
+                ? styles.answerBoxText
+                : isChecked === 2
+                ? styles.answerBoxText
+                : isChecked === 3
+                ? styles.answerBoxText
+                : isChecked === 4
+                ? styles.answerBoxText
+                : styles.checkedBoxText
+            }>
+            7시간 이상 10시간 이내
+          </AppTextBold>
+        </Pressable>
+      </View>
       <Pressable
         style={canGoNext ? styles.arrowButtonActive : styles.arrowButton}
         disabled={!canGoNext}
@@ -263,19 +269,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: '#272827',
-    fontWeight: 'bold',
   },
   subTitle: {
-    marginTop: 10,
+    marginVertical: 10,
     color: '#272827',
-    fontWeight: 'bold',
   },
   answerBox: {
-    padding: 20,
     marginHorizontal: 10,
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: 'white',
-    height: 60,
+    height: 55,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: '#c5c5c5',
@@ -284,15 +287,12 @@ const styles = StyleSheet.create({
   },
   answerBoxText: {
     color: 'grey',
-    fontWeight: 'bold',
   },
   checkedBox: {
-    padding: 20,
     marginHorizontal: 10,
-    marginTop: 20,
-    color: 'black',
+    marginTop: 10,
     backgroundColor: '#57d696',
-    height: 60,
+    height: 55,
     borderRadius: 30,
     borderWidth: 0,
     borderColor: 'black',
@@ -301,7 +301,6 @@ const styles = StyleSheet.create({
   },
   checkedBoxText: {
     color: 'white',
-    fontWeight: 'bold',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -309,7 +308,7 @@ const styles = StyleSheet.create({
   arrowButton: {
     width: 50,
     height: 50,
-    marginTop: 30,
+    marginTop: 15,
     marginLeft: 250,
     padding: 10,
     borderRadius: 50,
@@ -322,7 +321,7 @@ const styles = StyleSheet.create({
   arrowButtonActive: {
     width: 50,
     height: 50,
-    marginTop: 30,
+    marginTop: 15,
     marginLeft: 250,
     padding: 10,
     borderRadius: 50,

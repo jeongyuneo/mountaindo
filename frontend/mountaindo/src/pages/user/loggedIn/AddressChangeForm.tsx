@@ -1,8 +1,7 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
-import AppText from '../../../components/AppText';
 import AppTextBold from '../../../components/AppTextBold';
 import LocationPicker from '../../../components/user/LocationPicker';
 import {userChange} from '../../../slices/userSlice/user';
@@ -45,7 +44,7 @@ function AddressChangeForm({navigation, route}: AddressChangeFormScreenProps) {
       }
     });
 
-    navigation.navigate('MyPage');
+    navigation.navigate('유저');
     return console.log('알림', '주소 변경에 성공하였습니다. ');
   }, [navigation, selectedCity, selectedCity2, route.params]);
 
@@ -90,22 +89,23 @@ const styles = StyleSheet.create({
   },
   container: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   addressChangeButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 20,
+    width: '100%',
   },
   addressChangeButtonActive: {
     backgroundColor: '#57d696',
   },
   addressChangeButtonText: {
-    textAlign: 'center',
     color: 'white',
-    fontSize: 20,
+    textAlign: 'center',
+    fontSize: 15,
   },
 });
 

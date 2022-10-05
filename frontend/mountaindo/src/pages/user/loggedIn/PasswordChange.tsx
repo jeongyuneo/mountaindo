@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import DismissKeyboardView from '../../../components/DismissKeyboardView';
 import {passwordChange} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
@@ -83,7 +84,7 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
     dispatch(passwordChange({password, newPassword: password2}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          navigation.navigate('MyPage');
+          navigation.navigate('유저');
           return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
         }
         return Alert.alert('알림', '비밀번호 재설정에 실패하였습니다.');
@@ -97,113 +98,124 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
   const canGoNext = password && password1 && password2; // 버튼 disabled 확인할 변수
 
   return (
-    <DismissKeyboardView>
-      <View style={styles.container}>
-        <View style={styles.inputView}>
-          <Text style={styles.inputLabel}>현재 비밀번호</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangePassword}
-            placeholder="현재비밀번호를 입력해주세요"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            autoComplete="password"
-            textContentType="password"
-            secureTextEntry
-            value={password}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={passwordRef}
-            onSubmitEditing={() => password1Ref.current?.focus()}
-            blurOnSubmit={false}
-          />
+    <View style={styles.backColor}>
+      <DismissKeyboardView>
+        <View style={styles.container}>
+          <View style={styles.inputView}>
+            <AppTextBold style={styles.inputLabel}>현재 비밀번호</AppTextBold>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangePassword}
+              placeholder="현재비밀번호를 입력해주세요"
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              autoComplete="password"
+              textContentType="password"
+              secureTextEntry
+              value={password}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={passwordRef}
+              onSubmitEditing={() => password1Ref.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <AppTextBold style={styles.inputLabel}>새 비밀번호</AppTextBold>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangePassword1}
+              placeholder="새 비밀번호를 입력해주세요"
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              autoComplete="password"
+              textContentType="password"
+              secureTextEntry
+              value={password1}
+              returnKeyType="next"
+              clearButtonMode="while-editing"
+              ref={password1Ref}
+              onSubmitEditing={() => password2Ref.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <AppTextBold style={styles.inputLabel}>
+              새 비밀번호 확인
+            </AppTextBold>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangePassword2}
+              placeholder="새 비밀번호를 다시 입력해주세요"
+              placeholderTextColor="#666"
+              importantForAutofill="yes"
+              autoComplete="password"
+              textContentType="password"
+              secureTextEntry
+              value={password2}
+              returnKeyType="send"
+              clearButtonMode="while-editing"
+              ref={password2Ref}
+              onSubmitEditing={onSubmit}
+              blurOnSubmit={false}
+            />
+          </View>
+          <Pressable
+            disabled={!canGoNext}
+            onPress={onSubmit}
+            style={
+              canGoNext
+                ? StyleSheet.compose(
+                    styles.changePasswordButton,
+                    styles.changePasswordButtonActive,
+                  )
+                : styles.changePasswordButton
+            }>
+            <AppTextBold style={styles.changePasswordButtonText}>
+              비밀번호 변경
+            </AppTextBold>
+          </Pressable>
         </View>
-        <View style={styles.inputView}>
-          <Text style={styles.inputLabel}>새 비밀번호</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangePassword1}
-            placeholder="새 비밀번호를 입력해주세요"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            autoComplete="password"
-            textContentType="password"
-            secureTextEntry
-            value={password1}
-            returnKeyType="next"
-            clearButtonMode="while-editing"
-            ref={password1Ref}
-            onSubmitEditing={() => password2Ref.current?.focus()}
-            blurOnSubmit={false}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <Text style={styles.inputLabel}>새 비밀번호 확인</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangePassword2}
-            placeholder="새 비밀번호를 다시 입력해주세요"
-            placeholderTextColor="#666"
-            importantForAutofill="yes"
-            autoComplete="password"
-            textContentType="password"
-            secureTextEntry
-            value={password2}
-            returnKeyType="send"
-            clearButtonMode="while-editing"
-            ref={password2Ref}
-            onSubmitEditing={onSubmit}
-            blurOnSubmit={false}
-          />
-        </View>
-        <Pressable
-          disabled={!canGoNext}
-          onPress={onSubmit}
-          style={
-            canGoNext
-              ? StyleSheet.compose(
-                  styles.changePasswordButton,
-                  styles.changePasswordButtonActive,
-                )
-              : styles.changePasswordButton
-          }>
-          <Text style={styles.changePasswordButtonText}>비밀번호 변경</Text>
-        </Pressable>
-      </View>
-    </DismissKeyboardView>
+      </DismissKeyboardView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  backColor: {
+    backgroundColor: 'white',
+    flex: 1,
+  },
   container: {
-    marginHorizontal: 20,
-    marginTop: 30,
+    marginVertical: 10,
+    marginHorizontal: 30,
   },
   inputView: {
-    marginVertical: 20,
+    marginVertical: 10,
   },
   inputLabel: {
     fontWeight: '700',
-    color: 'black',
   },
   input: {
     borderBottomWidth: 1,
-    color: 'black',
-    paddingLeft: 0,
+    fontFamily: 'NanumBarunGothic',
+    paddingStart: 5,
   },
   changePasswordButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 20,
+    width: '100%',
   },
   changePasswordButtonActive: {
-    backgroundColor: 'blue',
+    backgroundColor: '#57d696',
   },
   changePasswordButtonText: {
-    textAlign: 'center',
     color: 'white',
+    textAlign: 'center',
+    fontSize: 15,
   },
 });
 

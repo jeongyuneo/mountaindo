@@ -1,13 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useRef, useState} from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  Text,
-  Alert,
-} from 'react-native';
+import {View, TextInput, StyleSheet, Pressable, Alert} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import AppTextBold from '../../../components/AppTextBold';
 import {userChange} from '../../../slices/userSlice/user';
@@ -47,19 +40,28 @@ function NicknameChangeForm({
       );
     }
 
-    dispatch(
-      userChange({user: {...route.params?.user, nickname: nickname}}),
-    ).then(res => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        // 유효성 검사에 통과했을 경우 params로 받아온 user 정보를 변경시켜줌
-        route.params?.setUser({
-          ...route.params?.user,
-          nickname: nickname,
-        });
-      }
-    });
-    navigation.navigate('MyPage');
-    return console.log('알림', '닉네임 변경에 성공하였습니다. ');
+    dispatch(userChange({user: {...route.params?.user, nickname: nickname}}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          // 유효성 검사에 통과했을 경우 params로 받아온 user 정보를 변경시켜줌
+          route.params?.setUser({
+            ...route.params?.user,
+            nickname: nickname,
+          });
+          navigation.navigate('유저');
+          return Alert.alert('알림', '닉네임 변경에 성공하였습니다.');
+        }
+        return Alert.alert(
+          '알림',
+          `닉네임 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      })
+      .catch(err => {
+        return Alert.alert(
+          '알림',
+          `닉네임 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      });
   }, [navigation, nickname, route.params]);
 
   const canGoNext = nickname; // 버튼 disabled 확인할 변수
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   inputView: {
     marginVertical: 10,
@@ -118,19 +120,20 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   nicknameChangeButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 20,
+    width: '100%',
   },
   nicknameChangeButtonActive: {
     backgroundColor: '#57d696',
   },
   nicknameChangeButtonText: {
-    textAlign: 'center',
     color: 'white',
-    fontSize: 20,
+    textAlign: 'center',
+    fontSize: 15,
   },
 });
 

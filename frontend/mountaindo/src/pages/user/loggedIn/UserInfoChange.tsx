@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import AppText from '../../../components/AppText';
 import AppTextBold from '../../../components/AppTextBold';
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flexDirection: 'row',
     marginBottom: 30,
+    alignItems: 'center',
   },
   textLabelGroup: {
     flex: 0.3,

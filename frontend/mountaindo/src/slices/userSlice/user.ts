@@ -47,7 +47,7 @@ export const userChange = createAsyncThunk(
   'userSlice/userChange',
   async (args: any, {rejectWithValue}) => {
     try {
-      const response = await axiosService.patch('/api/v1/members', {
+      const response = await axiosService.post('/api/v1/members/update', {
         name: args.user.name,
         phone: args.user.phone,
         address: {
@@ -57,8 +57,30 @@ export const userChange = createAsyncThunk(
           fullAddress: args.user.fullAddress,
         },
         nickname: args.user.nickname,
-        imageUrl: args.user.imageUrl,
       });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
+// 프로필 이미지 변경
+export const profileImageChange = createAsyncThunk(
+  'userSlice/profileImageChange',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', args.file);
+      const response = await axiosService.post(
+        '/api/v1/members/update/image',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
       return response.data;
     } catch (err: any) {
       return rejectWithValue(err.response);
@@ -126,8 +148,8 @@ export const signUp = createAsyncThunk(
         address: {
           si: args.selectedCity,
           gu: args.selectedCity2,
-          dong: args.selectedCity2,
-          fullAddress: '경기도',
+          dong: null,
+          fullAddress: `${args.selectedCity} ${args.selectedCity2}`,
         },
         nickname: args.nickName,
       });
@@ -221,6 +243,20 @@ export const passwordChange = createAsyncThunk(
   },
 );
 
+// 닉네임 중복 확인
+export const checkNickname = createAsyncThunk(
+  'userSlice/checkNickname',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        `api/v1/members/nickname?nickname=${args.nickname}`,
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -314,10 +350,10 @@ const userSlice = createSlice({
         console.log('passwordChange Rejected ==>', payload);
       })
       .addCase(userChange.fulfilled, (state, {payload}) => {
-        console.log('passwordChange Fulfilled ==> ', payload);
+        console.log('userChange Fulfilled ==> ', payload);
       })
       .addCase(userChange.rejected, (state, {payload}) => {
-        console.log('passwordChange Rejected ==>', payload);
+        console.log('userChange Rejected ==>', payload);
       })
       .addCase(emailRequest.fulfilled, (state, {payload}) => {
         console.log('emailRequest Fulfilled ==> ', payload);
@@ -330,6 +366,18 @@ const userSlice = createSlice({
       })
       .addCase(emailAuth.rejected, (state, {payload}) => {
         console.log('emailAuth Rejected ==>', payload);
+      })
+      .addCase(checkNickname.fulfilled, (state, {payload}) => {
+        console.log('checkNickname Fulfilled ==> ', payload);
+      })
+      .addCase(checkNickname.rejected, (state, {payload}) => {
+        console.log('checkNickname Rejected ==>', payload);
+      })
+      .addCase(profileImageChange.fulfilled, (state, {payload}) => {
+        console.log('profileImageChange Fulfilled ==> ', payload);
+      })
+      .addCase(profileImageChange.rejected, (state, {payload}) => {
+        console.log('profileImageChange Rejected ==>', payload);
       });
   },
 });

@@ -25,10 +25,7 @@ import {useAppDispatch} from '../../store';
 import {RootState} from '../../store/reducer';
 import SearchSubjectPicker from '../../components/mountain/SearchSubjectPicker';
 
-type MountainScreenProps = NativeStackScreenProps<
-  LoggedInParamList,
-  'Mountain'
->;
+type MountainScreenProps = NativeStackScreenProps<LoggedInParamList, '산'>;
 
 export type MountainType = {
   address: string;
@@ -259,7 +256,7 @@ function Mountain({navigation}: MountainScreenProps) {
             <TextInput
               style={styles.searchInputText}
               onChangeText={onChangeSearch}
-              placeholder="검색할 산/등산로 이름을 입력해주세요"
+              placeholder="산/등산로 검색"
               textContentType="none"
               returnKeyType="send"
               clearButtonMode="while-editing"
