@@ -12,6 +12,7 @@ import DatePicker from '../../../components/user/DatePicker';
 import LocationPicker from '../../../components/user/LocationPicker';
 import {
   checkCertification,
+  checkNickname,
   emailAuth,
   emailRequest,
   login,
@@ -36,6 +37,9 @@ function SignUp() {
   const [selectedCity2, setSelectedCity2] = useState('');
   const [check, setCheck] = useState(0); // 달력에 날짜를 선택했는지 확인할 변수
   const [selectedDate, setSelectedDate] = useState(''); // 선택 날짜를 문자열 형태로 변경하여 저장할 변수
+  const [disabledEmail, setDisableEmail] = useState(false);
+  const [isCertificate, setIsCertificate] = useState(false);
+  const [isNickname, setIsNickname] = useState(false);
 
   const emailRef = useRef<TextInput | null>(null);
   const certificationRef = useRef<TextInput | null>(null);
@@ -54,16 +58,29 @@ function SignUp() {
     nickName &&
     phoneNumber &&
     !!check &&
-    selectedCity &&
-    selectedCity2;
+    disabledEmail &&
+    isCertificate &&
+    isNickname;
 
-  const disabledEmail =
-    !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
-      email,
-    );
+  // 이메일 유효성 검사 함수
+  const checkEmailValidation = useCallback((text: string) => {
+    if (
+      !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
+        text,
+      )
+    ) {
+      return false;
+    }
+    return true;
+  }, []);
 
   const onChangeEmail = useCallback(text => {
     setEmail(text.trim());
+    if (checkEmailValidation(text.trim())) {
+      setDisableEmail(true);
+    } else {
+      setDisableEmail(false);
+    }
   }, []);
 
   const onChangeCertification = useCallback(text => {
@@ -91,18 +108,21 @@ function SignUp() {
   }, []);
 
   const pressCertificationButton = useCallback(() => {
-    if (disabledEmail) {
+    if (!checkEmailValidation(email)) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
     dispatch(checkCertification({email}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
           setCheckEmail(1);
-          Alert.alert('알림', '사용할 수 있는 이메일입니다.');
-        } else if (res.meta.requestStatus === 'rejected') {
-          setCheckEmail(0);
-          Alert.alert('알림', '중복된 이메일이 있습니다.');
+          setIsCertificate(false);
+          return Alert.alert(
+            '알림',
+            `사용할 수 있는 이메일입니다.\n 인증 버튼을 눌러주세요`,
+          );
         }
+        setCheckEmail(0);
+        return Alert.alert('알림', '중복된 이메일이 있습니다.');
       })
       .catch(err => {
         Alert.alert('알림', err.message);
@@ -112,24 +132,62 @@ function SignUp() {
   const [authmail, setAuthmail] = useState(false);
   // 이메일 인증
   const rsquestEmail = () => {
-    dispatch(emailRequest({email})).then(res => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        Alert.alert('이메일 요청', `해당 이메일에서\n 인증번호를 확인하세요!`);
-        setAuthmail(true);
-      }
-    });
+    dispatch(emailRequest({email}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setAuthmail(true);
+          return Alert.alert(
+            '이메일 요청',
+            `해당 이메일에서\n인증번호를 확인하세요!`,
+          );
+        }
+        setAuthmail(false);
+        return Alert.alert(
+          '이메일 요청',
+          `이메일 전송에 실패했습니다.\n다시 시도해주세요!`,
+        );
+      })
+      .catch(err => {
+        console.log(err);
+        return Alert.alert(
+          '이메일 요청',
+          `이메일 전송에 실패했습니다.\n다시 시도해주세요!`,
+        );
+      });
   };
 
   // 이메일 인증확인
   const authEmail = () => {
-    dispatch(emailAuth({email: email, authToken: certification})).then(res => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        Alert.alert('인증', '인증성공');
-      } else {
-        Alert.alert('인증실패', '인증번호가 일치하지않습니다.');
-      }
-    });
+    dispatch(emailAuth({email: email, authToken: certification}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setIsCertificate(true);
+          return Alert.alert('인증', '인증성공');
+        }
+        setIsCertificate(false);
+        return Alert.alert('인증실패', '인증번호가 일치하지않습니다.');
+      })
+      .catch(err => {
+        setIsCertificate(false);
+        return Alert.alert('인증실패', '인증번호가 일치하지않습니다.');
+      });
   };
+
+  const checkNicknameRequest = useCallback(() => {
+    dispatch(checkNickname({nickname: nickName}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setIsNickname(true);
+          return Alert.alert('알림', '사용할 수 있는 닉네임입니다.');
+        }
+        setIsNickname(false);
+        return Alert.alert('알림', '중복된 닉네임이 있습니다.');
+      })
+      .catch(err => {
+        setIsNickname(false);
+        return Alert.alert('알림', '중복된 닉네임이 있습니다.');
+      });
+  }, [nickName]);
 
   const onSubmit = useCallback(async () => {
     if (!email || !email.trim()) {
@@ -156,17 +214,10 @@ function SignUp() {
     if (!phoneNumber || !phoneNumber.trim()) {
       return Alert.alert('알림', '핸드폰 번호를 입력해주세요.');
     }
-    if (!selectedCity || !selectedCity2) {
-      return Alert.alert('알림', '주소를 입력해주세요.');
-    }
     if (!check) {
       return Alert.alert('알림', '생년월일을 입력해주세요.');
     }
-    if (
-      !/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(
-        email,
-      )
-    ) {
+    if (!checkEmailValidation(email)) {
       return Alert.alert('알림', '올바른 이메일 주소가 아닙니다.');
     }
     if (!/^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@^!%*#?&]).{8,50}$/.test(password)) {
@@ -188,6 +239,10 @@ function SignUp() {
         '숫자, -을 포함해 휴대전화 형식에 맞게 입력해주세요.',
       );
     }
+    if (!nickName || !isNickname) {
+      return Alert.alert('알림', '닉네임 중복확인을 해주세요.');
+    }
+
     dispatch(
       signUp({
         email,
@@ -195,8 +250,8 @@ function SignUp() {
         name,
         birth: selectedDate,
         phoneNumber,
-        selectedCity,
-        selectedCity2,
+        selectedCity: selectedCity ? selectedCity : '서울특별시',
+        selectedCity2: selectedCity2 ? selectedCity2 : null,
         nickName,
       }),
     )
@@ -223,8 +278,11 @@ function SignUp() {
     check,
     dispatch,
     selectedDate,
+    disabledEmail,
+    isCertificate,
   ]);
 
+  console.log(canGoNext);
   useEffect(() => {
     if (phoneNumber.length === 10) {
       setPhoneNumber(phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
@@ -256,24 +314,23 @@ function SignUp() {
             onSubmitEditing={() => certificationRef.current?.focus()}
             blurOnSubmit={false}
           />
-          {!disabledEmail ? (
+          {checkEmail !== 1 && (
             <Pressable
-              style={styles.checkEmailActive}
-              onPress={pressCertificationButton}>
-              <AppText style={styles.checkEmailText}>중복확인</AppText>
-            </Pressable>
-          ) : (
-            <Pressable style={styles.checkEmail}>
+              style={
+                disabledEmail ? styles.checkEmailActive : styles.checkEmail
+              }
+              onPress={pressCertificationButton}
+              disabled={!disabledEmail || checkEmail === 1}>
               <AppText style={styles.checkEmailText}>중복확인</AppText>
             </Pressable>
           )}
-
-          {checkEmail === 1 ? (
-            <Pressable style={styles.checkEmailActive} onPress={rsquestEmail}>
-              <AppText style={styles.checkEmailText}>인증</AppText>
-            </Pressable>
-          ) : (
-            <Pressable style={styles.checkEmail}>
+          {checkEmail === 1 && (
+            <Pressable
+              style={
+                checkEmail === 1 ? styles.checkEmailActive : styles.checkEmail
+              }
+              onPress={rsquestEmail}
+              disabled={!(checkEmail === 1)}>
               <AppText style={styles.checkEmailText}>인증</AppText>
             </Pressable>
           )}
@@ -281,7 +338,7 @@ function SignUp() {
         <View>
           <View style={styles.inputWrapper}>
             <TextInput
-              style={styles.authinputText}
+              style={styles.emailInputText}
               onChangeText={onChangeCertification}
               placeholder="인증번호를 입력해주세요."
               placeholderTextColor="#666"
@@ -293,15 +350,12 @@ function SignUp() {
               onSubmitEditing={() => passwordRef.current?.focus()}
               blurOnSubmit={false}
             />
-            {authmail ? (
-              <Pressable style={styles.checkEmailActive} onPress={authEmail}>
-                <AppText style={styles.checkEmailText}>인증확인</AppText>
-              </Pressable>
-            ) : (
-              <Pressable style={styles.checkEmail}>
-                <AppText style={styles.checkEmailText}>인증확인</AppText>
-              </Pressable>
-            )}
+            <Pressable
+              style={authmail ? styles.checkEmailActive : styles.checkEmail}
+              onPress={authEmail}
+              disabled={!authmail}>
+              <AppText style={styles.checkEmailText}>인증확인</AppText>
+            </Pressable>
           </View>
           <View style={styles.inputWrapper}>
             <TextInput
@@ -350,21 +404,29 @@ function SignUp() {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              style={styles.inputText}
-              onChangeText={onChangeNickName}
-              placeholder="닉네임을 입력해주세요."
-              placeholderTextColor="#666"
-              importantForAutofill="yes"
-              textContentType="nickname"
-              value={nickName}
-              returnKeyType="next"
-              clearButtonMode="while-editing"
-              ref={nickNameRef}
-              onSubmitEditing={() => phoneNumberRef.current?.focus()}
-              blurOnSubmit={false}
-            />
+          <View>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={styles.emailInputText}
+                onChangeText={onChangeNickName}
+                placeholder="닉네임을 입력해주세요."
+                placeholderTextColor="#666"
+                importantForAutofill="yes"
+                textContentType="nickname"
+                value={nickName}
+                returnKeyType="next"
+                clearButtonMode="while-editing"
+                ref={nickNameRef}
+                onSubmitEditing={() => phoneNumberRef.current?.focus()}
+                blurOnSubmit={false}
+              />
+              <Pressable
+                style={nickName ? styles.checkEmailActive : styles.checkEmail}
+                onPress={checkNicknameRequest}
+                disabled={!nickName}>
+                <AppText style={styles.checkEmailText}>중복확인</AppText>
+              </Pressable>
+            </View>
           </View>
           <View style={styles.inputWrapper}>
             <TextInput
@@ -388,7 +450,7 @@ function SignUp() {
           />
           <View style={styles.location}>
             <AppText style={styles.locationText}>
-              실 거주지의 주소를 선택해주세요
+              실제 거주지의 주소를 선택해주세요
             </AppText>
           </View>
           <View style={styles.addressSt}>
@@ -443,25 +505,27 @@ const styles = StyleSheet.create({
     fontFamily: 'NanumBarunGothic',
     borderBottomWidth: 1,
     borderBottomColor: '#c5c5c5',
-    width: 180,
     fontSize: 12,
+    flex: 0.7,
   },
   checkEmail: {
-    backgroundColor: '#c5c5c5',
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
     borderRadius: 30,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
     marginTop: 10,
+    flex: 0.3,
+    justifyContent: 'center',
   },
   checkEmailActive: {
     backgroundColor: '#57d696',
     borderRadius: 30,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
     marginTop: 10,
+    flex: 0.3,
+    justifyContent: 'center',
   },
   checkEmailText: {
     color: 'white',
+    textAlign: 'center',
+    fontSize: 12,
   },
   inputWrapper: {
     flexDirection: 'row',
