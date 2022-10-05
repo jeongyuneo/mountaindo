@@ -92,7 +92,7 @@ public class HikingService {
     }
 
     @Transactional
-    public void createHiking(int memberId, HikingRequest hikingRequest) {
+    public HikingIdResponse createHiking(int memberId, HikingRequest hikingRequest) {
         Member member = findMember(memberId);
         Trail trail = findTrail(hikingRequest);
         member.addHiking(
@@ -104,9 +104,12 @@ public class HikingService {
                         .path(PathUtil.toLineStringForm(hikingRequest.getPath()))
                         .isCompleted(isCompleted(trail.getPath(), hikingRequest.getEndPoint()))
                         .isActive(true)
-                        .build()
-        );
+                        .build());
         memberRepository.save(member);
+        List<Hiking> hikings = member.getHikings();
+        return HikingIdResponse.builder()
+                .hikingId(hikings.get(hikings.size() - 1).getId())
+                .build();
     }
 
     private Member findMember(int memberId) {
