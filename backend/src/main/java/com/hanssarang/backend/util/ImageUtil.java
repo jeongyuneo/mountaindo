@@ -39,7 +39,7 @@ public class ImageUtil {
         } catch (IOException e) {
             throw new FileSaveException(FAIL_TO_SAVE_FILE);
         }
-        return IMAGE_REQUEST + path + File.separator + imageFileName;
+        return IMAGE_REQUEST + File.separator + path + File.separator + imageFileName;
     }
 
     private static String extractExt(String contentType) {
