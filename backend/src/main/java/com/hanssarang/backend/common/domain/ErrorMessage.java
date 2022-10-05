@@ -14,6 +14,7 @@ public enum ErrorMessage {
     FAIL_TO_DELETE_MEMBER("회원탈퇴에 실패하였습니다."),
     FAIL_TO_SAVE_FILE("파일 저장에 실패했습니다."),
     FAIL_TO_GET_MOUNTAINS("산 목록 조회에 실패했습니다."),
+    FAIL_TO_GET_TRAILS("등산로 목록 조회에 실패했습니다."),
     FAIL_TO_SEARCH_MOUNTAIN("산 검색에 실패했습니다."),
     FAIL_TO_SEARCH_TRAIL("등산로 검색에 실패했습니다."),
     FAIL_TO_CREATE_HIKING("등산 정보 저장에 실패했습니다."),
