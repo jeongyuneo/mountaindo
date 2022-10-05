@@ -276,6 +276,12 @@ include::{snippets}/get-recommendations-success/http-request.adoc[]
 
 .response
 include::{snippets}/get-recommendations-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-recommendations-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-recommendations-fail/http-response.adoc[]
 
 ==== 산 목록 조회
 ----
