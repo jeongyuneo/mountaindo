@@ -524,19 +524,6 @@ include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
 /api/v1/hikings
 ----
 
-[cols="2,2,3"]
-|===
-|Field |Type |Description
-
-|hikingRequest
-|application/json
-|등산 기록
-
-|file
-|multipart
-|등산 기록 이미지
-|===
-
 ===== 성공
 .request
 include::{snippets}/create-hiking-success/http-request.adoc[]
@@ -549,6 +536,33 @@ include::{snippets}/create-hiking-fail/http-request.adoc[]
 
 .response
 include::{snippets}/create-hiking-fail/http-response.adoc[]
+
+==== 등산 기록 이미지 저장
+----
+/api/v1/hikings/image
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|hikingId
+|int
+|등산 기록 아아디
+|===
+
+===== 성공
+.request
+include::{snippets}/create-hiking-image-success/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-image-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/create-hiking-image-fail/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-image-fail/http-response.adoc[]
 
 === 랭킹 관련 기능
 ==== 전체 랭킹 조회
