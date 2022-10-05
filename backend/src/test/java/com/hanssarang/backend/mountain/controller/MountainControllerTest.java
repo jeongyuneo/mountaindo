@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.UnexpectedRollbackException;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -40,7 +39,7 @@ class MountainControllerTest extends ApiDocument {
     private static final String NAME = "북한산";
     private static final int HEIGHT = 836;
     private static final String ADDRESS = "서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시";
-    private static final byte[] IMAGE = "{image url}".getBytes(StandardCharsets.UTF_8);
+    private static final String IMAGE_URL = "{image url}";
     private static final boolean IS_HOT = true;
     private static final String TRAIL_NAME = "A코스";
     private static final double LENGTH = 1;
@@ -69,7 +68,7 @@ class MountainControllerTest extends ApiDocument {
                 .mapToObj(n -> RecommendationResponse.builder()
                         .trailName(TRAIL_NAME)
                         .mountainName(NAME)
-                        .mountainImage(IMAGE)
+                        .mountainImage(IMAGE_URL)
                         .build())
                 .collect(Collectors.toList());
         mountainListResponses = IntStream.range(0, 3)
@@ -78,7 +77,7 @@ class MountainControllerTest extends ApiDocument {
                         .name(NAME)
                         .height(HEIGHT)
                         .address(ADDRESS)
-                        .image(IMAGE)
+                        .imageUrl(IMAGE_URL)
                         .isHot(IS_HOT)
                         .build())
                 .collect(Collectors.toList());
@@ -91,7 +90,7 @@ class MountainControllerTest extends ApiDocument {
                 .name(NAME)
                 .height(HEIGHT)
                 .address(ADDRESS)
-                .image(IMAGE)
+                .imageUrl(IMAGE_URL)
                 .trails(IntStream.range(0, 3)
                         .mapToObj(n -> TrailListResponse.builder()
                                 .name(TRAIL_NAME)
@@ -130,7 +129,7 @@ class MountainControllerTest extends ApiDocument {
         // when
         ResultActions resultActions = 추천_목록_조회_요청(ID);
         // then
-        추천_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_MOUNTAINS));
+        추천_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_TRAILS));
     }
 
     @DisplayName("산 목록 조회 - 성공")

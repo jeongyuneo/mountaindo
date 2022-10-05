@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,7 +33,7 @@ public class RankingControllerTest extends ApiDocument {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer ";
     private static final int ID = 1;
-    private static final byte[] IMAGE_URL = "imageUrl".getBytes(StandardCharsets.UTF_8);
+    private static final String IMAGE_URL = "imageUrl";
     private static final int RANKING = 5;
     private static final String NICKNAME = "닉네임";
     private static final int ACCUMULATED_HEIGHT = 1000;
@@ -49,13 +48,13 @@ public class RankingControllerTest extends ApiDocument {
     @BeforeEach
     void setUp() {
         rankingListResponse = RankingListResponse.builder()
-                .image(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .ranking(RANKING)
                 .nickname(NICKNAME)
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
                 .rankings(IntStream.range(1, 4)
                         .mapToObj(n -> RankingResponse.builder()
-                                .image(IMAGE_URL)
+                                .imageUrl(IMAGE_URL)
                                 .ranking(n)
                                 .nickname(NICKNAME)
                                 .accumulatedHeight(ACCUMULATED_HEIGHT * 100 / n)
@@ -63,7 +62,7 @@ public class RankingControllerTest extends ApiDocument {
                         .collect(Collectors.toList()))
                 .build();
         rankingResponse = RankingResponse.builder()
-                .image(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .ranking(RANKING)
                 .nickname(NICKNAME)
                 .accumulatedHeight(ACCUMULATED_HEIGHT)

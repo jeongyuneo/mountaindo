@@ -13,7 +13,7 @@ public class MountainResponse {
     private String name;
     private double height;
     private String address;
-    private byte[] image;
+    private String imageUrl;
     private boolean isHot;
     private List<TrailListResponse> trails;
 }
