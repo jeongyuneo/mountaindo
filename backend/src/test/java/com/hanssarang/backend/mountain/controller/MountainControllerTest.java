@@ -43,7 +43,7 @@ class MountainControllerTest extends ApiDocument {
     private static final String NAME = "북한산";
     private static final int HEIGHT = 836;
     private static final String ADDRESS = "서울특별시 강북구ㆍ성북구ㆍ종로구ㆍ은평구, 경기도 고양시ㆍ양주시";
-    private static final byte[] IMAGE_URL = "{image url}".getBytes(StandardCharsets.UTF_8);
+    private static final byte[] IMAGE = "{image url}".getBytes(StandardCharsets.UTF_8);
     private static final boolean IS_HOT = true;
     private static final String TRAIL_NAME = "A코스";
     private static final double LENGTH = 1;
@@ -73,7 +73,7 @@ class MountainControllerTest extends ApiDocument {
                         .name(NAME)
                         .height(HEIGHT)
                         .address(ADDRESS)
-                        .image(IMAGE_URL)
+                        .image(IMAGE)
                         .isHot(IS_HOT)
                         .build())
                 .collect(Collectors.toList());
@@ -81,7 +81,7 @@ class MountainControllerTest extends ApiDocument {
                 .name(NAME)
                 .height(HEIGHT)
                 .address(ADDRESS)
-                .image(IMAGE_URL)
+                .image(IMAGE)
                 .trails(IntStream.range(0, 3)
                         .mapToObj(n -> TrailListResponse.builder()
                                 .name(TRAIL_NAME)
