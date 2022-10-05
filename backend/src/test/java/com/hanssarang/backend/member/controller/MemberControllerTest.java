@@ -79,7 +79,7 @@ public class MemberControllerTest extends ApiDocument {
                 .phone(PHONE)
                 .address(ADDRESS.getFullAddress())
                 .nickname(NICKNAME)
-                .profileImage(IMAGE_URL)
+                .imageUrl(IMAGE_URL)
                 .build();
         updateRequest = UpdateRequest.builder()
                 .name(NAME)
