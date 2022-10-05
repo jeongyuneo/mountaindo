@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   inputView: {
     marginVertical: 10,
@@ -118,19 +118,20 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   nicknameChangeButton: {
-    backgroundColor: 'gray',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 5,
-    marginVertical: 10,
+    backgroundColor: 'rgba(87, 214, 150, 0.5)',
+    borderRadius: 30,
+    paddingHorizontal: 100,
+    paddingVertical: 10,
+    marginTop: 20,
+    width: '100%',
   },
   nicknameChangeButtonActive: {
     backgroundColor: '#57d696',
   },
   nicknameChangeButtonText: {
-    textAlign: 'center',
     color: 'white',
-    fontSize: 20,
+    textAlign: 'center',
+    fontSize: 15,
   },
 });
 

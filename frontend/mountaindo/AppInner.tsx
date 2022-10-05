@@ -14,14 +14,12 @@ import Welcome from './src/pages/user/loggedOut/Welcome';
 import FindId from './src/pages/user/loggedOut/FindId';
 import NicknameChangeForm from './src/pages/user/loggedIn/NicknameChangeForm';
 import usePermissions from './src/hooks/usePermissions';
-import ContactUs from './src/pages/user/loggedIn/ContactUs';
 import SignIn from './src/pages/user/loggedOut/SignIn';
 import FindPassword from './src/pages/user/loggedOut/FindPassword';
 import Survey1 from './src/pages/user/loggedOut/Survey1';
 import Survey2 from './src/pages/user/loggedOut/Survey2';
 import Survey3 from './src/pages/user/loggedOut/Survey3';
 import Survey4 from './src/pages/user/loggedOut/Survey4';
-import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
@@ -60,8 +58,6 @@ export type LoggedInParamList = {
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
   MyPage: any;
-  Notice: any;
-  ContactUs: any;
   MountainDetail: any;
   CourseDetail: any;
   Visited: any;
@@ -143,16 +139,6 @@ function UserTab() {
         name="PhoneNumberChangeForm"
         component={PhoneNumberChangeForm}
         options={{title: '전화번호 변경'}}
-      />
-      <Stack.Screen
-        name="Notice"
-        component={Notice}
-        options={{title: '공지사항'}}
-      />
-      <Stack.Screen
-        name="ContactUs"
-        component={ContactUs}
-        options={{title: '문의하기'}}
       />
       <Stack.Screen
         name="AddressChangeForm"
@@ -303,7 +289,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faMountain}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
@@ -318,7 +304,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faPersonHiking}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
           }}
@@ -332,7 +318,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faHome}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
@@ -347,7 +333,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faFlag}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
@@ -362,7 +348,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faUser}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,

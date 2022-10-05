@@ -259,7 +259,7 @@ function Mountain({navigation}: MountainScreenProps) {
             <TextInput
               style={styles.searchInputText}
               onChangeText={onChangeSearch}
-              placeholder="검색할 산/등산로 이름을 입력해주세요"
+              placeholder="산/등산로 검색"
               textContentType="none"
               returnKeyType="send"
               clearButtonMode="while-editing"
