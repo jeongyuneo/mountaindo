@@ -41,8 +41,14 @@ public class HikingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestPart HikingRequest hikingRequest, @RequestPart("file") MultipartFile multipartFile) {
-        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest, multipartFile);
+    public ResponseEntity<Void> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestBody HikingRequest hikingRequest) {
+        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/image/{hikingId}")
+    public ResponseEntity<Void> createImage(@RequestHeader(AUTHORIZATION) String token, @PathVariable int hikingId, @RequestParam("file") MultipartFile multipartFile) {
+        hikingService.createImage(JwtUtil.getMemberId(token), hikingId, multipartFile);
         return ResponseEntity.ok().build();
     }
 }
