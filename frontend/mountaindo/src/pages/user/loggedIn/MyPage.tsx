@@ -19,7 +19,10 @@ import {faAngleRight} from '@fortawesome/free-solid-svg-icons';
 // component import
 import {LoggedInParamList} from '../../../../AppInner';
 import {useAppDispatch} from '../../../store';
-import userSlice, {userChange, userInfo} from '../../../slices/userSlice/user';
+import userSlice, {
+  profileImageChange,
+  userInfo,
+} from '../../../slices/userSlice/user';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,6 +34,7 @@ type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, '유저'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
   const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State
+  const [profileImage, setProfileImage] = useState('');
   //로그아웃 버튼 클릭시 로그인창으로 화면전환
   const loggedout = () => {
     Alert.alert(
@@ -53,6 +57,11 @@ function MyPage({navigation}: MyPageScreenProps) {
     );
   };
 
+  // 이미지 변환
+  const getImageSource = (source: any) => {
+    return `data:image/jpeg;base64,${source}`;
+  };
+
   const [user, setUser] = useState({
     si: '',
     gu: '',
@@ -63,26 +72,27 @@ function MyPage({navigation}: MyPageScreenProps) {
     name: '',
     nickname: '',
     phone: '',
-    imageUrl: '',
   });
+
   // 유저정보를 받아오는 기능.
   useEffect(() => {
     dispatch(userInfo('a')).then(async res => {
       const si = res.payload?.address.split(' ');
       setUser({
-        si: si[0],
-        gu: si[1],
-        dong: si[2],
+        si: si.length > 1 ? si[0] : '',
+        gu: si.length > 2 ? si[1] : '',
+        dong: si.length > 3 ? si[2] : '',
         fullAddress: res.payload?.address,
         birth: res.payload?.birth,
         email: res.payload?.email,
         name: res.payload?.name,
         nickname: res.payload?.nickname,
         phone: res.payload?.phone,
-        imageUrl: res.payload?.imageUrl,
       });
+
+      setProfileImage(getImageSource(res.payload?.profileImage));
     });
-  }, [user.nickname, user.imageUrl, photo, user.si, user.phone]);
+  }, [user.nickname, photo, user.si, user.phone, profileImage]);
 
   // 이미지 불러오기
   const showPicker = async () => {
@@ -130,12 +140,33 @@ function MyPage({navigation}: MyPageScreenProps) {
               const imageName = localUri?.split('/').pop();
 
               dispatch(
-                userChange({user: {...user, imageUrl: 'file://' + localUri}}),
-              ).then(res => {
-                if (res.meta.requestStatus === 'fulfilled') {
-                  setPhoto('file://' + localUri);
-                }
-              });
+                profileImageChange({
+                  file: {
+                    uri: 'file://' + localUri,
+                    type: 'image/jpeg',
+                    name: 'profileImage.jpg',
+                  },
+                }),
+              )
+                .then(res => {
+                  if (res.meta.requestStatus === 'fulfilled') {
+                    setPhoto('file://' + localUri);
+                    return Alert.alert(
+                      '알림',
+                      '프로필 이미지 변경에 성공했습니다.',
+                    );
+                  }
+                  return Alert.alert(
+                    '알림',
+                    '프로필 이미지 변경에 실패했습니다.',
+                  );
+                })
+                .catch(err => {
+                  return Alert.alert(
+                    '알림',
+                    '프로필 이미지 변경에 실패했습니다.',
+                  );
+                });
             },
           },
           {
@@ -150,7 +181,13 @@ function MyPage({navigation}: MyPageScreenProps) {
               const imageName = localUri?.split('/').pop();
 
               dispatch(
-                userChange({user: {...user, imageUrl: 'file://' + localUri}}),
+                profileImageChange({
+                  file: {
+                    uri: 'file://' + localUri,
+                    type: 'image/jpeg',
+                    name: 'profileImage.jpg',
+                  },
+                }),
               ).then(res => {
                 if (res.meta.requestStatus === 'fulfilled') {
                   setPhoto('file://' + localUri);
@@ -172,8 +209,8 @@ function MyPage({navigation}: MyPageScreenProps) {
       <View style={styles.containerUp}>
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
-            {user.imageUrl !== null ? (
-              <Image source={{uri: user.imageUrl}} style={styles.userImg} />
+            {profileImage !== null ? (
+              <Image source={{uri: profileImage}} style={styles.userImg} />
             ) : (
               <Image
                 source={require('../../../assets/user.png')}
