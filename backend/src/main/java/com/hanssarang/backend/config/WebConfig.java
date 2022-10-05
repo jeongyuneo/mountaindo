@@ -11,6 +11,8 @@ import static com.hanssarang.backend.common.domain.Message.AUTHORIZATION;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    private static final String API_SPECIFICATION = "/docs/**";
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -23,6 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
-        interceptorRegistry.addInterceptor(new JwtAuthInterceptor());
+        interceptorRegistry.addInterceptor(new JwtAuthInterceptor())
+                .excludePathPatterns(API_SPECIFICATION);
     }
 }
