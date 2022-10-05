@@ -129,7 +129,7 @@ class MountainControllerTest extends ApiDocument {
         // when
         ResultActions resultActions = 추천_목록_조회_요청(ID);
         // then
-        추천_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_MOUNTAINS));
+        추천_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_TRAILS));
     }
 
     @DisplayName("산 목록 조회 - 성공")
