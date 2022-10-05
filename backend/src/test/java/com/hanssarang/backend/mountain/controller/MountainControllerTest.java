@@ -113,7 +113,7 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getRecommendationsSuccess() throws Exception {
         // given
-        willReturn(recommendationListResponse).given(mountainService).getRecommendedMountains(anyInt());
+        willReturn(recommendationListResponse).given(mountainService).getRecommendedTrails(anyInt());
         // when
         ResultActions resultActions = 추천_목록_조회_요청(ID);
         // then
@@ -124,7 +124,7 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getRecommendationsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_MOUNTAINS.getMessage())).given(mountainService).getRecommendedMountains(anyInt());
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_TRAILS.getMessage())).given(mountainService).getRecommendedTrails(anyInt());
         // when
         ResultActions resultActions = 추천_목록_조회_요청(ID);
         // then
