@@ -372,362 +372,557 @@ function WeatherForecast({location}: Props) {
   return (
     <View>
       <View style={styles.weatherWrapper}>
-        <AppTextBold style={styles.weatherText}>주간 날씨 예보</AppTextBold>
-        {isLoading || error ? (
-          <AppTextBold>Loading</AppTextBold>
-        ) : (
-          <View style={styles.weatherImgWrapper}>
-            <View>
-              {/* 오늘 날씨 */}
-              {weather0 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
-                <View>
-                  <AppText>{todayDate}</AppText>
-                  <AppText>{dayList[todayDay]}</AppText>
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow0}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh0}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain0}</AppText>
-                </View>
-              ) : weather0 === 2 ? (
-                <View>
-                  <AppText>{todayDate}</AppText>
-                  <AppText>{dayList[todayDay]}</AppText>
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow0}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh0}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain0}</AppText>
-                </View>
-              ) : weather0 === 3 ? (
-                <View>
-                  <AppText>{todayDate}</AppText>
-                  <AppText>{dayList[todayDay]}</AppText>
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow0}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh0}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain0}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{todayDate}</AppText>
-                  <AppText>{dayList[todayDay]}</AppText>
-                  <Image source={require('../../assets/many-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow0}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh0}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain0}</AppText>
-                </View>
-              )}
+        <View style={styles.weatherInnerWrapper}>
+          {isLoading || error ? (
+            <AppTextBold>Loading</AppTextBold>
+          ) : (
+            <View style={styles.weatherComponentWrapper}>
+              <View>
+                {/* 오늘 날씨 */}
+                {weather0 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{todayDate}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain0}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow0}℃ / {tempHigh0}℃
+                    </AppText>
+                  </View>
+                ) : weather0 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{todayDate}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain0}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow0}℃ / {tempHigh0}℃
+                    </AppText>
+                  </View>
+                ) : weather0 === 3 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{todayDate}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain0}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow0}℃ / {tempHigh0}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{todayDate}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/tooCloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain0}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow0}℃ / {tempHigh0}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
+              <View>
+                {/* 1일 뒤 날씨 */}
+                {weather1 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date1After}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay + 1]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain1}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow1}℃ / {tempHigh1}℃
+                    </AppText>
+                  </View>
+                ) : weather1 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date1After}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay + 1]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain1}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow1}℃ / {tempHigh1}℃
+                    </AppText>
+                  </View>
+                ) : weather1 === 3 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date1After}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay + 1]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain1}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow1}℃ / {tempHigh1}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date1After}</AppText>
+                      <AppText style={styles.dayText}>
+                        {dayList[todayDay + 1]}
+                      </AppText>
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/tooCloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain1}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow1}℃ / {tempHigh1}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
+              <View>
+                {/* 2일 뒤 날씨 */}
+                {weather2 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date2After}</AppText>
+                      {todayDay + 2 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 5]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 2]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain2}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow2}℃ / {tempHigh2}℃
+                    </AppText>
+                  </View>
+                ) : weather2 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date2After}</AppText>
+                      {todayDay + 2 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 5]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 2]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain2}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow2}℃ / {tempHigh2}℃
+                    </AppText>
+                  </View>
+                ) : weather2 === 3 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date2After}</AppText>
+                      {todayDay + 2 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 5]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 2]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain2}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow2}℃ / {tempHigh2}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date2After}</AppText>
+                      {todayDay + 2 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 5]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 2]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/tooCloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain2}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow2}℃ / {tempHigh2}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
+              <View>
+                {/* 3일 뒤 날씨 */}
+                {weather3 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date3After}</AppText>
+                      {todayDay + 3 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 4]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 3]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain3}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow3}℃ / {tempHigh3}℃
+                    </AppText>
+                  </View>
+                ) : weather3 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date3After}</AppText>
+                      {todayDay + 3 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 4]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 3]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain3}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow3}℃ / {tempHigh3}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date3After}</AppText>
+                      {todayDay + 3 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 4]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 3]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain3}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow3}℃ / {tempHigh3}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
+              <View>
+                {/* 4일 뒤 날씨 */}
+                {weather4 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date4After}</AppText>
+                      {todayDay + 4 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 3]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 4]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain4}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow4}℃ / {tempHigh4}℃
+                    </AppText>
+                  </View>
+                ) : weather4 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date4After}</AppText>
+                      {todayDay + 4 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 3]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 4]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain4}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow4}℃ / {tempHigh4}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date4After}</AppText>
+                      {todayDay + 4 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 3]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 4]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain4}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow4}℃ / {tempHigh4}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
+              <View>
+                {/* 5일 뒤 날씨 */}
+                {weather5 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date5After}</AppText>
+                      {todayDay + 5 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 2]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 5]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/sunny.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain5}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow5}℃ / {tempHigh5}℃
+                    </AppText>
+                  </View>
+                ) : weather5 === 2 ? (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date5After}</AppText>
+                      {todayDay + 5 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 2]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 5]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/rainy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain5}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow5}℃ / {tempHigh5}℃
+                    </AppText>
+                  </View>
+                ) : (
+                  <View>
+                    <View style={styles.dateDayWrapper}>
+                      <AppText style={styles.dateText}>{date5After}</AppText>
+                      {todayDay + 5 > 6 ? (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay - 2]}
+                        </AppText>
+                      ) : (
+                        <AppText style={styles.dayText}>
+                          {dayList[todayDay + 5]}
+                        </AppText>
+                      )}
+                    </View>
+                    <View style={styles.weatherImgWrapper}>
+                      <Image
+                        source={require('../../assets/cloudy.png')}
+                        style={styles.weatherImg}
+                      />
+                    </View>
+                    <View style={styles.rainWrapper}>
+                      <AppText style={styles.rainText}>{rain5}%</AppText>
+                    </View>
+                    <AppText style={styles.lowTempText}>
+                      {tempLow5}℃ / {tempHigh5}℃
+                    </AppText>
+                  </View>
+                )}
+              </View>
             </View>
-            <View>
-              {/* 1일 뒤 날씨 */}
-              {weather1 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
-                <View>
-                  <AppText>{date1After}</AppText>
-                  <AppText>{dayList[todayDay + 1]}</AppText>
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow1}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh1}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain1}</AppText>
-                </View>
-              ) : weather1 === 2 ? (
-                <View>
-                  <AppText>{date1After}</AppText>
-                  <AppText>{dayList[todayDay + 1]}</AppText>
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow1}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh1}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain1}</AppText>
-                </View>
-              ) : weather1 === 3 ? (
-                <View>
-                  <AppText>{date1After}</AppText>
-                  <AppText>{dayList[todayDay + 1]}</AppText>
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow1}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh1}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain1}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{date1After}</AppText>
-                  <AppText>{dayList[todayDay + 1]}</AppText>
-                  <Image source={require('../../assets/many-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow1}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh1}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain1}</AppText>
-                </View>
-              )}
-            </View>
-            <View>
-              {/* 2일 뒤 날씨 */}
-              {weather2 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음, 4: 흐림
-                <View>
-                  <AppText>{date2After}</AppText>
-                  {todayDay + 2 > 6 ? (
-                    <AppText>{dayList[todayDay - 5]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 2]}</AppText>
-                  )}
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow2}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh2}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain2}</AppText>
-                </View>
-              ) : weather2 === 2 ? (
-                <View>
-                  <AppText>{date2After}</AppText>
-                  {todayDay + 2 > 6 ? (
-                    <AppText>{dayList[todayDay - 5]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 2]}</AppText>
-                  )}
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow2}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh2}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain2}</AppText>
-                </View>
-              ) : weather2 === 3 ? (
-                <View>
-                  <AppText>{date2After}</AppText>
-                  {todayDay + 2 > 6 ? (
-                    <AppText>{dayList[todayDay - 5]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 2]}</AppText>
-                  )}
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow2}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh2}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain2}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{date2After}</AppText>
-                  {todayDay + 2 > 6 ? (
-                    <AppText>{dayList[todayDay - 5]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 2]}</AppText>
-                  )}
-                  <Image source={require('../../assets/many-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow2}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh2}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain2}</AppText>
-                </View>
-              )}
-            </View>
-            <View>
-              {/* 3일 뒤 날씨 */}
-              {weather3 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
-                <View>
-                  <AppText>{date3After}</AppText>
-                  {todayDay + 3 > 6 ? (
-                    <AppText>{dayList[todayDay - 4]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 3]}</AppText>
-                  )}
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow3}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh3}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain3}</AppText>
-                </View>
-              ) : weather3 === 2 ? (
-                <View>
-                  <AppText>{date3After}</AppText>
-                  {todayDay + 3 > 6 ? (
-                    <AppText>{dayList[todayDay - 4]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 3]}</AppText>
-                  )}
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow3}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh3}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain3}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{date3After}</AppText>
-                  {todayDay + 3 > 6 ? (
-                    <AppText>{dayList[todayDay - 4]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 3]}</AppText>
-                  )}
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow3}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh3}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain3}</AppText>
-                </View>
-              )}
-            </View>
-            <View>
-              {/* 4일 뒤 날씨 */}
-              {weather4 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
-                <View>
-                  <AppText>{date4After}</AppText>
-                  {todayDay + 4 > 6 ? (
-                    <AppText>{dayList[todayDay - 3]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 4]}</AppText>
-                  )}
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow4}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh4}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain4}</AppText>
-                </View>
-              ) : weather4 === 2 ? (
-                <View>
-                  <AppText>{date4After}</AppText>
-                  {todayDay + 4 > 6 ? (
-                    <AppText>{dayList[todayDay - 3]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 4]}</AppText>
-                  )}
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow4}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh4}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain4}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{date4After}</AppText>
-                  {todayDay + 4 > 6 ? (
-                    <AppText>{dayList[todayDay - 3]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 4]}</AppText>
-                  )}
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow4}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh4}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain4}</AppText>
-                </View>
-              )}
-            </View>
-            <View>
-              {/* 5일 뒤 날씨 */}
-              {weather5 === 1 ? ( // 1: 맑음, 2: 비, 3: 구름많음
-                <View>
-                  <AppText>{date5After}</AppText>
-                  {todayDay + 5 > 6 ? (
-                    <AppText>{dayList[todayDay - 2]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 5]}</AppText>
-                  )}
-                  <Image source={require('../../assets/clear.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow5}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh5}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain5}</AppText>
-                </View>
-              ) : weather5 === 2 ? (
-                <View>
-                  <AppText>{date5After}</AppText>
-                  {todayDay + 5 > 6 ? (
-                    <AppText>{dayList[todayDay - 2]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 5]}</AppText>
-                  )}
-                  <Image source={require('../../assets/rain.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow5}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh5}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain5}</AppText>
-                </View>
-              ) : (
-                <View>
-                  <AppText>{date5After}</AppText>
-                  {todayDay + 5 > 6 ? (
-                    <AppText>{dayList[todayDay - 2]}</AppText>
-                  ) : (
-                    <AppText>{dayList[todayDay + 5]}</AppText>
-                  )}
-                  <Image source={require('../../assets/little-clouds.jpg')} />
-                  <AppText style={styles.lowTempText}>
-                    최저 기온: {tempLow5}
-                  </AppText>
-                  <AppText style={styles.highTempText}>
-                    최고 기온: {tempHigh5}
-                  </AppText>
-                  <AppText style={styles.rainText}>강수 확률: {rain5}</AppText>
-                </View>
-              )}
-            </View>
-          </View>
-        )}
+          )}
+        </View>
       </View>
     </View>
   );
@@ -735,24 +930,51 @@ function WeatherForecast({location}: Props) {
 
 const styles = StyleSheet.create({
   weatherWrapper: {
-    marginTop: 20,
-    marginHorizontal: 20,
+    backgroundColor: 'rgba(23, 23, 23, 0.4)',
+  },
+  weatherInnerWrapper: {
+    padding: 10,
+  },
+  weatherComponentWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  weatherComponent: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 20,
   },
   weatherText: {
     fontSize: 20,
   },
-  weatherImgWrapper: {
+  dateDayWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+  },
+  dateText: {
+    fontSize: 14,
+    color: 'white',
+  },
+  dayText: {
+    fontSize: 11,
+    color: 'white',
+  },
+  weatherImgWrapper: {
+    alignItems: 'center',
+  },
+  weatherImg: {
+    width: 25,
+    height: 25,
   },
   lowTempText: {
     fontSize: 9,
+    color: 'white',
   },
-  highTempText: {
-    fontSize: 9,
+  rainWrapper: {
+    alignItems: 'center',
   },
   rainText: {
     fontSize: 9,
+    color: 'white',
   },
 });
 

@@ -1,11 +1,12 @@
+import {faLocationDot, faMountain} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Image, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, ImageBackground} from 'react-native';
 import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
 import CourseList from '../../components/mountainDetail/CourseList';
-import Facilites from '../../components/mountainDetail/Facilities';
 import RankingList from '../../components/mountainDetail/RankingList';
 import WeatherForecast from '../../components/mountainDetail/WeatherForecast';
 import {mountainRanking} from '../../slices/rankingSlice/ranking';
@@ -55,32 +56,39 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
 
   return (
     <ScrollView style={styles.container}>
-      <Image
-        style={styles.mountainImg}
+      <ImageBackground
         source={require('../../assets/gyeryongMountain.jpg')}
-      />
+        style={styles.backgroundImg}>
+        <WeatherForecast
+          location={sentData.mountainDetail.address.split(' ')[0]}
+        />
+      </ImageBackground>
       <View style={styles.titleWrapper}>
         <AppTextBold style={styles.titleText}>
           {sentData.mountainDetail.name}
         </AppTextBold>
       </View>
       <View style={styles.infoWrapper}>
-        <AppText style={styles.text}>
-          위치: {sentData.mountainDetail.address}
-        </AppText>
-        <AppText style={styles.text}>
-          고도: {sentData.mountainDetail.height}m
-        </AppText>
+        <View style={styles.iconInfoWrapper}>
+          <FontAwesomeIcon icon={faMountain} style={styles.icon} />
+          <AppText>높이</AppText>
+          <AppText style={styles.text}>
+            {sentData.mountainDetail.height}m
+          </AppText>
+        </View>
+        <View style={styles.iconInfoWrapper}>
+          <FontAwesomeIcon icon={faLocationDot} style={styles.icon} />
+          <AppText>위치</AppText>
+          <AppText style={styles.text}>
+            {sentData.mountainDetail.address}
+          </AppText>
+        </View>
       </View>
-      <WeatherForecast
-        location={sentData.mountainDetail.address.split(' ')[0]}
-      />
       <CourseList
         trailList={sentData.mountainDetail.trails}
         moveToCourseDetail={moveToCourseDetail}
       />
       <RankingList rankingList={rankingList} myRanking={myRanking} />
-      <Facilites />
     </ScrollView>
   );
 }
@@ -88,23 +96,39 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    marginBottom: 50,
   },
   mountainImg: {
     width: '100%',
-    height: 200,
+    height: 180,
+  },
+  backgroundImg: {
+    height: 350,
+    paddingTop: 263,
   },
   titleWrapper: {
     marginLeft: 20,
     marginTop: 20,
   },
   titleText: {
-    fontSize: 30,
+    fontSize: 25,
+  },
+  iconInfoWrapper: {
+    flexDirection: 'row',
+    marginVertical: 5,
+  },
+  icon: {
+    color: '#57d696',
+    marginRight: 10,
   },
   infoWrapper: {
     marginLeft: 20,
     marginTop: 20,
   },
-  text: {marginBottom: 5},
+  text: {
+    marginBottom: 5,
+    marginHorizontal: 10,
+  },
 });
 
 export default MountainDetail;

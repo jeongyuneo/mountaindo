@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TextInput,
   FlatList,
+  Alert,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {LoggedInParamList} from '../../../AppInner';
@@ -24,6 +25,7 @@ import mountainSlice, {
 import {useAppDispatch} from '../../store';
 import {RootState} from '../../store/reducer';
 import SearchSubjectPicker from '../../components/mountain/SearchSubjectPicker';
+import once from 'lodash.debounce';
 
 type MountainScreenProps = NativeStackScreenProps<LoggedInParamList, '산'>;
 
@@ -94,23 +96,41 @@ function Mountain({navigation}: MountainScreenProps) {
     setSearchInput(text.trim());
   }, []);
 
+  const [exPage, setExPage] = useState(-1);
+  const [exStandard, setExStandard] = useState('');
+  const [exLocation, setExLocation] = useState('');
+
   // 전체 산 목록 API 요청 보내기 (이름순, 인기순, 고도 높은 순, 고도 낮은 순, 지역별 태그)
-  const dispatchMountainList: any = useCallback(
-    (standardArg: any, locationArg: string, pageArg: number) => {
-      dispatch(
-        getMountainList({
-          standard: standardArg,
-          location: locationArg,
-          page: pageArg,
-        }),
-      );
-    },
-    [],
-  );
+  const dispatchMountainList: any = (
+    standardArg: any,
+    locationArg: string,
+    pageArg: number,
+  ) => {
+    if (
+      exStandard === standardArg &&
+      exLocation === locationArg &&
+      exPage === pageArg
+    ) {
+      return;
+    }
+    setExPage(pageArg);
+    setExStandard(standardArg);
+    setExLocation(locationArg);
+    dispatch(
+      getMountainList({
+        standard: standardArg,
+        location: locationArg,
+        page: pageArg,
+      }),
+    );
+  };
 
   // 특정 산 검색 API 요청 보내가
   const dispatchSearchedMountain = () => {
     if (selectedSubject === '산') {
+      if (searchInput.length < 2) {
+        return Alert.alert('검색어를 두 글자 이상 입력하세요.');
+      }
       dispatch(
         getSearchedMountain({
           keyword: searchInput,
@@ -132,6 +152,9 @@ function Mountain({navigation}: MountainScreenProps) {
           console.log('SEARCHED_MOUNTAIN ERR ==>', err);
         });
     } else if (selectedSubject === '등산로') {
+      if (searchInput.length < 2) {
+        return Alert.alert('검색어를 두 글자 이상 입력하세요.');
+      }
       dispatch(
         getSearchedTrail({
           keyword: searchInput,
@@ -209,7 +232,6 @@ function Mountain({navigation}: MountainScreenProps) {
   const dispatchMountainDetail = (mountainId: number) => {
     dispatch(getMountainDetail({mountainId: mountainId}))
       .then(res => {
-        console.log('MOUNTAIN_DETAIL', res);
         if (res.meta.requestStatus === 'fulfilled') {
           navigation.navigate('MountainDetail', {
             mountainDetail: res.payload,
@@ -221,13 +243,16 @@ function Mountain({navigation}: MountainScreenProps) {
       });
   };
 
-  const getData = (
+  const getData = async (
     standardArg: string,
     locationArg: string,
     pageArg: number,
   ) => {
+    if (loading) {
+      return;
+    }
     setLoading(true);
-    dispatchMountainList(standardArg, locationArg, pageArg);
+    await dispatchMountainList(standardArg, locationArg, pageArg);
     setLoading(false);
   };
 
@@ -392,9 +417,11 @@ function Mountain({navigation}: MountainScreenProps) {
                   </View>
                 ) : (
                   <Pressable
-                    onPress={() => {
-                      dispatch(mountainSlice.actions.setInitialMountainList());
-                      dispatch(mountainSlice.actions.setInitialPage());
+                    onPress={async () => {
+                      await dispatch(
+                        mountainSlice.actions.setInitialMountainList(),
+                      );
+                      await dispatch(mountainSlice.actions.setInitialPage());
                       dispatch(
                         mountainSlice.actions.setLocation({location: '경기'}),
                       );
@@ -1775,8 +1802,10 @@ function Mountain({navigation}: MountainScreenProps) {
                   </Pressable>
                 ) : (
                   <Pressable
-                    onPress={() => {
-                      dispatch(mountainSlice.actions.setInitialMountainList());
+                    onPress={async () => {
+                      await dispatch(
+                        mountainSlice.actions.setInitialMountainList(),
+                      );
                       dispatch(mountainSlice.actions.setInitialPage());
                       dispatch(
                         mountainSlice.actions.setStandard({
@@ -1847,16 +1876,16 @@ function Mountain({navigation}: MountainScreenProps) {
               <FlatList
                 data={mountainList}
                 keyExtractor={item => String(item.mountainId)}
-                onEndReached={onEndReached}
-                onEndReachedThreshold={0.6}
+                onEndReached={once(onEndReached)}
+                onEndReachedThreshold={0.01}
                 refreshing={false}
                 renderItem={({item}) => {
                   const {
+                    mountainId,
                     address,
                     height,
                     hot,
                     imageUrl,
-                    mountainId,
                     name,
                   }: MountainType = item;
                   return (
@@ -1865,11 +1894,11 @@ function Mountain({navigation}: MountainScreenProps) {
                         dispatchMountainDetail(item.mountainId);
                       }}>
                       <MountainListItem
+                        mountainId={mountainId}
                         address={address}
                         height={height}
                         hot={hot}
                         imageUrl={imageUrl}
-                        mountainId={mountainId}
                         name={name}
                       />
                     </Pressable>
