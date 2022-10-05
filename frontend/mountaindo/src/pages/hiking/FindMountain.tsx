@@ -2,6 +2,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Dimensions,
   Pressable,
   ScrollView,
@@ -75,6 +76,9 @@ function FindMountain({navigation}: FindMountainScreenProps) {
 
   // 사용자가 입력한 keyword로 산 검색 요청
   const onSearch = () => {
+    if (search.trim().length < 2) {
+      return Alert.alert('알림', '검색어는 최소 2글자 이상 입력해주세요');
+    }
     dispatch(searchMountain({keyword: search}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
@@ -100,7 +104,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
   };
 
   const moveToHiking = (id: number, name: string) => {
-    navigation.navigate('Hiking', {
+    navigation.navigate('등산', {
       trailId: id,
       trailName: name,
     });

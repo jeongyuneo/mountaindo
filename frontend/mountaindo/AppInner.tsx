@@ -14,14 +14,12 @@ import Welcome from './src/pages/user/loggedOut/Welcome';
 import FindId from './src/pages/user/loggedOut/FindId';
 import NicknameChangeForm from './src/pages/user/loggedIn/NicknameChangeForm';
 import usePermissions from './src/hooks/usePermissions';
-import ContactUs from './src/pages/user/loggedIn/ContactUs';
 import SignIn from './src/pages/user/loggedOut/SignIn';
 import FindPassword from './src/pages/user/loggedOut/FindPassword';
 import Survey1 from './src/pages/user/loggedOut/Survey1';
 import Survey2 from './src/pages/user/loggedOut/Survey2';
 import Survey3 from './src/pages/user/loggedOut/Survey3';
 import Survey4 from './src/pages/user/loggedOut/Survey4';
-import Notice from './src/pages/user/loggedIn/Notice';
 import PasswordChange from './src/pages/user/loggedIn/PasswordChange';
 import PhoneNumberChangeForm from './src/pages/user/loggedIn/PhoneNumberChangeForm';
 import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
@@ -51,20 +49,18 @@ export type LoggedInParamList = {
   Survey2: any;
   Survey3: any;
   Survey4: any;
-  Main: any;
+  홈: any;
   Completed: any;
-  Hiking: any;
-  Mountain: any;
+  등산: any;
+  산: any;
   UserInfoChange: any;
   PasswordChange: any;
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
-  MyPage: any;
-  Notice: any;
-  ContactUs: any;
+  유저: any;
   MountainDetail: any;
   CourseDetail: any;
-  Visited: any;
+  기록: any;
   MainDetail: any;
   AddressChangeForm: any;
   FindMountain: any;
@@ -145,16 +141,6 @@ function UserTab() {
         options={{title: '전화번호 변경'}}
       />
       <Stack.Screen
-        name="Notice"
-        component={Notice}
-        options={{title: '공지사항'}}
-      />
-      <Stack.Screen
-        name="ContactUs"
-        component={ContactUs}
-        options={{title: '문의하기'}}
-      />
-      <Stack.Screen
         name="AddressChangeForm"
         component={AddressChangeForm}
         options={{title: '주소 변경'}}
@@ -176,7 +162,7 @@ function MountainTab() {
         headerShadowVisible: false,
       })}>
       <Stack.Screen
-        name="Mountain"
+        name="산"
         component={Mountain}
         options={{title: '전체 산 목록', headerShown: false}}
       />
@@ -237,7 +223,7 @@ function HikingTab() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Hiking"
+        name="등산"
         component={Hiking}
         options={{
           title: '등산',
@@ -295,7 +281,7 @@ function AppInner() {
         }}
         initialRouteName="Main">
         <Tab.Screen
-          name="MountainList"
+          name="산"
           component={MountainTab}
           options={{
             headerShown: false,
@@ -303,14 +289,14 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faMountain}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
           }}
         />
         <Tab.Screen
-          name="HikingTab"
+          name="등산"
           component={HikingTab}
           options={{
             headerShown: false,
@@ -318,13 +304,13 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faPersonHiking}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
           }}
         />
         <Tab.Screen
-          name="Main"
+          name="홈"
           component={Main}
           options={{
             headerShown: false,
@@ -332,14 +318,14 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faHome}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
           }}
         />
         <Tab.Screen
-          name="VisitedTab"
+          name="기록"
           component={VisitedTab}
           options={{
             headerShown: false,
@@ -347,14 +333,14 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faFlag}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
           }}
         />
         <Tab.Screen
-          name="User"
+          name="유저"
           component={UserTab}
           options={{
             headerShown: false,
@@ -362,7 +348,7 @@ function AppInner() {
               <FontAwesomeIcon
                 icon={faUser}
                 size={20}
-                color={focused ? '#7FB77E' : 'black'}
+                color={focused ? '#57d696' : 'black'}
               />
             ),
             unmountOnBlur: true,
