@@ -46,17 +46,27 @@ function PhoneNumberChangeForm({
       userChange({
         user: {...route.params?.user, phone: phone},
       }),
-    ).then(res => {
-      if (res.meta.requestStatus === 'fulfilled') {
-        route.params?.setUser({
-          ...route.params?.user,
-          phone: phone,
-        });
-      }
-    });
-
-    navigation.navigate('유저');
-    return console.log('알림', '전화번호 변경에 성공하였습니다. ');
+    )
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          route.params?.setUser({
+            ...route.params?.user,
+            phone: phone,
+          });
+          navigation.navigate('유저');
+          return Alert.alert('알림', '전화번호 변경에 성공하였습니다.');
+        }
+        return Alert.alert(
+          '알림',
+          `전화번호 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      })
+      .catch(err => {
+        return Alert.alert(
+          '알림',
+          `전화번호 변경에 실패하였습니다.\n다시 시도해주세요!`,
+        );
+      });
   }, [navigation, phone, route.params]);
   const canGoNext = phone; // 버튼 disabled 확인할 변수
   return (
