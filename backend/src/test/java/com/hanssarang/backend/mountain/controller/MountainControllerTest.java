@@ -87,6 +87,8 @@ class MountainControllerTest extends ApiDocument {
                                 .name(TRAIL_NAME)
                                 .length(LENGTH)
                                 .level(LEVEL)
+                                .goingUpTime(GOING_UP_TIME)
+                                .goingDownTime(GOING_DOWN_TIME)
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
