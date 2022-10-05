@@ -165,7 +165,7 @@ function TrackingEnd({
               <FontAwesomeIcon
                 icon={faCloudRain}
                 size={15}
-                color={'skyblue'}
+                color={'grey'}
                 style={styles.weatherIcon}
               />
             ) : currentWeather === '바람' ? (
