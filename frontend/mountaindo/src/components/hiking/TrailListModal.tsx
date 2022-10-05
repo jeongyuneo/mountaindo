@@ -33,7 +33,11 @@ const TrailListModal = ({
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <Pressable style={styles.centeredView}>
+        <Pressable
+          style={styles.centeredView}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
           <View style={styles.modalView}>
             {isMountain === 2 && isTrailList && trailList?.length > 0 ? (
               <ScrollView>
@@ -51,20 +55,23 @@ const TrailListModal = ({
                       key={index}
                       style={styles.searchList}
                       onPress={() => {
-                        moveToHiking(item.trailId, item.name);
+                        moveToHiking(
+                          item.trailId,
+                          item?.name ? item.name : `${mountainName}의 코스`,
+                        );
                       }}>
-                      <AppTextBold key={index}>{item?.name}</AppTextBold>
+                      <AppTextBold key={index}>
+                        {item?.name ? item.name : `${mountainName}의 코스`}
+                      </AppTextBold>
                     </Pressable>
                   ))}
                 </View>
               </ScrollView>
-            ) : isMountain === 1 ? (
+            ) : (
               <View style={styles.searchContainer}>
-                <AppText style={styles.text}>검색 결과가 없습니다.</AppText>
+                <AppText style={styles.text}>등산 코스가 없습니다.</AppText>
                 <AppText style={styles.text}>다른 산을 검색해주세요!</AppText>
               </View>
-            ) : (
-              <></>
             )}
           </View>
         </Pressable>
@@ -114,6 +121,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 15,
+    marginBottom: 5,
+    textAlign: 'center',
   },
   chooseText: {
     marginLeft: 5,
