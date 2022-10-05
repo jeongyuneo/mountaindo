@@ -225,27 +225,9 @@ function MyPage({navigation}: MyPageScreenProps) {
               </View>
             </Pressable>
 
-            <Pressable
-              onPress={() => navigation.push('Notice')}
-              style={styles.menuHeight}>
-              <View style={styles.menuStyle}>
-                <AppText style={styles.goMenuText}>공지사항</AppText>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size={20}
-                  style={styles.angleIcon}
-                />
-              </View>
-            </Pressable>
-
             <Pressable style={styles.menuHeight} onPress={loggedout}>
               <View style={styles.menuStyle}>
                 <AppText style={styles.goMenuText}>로그아웃</AppText>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  size={20}
-                  style={styles.angleIcon}
-                />
               </View>
             </Pressable>
           </ScrollView>
@@ -271,7 +253,6 @@ const styles = StyleSheet.create({
   },
   myPageText: {
     fontSize: 15,
-    color: 'black',
   },
   container: {
     flex: 1,
@@ -298,7 +279,6 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 13,
-    color: 'black',
     paddingTop: 10,
   },
   userRank: {
@@ -307,12 +287,7 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 15,
-    fontWeight: 'bold',
     color: '#57AAFF',
-  },
-  title: {
-    fontWeight: 'bold',
-    color: 'black',
   },
   backIcon: {
     marginVertical: 10,
@@ -325,8 +300,7 @@ const styles = StyleSheet.create({
   },
   goMenuText: {
     marginLeft: 30,
-    color: 'black',
-    fontSize: 20,
+    fontSize: 15,
   },
   angleIcon: {
     marginTop: 3,
