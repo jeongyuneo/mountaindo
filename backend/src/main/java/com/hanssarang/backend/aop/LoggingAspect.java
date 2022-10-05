@@ -15,7 +15,7 @@ public class LoggingAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
-    @Before(value = "execution(* com.hanssarang..controller.*Controller.*(..)) || execution(* com.hanssarang..service.*Service.*(..))")
+    @Before(value = "execution(* com.hanssarang..controller.*Controller.*(..))")
     public void logging(JoinPoint joinPoint) {
         logger.debug("메소드 선언부 : {}, 전달 파라미터 : {}", joinPoint.getSignature(), Arrays.toString(joinPoint.getArgs()));
     }
