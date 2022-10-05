@@ -170,7 +170,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberSuccess() throws Exception {
         // given
-        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
+        willReturn(updateResponse).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
@@ -181,11 +181,33 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void updateMemberFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_MEMBER.getMessage())).given(memberService).updateMember(anyInt(), any(UpdateRequest.class), any(MultipartFile.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_MEMBER.getMessage())).given(memberService).updateMember(anyInt(), any(UpdateRequest.class));
         // when
         ResultActions resultActions = 회원정보_수정_요청(updateRequest);
         // then
         회원정보_수정_실패(resultActions, new Message(ErrorMessage.FAIL_TO_UPDATE_MEMBER));
+    }
+
+    @DisplayName("회원 프로필 사진 수정 - 성공")
+    @Test
+    void updateImageSuccess() throws Exception {
+        // given
+        willDoNothing().given(memberService).updateImage(anyInt(), any(MultipartFile.class));
+        // when
+        ResultActions resultActions = 회원_프로필_사진_수정_요청();
+        // then
+        회원_프로필_사진_수정_성공(resultActions);
+    }
+
+    @DisplayName("회원 프로필 사진 수정 - 실패")
+    @Test
+    void updateImageFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_UPDATE_IMAGE.getMessage())).given(memberService).updateImage(anyInt(), any(MultipartFile.class));
+        // when
+        ResultActions resultActions = 회원_프로필_사진_수정_요청();
+        // then
+        회원_프로필_사진_수정_실패(resultActions, new Message(ErrorMessage.FAIL_TO_UPDATE_IMAGE));
     }
 
     @DisplayName("마이페이지에서 비밀번호 재설정 - 성공")
@@ -450,11 +472,10 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 회원정보_수정_요청(UpdateRequest updateRequest) throws Exception {
-        return mockMvc.perform(multipart("/api/v1/members/update")
-                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
-                .file(new MockMultipartFile("updateRequest", "", "application/json", toJson(updateRequest).getBytes()))
+        return mockMvc.perform(post("/api/v1/members/update")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.MULTIPART_FORM_DATA));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(updateRequest)));
     }
 
     private void 회원정보_수정_성공(ResultActions resultActions, UpdateResponse updateResponse) throws Exception {
@@ -469,6 +490,26 @@ public class MemberControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("update-member-fail"));
+    }
+
+    private ResultActions 회원_프로필_사진_수정_요청() throws Exception {
+        return mockMvc.perform(multipart("/api/v1/members/update/image")
+                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+    }
+
+    private void 회원_프로필_사진_수정_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("update-image-success"));
+    }
+
+    private void 회원_프로필_사진_수정_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("update-image-fail"));
     }
 
     private ResultActions 마이페이지_비밀번호_재설정_요청(PasswordUpdateRequest passwordUpdateRequest) throws Exception {

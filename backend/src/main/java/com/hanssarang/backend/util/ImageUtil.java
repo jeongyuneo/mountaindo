@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.UUID;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FILE;
