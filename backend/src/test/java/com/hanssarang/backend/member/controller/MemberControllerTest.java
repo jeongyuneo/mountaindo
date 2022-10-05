@@ -472,11 +472,10 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private ResultActions 회원정보_수정_요청(UpdateRequest updateRequest) throws Exception {
-        return mockMvc.perform(multipart("/api/v1/members/update")
-                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
-                .file(new MockMultipartFile("updateRequest", "", "application/json", toJson(updateRequest).getBytes()))
+        return mockMvc.perform(post("/api/v1/members/update")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.MULTIPART_FORM_DATA));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(updateRequest)));
     }
 
     private void 회원정보_수정_성공(ResultActions resultActions, UpdateResponse updateResponse) throws Exception {
