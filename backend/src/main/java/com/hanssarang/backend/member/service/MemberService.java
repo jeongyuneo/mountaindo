@@ -104,15 +104,20 @@ public class MemberService {
                 .build();
     }
 
-    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest, MultipartFile multipartFile) {
+    public UpdateResponse updateMember(int memberId, UpdateRequest updateRequest) {
         Member member = findMember(memberId);
-        String imageUrl = ImageUtil.saveImage(multipartFile, PROFILE);
-        member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname(), imageUrl);
+        member.update(updateRequest.getName(), updateRequest.getPhone(), updateRequest.getAddress(), updateRequest.getNickname());
         memberRepository.save(member);
         return UpdateResponse.builder()
                 .nickname(member.getNickname())
                 .token(JwtUtil.generateToken(memberId, member.getNickname()))
                 .build();
+    }
+
+    public void updateImage(int memberId, MultipartFile multipartFile) {
+        Member member = findMember(memberId);
+        member.updateImage(ImageUtil.saveImage(multipartFile, PROFILE));
+        memberRepository.save(member);
     }
 
     public void updatePassword(PasswordUpdateVerificationRequest passwordUpdateVerificationRequest) {

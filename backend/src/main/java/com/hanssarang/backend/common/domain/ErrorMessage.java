@@ -10,6 +10,7 @@ public enum ErrorMessage {
     FAIL_TO_SIGNUP("가입에 실패했습니다."),
     FAIL_TO_CREATE_SURVEY("사전 설문조사 저장에 실패했습니다."),
     FAIL_TO_UPDATE_MEMBER("회원정보 수정에 실패하였습니다."),
+    FAIL_TO_UPDATE_IMAGE("회원 프로필 사진 수정에 실패하였습니다."),
     FAIL_TO_UPDATE_PASSWORD("비밀번호 수정에 실패하였습니다."),
     FAIL_TO_DELETE_MEMBER("회원탈퇴에 실패하였습니다."),
     FAIL_TO_SAVE_FILE("파일 저장에 실패했습니다."),
