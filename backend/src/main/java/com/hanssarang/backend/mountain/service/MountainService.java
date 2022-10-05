@@ -9,7 +9,6 @@ import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
-import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -75,7 +74,7 @@ public class MountainService {
                 .name(mountain.getName())
                 .height(mountain.getHeight())
                 .address(mountain.getAddress().getFullAddress())
-                .image(ImageUtil.toByteArray(mountain.getImageUrl()))
+                .imageUrl(mountain.getImageUrl())
                 .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                 .trails(mountain.getTrails()
                         .stream()
@@ -179,7 +178,7 @@ public class MountainService {
                         .name(mountain.getName())
                         .height(mountain.getHeight())
                         .address(mountain.getAddress().getFullAddress())
-                        .image(ImageUtil.toByteArray(mountain.getImageUrl()))
+                        .imageUrl(mountain.getImageUrl())
                         .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                         .build())
                 .collect(Collectors.toList());
@@ -219,7 +218,7 @@ public class MountainService {
         return RecommendationResponse.builder()
                 .trailName(recommendedTrail.getName())
                 .mountainName(recommendedTrail.getMountain().getName())
-                .mountainImage(ImageUtil.toByteArray(recommendedTrail.getMountain().getImageUrl()))
+                .mountainImage(recommendedTrail.getMountain().getImageUrl())
                 .build();
     }
 }
