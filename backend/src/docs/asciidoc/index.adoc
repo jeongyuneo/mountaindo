@@ -291,6 +291,24 @@ include::{snippets}/delete-member-fail/http-response.adoc[]
 === 산/등산로 관련 기능
 ==== 산 목록 조회
 ----
+/api/v1/mountains/recommendation
+----
+
+===== 성공
+.request
+include::{snippets}/get-recommendations-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-recommendations-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-recommendations-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-recommendations-fail/http-response.adoc[]
+
+==== 산 목록 조회
+----
 /api/v1/mountains
 ----
 
@@ -456,6 +474,24 @@ include::{snippets}/search-trail-fail/http-request.adoc[]
 include::{snippets}/search-trail-fail/http-response.adoc[]
 
 === 등산 관련 기능
+==== 등산 목록 조회
+----
+/api/v1/hikings
+----
+
+===== 성공
+.request
+include::{snippets}/get-hikings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-fail/http-response.adoc[]
+
 ==== 등산 목록 조회
 ----
 /api/v1/hikings

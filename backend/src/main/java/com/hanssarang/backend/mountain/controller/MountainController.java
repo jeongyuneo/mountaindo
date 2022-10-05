@@ -2,13 +2,17 @@ package com.hanssarang.backend.mountain.controller;
 
 import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
 import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
+import com.hanssarang.backend.mountain.controller.dto.RecommendationListResponse;
 import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
 import com.hanssarang.backend.mountain.service.MountainService;
+import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.hanssarang.backend.common.domain.Message.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,5 +55,11 @@ public class MountainController {
                                                                   @RequestParam String si) {
         return ResponseEntity.ok()
                 .body(mountainService.searchTrail(keyword, sort, si));
+    }
+
+    @GetMapping("/recommendation")
+    public ResponseEntity<RecommendationListResponse> getRecommendedTrails(@RequestHeader(AUTHORIZATION) String token) {
+        return ResponseEntity.ok()
+                .body(mountainService.getRecommendedTrails(JwtUtil.getMemberId(token)));
     }
 }
