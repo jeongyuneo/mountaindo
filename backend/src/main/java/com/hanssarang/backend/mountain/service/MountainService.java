@@ -28,7 +28,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
 @Service
 public class MountainService {
 
-    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 50;
+    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 10;
     private static final String NAME = "name";
     private static final String HEIGHT = "height";
     private static final String HIGH_HEIGHT = "high-height";
