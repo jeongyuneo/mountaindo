@@ -16,5 +16,5 @@ public class HikingResponse {
     private double distance;
     private LocalTime useTime;
     private double accumulatedHeight;
-    private byte[] image;
+    private String imageUrl;
 }
