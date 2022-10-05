@@ -23,7 +23,7 @@ export const searchMountain = createAsyncThunk(
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
-        `api/v1/mountains/search/2?keyword=${args.keyword}&sort=name&si=전체`,
+        `api/v1/mountains/search/1?keyword=${args.keyword}&sort=name&si=전체`,
       );
       return response.data;
     } catch (err: any) {

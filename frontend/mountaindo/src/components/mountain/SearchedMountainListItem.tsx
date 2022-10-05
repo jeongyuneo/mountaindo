@@ -3,6 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import {faFire} from '@fortawesome/free-solid-svg-icons';
 import AppText from '../AppText';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import AppTextBold from '../AppTextBold';
 
 interface Props {
   address: string;
@@ -30,8 +31,14 @@ function SearchedMountainListItem({
         />
         <View style={styles.contentWrapper}>
           <View style={styles.nameIconWrapper}>
-            <AppText style={styles.nameText}>{name}</AppText>
-            <View>{hot ? <FontAwesomeIcon icon={faFire} /> : <View />}</View>
+            <AppTextBold style={styles.nameText}>{name}</AppTextBold>
+            <View>
+              {hot ? (
+                <FontAwesomeIcon icon={faFire} style={styles.iconFire} />
+              ) : (
+                <View />
+              )}
+            </View>
           </View>
           <AppText style={styles.heightText}>{height}m</AppText>
           <AppText style={styles.addressText}>{address}</AppText>
@@ -43,29 +50,40 @@ function SearchedMountainListItem({
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginVertical: 5,
-    marginHorizontal: 10,
+    marginVertical: 7,
+    marginHorizontal: 15,
     borderRadius: 20,
-    padding: 10,
+    padding: 5,
     backgroundColor: 'white',
+    elevation: 5,
   },
   imageContentWrapper: {
     flexDirection: 'row',
   },
   contentWrapper: {
-    marginLeft: 20,
+    marginLeft: 25,
   },
   nameIconWrapper: {
     flexDirection: 'row',
+    marginBottom: 3,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 16,
     marginRight: 5,
   },
   image: {
-    height: 80,
+    height: 60,
     width: 80,
-    borderRadius: 20,
+    borderRadius: 15,
+  },
+  iconFire: {
+    color: 'red',
+  },
+  heightText: {
+    fontSize: 12,
+  },
+  addressText: {
+    fontSize: 12,
   },
 });
 
