@@ -116,8 +116,7 @@ public class MemberService {
 
     public void updateImage(int memberId, MultipartFile multipartFile) {
         Member member = findMember(memberId);
-        String imageUrl = ImageUtil.saveImage(multipartFile, PROFILE);
-        member.updateImage(imageUrl);
+        member.updateImage(ImageUtil.saveImage(multipartFile, PROFILE));
         memberRepository.save(member);
     }
 
