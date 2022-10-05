@@ -58,7 +58,7 @@ public class MountainController {
     }
 
     @GetMapping("/recommendation")
-    public ResponseEntity<RecommendationListResponse> getRecommendedMountains(@RequestHeader(AUTHORIZATION) String token) {
+    public ResponseEntity<RecommendationListResponse> getRecommendedTrails(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity.ok()
                 .body(mountainService.getRecommendedMountains(JwtUtil.getMemberId(token)));
     }
