@@ -4,10 +4,7 @@ import com.hanssarang.backend.ApiDocument;
 import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.domain.Message;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
-import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
+import com.hanssarang.backend.mountain.controller.dto.*;
 import com.hanssarang.backend.mountain.service.MountainService;
 import com.hanssarang.backend.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,12 +58,20 @@ class MountainControllerTest extends ApiDocument {
     private List<MountainListResponse> mountainListResponses;
     private MountainResponse mountainResponse;
     private TrailResponse trailResponse;
+    private RecommendationListResponse recommendationListResponse;
 
     @MockBean
     private MountainService mountainService;
 
     @BeforeEach
     void setUp() {
+        List<RecommendationResponse> recommendationResponses = IntStream.range(0, 3)
+                .mapToObj(n -> RecommendationResponse.builder()
+                        .trailName(TRAIL_NAME)
+                        .mountainName(NAME)
+                        .mountainImage(IMAGE)
+                        .build())
+                .collect(Collectors.toList());
         mountainListResponses = IntStream.range(0, 3)
                 .mapToObj(n -> MountainListResponse.builder()
                         .mountainId(ID)
@@ -77,6 +82,11 @@ class MountainControllerTest extends ApiDocument {
                         .isHot(IS_HOT)
                         .build())
                 .collect(Collectors.toList());
+        recommendationListResponse = RecommendationListResponse.builder()
+                .memberBased(recommendationResponses)
+                .lastVisitedTrailBased(recommendationResponses)
+                .surveyBased(recommendationResponses)
+                .build();
         mountainResponse = MountainResponse.builder()
                 .name(NAME)
                 .height(HEIGHT)
@@ -97,6 +107,17 @@ class MountainControllerTest extends ApiDocument {
                 .length(LENGTH)
                 .risk(RISK)
                 .build();
+    }
+
+    @DisplayName("추천 목록 조회 - 성공")
+    @Test
+    void getRecommendationsSuccess() throws Exception {
+        // given
+        willReturn(recommendationListResponse).given(mountainService).getRecommendedMountains(anyInt());
+        // when
+        ResultActions resultActions = 추천_목록_조회_요청(ID);
+        // then
+        추천_목록_조회_성공(resultActions, recommendationListResponse);
     }
 
     @DisplayName("산 목록 조회 - 성공")
@@ -207,6 +228,18 @@ class MountainControllerTest extends ApiDocument {
         ResultActions resultActions = 등산로_검색_요청(TRAIL_KEYWORD, SORT, SI);
         // then
         등산로_검색_실패(resultActions, new Message(ErrorMessage.FAIL_TO_SEARCH_TRAIL));
+    }
+
+    private ResultActions 추천_목록_조회_요청(int memberId) throws Exception {
+        return mockMvc.perform(get("/api/v1/mountains/recommendation")
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN));
+    }
+
+    private void 추천_목록_조회_성공(ResultActions resultActions, RecommendationListResponse recommendationListResponse) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(toJson(recommendationListResponse)))
+                .andDo(print())
+                .andDo(toDocument("get-recommendations-success"));
     }
 
     private ResultActions 산_목록_조회_요청(String sort, String si, int page) throws Exception {
