@@ -43,7 +43,7 @@ public class MountainService {
         List<Mountain> mountains = null;
         if (si.equals(ALL_AREA)) {
             if (sort.equals(NAME)) {
-                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
+                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE)).getContent();
             } else if (sort.equals(HIGH_HEIGHT)) {
                 mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
             } else if (sort.equals(LOW_HEIGHT)) {
