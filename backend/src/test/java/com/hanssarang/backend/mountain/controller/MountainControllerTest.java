@@ -120,6 +120,17 @@ class MountainControllerTest extends ApiDocument {
         추천_목록_조회_성공(resultActions, recommendationListResponse);
     }
 
+    @DisplayName("추천 목록 조회 - 실패")
+    @Test
+    void getRecommendationsFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_MOUNTAINS.getMessage())).given(mountainService).getRecommendedMountains(anyInt());
+        // when
+        ResultActions resultActions = 추천_목록_조회_요청(ID);
+        // then
+        추천_목록_조회_실패(resultActions, new Message(ErrorMessage.FAIL_TO_GET_MOUNTAINS));
+    }
+
     @DisplayName("산 목록 조회 - 성공")
     @Test
     void getMountainsSuccess() throws Exception {
@@ -240,6 +251,13 @@ class MountainControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(recommendationListResponse)))
                 .andDo(print())
                 .andDo(toDocument("get-recommendations-success"));
+    }
+
+    private void 추천_목록_조회_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("get-recommendations-fail"));
     }
 
     private ResultActions 산_목록_조회_요청(String sort, String si, int page) throws Exception {
