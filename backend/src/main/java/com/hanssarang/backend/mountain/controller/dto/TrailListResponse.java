@@ -12,4 +12,6 @@ public class TrailListResponse {
     private String name;
     private double length;
     private String level;
+    private int goingUpTime;
+    private int goingDownTime;
 }
