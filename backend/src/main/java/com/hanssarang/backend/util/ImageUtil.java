@@ -50,7 +50,6 @@ public class ImageUtil {
         try {
             InputStream imageFile = new FileInputStream(imageUrl);
             byte[] imageBytes = IOUtils.toByteArray(imageFile);
-            System.out.println(Arrays.toString(imageBytes));
             imageFile.close();
             return imageBytes;
         } catch (IOException e) {
