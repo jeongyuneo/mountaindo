@@ -117,8 +117,6 @@ export const signUp = createAsyncThunk(
   'userSlice/signUp',
   async (args: any, {rejectWithValue}) => {
     try {
-      console.log(args);
-
       const response = await axiosService.post('api/v1/members', {
         email: args.email,
         password: args.password,
