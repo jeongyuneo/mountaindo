@@ -45,17 +45,6 @@ public class ImageUtil {
         return imageUrl;
     }
 
-    public static byte[] toByteArray(String imageUrl) {
-        try {
-            InputStream imageFile = new FileInputStream(imageUrl);
-            byte[] imageBytes = IOUtils.toByteArray(imageFile);
-            imageFile.close();
-            return imageBytes;
-        } catch (IOException e) {
-            throw new FileLoadException(ErrorMessage.FAIL_TO_LOAD_IMAGE);
-        }
-    }
-
     private static String extractExt(String contentType) {
         return contentType.substring(contentType.lastIndexOf(SEPARATOR) + 1);
     }
