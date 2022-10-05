@@ -188,7 +188,7 @@ public class MountainService {
                 .anyMatch(mountain -> mountain.getId() == mountainId);
     }
 
-    public RecommendationListResponse getRecommendedMountains(int memberId) {
+    public RecommendationListResponse getRecommendedTrails(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         List<Hiking> hikings = member.getHikings();

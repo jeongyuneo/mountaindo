@@ -60,6 +60,6 @@ public class MountainController {
     @GetMapping("/recommendation")
     public ResponseEntity<RecommendationListResponse> getRecommendedTrails(@RequestHeader(AUTHORIZATION) String token) {
         return ResponseEntity.ok()
-                .body(mountainService.getRecommendedMountains(JwtUtil.getMemberId(token)));
+                .body(mountainService.getRecommendedTrails(JwtUtil.getMemberId(token)));
     }
 }
