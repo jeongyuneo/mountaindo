@@ -282,7 +282,6 @@ function SignUp() {
     isCertificate,
   ]);
 
-  console.log(canGoNext);
   useEffect(() => {
     if (phoneNumber.length === 10) {
       setPhoneNumber(phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
