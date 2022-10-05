@@ -16,7 +16,8 @@
       android:theme="@style/AppTheme"
       android:exported="true"
       android:allowBackup="true"
-      android:requestLegacyExternalStorage="true">
+      android:requestLegacyExternalStorage="true"
+      android:usesCleartextTraffic="true">
       <meta-data
         android:name="com.naver.maps.map.CLIENT_ID"
         android:value="@string/NAVER_MAP_KEY" />
