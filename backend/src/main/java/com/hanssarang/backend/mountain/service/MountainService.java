@@ -83,6 +83,8 @@ public class MountainService {
                                 .name(trail.getName())
                                 .length(trail.getLength())
                                 .level(trail.getLevel().toString())
+                                .goingUpTime(trail.getGoingUpTime())
+                                .goingDownTime(trail.getGoingDownTime())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
