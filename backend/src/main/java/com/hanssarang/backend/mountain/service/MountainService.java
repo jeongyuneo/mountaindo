@@ -28,7 +28,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
 @Service
 public class MountainService {
 
-    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 50;
+    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 10;
     private static final String NAME = "name";
     private static final String HEIGHT = "height";
     private static final String HIGH_HEIGHT = "high-height";
@@ -44,7 +44,7 @@ public class MountainService {
         List<Mountain> mountains = null;
         if (si.equals(ALL_AREA)) {
             if (sort.equals(NAME)) {
-                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
+                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE)).getContent();
             } else if (sort.equals(HIGH_HEIGHT)) {
                 mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
             } else if (sort.equals(LOW_HEIGHT)) {
