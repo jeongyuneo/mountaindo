@@ -22,7 +22,7 @@ public class ImageUtil {
     private static final String IMAGE_JPG = "image/jpg";
     private static final String IMAGE_JPEG = "image/jpeg";
     private static final String IMAGE_PNG = "image/png";
-    private static final String IMAGE_REQUEST = "https://j7b201.p.ssafy.io/images/";
+    private static final String IMAGE_REQUEST = "/images";
 
     public static String saveImage(MultipartFile multipartFile, String path) {
         validateContentType(multipartFile.getContentType());
