@@ -2,9 +2,10 @@ import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import userSlice, {survey} from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 import {RootState} from '../../../store/reducer';
@@ -56,10 +57,10 @@ function Survey4({navigation}: Survey4ScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 등산 소요시간</Text>
-        <Text style={styles.subTitle}>
+        <AppTextBold style={styles.title}>선호하는 등산 소요시간</AppTextBold>
+        <AppTextBold style={styles.subTitle}>
           등산하는데 어느 정도의 시간을 소요하시나요?
-        </Text>
+        </AppTextBold>
       </View>
       <View>
         <Pressable
@@ -80,7 +81,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
             setChecked1(!isChecked1);
             setChecked(1);
           }}>
-          <Text
+          <AppTextBold
             style={
               isChecked === 0
                 ? styles.answerBoxText
@@ -95,7 +96,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : styles.answerBoxText
             }>
             3시간 이내
-          </Text>
+          </AppTextBold>
         </Pressable>
         <Pressable
           style={
@@ -115,7 +116,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
             setChecked2(!isChecked2);
             setChecked(2);
           }}>
-          <Text
+          <AppTextBold
             style={
               isChecked === 0
                 ? styles.answerBoxText
@@ -130,7 +131,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : styles.answerBoxText
             }>
             3시간 이상 5시간 이내
-          </Text>
+          </AppTextBold>
         </Pressable>
         <Pressable
           style={
@@ -150,7 +151,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
             setChecked3(!isChecked3);
             setChecked(3);
           }}>
-          <Text
+          <AppTextBold
             style={
               isChecked === 0
                 ? styles.answerBoxText
@@ -165,7 +166,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : styles.answerBoxText
             }>
             5시간 이상 7시간 이내
-          </Text>
+          </AppTextBold>
         </Pressable>
         <Pressable
           style={
@@ -185,7 +186,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
             setChecked4(!isChecked4);
             setChecked(4);
           }}>
-          <Text
+          <AppTextBold
             style={
               isChecked === 0
                 ? styles.answerBoxText
@@ -200,7 +201,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : styles.answerBoxText
             }>
             7시간 이상 10시간 이내
-          </Text>
+          </AppTextBold>
         </Pressable>
         <Pressable
           style={
@@ -220,7 +221,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
             setChecked4(!isChecked5);
             setChecked(5);
           }}>
-          <Text
+          <AppTextBold
             style={
               isChecked === 0
                 ? styles.answerBoxText
@@ -235,7 +236,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : styles.checkedBoxText
             }>
             7시간 이상 10시간 이내
-          </Text>
+          </AppTextBold>
         </Pressable>
       </View>
       <Pressable
@@ -268,12 +269,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: '#272827',
-    fontWeight: 'bold',
   },
   subTitle: {
     marginVertical: 10,
     color: '#272827',
-    fontWeight: 'bold',
   },
   answerBox: {
     marginHorizontal: 10,
@@ -288,12 +287,10 @@ const styles = StyleSheet.create({
   },
   answerBoxText: {
     color: 'grey',
-    fontWeight: 'bold',
   },
   checkedBox: {
     marginHorizontal: 10,
     marginTop: 10,
-    color: 'black',
     backgroundColor: '#57d696',
     height: 55,
     borderRadius: 30,
@@ -304,7 +301,6 @@ const styles = StyleSheet.create({
   },
   checkedBoxText: {
     color: 'white',
-    fontWeight: 'bold',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

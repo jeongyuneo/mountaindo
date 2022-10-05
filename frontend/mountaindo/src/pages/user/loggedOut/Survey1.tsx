@@ -2,8 +2,9 @@ import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
@@ -45,10 +46,10 @@ function Survey1({navigation}: Survey1ScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산레벨</Text>
-        <Text style={styles.subTitle}>
+        <AppTextBold style={styles.title}>등산레벨</AppTextBold>
+        <AppTextBold style={styles.subTitle}>
           내가 생각하는 나의 등산 레벨은 어느 정도인가요?
-        </Text>
+        </AppTextBold>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -58,9 +59,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -68,9 +69,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -78,9 +79,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked3(!isChecked3);
               setChecked(3);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -91,9 +92,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>
+            <AppTextBold style={styles.checkedBoxText}>
               등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -101,9 +102,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -111,9 +112,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked3(!isChecked3);
               setChecked(3);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       ) : isChecked === 2 ? (
@@ -124,9 +125,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -134,9 +135,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>
+            <AppTextBold style={styles.checkedBoxText}>
               등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -144,9 +145,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked3(!isChecked3);
               setChecked(3);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       ) : (
@@ -157,9 +158,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등린이 - 낮고 완만한 산이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -167,9 +168,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               등소년 - 등산이면 적당한 운동이 좋아요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -177,9 +178,9 @@ function Survey1({navigation}: Survey1ScreenProps) {
               setChecked3(!isChecked3);
               setChecked(3);
             }}>
-            <Text style={styles.checkedBoxText}>
+            <AppTextBold style={styles.checkedBoxText}>
               등른이 - 등산이면 가파르고 높아야죠!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       )}
@@ -213,12 +214,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: '#272827',
-    fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
     color: '#272827',
-    fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
@@ -234,13 +233,11 @@ const styles = StyleSheet.create({
   },
   answerBoxText: {
     color: 'grey',
-    fontWeight: 'bold',
   },
   checkedBox: {
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: '#57d696',
     height: 60,
     borderRadius: 30,
@@ -251,7 +248,6 @@ const styles = StyleSheet.create({
   },
   checkedBoxText: {
     color: 'white',
-    fontWeight: 'bold',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

@@ -2,8 +2,9 @@ import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
@@ -37,8 +38,10 @@ function Survey2({navigation}: Survey2ScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>등산지역 선호도</Text>
-        <Text style={styles.subTitle}>등산은 주로 어디에서 하시나요?</Text>
+        <AppTextBold style={styles.title}>등산지역 선호도</AppTextBold>
+        <AppTextBold style={styles.subTitle}>
+          등산은 주로 어디에서 하시나요?
+        </AppTextBold>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -48,9 +51,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -58,9 +61,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -71,9 +74,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>
+            <AppTextBold style={styles.checkedBoxText}>
               전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -81,9 +84,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       ) : (
@@ -94,9 +97,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>
+            <AppTextBold style={styles.answerBoxText}>
               전국 - 명산이면 어디든! 등산을 위해 여행을 가요!
-            </Text>
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -104,9 +107,9 @@ function Survey2({navigation}: Survey2ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>
+            <AppTextBold style={styles.checkedBoxText}>
               지역 - 저의 주변을 주로 선호해요!
-            </Text>
+            </AppTextBold>
           </Pressable>
         </View>
       )}
@@ -140,18 +143,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: '#272827',
-    fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
     color: '#272827',
-    fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: 'white',
     height: 60,
     borderRadius: 30,
@@ -162,14 +162,12 @@ const styles = StyleSheet.create({
   },
   answerBoxText: {
     color: 'grey',
-    fontWeight: 'bold',
     fontSize: 12,
   },
   checkedBox: {
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: '#57d696',
     height: 60,
     borderRadius: 30,
@@ -180,7 +178,6 @@ const styles = StyleSheet.create({
   },
   checkedBoxText: {
     color: 'white',
-    fontWeight: 'bold',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

@@ -2,8 +2,9 @@ import {faArrowRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
+import AppTextBold from '../../../components/AppTextBold';
 import userSlice from '../../../slices/userSlice/user';
 import {useAppDispatch} from '../../../store';
 
@@ -37,8 +38,10 @@ function Survey3({navigation}: Survey3ScreenProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.titleWrapper}>
-        <Text style={styles.title}>선호하는 등산 스타일</Text>
-        <Text style={styles.subTitle}>어떤 등산 스타일을 좋아하시나요?</Text>
+        <AppTextBold style={styles.title}>선호하는 등산 스타일</AppTextBold>
+        <AppTextBold style={styles.subTitle}>
+          어떤 등산 스타일을 좋아하시나요?
+        </AppTextBold>
       </View>
       {isChecked === 0 ? (
         <View>
@@ -48,7 +51,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <AppTextBold style={styles.answerBoxText}>
+              험난한 산맥 정복하기
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -56,7 +61,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <AppTextBold style={styles.answerBoxText}>
+              무리 없는 등산하기
+            </AppTextBold>
           </Pressable>
         </View>
       ) : isChecked === 1 ? (
@@ -67,7 +74,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.checkedBoxText}>험난한 산맥 정복하기</Text>
+            <AppTextBold style={styles.checkedBoxText}>
+              험난한 산맥 정복하기
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.answerBox}
@@ -75,7 +84,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.answerBoxText}>무리 없는 등산하기</Text>
+            <AppTextBold style={styles.answerBoxText}>
+              무리 없는 등산하기
+            </AppTextBold>
           </Pressable>
         </View>
       ) : (
@@ -86,7 +97,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked1(!isChecked1);
               setChecked(1);
             }}>
-            <Text style={styles.answerBoxText}>험난한 산맥 정복하기</Text>
+            <AppTextBold style={styles.answerBoxText}>
+              험난한 산맥 정복하기
+            </AppTextBold>
           </Pressable>
           <Pressable
             style={styles.checkedBox}
@@ -94,7 +107,9 @@ function Survey3({navigation}: Survey3ScreenProps) {
               setChecked2(!isChecked2);
               setChecked(2);
             }}>
-            <Text style={styles.checkedBoxText}>무리 없는 등산하기</Text>
+            <AppTextBold style={styles.checkedBoxText}>
+              무리 없는 등산하기
+            </AppTextBold>
           </Pressable>
         </View>
       )}
@@ -128,18 +143,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     color: '#272827',
-    fontWeight: 'bold',
   },
   subTitle: {
     marginTop: 10,
     color: '#272827',
-    fontWeight: 'bold',
   },
   answerBox: {
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: 'white',
     height: 60,
     borderRadius: 30,
@@ -150,13 +162,11 @@ const styles = StyleSheet.create({
   },
   answerBoxText: {
     color: 'grey',
-    fontWeight: 'bold',
   },
   checkedBox: {
     padding: 20,
     marginHorizontal: 10,
     marginTop: 30,
-    color: 'black',
     backgroundColor: '#57d696',
     height: 60,
     borderRadius: 30,
@@ -167,7 +177,6 @@ const styles = StyleSheet.create({
   },
   checkedBoxText: {
     color: 'white',
-    fontWeight: 'bold',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
