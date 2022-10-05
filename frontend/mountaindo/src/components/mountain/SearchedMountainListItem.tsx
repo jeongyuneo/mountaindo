@@ -3,6 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import {faFire} from '@fortawesome/free-solid-svg-icons';
 import AppText from '../AppText';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import AppTextBold from '../AppTextBold';
 
 interface Props {
   address: string;
@@ -30,7 +31,7 @@ function SearchedMountainListItem({
         />
         <View style={styles.contentWrapper}>
           <View style={styles.nameIconWrapper}>
-            <AppText style={styles.nameText}>{name}</AppText>
+            <AppTextBold style={styles.nameText}>{name}</AppTextBold>
             <View>
               {hot ? (
                 <FontAwesomeIcon icon={faFire} style={styles.iconFire} />
@@ -69,7 +70,6 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 16,
     marginRight: 5,
-    fontWeight: 'bold',
   },
   image: {
     height: 60,

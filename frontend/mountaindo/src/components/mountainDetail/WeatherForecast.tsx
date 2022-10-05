@@ -952,12 +952,10 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: 'white',
   },
   dayText: {
     fontSize: 11,
-    fontWeight: 'bold',
     color: 'white',
   },
   weatherImgWrapper: {
@@ -970,7 +968,6 @@ const styles = StyleSheet.create({
   lowTempText: {
     fontSize: 9,
     color: 'white',
-    fontWeight: 'bold',
   },
   rainWrapper: {
     alignItems: 'center',
@@ -978,7 +975,6 @@ const styles = StyleSheet.create({
   rainText: {
     fontSize: 9,
     color: 'white',
-    fontWeight: 'bold',
   },
 });
 
