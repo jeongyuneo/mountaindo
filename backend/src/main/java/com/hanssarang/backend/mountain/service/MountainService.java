@@ -1,10 +1,10 @@
 package com.hanssarang.backend.mountain.service;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
-import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
+import com.hanssarang.backend.hiking.domain.Hiking;
+import com.hanssarang.backend.member.domain.*;
+import com.hanssarang.backend.mountain.controller.dto.*;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
@@ -38,6 +38,7 @@ public class MountainService {
 
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
+    private final MemberRepository memberRepository;
 
     public List<MountainListResponse> getMountains(String sort, String si, int page) {
         List<Mountain> mountains = null;
@@ -185,5 +186,38 @@ public class MountainService {
     private boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
         return hotMountains.stream()
                 .anyMatch(mountain -> mountain.getId() == mountainId);
+    }
+
+    public RecommendationListResponse getRecommendedMountains(int memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
+        List<Hiking> hikings = member.getHikings();
+        Trail trail = trailRepository.findById(hikings.get(hikings.size() - 1).getTrail().getId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
+        return RecommendationListResponse.builder()
+                .memberBased(member.getMemberBasedRecommendations()
+                        .stream()
+                        .map(MemberBasedRecommendation::getTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .lastVisitedTrailBased(trail.getLastVisitedTrailBasedRecommendations()
+                        .stream()
+                        .map(LastVisitedTrailBasedRecommendation::getRecommendedTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .surveyBased(member.getSurveyBasedRecommendations()
+                        .stream()
+                        .map(SurveyBasedRecommendation::getTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private RecommendationResponse getRecommendationResponse(Trail recommendedTrail) {
+        return RecommendationResponse.builder()
+                .trailName(recommendedTrail.getName())
+                .mountainName(recommendedTrail.getMountain().getName())
+                .mountainImage(ImageUtil.toByteArray(recommendedTrail.getMountain().getImageUrl()))
+                .build();
     }
 }
