@@ -84,7 +84,7 @@ function PasswordChange({navigation}: PasswordChangeScreenProps) {
     dispatch(passwordChange({password, newPassword: password2}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          navigation.navigate('MyPage');
+          navigation.navigate('유저');
           return Alert.alert('알림', '비밀번호가 재설정되었습니다.');
         }
         return Alert.alert('알림', '비밀번호 재설정에 실패하였습니다.');

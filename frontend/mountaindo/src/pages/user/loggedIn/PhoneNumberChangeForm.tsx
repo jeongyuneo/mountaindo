@@ -55,7 +55,7 @@ function PhoneNumberChangeForm({
       }
     });
 
-    navigation.navigate('MyPage');
+    navigation.navigate('유저');
     return console.log('알림', '전화번호 변경에 성공하였습니다. ');
   }, [navigation, phone, route.params]);
   const canGoNext = phone; // 버튼 disabled 확인할 변수

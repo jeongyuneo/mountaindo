@@ -44,7 +44,7 @@ function AddressChangeForm({navigation, route}: AddressChangeFormScreenProps) {
       }
     });
 
-    navigation.navigate('MyPage');
+    navigation.navigate('유저');
     return console.log('알림', '주소 변경에 성공하였습니다. ');
   }, [navigation, selectedCity, selectedCity2, route.params]);
 

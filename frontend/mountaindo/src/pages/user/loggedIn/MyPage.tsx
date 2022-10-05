@@ -27,7 +27,7 @@ import AppText from '../../../components/AppText';
 import AppTextBold from '../../../components/AppTextBold';
 
 // Navigation 사용
-type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, 'MyPage'>;
+type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, '유저'>;
 function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
   const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State

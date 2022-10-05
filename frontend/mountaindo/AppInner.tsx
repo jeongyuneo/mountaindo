@@ -49,18 +49,18 @@ export type LoggedInParamList = {
   Survey2: any;
   Survey3: any;
   Survey4: any;
-  Main: any;
+  홈: any;
   Completed: any;
-  Hiking: any;
-  Mountain: any;
+  등산: any;
+  산: any;
   UserInfoChange: any;
   PasswordChange: any;
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
-  MyPage: any;
+  유저: any;
   MountainDetail: any;
   CourseDetail: any;
-  Visited: any;
+  기록: any;
   MainDetail: any;
   AddressChangeForm: any;
   FindMountain: any;
@@ -162,7 +162,7 @@ function MountainTab() {
         headerShadowVisible: false,
       })}>
       <Stack.Screen
-        name="Mountain"
+        name="산"
         component={Mountain}
         options={{title: '전체 산 목록', headerShown: false}}
       />
@@ -223,7 +223,7 @@ function HikingTab() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Hiking"
+        name="등산"
         component={Hiking}
         options={{
           title: '등산',
@@ -281,7 +281,7 @@ function AppInner() {
         }}
         initialRouteName="Main">
         <Tab.Screen
-          name="MountainList"
+          name="산"
           component={MountainTab}
           options={{
             headerShown: false,
@@ -296,7 +296,7 @@ function AppInner() {
           }}
         />
         <Tab.Screen
-          name="HikingTab"
+          name="등산"
           component={HikingTab}
           options={{
             headerShown: false,
@@ -310,7 +310,7 @@ function AppInner() {
           }}
         />
         <Tab.Screen
-          name="Main"
+          name="홈"
           component={Main}
           options={{
             headerShown: false,
@@ -325,7 +325,7 @@ function AppInner() {
           }}
         />
         <Tab.Screen
-          name="VisitedTab"
+          name="기록"
           component={VisitedTab}
           options={{
             headerShown: false,
@@ -340,7 +340,7 @@ function AppInner() {
           }}
         />
         <Tab.Screen
-          name="User"
+          name="유저"
           component={UserTab}
           options={{
             headerShown: false,

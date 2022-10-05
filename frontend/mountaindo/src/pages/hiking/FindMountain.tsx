@@ -104,7 +104,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
   };
 
   const moveToHiking = (id: number, name: string) => {
-    navigation.navigate('Hiking', {
+    navigation.navigate('등산', {
       trailId: id,
       trailName: name,
     });

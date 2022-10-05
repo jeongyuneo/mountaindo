@@ -58,7 +58,7 @@ function NicknameChangeForm({
         });
       }
     });
-    navigation.navigate('MyPage');
+    navigation.navigate('유저');
     return console.log('알림', '닉네임 변경에 성공하였습니다. ');
   }, [navigation, nickname, route.params]);
 

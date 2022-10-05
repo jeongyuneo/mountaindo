@@ -11,7 +11,7 @@ import {
 import {useAppDispatch} from '../../store';
 
 // navigation 사용을 위해 props 설정
-type VisitedScreenProps = NativeStackScreenProps<LoggedInParamList, 'Visited'>;
+type VisitedScreenProps = NativeStackScreenProps<LoggedInParamList, '기록'>;
 
 export type VisitedListType = {
   hikingId: number;

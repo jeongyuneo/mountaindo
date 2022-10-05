@@ -25,10 +25,7 @@ import {useAppDispatch} from '../../store';
 import {RootState} from '../../store/reducer';
 import SearchSubjectPicker from '../../components/mountain/SearchSubjectPicker';
 
-type MountainScreenProps = NativeStackScreenProps<
-  LoggedInParamList,
-  'Mountain'
->;
+type MountainScreenProps = NativeStackScreenProps<LoggedInParamList, '산'>;
 
 export type MountainType = {
   address: string;

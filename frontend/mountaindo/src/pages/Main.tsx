@@ -1,13 +1,6 @@
 // React
 import React, {useEffect, useState} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Pressable,
-} from 'react-native';
+import {ScrollView, StyleSheet, View, Image, Pressable} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -33,7 +26,7 @@ export type Rankings = {
   accumulatedHeight: number;
 };
 
-type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, 'Main'>;
+type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, '홈'>;
 function Main({navigation}: MainInScreenProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
