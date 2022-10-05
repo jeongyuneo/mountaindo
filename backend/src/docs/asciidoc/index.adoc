@@ -210,9 +210,6 @@ include::{snippets}/get-member-fail/http-response.adoc[]
 |application/json
 |수정할 회원 정보
 
-|file
-|multipart
-|프로필 이미지
 |===
 
 ===== 성공
@@ -227,6 +224,33 @@ include::{snippets}/update-member-fail/http-request.adoc[]
 
 .response
 include::{snippets}/update-member-fail/http-response.adoc[]
+
+==== 회원 프로필 사진 수정
+----
+/api/v1/members
+----
+
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|file
+|multipart
+|프로필 이미지
+|===
+
+===== 성공
+.request
+include::{snippets}/update-image-success/http-request.adoc[]
+
+.response
+include::{snippets}/update-image-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/update-image-fail/http-request.adoc[]
+
+.response
+include::{snippets}/update-image-fail/http-response.adoc[]
 
 ==== 회원정보 비밀번호 수정
 ----
