@@ -199,7 +199,7 @@ include::{snippets}/get-member-fail/http-response.adoc[]
 
 ==== 회원정보 수정
 ----
-/api/v1/members
+/api/v1/members/update
 ----
 
 [cols="2,2,3"]
@@ -227,7 +227,7 @@ include::{snippets}/update-member-fail/http-response.adoc[]
 
 ==== 회원 프로필 사진 수정
 ----
-/api/v1/members
+/api/v1/members/update/image
 ----
 
 [cols="2,2,3"]
