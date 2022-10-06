@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import {StyleSheet, Pressable, View} from 'react-native';
 import {Rankings} from '../../pages/Main';
 import AppTextBold from '../AppTextBold';
-import RankingListDummy from './RankingListDummy';
 import RankingListItem from './RankingListItem';
 import RankingListModal from './RankingListModal';
 
 interface Props {
   rankingList: any;
   myRanking: any;
+  mountainName: string;
 }
 
-function CourseList({rankingList, myRanking}: Props) {
+function CourseList({rankingList, myRanking, mountainName}: Props) {
   const [visibleModal, setVisibleModal] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ function CourseList({rankingList, myRanking}: Props) {
         style={styles.rankingListWrapper}
         onPress={() => setVisibleModal(true)}>
         <AppTextBold style={styles.rankingTitle}>
-          {RankingListDummy[0].mountain} 랭킹
+          {mountainName} 랭킹
         </AppTextBold>
         {rankingList?.length > 0 &&
           rankingList.map((item: Rankings, index: number) =>
