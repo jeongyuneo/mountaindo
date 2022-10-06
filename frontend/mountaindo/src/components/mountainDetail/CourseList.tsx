@@ -45,8 +45,8 @@ function CourseList({trailList, moveToCourseDetail}: Props) {
         <AppText style={styles.level2Text}>난이도</AppText>
         <AppText style={styles.nameText}>등산로</AppText>
         <AppText style={styles.lengthText}>길이</AppText>
-        <AppText style={styles.goingUpText}>상행 시간</AppText>
-        <AppText style={styles.goingDownText}>하행 시간</AppText>
+        <AppText style={styles.goingUpText}>상행</AppText>
+        <AppText style={styles.goingDownText}>하행</AppText>
       </View>
       <View style={styles.courseListWrapper}>
         <ScrollView style={styles.scrollView} nestedScrollEnabled={true}>
@@ -73,6 +73,7 @@ function CourseList({trailList, moveToCourseDetail}: Props) {
 const styles = StyleSheet.create({
   courseList: {
     marginVertical: 30,
+    marginHorizontal: 10,
   },
   scrollView: {
     height: 150,
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
   },
   courseText: {
     fontSize: 20,
-    marginHorizontal: 20,
   },
   levelText: {
     fontSize: 11,
@@ -108,27 +108,33 @@ const styles = StyleSheet.create({
   subTitleWrapper: {
     flexDirection: 'row',
     marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   level2Text: {
-    marginHorizontal: 10,
-    fontSize: 12,
+    flex: 0.1,
+    fontSize: 10,
+    textAlign: 'center',
   },
   nameText: {
-    marginHorizontal: 60,
-    fontSize: 12,
+    flex: 0.4,
+    fontSize: 10,
+    textAlign: 'center',
   },
   lengthText: {
-    marginLeft: 40,
-    marginRight: 15,
-    fontSize: 12,
+    flex: 0.2,
+    fontSize: 10,
+    textAlign: 'center',
   },
   goingUpText: {
-    marginHorizontal: 10,
-    fontSize: 12,
+    flex: 0.1,
+    fontSize: 10,
+    textAlign: 'center',
   },
   goingDownText: {
-    marginHorizontal: 3,
-    fontSize: 12,
+    flex: 0.1,
+    fontSize: 10,
+    textAlign: 'center',
   },
 });
 
