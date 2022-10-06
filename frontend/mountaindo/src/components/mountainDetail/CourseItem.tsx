@@ -50,22 +50,28 @@ function CourseItem({
           dispatchTrailDetail(trailId);
         }}>
         <View style={styles.contentWrapper}>
-          {level === '상' ? (
-            <View>
+          <View style={styles.levelWrapper}>
+            {level === '상' ? (
+              <View>
+                <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+                <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+                <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+              </View>
+            ) : level === '중' ? (
+              <View>
+                <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+                <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+              </View>
+            ) : (
               <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-            </View>
-          ) : level === '중' ? (
-            <View>
-              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-            </View>
-          ) : (
-            <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
-          )}
-          <AppText style={styles.trailText}>{name}</AppText>
-          <AppText style={styles.levelText}>{length}km</AppText>
+            )}
+          </View>
+          <View style={styles.nameWrapper}>
+            <AppText style={styles.trailText}>{name}</AppText>
+          </View>
+          <View style={styles.lengthWrapper}>
+            <AppText style={styles.levelText}>{length}km</AppText>
+          </View>
         </View>
       </Pressable>
     </View>
@@ -74,19 +80,26 @@ function CourseItem({
 
 const styles = StyleSheet.create({
   courseItemWrapper: {
-    elevation: 5,
-    alignItems: 'center',
     height: 50,
     justifyContent: 'center',
-    borderBottomWidth: 0.1,
-    backgroundColor: '#faf9f2',
   },
   contentWrapper: {
     flexDirection: 'row',
   },
+  levelWrapper: {
+    marginRight: 30,
+    marginLeft: 20,
+    padding: 5,
+  },
+  nameWrapper: {
+    marginRight: 30,
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+  },
   trailText: {
     fontSize: 14,
-    marginHorizontal: 30,
     color: 'grey',
   },
   imageSrc: {
