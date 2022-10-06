@@ -18,10 +18,8 @@ function Survey4({navigation}: Survey4ScreenProps) {
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
   const [isChecked4, setChecked4] = useState(false);
-  const [isChecked5, setChecked5] = useState(false);
   const [isChecked, setChecked] = useState(0);
-  const canGoNext =
-    isChecked1 || isChecked2 || isChecked3 || isChecked4 || isChecked5;
+  const canGoNext = isChecked1 || isChecked2 || isChecked3 || isChecked4;
 
   const survey1 = useSelector((state: RootState) => state.user.survey1);
   const survey2 = useSelector((state: RootState) => state.user.survey2);
@@ -37,8 +35,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
       survey4 = 3;
     } else if (isChecked4) {
       survey4 = 4;
-    } else {
-      survey4 = 5;
     }
     setSurvey();
   };
@@ -73,8 +69,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
               ? styles.answerBox
               : isChecked === 3
               ? styles.answerBox
-              : isChecked === 4
-              ? styles.answerBox
               : styles.answerBox
           }
           onPress={() => {
@@ -91,8 +85,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 ? styles.answerBoxText
                 : isChecked === 3
                 ? styles.answerBoxText
-                : isChecked === 4
-                ? styles.answerBoxText
                 : styles.answerBoxText
             }>
             3시간 이내
@@ -107,8 +99,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
               : isChecked === 2
               ? styles.checkedBox
               : isChecked === 3
-              ? styles.answerBox
-              : isChecked === 4
               ? styles.answerBox
               : styles.answerBox
           }
@@ -126,8 +116,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 ? styles.checkedBoxText
                 : isChecked === 3
                 ? styles.answerBoxText
-                : isChecked === 4
-                ? styles.answerBoxText
                 : styles.answerBoxText
             }>
             3시간 이상 5시간 이내
@@ -143,8 +131,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
               ? styles.answerBox
               : isChecked === 3
               ? styles.checkedBox
-              : isChecked === 4
-              ? styles.answerBox
               : styles.answerBox
           }
           onPress={() => {
@@ -161,8 +147,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 ? styles.answerBoxText
                 : isChecked === 3
                 ? styles.checkedBoxText
-                : isChecked === 4
-                ? styles.answerBoxText
                 : styles.answerBoxText
             }>
             5시간 이상 7시간 이내
@@ -178,9 +162,7 @@ function Survey4({navigation}: Survey4ScreenProps) {
               ? styles.answerBox
               : isChecked === 3
               ? styles.answerBox
-              : isChecked === 4
-              ? styles.checkedBox
-              : styles.answerBox
+              : styles.checkedBox
           }
           onPress={() => {
             setChecked4(!isChecked4);
@@ -195,43 +177,6 @@ function Survey4({navigation}: Survey4ScreenProps) {
                 : isChecked === 2
                 ? styles.answerBoxText
                 : isChecked === 3
-                ? styles.answerBoxText
-                : isChecked === 4
-                ? styles.checkedBoxText
-                : styles.answerBoxText
-            }>
-            7시간 이상 10시간 이내
-          </AppTextBold>
-        </Pressable>
-        <Pressable
-          style={
-            isChecked === 0
-              ? styles.answerBox
-              : isChecked === 1
-              ? styles.answerBox
-              : isChecked === 2
-              ? styles.answerBox
-              : isChecked === 3
-              ? styles.answerBox
-              : isChecked === 4
-              ? styles.answerBox
-              : styles.checkedBox
-          }
-          onPress={() => {
-            setChecked4(!isChecked5);
-            setChecked(5);
-          }}>
-          <AppTextBold
-            style={
-              isChecked === 0
-                ? styles.answerBoxText
-                : isChecked === 1
-                ? styles.answerBoxText
-                : isChecked === 2
-                ? styles.answerBoxText
-                : isChecked === 3
-                ? styles.answerBoxText
-                : isChecked === 4
                 ? styles.answerBoxText
                 : styles.checkedBoxText
             }>

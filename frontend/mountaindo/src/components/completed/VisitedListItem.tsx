@@ -3,6 +3,7 @@ import {faStar} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
 import {Image, Pressable, StyleSheet, View} from 'react-native';
+import Config from 'react-native-config';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 
@@ -14,6 +15,7 @@ interface Props {
   level: string;
   mountainName: string;
   moveToVisitedDetail: any;
+  imageUrl: string;
 }
 
 function VisitedListItem({
@@ -24,6 +26,7 @@ function VisitedListItem({
   level,
   mountainName,
   moveToVisitedDetail,
+  imageUrl,
 }: Props) {
   return (
     // 개별 아이템 클릭 시 디테일페이지로 이동(등산로 정보, 산 이름, 주소 정보 포함)
@@ -67,10 +70,17 @@ function VisitedListItem({
               </>
             )}
           </View>
-          <Image
-            source={require('../../assets/gyeryongMountain.jpg')}
-            style={styles.image}
-          />
+          {imageUrl !== null ? (
+            <Image
+              source={{uri: Config.REACT_APP_BE_HOST + imageUrl}}
+              style={styles.image}
+            />
+          ) : (
+            <Image
+              source={require('../../assets/mountainOne.jpeg')}
+              style={styles.image}
+            />
+          )}
         </View>
         <View style={styles.contentWrapper}>
           <View style={styles.titleContainer}>

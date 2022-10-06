@@ -3,7 +3,7 @@ import {
   faShareNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -13,8 +13,11 @@ import {
   Share,
   Alert,
 } from 'react-native';
+import Config from 'react-native-config';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
+import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import ViewShot from 'react-native-view-shot';
 
 // Hiking 페이지(mountain) / VisitedDetail 페이지(trails)에서 받아온 Props 정보 type 설정
 interface Props {
@@ -39,6 +42,20 @@ const CompletedMountainModal = ({
     } catch (error: any) {
       Alert.alert(error.message);
     }
+  };
+
+  const captureRef = useRef<any>(); // 캡쳐할 영역의 값을 가져오기 위한 ref
+
+  // 지정된 영역 캡쳐해서 uri 생성
+  const getPhotoUri = async (): Promise<string> => {
+    const uri = await captureRef.current.capture();
+    return uri;
+  };
+
+  const onSave = async () => {
+    const uri = await getPhotoUri();
+    const result = await CameraRoll.save(uri);
+    Alert.alert('이미지 저장', '갤러리에 이미지가 저장되었습니다. ');
   };
   // mountain 정보가 있으면 완등한 산의 모달 없으면 방문한 등산로 모달
   return mountain?.mountainName ? (
@@ -109,7 +126,7 @@ const CompletedMountainModal = ({
                     style={styles.icon}
                   />
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={onSave}>
                   <FontAwesomeIcon
                     icon={faCloudArrowDown}
                     size={15}
@@ -117,12 +134,14 @@ const CompletedMountainModal = ({
                   />
                 </Pressable>
               </View>
-              <View>
+              <ViewShot
+                ref={captureRef}
+                options={{format: 'jpg', quality: 0.9}}>
                 <Image
-                  source={require('../../assets/jjang.png')}
+                  source={{uri: Config.REACT_APP_BE_HOST + trails.imageUrl}}
                   style={styles.mountainImage}
                 />
-              </View>
+              </ViewShot>
               <View style={styles.titleView}>
                 <AppTextBold style={styles.trailName}>
                   {trails.trailName}
