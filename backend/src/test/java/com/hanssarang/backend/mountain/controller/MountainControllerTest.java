@@ -126,7 +126,7 @@ class MountainControllerTest extends ApiDocument {
     @Test
     void getRecommendationsFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_GET_TRAILS.getMessage())).given(mountainService).getRecommendedTrails(anyInt());
+        willThrow(new NotFoundException(ErrorMessage.FAIL_TO_GET_TRAILS)).given(mountainService).getRecommendedTrails(anyInt());
         // when
         ResultActions resultActions = 추천_목록_조회_요청(ID);
         // then
@@ -256,7 +256,7 @@ class MountainControllerTest extends ApiDocument {
     }
 
     private void 추천_목록_조회_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isInternalServerError())
+        resultActions.andExpect(status().isNotFound())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("get-recommendations-fail"));
