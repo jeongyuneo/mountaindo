@@ -15,6 +15,7 @@ type VisitedScreenProps = NativeStackScreenProps<LoggedInParamList, '기록'>;
 
 export type VisitedListType = {
   hikingId: number;
+  imageUrl: string;
   trailName: string;
   lastHikingDate: string;
   useTime: string;

@@ -1,13 +1,6 @@
 // React
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Dimensions,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -26,8 +19,6 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {RootState} from '../store/reducer';
-import {LoadingAnimationC} from '../components/completed/LoadingAnimation';
-import AppText from '../components/AppText';
 
 // 랭킹의 타입 설정
 export type Rankings = {

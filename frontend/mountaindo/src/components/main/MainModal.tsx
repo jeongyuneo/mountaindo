@@ -16,6 +16,7 @@ import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 import {useAppDispatch} from '../../store';
 import {totalRankingSearch} from '../../slices/rankingSlice/ranking';
+import Config from 'react-native-config';
 
 interface Props {
   isModalVisible: any;
@@ -119,10 +120,20 @@ function MainModal({
                       <AppTextBold style={styles.rankNum}>
                         {searchResult?.ranking}
                       </AppTextBold>
-                      <Image
-                        source={searchResult?.imageUrl}
-                        style={styles.imgStyle}
-                      />
+                      {searchResult?.imageUrl === null ? (
+                        <Image
+                          source={require('../../assets/user.png')}
+                          style={styles.imgStyle}
+                        />
+                      ) : (
+                        <Image
+                          source={{
+                            uri:
+                              Config.REACT_APP_BE_HOST + searchResult?.imageUrl,
+                          }}
+                          style={styles.imgStyle}
+                        />
+                      )}
                       <AppTextBold style={styles.nameStyle}>
                         {searchResult?.nickname}
                       </AppTextBold>
@@ -151,10 +162,19 @@ function MainModal({
                     <AppTextBold style={styles.rankNum}>
                       {myRanking?.ranking}
                     </AppTextBold>
-                    <Image
-                      source={myRanking?.imageUrl}
-                      style={styles.imgStyle}
-                    />
+                    {myRanking?.imageUrl === null ? (
+                      <Image
+                        source={require('../../assets/user.png')}
+                        style={styles.imgStyle}
+                      />
+                    ) : (
+                      <Image
+                        source={{
+                          uri: Config.REACT_APP_BE_HOST + myRanking?.imageUrl,
+                        }}
+                        style={styles.imgStyle}
+                      />
+                    )}
                     <AppTextBold style={styles.nameStyle}>
                       {myRanking?.nickname}
                     </AppTextBold>
@@ -176,10 +196,19 @@ function MainModal({
                         <AppTextBold style={styles.rankNum}>
                           {item.ranking}
                         </AppTextBold>
-                        <Image
-                          source={item?.imageUrl}
-                          style={styles.imgStyle}
-                        />
+                        {item?.imageUrl === null ? (
+                          <Image
+                            source={require('../../assets/user.png')}
+                            style={styles.imgStyle}
+                          />
+                        ) : (
+                          <Image
+                            source={{
+                              uri: Config.REACT_APP_BE_HOST + item?.imageUrl,
+                            }}
+                            style={styles.imgStyle}
+                          />
+                        )}
                         <AppTextBold style={styles.nameStyle}>
                           {item.nickname}
                         </AppTextBold>
@@ -227,7 +256,6 @@ const styles = StyleSheet.create({
   },
   find: {
     paddingBottom: 0,
-    paddingRight: 250,
     marginLeft: 3,
     fontFamily: 'NanumBarunGothic',
   },
