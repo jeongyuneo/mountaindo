@@ -34,21 +34,6 @@ function RestaurantItem({
   );
 }
 
-// <Image source={imageUrl} style={styles.imageSrc} />
-// {item.imageUrl !== null ? (
-//   <Image
-//     source={{
-//       uri: Config.REACT_APP_BE_HOST + item.imageUrl,
-//     }}
-//     style={styles.imageSrc}
-//   />
-// ) : (
-//   <Image
-//     source={require('../../assets/user.png')}
-//     style={styles.imageSrc}
-//   />
-// )}
-
 const styles = StyleSheet.create({
   itemWrapper: {
     flexDirection: 'row',
