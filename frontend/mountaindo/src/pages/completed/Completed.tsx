@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 200,
     height: 200,
-    top: 150,
+    top: Dimensions.get('window').height / 2 - 100,
     borderRadius: 100,
     overflow: 'hidden',
     left: Dimensions.get('window').width / 2 - 100,

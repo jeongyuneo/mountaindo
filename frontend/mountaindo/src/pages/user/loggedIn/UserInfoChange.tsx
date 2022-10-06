@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   goToChangeForm: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   text: {
     marginVertical: 15.2,

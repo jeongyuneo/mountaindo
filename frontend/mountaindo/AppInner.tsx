@@ -322,6 +322,7 @@ function AppInner() {
                 color={focused ? '#57d696' : 'black'}
               />
             ),
+            unmountOnBlur: false,
           }}
         />
         <Tab.Screen

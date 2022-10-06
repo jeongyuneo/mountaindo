@@ -206,6 +206,11 @@ function Hiking({navigation, route}: HikingScreenProps) {
     watchPosition();
   }, []);
 
+  useEffect(() => {
+    if (!myPosition || !myPosition.latitude) {
+      watchPosition();
+    }
+  }, [myPosition, isFocused]);
   // 등산 기록이 종료 되었을 때 isHikingEnd 값 변경
   useEffect(() => {
     if (!isTracking && isHikingEnd && isSuccess) {
@@ -244,6 +249,7 @@ function Hiking({navigation, route}: HikingScreenProps) {
 
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
+    // navigation.navigate('FindMountain');
     return (
       <ScrollView
         contentContainerStyle={styles.scrollView}

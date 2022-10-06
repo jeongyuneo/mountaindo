@@ -299,7 +299,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   containerBottom: {
+    marginTop: 10,
     flex: 2,
+    marginHorizontal: 10,
   },
   containerDown: {
     flex: 3,
