@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -78,6 +81,19 @@ public class MemberService {
                 .build();
         member.submit(survey);
         memberRepository.save(member);
+        try {
+            URL url = new URL("https://j7b201.p.ssafy.io/recommendation/survey-based/" + memberId
+                    + "?level=" + surveyRequest.getLevel()
+                    + "&preferred_mountain_location=" + surveyRequest.getPreferredMountainLocation()
+                    + "&preferred_hiking_time=" + surveyRequest.getPreferredHikingTime());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.getResponseCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new BadRequestException(ErrorMessage.FAIL_TO_CREATE_SURVEY);
+        }
     }
 
     public EmailResponse getMemberEmail(FindingEmailRequest findingEmailRequest) {
