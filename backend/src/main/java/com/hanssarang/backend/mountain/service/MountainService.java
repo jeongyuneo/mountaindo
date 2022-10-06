@@ -104,7 +104,7 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchMountain(String keyword, String sort, String si) {
-        List<Mountain> mountains = null;
+        List<Mountain> mountains;
         if (si.equals(ALL_AREA)) {
             if (sort.equals(POPULARITY)) {
                 mountains = mountainRepository.findMountainsOrderByPopularityDesc(keyword);
@@ -138,7 +138,7 @@ public class MountainService {
     }
 
     public List<MountainListResponse> searchTrail(String keyword, String sort, String si) {
-        List<Mountain> mountains = null;
+        List<Mountain> mountains;
         if (si.equals(ALL_AREA)) {
             if (sort.equals(POPULARITY)) {
                 mountains = mountainRepository.findBySearchTrailOrderByPopularityDesc(keyword);
