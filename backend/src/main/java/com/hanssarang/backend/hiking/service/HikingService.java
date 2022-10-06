@@ -28,7 +28,7 @@ public class HikingService {
 
     private static final int LATITUDE = 0;
     private static final int LONGITUDE = 1;
-    private static final String HIKING_IMAGE = "hiking-image";
+    private static final String HIKING = "hiking";
 
     private final MemberRepository memberRepository;
     private final TrailRepository trailRepository;
@@ -134,7 +134,7 @@ public class HikingService {
 
     public void createImage(int memberId, int hikingId, MultipartFile multipartFile) {
         Hiking hiking = findHiking(memberId, hikingId);
-        hiking.createImage(ImageUtil.saveImage(multipartFile, HIKING_IMAGE));
+        hiking.createImage(ImageUtil.saveImage(multipartFile, HIKING));
         hikingRepository.save(hiking);
     }
 }
