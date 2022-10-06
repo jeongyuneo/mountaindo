@@ -51,11 +51,6 @@ const ShareModal = ({
                 }}>
                 <AppText style={styles.shareText}>내 기록 저장하기</AppText>
               </Pressable>
-              <Pressable onPress={kakaoShare} style={styles.shareButton}>
-                <AppText style={styles.shareText}>
-                  카카오톡으로 공유하기
-                </AppText>
-              </Pressable>
               <Pressable
                 onPress={() => onCapture(null)}
                 style={styles.shareButton}>

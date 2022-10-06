@@ -20,7 +20,6 @@ import DismissKeyboardView from '../../components/DismissKeyboardView';
 import TrailListModal from '../../components/hiking/TrailListModal';
 import {mountainDetail, searchMountain} from '../../slices/hikingSlice/hiking';
 import {useAppDispatch} from '../../store';
-import axiosService from '../../store/axiosService';
 
 export type Trails = {
   trailId: number;
@@ -124,29 +123,6 @@ function FindMountain({navigation}: FindMountainScreenProps) {
 
   const isFocused = useIsFocused();
 
-  const getImage = async () => {
-    const token = AsyncStorage.getItem('token');
-    const response = axiosService
-      .post(
-        '/images/mountain/home/mountain/d0a9434a-ef44-4a2f-9762-8032dccf4335.jpeg',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-      .then(res => {
-        console.log(res);
-
-        return res;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    console.log(response);
-    return response;
-  };
   useEffect(() => {
     setSearch('');
     setIsMountain(0);
@@ -155,7 +131,6 @@ function FindMountain({navigation}: FindMountainScreenProps) {
     setTrailList([]);
     setIsTrailList(false);
     setModalVisible(false);
-    getImage();
   }, [isFocused]);
   return (
     <DismissKeyboardView>
@@ -182,9 +157,6 @@ function FindMountain({navigation}: FindMountainScreenProps) {
               blurOnSubmit={false}
               autoFocus={true}
             />
-          </View>
-          <View>
-            {/* <Image source={{uri: getImage()}} style={styles.image} /> */}
           </View>
           <ScrollView>
             {isMountain == 2 && mountainList?.length > 0 ? (
