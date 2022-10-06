@@ -81,6 +81,7 @@ public class HikingControllerTest extends ApiDocument {
                         .useTime(USE_TIME)
                         .level(LEVEL)
                         .mountainName(MOUNTAIN_NAME)
+                        .imageUrl(IMAGE_URL)
                         .build())
                 .collect(Collectors.toList());
         completedHikingListResponses = IntStream.range(0, 3)

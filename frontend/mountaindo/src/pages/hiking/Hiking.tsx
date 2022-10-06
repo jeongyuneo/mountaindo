@@ -17,7 +17,7 @@ import AppTextBold from '../../components/AppTextBold';
 import TrackingEnd from '../../components/hiking/TrackingEnd';
 import {useIsFocused} from '@react-navigation/native';
 import {useAppDispatch} from '../../store';
-import {endHiking} from '../../slices/hikingSlice/hiking';
+import {endHiking, endHikingImage} from '../../slices/hikingSlice/hiking';
 import TrackingStart from '../../components/hiking/TrackingStart';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, '등산'>;
@@ -206,6 +206,11 @@ function Hiking({navigation, route}: HikingScreenProps) {
     watchPosition();
   }, []);
 
+  useEffect(() => {
+    if (!myPosition || !myPosition.latitude) {
+      watchPosition();
+    }
+  }, [myPosition, isFocused]);
   // 등산 기록이 종료 되었을 때 isHikingEnd 값 변경
   useEffect(() => {
     if (!isTracking && isHikingEnd && isSuccess) {
@@ -244,6 +249,7 @@ function Hiking({navigation, route}: HikingScreenProps) {
 
   // 현재 위치를 받아오지 못했을 경우
   if (!myPosition || !myPosition.latitude) {
+    // navigation.navigate('FindMountain');
     return (
       <ScrollView
         contentContainerStyle={styles.scrollView}
@@ -258,8 +264,7 @@ function Hiking({navigation, route}: HikingScreenProps) {
   // 기록 종료 시 TrackingEnd 이동 함수
   const moveToTrackingEnd = async (uri: any) => {
     getLocation();
-    const hikingRequest = new FormData();
-    const hikingRequestDto = {
+    const hikingRequest = {
       trailId: trailId,
       path: [
         ...coords,
@@ -270,33 +275,34 @@ function Hiking({navigation, route}: HikingScreenProps) {
       distance: totalDist.toFixed(2),
       useTime: endTime,
     };
-    const json = JSON.stringify(hikingRequestDto);
-    const blob = new Blob([json], {
-      type: 'application/json',
-      lastModified: 0,
-    });
-    const file = await uri;
-    hikingRequest.append('hikingRequest', blob);
-    hikingRequest.append('file', file);
 
-    for (var key of hikingRequest.getParts()) {
-      //  폼데이터 확인용 로그
-      console.log(key);
-    }
+    const file = {
+      uri: await uri,
+      name: 'image.jpg',
+      type: 'image/jpeg',
+    };
 
     dispatch(endHiking({hikingRequest}))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
-          // 이미지 저장 완료 여부 확인용 로그
-          console.log(res);
-          Alert.alert('알림', '등산 기록이 저장되었습니다.');
+          dispatch(endHikingImage({hikingId: res.payload.hikingId, file}))
+            .then(res => {
+              if (res.meta.requestStatus === 'fulfilled') {
+                return Alert.alert('알림', '등산 기록 저장에 성공했습니다.');
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              return Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
+            });
         } else {
-          Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
+          return Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
         }
       })
       .catch(err => {
         console.log(err);
         setIsSuccess(false);
+        return Alert.alert('알림', '등산 기록 저장에 실패했습니다.');
       });
   };
 

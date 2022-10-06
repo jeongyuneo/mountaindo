@@ -91,7 +91,11 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
         trailList={sentData.mountainDetail.trails}
         moveToCourseDetail={moveToCourseDetail}
       />
-      <RankingList rankingList={rankingList} myRanking={myRanking} />
+      <RankingList
+        rankingList={rankingList}
+        myRanking={myRanking}
+        mountainName={sentData.mountainDetail.name}
+      />
     </ScrollView>
   );
 }

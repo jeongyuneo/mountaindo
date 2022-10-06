@@ -46,6 +46,7 @@ public class HikingService {
                         .useTime(hiking.getUseTime())
                         .level(hiking.getTrail().getLevel().toString())
                         .mountainName(hiking.getTrail().getMountain().getName())
+                        .imageUrl(hiking.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
     }

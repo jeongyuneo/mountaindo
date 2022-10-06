@@ -13,7 +13,6 @@ import {
   faWind,
 } from '@fortawesome/free-solid-svg-icons';
 
-import KakaoShareLink from 'react-native-kakao-share-link';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 import ShareModal from './ShareModal';
@@ -82,49 +81,6 @@ function TrackingEnd({
     const uri = await getPhotoUri();
     const result = await CameraRoll.save(uri);
     Alert.alert('이미지 저장', '갤러리에 이미지가 저장되었습니다. ');
-  };
-
-  const kakaoShare = async () => {
-    try {
-      const uri = await getPhotoUri();
-
-      // 이미지 형식을 파일로 변경
-      let file = '';
-      fetch(uri)
-        .then(response => response.blob())
-        .then(myBlob => {
-          const objectURL = URL.createObjectURL(myBlob);
-          file = objectURL;
-        });
-
-      // 피드 형식으로 공유 (추후 수정 필요)
-      const response = await KakaoShareLink.sendFeed({
-        content: {
-          title: '등산 기록',
-          imageUrl: uri,
-          link: {
-            mobileWebUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
-            webUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
-            androidExecutionParams: [],
-            iosExecutionParams: [],
-          },
-          description: `등산 시간: ${timer}, 총 거리: ${totalDist}, 총 고도: ${totalHigh}`,
-        },
-        buttons: [
-          {
-            title: '앱에서 보기',
-            link: {
-              mobileWebUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
-              webUrl: 'http://j7b201.p.mountain.io:8080/docs/index.html',
-              androidExecutionParams: [],
-              iosExecutionParams: [],
-            },
-          },
-        ],
-      });
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   const getImageFile = async () => {
@@ -223,7 +179,6 @@ function TrackingEnd({
           setModalVisible={setModalVisible}
           onCapture={onCapture}
           onSave={onSave}
-          kakaoShare={kakaoShare}
           getPhotoUri={getPhotoUri}
           imageFile={getImageFile()}
         />

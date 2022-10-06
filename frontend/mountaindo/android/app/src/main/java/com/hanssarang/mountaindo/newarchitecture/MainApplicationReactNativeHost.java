@@ -1,7 +1,9 @@
-package com.mountain.mountaindo.newarchitecture;
+package com.hanssarang.mountaindo.newarchitecture;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -19,9 +21,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.mountain.mountaindo.BuildConfig;
-import com.mountain.mountaindo.newarchitecture.components.MainComponentsRegistry;
-import com.mountain.mountaindo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.hanssarang.mountaindo.BuildConfig;
+import com.hanssarang.mountaindo.newarchitecture.components.MainComponentsRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
       getReactPackageTurboModuleManagerDelegateBuilder() {
     // Here we provide the ReactPackageTurboModuleManagerDelegate Builder. This is necessary
     // for the new architecture and to use TurboModules correctly.
-    return new MainApplicationTurboModuleManagerDelegate.Builder();
+    return new com.hanssarang.mountaindo.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate.Builder();
   }
 
   @Override
