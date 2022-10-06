@@ -201,8 +201,6 @@ function MyPage({navigation}: MyPageScreenProps) {
   };
   // 이미지 불러오기 종료
 
-  console.log(`${Config.REACT_APP_BE_HOST}${imageUrl}`);
-
   return (
     <View style={styles.container}>
       <View style={styles.containerUp}>
