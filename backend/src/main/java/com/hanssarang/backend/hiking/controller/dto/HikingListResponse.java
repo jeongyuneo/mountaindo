@@ -17,4 +17,5 @@ public class HikingListResponse {
     private LocalTime useTime;
     private String level;
     private String mountainName;
+    private String imageUrl;
 }
