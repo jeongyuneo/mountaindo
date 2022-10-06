@@ -81,7 +81,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -94,12 +94,12 @@ apply from: "../../node_modules/react-native/react.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -137,13 +137,13 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.mountain.mountaindo"
+        applicationId "com.hanssarang.mountaindo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "5.0"
+        versionCode 1
+        versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
-        resValue "string", "build_config_package", "com.mountain.mountaindo"
+        resValue "string", "build_config_package", "com.hanssarang.mountaindo"
         
         if (isNewArchitectureEnabled()) {
             // We configure the NDK build only if you decide to opt-in for the New Architecture.
@@ -249,7 +249,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.debug
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

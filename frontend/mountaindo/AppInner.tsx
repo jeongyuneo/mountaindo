@@ -26,7 +26,6 @@ import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
-import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
 import {useEffect, useState} from 'react';
@@ -58,7 +57,6 @@ export type LoggedInParamList = {
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
   유저: any;
-  MountainDetail: any;
   CourseDetail: any;
   기록: any;
   MainDetail: any;
@@ -165,11 +163,6 @@ function MountainTab() {
         name="산"
         component={Mountain}
         options={{title: '전체 산 목록', headerShown: false}}
-      />
-      <Stack.Screen
-        name="MainDetail"
-        component={MainDetail}
-        options={{title: '전체 산 목록'}}
       />
       <Stack.Screen
         name="MountainDetail"
