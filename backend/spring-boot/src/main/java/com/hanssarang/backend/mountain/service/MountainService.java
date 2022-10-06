@@ -183,30 +183,10 @@ public class MountainService {
         return getMountainListResponses(mountains);
     }
 
-    private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains) {
-        return mountains.stream()
-                .map(mountain -> MountainListResponse.builder()
-                        .mountainId(mountain.getId())
-                        .name(mountain.getName())
-                        .height(mountain.getHeight())
-                        .address(mountain.getAddress().getFullAddress())
-                        .imageUrl(mountain.getImageUrl())
-                        .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
-                        .build())
-                .collect(Collectors.toList());
-    }
-
-    private boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
-        return hotMountains.stream()
-                .anyMatch(mountain -> mountain.getId() == mountainId);
-    }
-
     public RecommendationListResponse getRecommendedTrails(int memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
         List<Hiking> hikings = member.getHikings();
-        Trail trail = trailRepository.findById(hikings.get(hikings.size() - 1).getTrail().getId())
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
 
         List<RecommendationResponse> memberBased = null;
         List<RecommendationResponse> lastVisitedTrailBased = null;
@@ -253,6 +233,24 @@ public class MountainService {
                 .lastVisitedTrailBased(lastVisitedTrailBased)
                 .surveyBased(surveyBased)
                 .build();
+    }
+
+    private List<MountainListResponse> getMountainListResponses(Collection<Mountain> mountains) {
+        return mountains.stream()
+                .map(mountain -> MountainListResponse.builder()
+                        .mountainId(mountain.getId())
+                        .name(mountain.getName())
+                        .height(mountain.getHeight())
+                        .address(mountain.getAddress().getFullAddress())
+                        .imageUrl(mountain.getImageUrl())
+                        .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    private boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
+        return hotMountains.stream()
+                .anyMatch(mountain -> mountain.getId() == mountainId);
     }
 
     private RecommendationResponse getRecommendationResponse(Trail recommendedTrail) {
