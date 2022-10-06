@@ -1,31 +1,83 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
+import {View, StyleSheet, ScrollView, Image} from 'react-native';
+import Config from 'react-native-config';
+import {RecommendType} from '../../pages/Main';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
 
 interface Props {
-  dummyEasy: {
-    id: number;
-    profile: any;
-    course: string;
-    name: string;
-    meter: number;
-  }[];
+  recommend: string;
+  lastVisitedTrailBased?: RecommendType[];
+  memberBased?: RecommendType[];
+  surveyBased?: RecommendType[];
 }
 
-function EasyMountain({dummyEasy}: Props) {
+function EasyMountain({
+  recommend,
+  lastVisitedTrailBased,
+  memberBased,
+  surveyBased,
+}: Props) {
   return (
     <View>
       <ScrollView horizontal={true}>
-        {dummyEasy.map(item => (
-          <View key={item.id}>
-            <AppTextBold style={styles.mountainCourse}>
-              {item.course}
-            </AppTextBold>
-            <Image source={item.profile} style={styles.imgStyle} />
-            <AppText style={styles.mountainTitle}>{item.name}</AppText>
-          </View>
-        ))}
+        {recommend === 'lastVisitedTrailBased' &&
+          !!lastVisitedTrailBased &&
+          lastVisitedTrailBased?.length > 0 &&
+          lastVisitedTrailBased.map((item, index) => (
+            <View key={index}>
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
+              <Image
+                source={{
+                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                }}
+                style={styles.imgStyle}
+              />
+              <AppText style={styles.mountainTitle}>
+                {item.mountainName}
+              </AppText>
+            </View>
+          ))}
+        {recommend === 'memberBased' &&
+          !!memberBased &&
+          memberBased?.length > 0 &&
+          memberBased.map((item, index) => (
+            <View key={index}>
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
+              <Image
+                source={{
+                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                }}
+                style={styles.imgStyle}
+              />
+              <AppText style={styles.mountainTitle}>
+                {item.mountainName}
+              </AppText>
+            </View>
+          ))}
+        {recommend === 'surveyBased' &&
+          !!surveyBased &&
+          surveyBased?.length > 0 &&
+          surveyBased.map((item, index) => (
+            <View key={index}>
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
+              <Image
+                source={{
+                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                }}
+                style={styles.imgStyle}
+              />
+              <AppText style={styles.mountainTitle}>
+                {item.mountainName}
+              </AppText>
+            </View>
+          ))}
       </ScrollView>
     </View>
   );

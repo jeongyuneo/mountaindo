@@ -1,6 +1,6 @@
 // React
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View, Image, Pressable} from 'react-native';
+import {Alert, Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -9,14 +9,10 @@ import MainModal from '../components/main/MainModal';
 import RankList from '../components/main/RankList';
 import EasyMountain from '../components/main/EasyMountain';
 import Photo from '../components/main/Photo';
-import {dummyEasy, dummyAge} from '../components/main/Dummy';
-import AgeMountain from '../components/main/AgeMountain';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {useAppDispatch} from '../store';
 import {totalRanking} from '../slices/rankingSlice/ranking';
 import AppTextBold from '../components/AppTextBold';
-import AppText from '../components/AppText';
+import {getRecommendTrailList} from '../slices/mountainSlice/mountain';
 
 // 랭킹의 타입 설정
 export type Rankings = {
@@ -26,11 +22,22 @@ export type Rankings = {
   accumulatedHeight: number;
 };
 
+export type RecommendType = {
+  trailName: string;
+  mountainName: string;
+  mountainImage: string;
+};
+
 type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, '홈'>;
 function Main({navigation}: MainInScreenProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rankingList, setRankingList] = useState<Rankings[] | null[]>([]); // 전체 랭킹 리스트를 저장할 변수
   const [myRanking, setMyRanking] = useState<Rankings | null>(null); // 내 랭킹 정보를 저장할 변수
+  const [lastVisitedTrailBased, setLastVisitedTrailBased] = useState<
+    RecommendType[] | []
+  >([]);
+  const [memberBased, setMemberBased] = useState<RecommendType[] | []>([]);
+  const [surveyBased, setSurveyBased] = useState<RecommendType[] | []>([]);
 
   const dispatch = useAppDispatch();
 
@@ -65,6 +72,20 @@ function Main({navigation}: MainInScreenProps) {
     }
   }, [myRanking?.ranking, rankingList]);
 
+  useEffect(() => {
+    dispatch(getRecommendTrailList(''))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          setLastVisitedTrailBased(res.payload.lastVisitedTrailBased);
+          setMemberBased(res.payload.memberBased);
+          setSurveyBased(res.payload.surveyBased);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
   return (
     <View style={styles.containerMain}>
       <ScrollView>
@@ -84,33 +105,47 @@ function Main({navigation}: MainInScreenProps) {
             <RankList goAllRank={goAllRank} rankingList={rankingList} />
           </View>
 
-          <View>
+          {lastVisitedTrailBased.length > 0 && (
             <View style={styles.mountainList}>
               <AppTextBold style={styles.easyTitle}>
-                쉬운 난이도의 등산 코스
+                최근 방문한 산과 비슷한 등산 코스
               </AppTextBold>
-              <View style={styles.goList}>
-                <Pressable onPress={() => navigation.navigate('MainDetail')}>
-                  <AppText style={styles.mountainAll}>
-                    전체 산 목록 보기
-                  </AppText>
-                </Pressable>
-                <FontAwesomeIcon
-                  icon={faAngleDown}
-                  size={12}
-                  style={styles.angleDown}
-                />
-              </View>
+              <EasyMountain
+                lastVisitedTrailBased={lastVisitedTrailBased}
+                recommend={'lastVisitedTrailBased'}
+              />
             </View>
-            <EasyMountain dummyEasy={dummyEasy} />
-          </View>
-
-          <View>
-            <AppTextBold style={styles.easyTitle}>
-              20대에게 인기있는 등산 코스
-            </AppTextBold>
-            <AgeMountain dummyAge={dummyAge} />
-          </View>
+          )}
+          {memberBased.length > 0 && (
+            <View>
+              <AppTextBold style={styles.easyTitle}>
+                나와 비슷한 사용자들이 많이 방문한 코스
+              </AppTextBold>
+              <EasyMountain
+                memberBased={memberBased}
+                recommend={'memberBased'}
+              />
+            </View>
+          )}
+          {surveyBased.length > 0 && (
+            <View>
+              <AppTextBold style={styles.easyTitle}>
+                이런 코스에 방문해보는건 어떠세요?
+              </AppTextBold>
+              <EasyMountain
+                surveyBased={surveyBased}
+                recommend={'surveyBased'}
+              />
+            </View>
+          )}
+          {lastVisitedTrailBased.length < 1 &&
+            memberBased.length < 1 &&
+            surveyBased.length < 1 && (
+              <View style={styles.container}>
+                <AppTextBold>추천 목록을 불러오지 못했습니다.</AppTextBold>
+                <AppTextBold>다시 시도해주세요!</AppTextBold>
+              </View>
+            )}
         </View>
       </ScrollView>
     </View>
@@ -137,6 +172,9 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     flex: 1,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    backgroundColor: 'white',
   },
   photoContainer: {
     flex: 1.2,
@@ -151,6 +189,11 @@ const styles = StyleSheet.create({
   },
   rankList: {
     marginVertical: 10,
+  },
+  container: {
+    marginHorizontal: 30,
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
 

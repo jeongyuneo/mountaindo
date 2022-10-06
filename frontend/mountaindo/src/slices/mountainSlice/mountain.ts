@@ -83,6 +83,21 @@ export const getTrailDetail = createAsyncThunk(
   },
 );
 
+// 추천 목록 불러오기
+export const getRecommendTrailList = createAsyncThunk(
+  'mountainSlice/getRecommendTrailList',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const response = await axiosService.get(
+        '/api/v1/mountains/recommendation',
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 const mountainSlice = createSlice({
   name: 'mountain',
   initialState,
@@ -133,6 +148,12 @@ const mountainSlice = createSlice({
       })
       .addCase(getTrailDetail.rejected, (state, {payload}) => {
         console.log('getTrailDetailRejected ==>', payload);
+      })
+      .addCase(getRecommendTrailList.fulfilled, (state, {payload}) => {
+        console.log('getRecommendTrailListFulfilled ==> ', payload);
+      })
+      .addCase(getRecommendTrailList.rejected, (state, {payload}) => {
+        console.log('getRecommendTrailListRejected ==>', payload);
       });
   },
 });
