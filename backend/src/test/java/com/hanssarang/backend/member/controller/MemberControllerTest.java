@@ -334,7 +334,7 @@ public class MemberControllerTest extends ApiDocument {
     @Test
     void surveyFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_SURVEY.getMessage())).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
+        willThrow(new BadRequestException(ErrorMessage.FAIL_TO_CREATE_SURVEY)).given(memberService).createSurvey(anyInt(), any(SurveyRequest.class));
         // when
         ResultActions resultActions = 사전_설문조사_저장_요청(surveyRequest);
         // then
@@ -617,7 +617,7 @@ public class MemberControllerTest extends ApiDocument {
     }
 
     private void 사전_설문조사_저장_실패(ResultActions resultActions, Message message) throws Exception {
-        resultActions.andExpect(status().isInternalServerError())
+        resultActions.andExpect(status().isBadRequest())
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("create-survey-fail"));
