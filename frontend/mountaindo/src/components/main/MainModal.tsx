@@ -72,7 +72,10 @@ function MainModal({
     <Modal animationType="none" transparent={true} visible={isModalVisible}>
       <SafeAreaView style={styles.safeAreaView}>
         <ScrollView style={styles.scrollView}>
-          <Pressable onPress={goAllRank}>
+          <Pressable
+            onPress={() => {
+              setIsModalVisible(!isModalVisible);
+            }}>
             <AppTextBold style={styles.titleText}>산 전체 랭킹</AppTextBold>
             <TextInput
               style={styles.searchInput}

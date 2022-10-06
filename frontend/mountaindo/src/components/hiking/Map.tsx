@@ -42,7 +42,7 @@ function Map({myPosition}: Props) {
           height={15}
           anchor={{x: 0.5, y: 0.5}}
           caption={{text: '나'}}
-          image={require('../../assets/red-dot.png')}
+          image={require('../../assets/marker.png')}
         />
       )}
     </NaverMapView>
