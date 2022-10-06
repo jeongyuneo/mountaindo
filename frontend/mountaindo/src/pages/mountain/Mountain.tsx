@@ -25,7 +25,6 @@ import mountainSlice, {
 import {useAppDispatch} from '../../store';
 import {RootState} from '../../store/reducer';
 import SearchSubjectPicker from '../../components/mountain/SearchSubjectPicker';
-import once from 'lodash.debounce';
 
 type MountainScreenProps = NativeStackScreenProps<LoggedInParamList, '산'>;
 
@@ -128,53 +127,61 @@ function Mountain({navigation}: MountainScreenProps) {
   // 특정 산 검색 API 요청 보내가
   const dispatchSearchedMountain = () => {
     if (selectedSubject === '산') {
-      if (searchInput.length < 2) {
+      if (searchInput.length === 1) {
         return Alert.alert('검색어를 두 글자 이상 입력하세요.');
-      }
-      dispatch(
-        getSearchedMountain({
-          keyword: searchInput,
-          standard: standard,
-          location: location,
-        }),
-      )
-        .then(res => {
-          if (res.meta.requestStatus === 'fulfilled') {
-            if (res.payload.length > 0) {
-              setIsResult(2);
-              setSearchResult(res.payload);
-            } else {
-              setIsResult(1);
+      } else if (searchInput.length === 0) {
+        setIsResult(0);
+        dispatchMountainList(standard, location, 0);
+      } else {
+        dispatch(
+          getSearchedMountain({
+            keyword: searchInput,
+            standard: standard,
+            location: location,
+          }),
+        )
+          .then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              if (res.payload.length > 0) {
+                setIsResult(2);
+                setSearchResult(res.payload);
+              } else {
+                setIsResult(1);
+              }
             }
-          }
-        })
-        .catch((err: any) => {
-          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
-        });
+          })
+          .catch((err: any) => {
+            console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+          });
+      }
     } else if (selectedSubject === '등산로') {
-      if (searchInput.length < 2) {
+      if (searchInput.length === 2) {
         return Alert.alert('검색어를 두 글자 이상 입력하세요.');
-      }
-      dispatch(
-        getSearchedTrail({
-          keyword: searchInput,
-          standard: standard,
-          location: location,
-        }),
-      )
-        .then(res => {
-          if (res.meta.requestStatus === 'fulfilled') {
-            if (res.payload.length > 0) {
-              setIsResult(2);
-              setSearchResult(res.payload);
-            } else {
-              setIsResult(1);
+      } else if (searchInput.length === 0) {
+        setIsResult(0);
+        dispatchMountainList(standard, location, 0);
+      } else {
+        dispatch(
+          getSearchedTrail({
+            keyword: searchInput,
+            standard: standard,
+            location: location,
+          }),
+        )
+          .then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              if (res.payload.length > 0) {
+                setIsResult(2);
+                setSearchResult(res.payload);
+              } else {
+                setIsResult(1);
+              }
             }
-          }
-        })
-        .catch((err: any) => {
-          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
-        });
+          })
+          .catch((err: any) => {
+            console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+          });
+      }
     }
   };
 
@@ -184,47 +191,57 @@ function Mountain({navigation}: MountainScreenProps) {
     locationArg: string,
   ) => {
     if (selectedSubject === '산') {
-      dispatch(
-        getSearchedMountain({
-          keyword: searchInput,
-          standard: standardArg,
-          location: locationArg,
-        }),
-      )
-        .then(res => {
-          if (res.meta.requestStatus === 'fulfilled') {
-            if (res.payload.length > 0) {
-              setIsResult(2);
-              setSearchResult(res.payload);
-            } else {
-              setIsResult(1);
+      if (searchInput.length === 0) {
+        setIsResult(0);
+        dispatchMountainList(standardArg, locationArg, 0);
+      } else {
+        dispatch(
+          getSearchedMountain({
+            keyword: searchInput,
+            standard: standardArg,
+            location: locationArg,
+          }),
+        )
+          .then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              if (res.payload.length > 0) {
+                setIsResult(2);
+                setSearchResult(res.payload);
+              } else {
+                setIsResult(1);
+              }
             }
-          }
-        })
-        .catch((err: any) => {
-          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
-        });
+          })
+          .catch((err: any) => {
+            console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+          });
+      }
     } else if (selectedSubject === '등산로') {
-      dispatch(
-        getSearchedTrail({
-          keyword: searchInput,
-          standard: standardArg,
-          location: locationArg,
-        }),
-      )
-        .then(res => {
-          if (res.meta.requestStatus === 'fulfilled') {
-            if (res.payload.length > 0) {
-              setIsResult(2);
-              setSearchResult(res.payload);
-            } else {
-              setIsResult(1);
+      if (searchInput.length === 0) {
+        setIsResult(0);
+        dispatchMountainList(standardArg, locationArg, 0);
+      } else {
+        dispatch(
+          getSearchedTrail({
+            keyword: searchInput,
+            standard: standardArg,
+            location: locationArg,
+          }),
+        )
+          .then(res => {
+            if (res.meta.requestStatus === 'fulfilled') {
+              if (res.payload.length > 0) {
+                setIsResult(2);
+                setSearchResult(res.payload);
+              } else {
+                setIsResult(1);
+              }
             }
-          }
-        })
-        .catch((err: any) => {
-          console.log('SEARCHED_MOUNTAIN ERR ==>', err);
-        });
+          })
+          .catch((err: any) => {
+            console.log('SEARCHED_MOUNTAIN ERR ==>', err);
+          });
+      }
     }
   };
 
@@ -1876,7 +1893,7 @@ function Mountain({navigation}: MountainScreenProps) {
               <FlatList
                 data={mountainList}
                 keyExtractor={item => String(item.mountainId)}
-                onEndReached={once(onEndReached)}
+                onEndReached={onEndReached}
                 onEndReachedThreshold={0.01}
                 refreshing={false}
                 renderItem={({item}) => {
