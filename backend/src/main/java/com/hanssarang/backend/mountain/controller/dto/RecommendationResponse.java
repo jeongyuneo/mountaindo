@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecommendationResponse {
 
+    private int trailId;
     private String trailName;
     private String mountainName;
     private String mountainImage;
