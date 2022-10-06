@@ -11,7 +11,6 @@ import AppText from '../AppText';
 interface Props {
   modalVisible: boolean;
   setModalVisible: any;
-  kakaoShare: any;
   onCapture: any;
   onSave: any;
   getPhotoUri: any;
@@ -22,7 +21,6 @@ interface Props {
 const ShareModal = ({
   modalVisible,
   setModalVisible,
-  kakaoShare,
   onCapture,
   onSave,
   moveToTrackingEnd,
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 300,
-    height: 300,
+    height: 270,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,

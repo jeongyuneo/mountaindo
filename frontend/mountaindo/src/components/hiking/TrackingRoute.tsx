@@ -266,6 +266,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 100,
     height: 80,
+    marginVertical: 20,
   },
 });
 

@@ -5,6 +5,7 @@ import {faAngleDown} from '@fortawesome/free-solid-svg-icons';
 import {Rankings} from '../../pages/Main';
 import AppText from '../AppText';
 import AppTextBold from '../AppTextBold';
+import Config from 'react-native-config';
 
 interface Props {
   goAllRank: any;
@@ -40,16 +41,25 @@ function MainRankList({goAllRank, rankingList}: Props) {
         {rankingList?.length > 0 &&
           rankingList.map((item: Rankings, index: number) =>
             index < 3 ? (
-              <View key={index} style={styles.rankList}>
-                <View style={styles.styleRow}>
-                  <AppTextBold style={styles.rankNum}>
+              <View key={index} style={styles.itemWrapper}>
+                <View style={styles.userInfoWrapper}>
+                  <AppTextBold style={styles.userInfoText}>
                     {item.ranking}
                   </AppTextBold>
-                  <Image source={item.imageUrl} style={styles.imgStyle} />
-                  <AppTextBold style={styles.nameStyle}>
-                    {item.nickname}
+                  {item.imageUrl !== null ? (
+                    <Image
+                      source={{uri: Config.REACT_APP_BE_HOST + item.imageUrl}}
+                      style={styles.imageSrc}
+                    />
+                  ) : (
+                    <Image
+                      source={require('../../assets/user.png')}
+                      style={styles.imageSrc}
+                    />
+                  )}
+                  <AppTextBold style={styles.userInfoText}>
+                    {item.nickname}님
                   </AppTextBold>
-                  <AppText style={styles.namePix}>님</AppText>
                 </View>
                 <AppTextBold>{item.accumulatedHeight}m</AppTextBold>
               </View>
@@ -62,9 +72,6 @@ function MainRankList({goAllRank, rankingList}: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: '#6892D5',
-    borderRadius: 20,
     padding: 10,
   },
   rankStart: {
@@ -130,6 +137,26 @@ const styles = StyleSheet.create({
   namePix: {
     marginLeft: 5,
     fontSize: 13,
+  },
+  itemWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginVertical: 6,
+  },
+  userInfoWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  userInfoText: {
+    fontSize: 12,
+    marginHorizontal: 10,
+  },
+  imageSrc: {
+    width: 25,
+    height: 25,
+    borderRadius: 50,
   },
 });
 export default MainRankList;

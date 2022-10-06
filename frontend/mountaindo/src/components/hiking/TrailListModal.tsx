@@ -105,16 +105,17 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     marginTop: 20,
+    width: '100%',
   },
   searchList: {
     marginBottom: 10,
     marginLeft: 5,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#57d696',
-    paddingBottom: 5,
-    paddingVertical: 20,
+    paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 20,
+    justifyContent: 'center',
   },
   mountainText: {
     marginLeft: 5,

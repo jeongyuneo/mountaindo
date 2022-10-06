@@ -26,7 +26,6 @@ import UserInfoChange from './src/pages/user/loggedIn/UserInfoChange';
 import SignUp from './src/pages/user/loggedOut/SignUp';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Visited from './src/pages/completed/Visited';
-import MainDetail from './src/pages/main/MainDetail';
 import AddressChangeForm from './src/pages/user/loggedIn/AddressChangeForm';
 import CourseDetail from './src/pages/mountain/CourseDetail';
 import {useEffect, useState} from 'react';
@@ -61,7 +60,6 @@ export type LoggedInParamList = {
   MountainDetail: any;
   CourseDetail: any;
   기록: any;
-  MainDetail: any;
   AddressChangeForm: any;
   FindMountain: any;
 };
@@ -167,11 +165,6 @@ function MountainTab() {
         options={{title: '전체 산 목록', headerShown: false}}
       />
       <Stack.Screen
-        name="MainDetail"
-        component={MainDetail}
-        options={{title: '전체 산 목록'}}
-      />
-      <Stack.Screen
         name="MountainDetail"
         component={MountainDetail}
         options={{title: '산 상세 정보', headerShown: false}}
@@ -180,6 +173,28 @@ function MountainTab() {
         name="CourseDetail"
         component={CourseDetail}
         options={{title: '코스 상세 정보', headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// 홈 탭 (메인, 산 상세)
+function HomeTab() {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation}) => ({
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'NanumBarunGothic',
+          fontSize: 15,
+        },
+        headerShadowVisible: false,
+      })}>
+      <Stack.Screen name="홈" component={Main} options={{headerShown: false}} />
+      <Stack.Screen
+        name="MountainDetail"
+        component={MountainDetail}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -307,11 +322,12 @@ function AppInner() {
                 color={focused ? '#57d696' : 'black'}
               />
             ),
+            unmountOnBlur: false,
           }}
         />
         <Tab.Screen
           name="홈"
-          component={Main}
+          component={HomeTab}
           options={{
             headerShown: false,
             tabBarIcon: ({focused}) => (

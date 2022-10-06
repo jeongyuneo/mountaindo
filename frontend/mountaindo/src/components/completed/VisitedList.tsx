@@ -23,6 +23,7 @@ function VisitedList({moveToVisitedDetail, visitedTrail}: Props) {
             useTime={item.useTime}
             level={item.level}
             moveToVisitedDetail={moveToVisitedDetail}
+            imageUrl={item.imageUrl}
           />
         ))}
     </>
