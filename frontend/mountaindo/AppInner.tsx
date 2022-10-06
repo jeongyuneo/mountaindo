@@ -61,6 +61,7 @@ export type LoggedInParamList = {
   기록: any;
   AddressChangeForm: any;
   FindMountain: any;
+  MountainDetail: any;
 };
 
 export type RootStackParamList = {

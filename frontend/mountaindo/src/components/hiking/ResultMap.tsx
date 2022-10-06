@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import NaverMapView, {LayerGroup, Marker, Path} from 'react-native-nmap';
 
 type MyPosition = {
@@ -95,7 +95,7 @@ function ResultMap({coords}: Props) {
           height={15}
           anchor={{x: 0.5, y: 0.5}}
           caption={{text: '나'}}
-          image={require('../../assets/red-dot.png')}
+          image={require('../../assets/marker.png')}
         />
       )}
       {coords.length > 0 && coords[0]?.latitude && (
@@ -112,7 +112,7 @@ function ResultMap({coords}: Props) {
       )}
       {coords.length > 0 &&
         coords.map((item, itemIndex) => (
-          <>
+          <View key={itemIndex}>
             {itemIndex > 0 && (
               <Path
                 coordinates={[
@@ -126,7 +126,7 @@ function ResultMap({coords}: Props) {
                 key={itemIndex}
               />
             )}
-          </>
+          </View>
         ))}
       {coords.length > 0 && (
         <Marker
@@ -138,7 +138,7 @@ function ResultMap({coords}: Props) {
           height={15}
           anchor={{x: 0.5, y: 0.5}}
           caption={{text: '도착'}}
-          image={require('../../assets/blue-dot.png')}
+          image={require('../../assets/marker2.png')}
         />
       )}
     </NaverMapView>

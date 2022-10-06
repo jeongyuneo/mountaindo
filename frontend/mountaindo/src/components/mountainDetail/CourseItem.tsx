@@ -98,59 +98,47 @@ function CourseItem({
 const styles = StyleSheet.create({
   courseItemWrapper: {
     height: 50,
-    justifyContent: 'center',
     marginVertical: 5,
   },
   contentWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginHorizontal: 10,
   },
   levelWrapper: {
-    padding: 5,
+    flex: 0.1,
   },
   nameWrapper: {
+    flex: 0.4,
     backgroundColor: '#57d696',
     opacity: 0.7,
-    padding: 5,
     borderRadius: 20,
-    paddingHorizontal: 10,
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   lengthWrapper: {
+    flex: 0.2,
     borderRadius: 20,
-    paddingHorizontal: 5,
-    padding: 5,
     borderWidth: 1,
     borderColor: '#57d696',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 60,
   },
   timeWrapper: {
+    flex: 0.1,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
-    paddingHorizontal: 10,
-    padding: 5,
     backgroundColor: '#d4d3cd',
-    width: 50,
   },
   nameText: {
     fontSize: 12,
     color: 'white',
-    width: 160,
   },
   smallText: {
     fontSize: 10,
     color: 'white',
-    width: 160,
-  },
-  imageSrc: {
-    width: 90,
-    height: 80,
   },
   iconStar: {
     color: '#f5e642',
@@ -158,10 +146,12 @@ const styles = StyleSheet.create({
   lengthText: {
     fontSize: 10,
     color: '#57d696',
+    textAlign: 'center',
   },
   timeText: {
     fontSize: 10,
     color: 'white',
+    textAlign: 'center',
   },
   riskWrapper: {
     marginLeft: 60,

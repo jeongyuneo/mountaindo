@@ -5,6 +5,7 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
+  View,
 } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -19,6 +20,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useAppDispatch} from '../../store';
 import {endHiking, endHikingImage} from '../../slices/hikingSlice/hiking';
 import TrackingStart from '../../components/hiking/TrackingStart';
+import {LoadingAnimationB} from '../../components/completed/LoadingAnimation';
 
 type HikingScreenProps = NativeStackScreenProps<LoggedInParamList, '등산'>;
 
@@ -360,13 +362,9 @@ function Hiking({navigation, route}: HikingScreenProps) {
       moveToTrackingEnd={moveToTrackingEnd}
     />
   ) : (
-    <ScrollView
-      contentContainerStyle={styles.scrollView}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <AppTextBold>사용자의 현재 위치를 받아오지 못했습니다</AppTextBold>
-    </ScrollView>
+    <View style={styles.loading}>
+      <LoadingAnimationB />
+    </View>
   );
 }
 
@@ -417,6 +415,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
+  },
+  loading: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    top: 150,
+    borderRadius: 50,
+    overflow: 'hidden',
+    left: Dimensions.get('window').width / 2 - 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

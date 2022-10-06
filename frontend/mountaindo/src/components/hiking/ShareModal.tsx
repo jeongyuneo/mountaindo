@@ -13,7 +13,6 @@ interface Props {
   setModalVisible: any;
   onCapture: any;
   onSave: any;
-  getPhotoUri: any;
   moveToTrackingEnd: any;
   imageFile: any;
 }
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 300,
-    height: 270,
+    height: 250,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
