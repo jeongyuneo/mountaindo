@@ -19,13 +19,35 @@ function RestaurantItem({
     <View style={styles.itemWrapper}>
       <View style={styles.userInfoWrapper}>
         <AppTextBold style={styles.userInfoText}>{ranking}</AppTextBold>
-        <Image source={imageUrl} style={styles.imageSrc} />
+        {imageUrl === null ? (
+          <Image
+            source={require('../../assets/user.png')}
+            style={styles.imageSrc}
+          />
+        ) : (
+          <Image source={imageUrl} style={styles.imageSrc} />
+        )}
         <AppTextBold style={styles.userInfoText}>{nickname}님</AppTextBold>
       </View>
       <AppTextBold>{accumulatedHeight}m</AppTextBold>
     </View>
   );
 }
+
+// <Image source={imageUrl} style={styles.imageSrc} />
+// {item.imageUrl !== null ? (
+//   <Image
+//     source={{
+//       uri: Config.REACT_APP_BE_HOST + item.imageUrl,
+//     }}
+//     style={styles.imageSrc}
+//   />
+// ) : (
+//   <Image
+//     source={require('../../assets/user.png')}
+//     style={styles.imageSrc}
+//   />
+// )}
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -42,8 +64,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   imageSrc: {
-    width: 25,
-    height: 25,
+    width: 15,
+    height: 15,
     borderRadius: 50,
   },
 });

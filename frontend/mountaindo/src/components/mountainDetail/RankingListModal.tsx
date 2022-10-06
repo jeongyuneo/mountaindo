@@ -65,68 +65,81 @@ function RankingListModal({
   return (
     <Modal animationType="slide" transparent={true} visible={visibleModal}>
       <SafeAreaView style={styles.safeAreaView}>
+        <Pressable
+          onPress={() => setVisibleModal((visible: boolean) => !visible)}>
+          <AppTextBold style={styles.titleText}>산 전체 랭킹</AppTextBold>
+
+          <TextInput
+            style={styles.searchInput}
+            onChangeText={onChangeSearchInput}
+            placeholder="사용자 검색"
+            placeholderTextColor="#666"
+            importantForAutofill="yes"
+            autoComplete="name"
+            textContentType="name"
+            value={search}
+            returnKeyType="send"
+            clearButtonMode="while-editing"
+            onSubmitEditing={onSearch}
+            blurOnSubmit={false}
+          />
+          {!!searchResult && isResult === 2 ? (
+            <View>
+              <AppTextBold style={styles.myRankingText}>검색 결과</AppTextBold>
+              <View style={styles.itemWrapper}>
+                <View style={styles.userInfoWrapper}>
+                  <AppTextBold style={styles.userInfoText}>
+                    {searchResult?.ranking}
+                  </AppTextBold>
+                  <Image
+                    source={searchResult?.imageUrl}
+                    style={styles.imageSrc}
+                  />
+                  <AppTextBold style={styles.userInfoText}>
+                    {searchResult?.nickname}님
+                  </AppTextBold>
+                </View>
+                <AppTextBold>{searchResult?.accumulatedHeight}m</AppTextBold>
+              </View>
+            </View>
+          ) : isResult === 0 ? (
+            <></>
+          ) : (
+            <View>
+              <AppTextBold style={styles.searchResult}>
+                검색 결과가 없습니다.
+              </AppTextBold>
+            </View>
+          )}
+          <AppTextBold style={styles.myRankingText}>내 랭킹</AppTextBold>
+          <View style={styles.itemWrapper}>
+            <View style={styles.userInfoWrapper}>
+              <AppTextBold style={styles.userInfoText}>
+                {myRanking?.ranking}
+              </AppTextBold>
+              {myRanking?.imageUrl === null ? (
+                <Image
+                  source={require('../../assets/user.png')}
+                  style={styles.imageSrc}
+                />
+              ) : (
+                <Image source={myRanking?.imageUrl} style={styles.imageSrc} />
+              )}
+              <AppTextBold style={styles.userInfoText}>
+                {myRanking?.nickname}님
+              </AppTextBold>
+            </View>
+            <AppTextBold style={styles.meterText}>
+              {myRanking?.accumulatedHeight}m
+            </AppTextBold>
+          </View>
+
+          <AppTextBold style={styles.myRankingText}>전체 랭킹</AppTextBold>
+        </Pressable>
+
         <ScrollView style={styles.scrollView}>
           <Pressable
             onPress={() => setVisibleModal((visible: boolean) => !visible)}>
-            <AppTextBold style={styles.titleText}>산 전체 랭킹</AppTextBold>
-            <TextInput
-              style={styles.searchInput}
-              onChangeText={onChangeSearchInput}
-              placeholder="사용자 검색"
-              placeholderTextColor="#666"
-              importantForAutofill="yes"
-              autoComplete="name"
-              textContentType="name"
-              value={search}
-              returnKeyType="send"
-              clearButtonMode="while-editing"
-              onSubmitEditing={onSearch}
-              blurOnSubmit={false}
-            />
-            {!!searchResult && isResult === 2 ? (
-              <View>
-                <AppTextBold style={styles.myRankingText}>
-                  검색 결과
-                </AppTextBold>
-                <View style={styles.itemWrapper}>
-                  <View style={styles.userInfoWrapper}>
-                    <AppTextBold style={styles.userInfoText}>
-                      {searchResult?.ranking}
-                    </AppTextBold>
-                    <Image
-                      source={searchResult?.imageUrl}
-                      style={styles.imageSrc}
-                    />
-                    <AppTextBold style={styles.userInfoText}>
-                      {searchResult?.nickname}님
-                    </AppTextBold>
-                  </View>
-                  <AppTextBold>{searchResult?.accumulatedHeight}m</AppTextBold>
-                </View>
-              </View>
-            ) : isResult === 0 ? (
-              <></>
-            ) : (
-              <View>
-                <AppTextBold style={styles.searchResult}>
-                  검색 결과가 없습니다.
-                </AppTextBold>
-              </View>
-            )}
-            <AppTextBold style={styles.myRankingText}>내 랭킹</AppTextBold>
-            <View style={styles.itemWrapper}>
-              <View style={styles.userInfoWrapper}>
-                <AppTextBold style={styles.userInfoText}>
-                  {myRanking?.ranking}
-                </AppTextBold>
-                <Image source={myRanking?.imageUrl} style={styles.imageSrc} />
-                <AppTextBold style={styles.userInfoText}>
-                  {myRanking?.nickname}님
-                </AppTextBold>
-              </View>
-              <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
-            </View>
-            <AppTextBold style={styles.myRankingText}>전체 랭킹</AppTextBold>
             {rankingList?.length > 0 &&
               rankingList.map((item: Rankings, index: number) => (
                 <RankingListItem
@@ -145,23 +158,30 @@ function RankingListModal({
 }
 
 const styles = StyleSheet.create({
+  meterText: {
+    marginRight: 5,
+  },
   safeAreaView: {
     flex: 1,
     alignItems: 'center',
-    width: 400,
+    width: '100%',
     marginTop: '40%',
-    // paddingHorizontal: 30,
     borderWidth: 1,
     borderColor: 'grey',
-    borderRadius: 30,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingHorizontal: 5,
   },
   scrollView: {
     flex: 1,
-    borderRadius: 5,
     borderColor: '#cccccc',
     backgroundColor: '#ffffff',
+    width: '100%',
   },
   titleText: {
+    paddingVertical: 13,
+    paddingHorizontal: 10,
     fontSize: 20,
   },
   searchInput: {
@@ -182,6 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: 'rgba(117, 207, 184, 0.5)',
     paddingVertical: 7,
+    marginHorizontal: 5,
     borderRadius: 10,
   },
   userInfoWrapper: {
@@ -194,8 +215,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   imageSrc: {
-    width: 25,
-    height: 25,
+    width: 15,
+    height: 15,
     borderRadius: 50,
   },
   searchResult: {

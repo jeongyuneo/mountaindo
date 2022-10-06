@@ -18,6 +18,7 @@ import AppTextBold from '../AppTextBold';
 import {useAppDispatch} from '../../store';
 import {totalRankingSearch} from '../../slices/rankingSlice/ranking';
 import Config from 'react-native-config';
+import UserRankList from './UserRankList';
 
 interface Props {
   isModalVisible: any;
@@ -116,7 +117,9 @@ function MainModal({
                       {searchResult?.nickname}님
                     </AppTextBold>
                   </View>
-                  <AppTextBold>{searchResult?.accumulatedHeight}m</AppTextBold>
+                  <AppTextBold style={styles.meterStyle}>
+                    {searchResult?.accumulatedHeight}m
+                  </AppTextBold>
                 </View>
               </View>
             ) : isResult === 0 ? (
@@ -151,46 +154,31 @@ function MainModal({
                   {myRanking?.nickname}님
                 </AppTextBold>
               </View>
-              <AppTextBold>{myRanking?.accumulatedHeight}m</AppTextBold>
-              <AppTextBold style={styles.myRankingText}>전체 랭킹</AppTextBold>
+              <AppTextBold style={styles.meterStyle}>
+                {myRanking?.accumulatedHeight}m
+              </AppTextBold>
             </View>
-            <View>
-              {rankingList?.length > 0 &&
-                rankingList.map((item: Rankings, index: number) => (
-                  <View key={index} style={styles.itemWrapper}>
-                    <View style={styles.userInfoWrapper}>
-                      <AppTextBold style={styles.userInfoText}>
-                        {item.ranking}
-                      </AppTextBold>
-                      {item.imageUrl !== null ? (
-                        <Image
-                          source={{
-                            uri: Config.REACT_APP_BE_HOST + item.imageUrl,
-                          }}
-                          style={styles.imageSrc}
-                        />
-                      ) : (
-                        <Image
-                          source={require('../../assets/user.png')}
-                          style={styles.imageSrc}
-                        />
-                      )}
-                      <AppTextBold style={styles.userInfoText}>
-                        {item.nickname}님
-                      </AppTextBold>
-                    </View>
-                    <AppTextBold>{item.accumulatedHeight}m</AppTextBold>
-                  </View>
-                ))}
-            </View>
+            <AppTextBold style={styles.myRankingText}>전체 랭킹</AppTextBold>
           </Pressable>
         </ScrollView>
+
+        <View style={styles.userRankList}>
+          <UserRankList rankingList={rankingList}></UserRankList>
+        </View>
       </SafeAreaView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  userRankList: {
+    backgroundColor: 'white',
+    width: '90%',
+    flex: 35,
+  },
+  meterStyle: {
+    marginRight: 5,
+  },
   safeAreaView: {
     flex: 1,
     alignItems: 'center',
@@ -198,15 +186,17 @@ const styles = StyleSheet.create({
     marginVertical: '5%',
   },
   scrollView: {
-    flex: 0.9,
-    borderRadius: 5,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
     borderColor: '#cccccc',
     backgroundColor: '#ffffff',
     paddingHorizontal: 10,
-    paddingVertical: 30,
+    marginTop: 10,
+    width: '90%',
   },
   titleText: {
     fontSize: 20,
+    paddingTop: 15,
   },
   searchInput: {
     borderBottomColor: 'black',
