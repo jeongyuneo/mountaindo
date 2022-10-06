@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Image,
+  Dimensions,
 } from 'react-native';
 import {Rankings} from '../../pages/Main';
 import {mountainRankingSearch} from '../../slices/rankingSlice/ranking';
@@ -62,7 +63,7 @@ function RankingListModal({
     setSearch(text.trim());
   };
   return (
-    <Modal animationType="none" transparent={true} visible={visibleModal}>
+    <Modal animationType="slide" transparent={true} visible={visibleModal}>
       <SafeAreaView style={styles.safeAreaView}>
         <ScrollView style={styles.scrollView}>
           <Pressable
@@ -147,16 +148,18 @@ const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
     alignItems: 'center',
-    width: '100%',
-    marginVertical: '5%',
+    width: 400,
+    marginTop: '40%',
+    // paddingHorizontal: 30,
+    borderWidth: 1,
+    borderColor: 'grey',
+    borderRadius: 30,
   },
   scrollView: {
-    flex: 0.9,
+    flex: 1,
     borderRadius: 5,
     borderColor: '#cccccc',
     backgroundColor: '#ffffff',
-    paddingHorizontal: 10,
-    paddingVertical: 30,
   },
   titleText: {
     fontSize: 20,
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
   searchInput: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    width: 300,
+    width: Dimensions.get('window').width,
   },
   myRankingText: {
     fontSize: 13,
