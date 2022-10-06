@@ -28,62 +28,88 @@ function EasyMountain({
           lastVisitedTrailBased?.length > 0 &&
           lastVisitedTrailBased.map((item, index) => (
             <Pressable
-              onPress={dispatchMountainDetail(item.mountainId)}
+              style={styles.button}
+              onPress={() => dispatchMountainDetail(item.mountainId)}
               key={index}>
-              <AppTextBold style={styles.mountainCourse}>
-                {item.trailName}
-              </AppTextBold>
-              <Image
-                source={{
-                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
-                }}
-                style={styles.imgStyle}
-              />
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
+              {item.mountainImage !== null && item.mountainImage !== '' ? (
+                <Image
+                  source={{
+                    uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                  }}
+                  style={styles.imgStyle}
+                />
+              ) : (
+                <Image
+                  source={require('../../assets/mountainOne.jpeg')}
+                  style={styles.imgStyle}
+                />
+              )}
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
             </Pressable>
           ))}
+      </ScrollView>
+      <ScrollView horizontal={true}>
         {recommend === 'memberBased' &&
           !!memberBased &&
           memberBased?.length > 0 &&
           memberBased.map((item, index) => (
             <Pressable
-              onPress={dispatchMountainDetail(item.mountainId)}
+              onPress={() => dispatchMountainDetail(item.mountainId)}
               key={index}>
-              <AppTextBold style={styles.mountainCourse}>
-                {item.trailName}
-              </AppTextBold>
-              <Image
-                source={{
-                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
-                }}
-                style={styles.imgStyle}
-              />
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
+              {item.mountainImage !== null && item.mountainImage !== '' ? (
+                <Image
+                  source={{
+                    uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                  }}
+                  style={styles.imgStyle}
+                />
+              ) : (
+                <Image
+                  source={require('../../assets/mountainOne.jpeg')}
+                  style={styles.imgStyle}
+                />
+              )}
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
             </Pressable>
           ))}
+      </ScrollView>
+      <ScrollView horizontal={true}>
         {recommend === 'surveyBased' &&
           !!surveyBased &&
           surveyBased?.length > 0 &&
           surveyBased.map((item, index) => (
             <Pressable
-              onPress={dispatchMountainDetail(item.mountainId)}
+              onPress={() => dispatchMountainDetail(item.mountainId)}
               key={index}>
-              <AppTextBold style={styles.mountainCourse}>
-                {item.trailName}
-              </AppTextBold>
-              <Image
-                source={{
-                  uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
-                }}
-                style={styles.imgStyle}
-              />
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
+              {item.mountainImage !== null && item.mountainImage !== '' ? (
+                <Image
+                  source={{
+                    uri: `${Config.REACT_APP_BE_HOST}${item.mountainImage}`,
+                  }}
+                  style={styles.imgStyle}
+                />
+              ) : (
+                <Image
+                  source={require('../../assets/mountainOne.jpeg')}
+                  style={styles.imgStyle}
+                />
+              )}
+              <AppTextBold style={styles.mountainCourse}>
+                {item.trailName}
+              </AppTextBold>
             </Pressable>
           ))}
       </ScrollView>
@@ -95,18 +121,18 @@ const styles = StyleSheet.create({
   mountainCourse: {
     fontSize: 12,
     marginLeft: 8,
+    flexShrink: 1,
   },
   mountainTitle: {
     fontSize: 10,
     marginLeft: 5,
-    marginBottom: 7,
   },
-
   imgStyle: {
     width: 90,
     height: 90,
     margin: 5,
   },
+  button: {width: 100},
 });
 
 export default EasyMountain;

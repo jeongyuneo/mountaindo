@@ -87,7 +87,7 @@ function Main({navigation}: MainInScreenProps) {
 
   // 만약 전체 랭킹과 내 랭킹의 정보가 아직 들어오지 않았다면 재렌더링
   useEffect(() => {
-    if (!myRanking?.ranking || !rankingList || rankingList.length < 1) {
+    if (!myRanking?.ranking || !rankingList || rankingList?.length < 1) {
       return;
     }
   }, [myRanking?.ranking, rankingList]);
@@ -132,19 +132,23 @@ function Main({navigation}: MainInScreenProps) {
             <RankList goAllRank={goAllRank} rankingList={rankingList} />
           </View>
 
-          {lastVisitedTrailBased.length > 0 && (
+          {lastVisitedTrailBased?.length > 0 && (
             <View style={styles.mountainList}>
-              <AppTextBold style={styles.easyTitle}>
-                최근 방문한 산과 비슷한 등산 코스
-              </AppTextBold>
-              <EasyMountain
-                lastVisitedTrailBased={lastVisitedTrailBased}
-                recommend={'lastVisitedTrailBased'}
-                dispatchMountainDetail={dispatchMountainDetail}
-              />
+              <View>
+                <AppTextBold style={styles.easyTitle}>
+                  최근 방문한 산과 비슷한 등산 코스
+                </AppTextBold>
+              </View>
+              <View>
+                <EasyMountain
+                  lastVisitedTrailBased={lastVisitedTrailBased}
+                  recommend={'lastVisitedTrailBased'}
+                  dispatchMountainDetail={dispatchMountainDetail}
+                />
+              </View>
             </View>
           )}
-          {memberBased.length > 0 && (
+          {memberBased?.length > 0 && (
             <View>
               <AppTextBold style={styles.easyTitle}>
                 나와 비슷한 사용자들이 많이 방문한 코스
@@ -156,7 +160,7 @@ function Main({navigation}: MainInScreenProps) {
               />
             </View>
           )}
-          {surveyBased.length > 0 && (
+          {surveyBased?.length > 0 && (
             <View>
               <AppTextBold style={styles.easyTitle}>
                 이런 코스에 방문해보는건 어떠세요?
@@ -168,9 +172,9 @@ function Main({navigation}: MainInScreenProps) {
               />
             </View>
           )}
-          {lastVisitedTrailBased.length < 1 &&
-            memberBased.length < 1 &&
-            surveyBased.length < 1 && (
+          {lastVisitedTrailBased?.length < 1 &&
+            memberBased?.length < 1 &&
+            surveyBased?.length < 1 && (
               <View style={styles.container}>
                 <AppTextBold>추천 목록을 불러오지 못했습니다.</AppTextBold>
                 <AppTextBold>다시 시도해주세요!</AppTextBold>
@@ -197,7 +201,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   mountainList: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   containerMain: {
@@ -205,6 +208,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     backgroundColor: 'white',
+    paddingBottom: 60,
   },
   photoContainer: {
     flex: 1.2,
