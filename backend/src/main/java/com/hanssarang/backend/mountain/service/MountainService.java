@@ -216,6 +216,7 @@ public class MountainService {
 
     private RecommendationResponse getRecommendationResponse(Trail recommendedTrail) {
         return RecommendationResponse.builder()
+                .trailId(recommendedTrail.getId())
                 .trailName(recommendedTrail.getName())
                 .mountainName(recommendedTrail.getMountain().getName())
                 .mountainImage(recommendedTrail.getMountain().getImageUrl())
