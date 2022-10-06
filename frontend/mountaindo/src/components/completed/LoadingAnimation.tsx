@@ -23,3 +23,14 @@ export function LoadingAnimationB() {
     />
   );
 }
+
+export function LoadingAnimationC() {
+  return (
+    <LottieView
+      source={require('../../assets/loading.json')}
+      autoPlay
+      speed={1}
+      loop
+    />
+  );
+}
