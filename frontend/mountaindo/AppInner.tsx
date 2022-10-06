@@ -95,7 +95,7 @@ function TopTab() {
         options={{title: '완등한 산'}}
       />
       <Top.Screen
-        name="Visited"
+        name="기록"
         component={Visited}
         options={{title: '등산 기록'}}
       />
@@ -116,7 +116,7 @@ function UserTab() {
         headerShadowVisible: false,
       })}>
       <Stack.Screen
-        name="MyPage"
+        name="유저"
         component={MyPage}
         options={{title: '프로필'}}
       />
@@ -279,7 +279,7 @@ function AppInner() {
           tabBarHideOnKeyboard: true,
           unmountOnBlur: true,
         }}
-        initialRouteName="Main">
+        initialRouteName="홈">
         <Tab.Screen
           name="산"
           component={MountainTab}
