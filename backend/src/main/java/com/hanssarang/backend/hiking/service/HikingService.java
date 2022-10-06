@@ -60,7 +60,7 @@ public class HikingService {
                 .trailName(trail.getName())
                 .distance(hiking.getDistance())
                 .useTime(hiking.getUseTime())
-                .image(ImageUtil.toByteArray(hiking.getImageUrl()))
+                .imageUrl(hiking.getImageUrl())
                 .accumulatedHeight(hiking.getAccumulatedHeight())
                 .build();
     }

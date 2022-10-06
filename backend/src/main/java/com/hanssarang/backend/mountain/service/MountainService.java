@@ -1,15 +1,14 @@
 package com.hanssarang.backend.mountain.service;
 
+import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.NotFoundException;
-import com.hanssarang.backend.mountain.controller.dto.MountainListResponse;
-import com.hanssarang.backend.mountain.controller.dto.MountainResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailListResponse;
-import com.hanssarang.backend.mountain.controller.dto.TrailResponse;
+import com.hanssarang.backend.hiking.domain.Hiking;
+import com.hanssarang.backend.member.domain.*;
+import com.hanssarang.backend.mountain.controller.dto.*;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
 import com.hanssarang.backend.mountain.domain.Trail;
 import com.hanssarang.backend.mountain.domain.TrailRepository;
-import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,7 +27,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
 @Service
 public class MountainService {
 
-    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 50;
+    private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 10;
     private static final String NAME = "name";
     private static final String HEIGHT = "height";
     private static final String HIGH_HEIGHT = "high-height";
@@ -38,12 +37,13 @@ public class MountainService {
 
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
+    private final MemberRepository memberRepository;
 
     public List<MountainListResponse> getMountains(String sort, String si, int page) {
         List<Mountain> mountains = null;
         if (si.equals(ALL_AREA)) {
             if (sort.equals(NAME)) {
-                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(NAME).ascending())).getContent();
+                mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE)).getContent();
             } else if (sort.equals(HIGH_HEIGHT)) {
                 mountains = mountainRepository.findAll(PageRequest.of(page, MOUNTAIN_LIST_RESPONSE_SIZE, Sort.by(HEIGHT).descending())).getContent();
             } else if (sort.equals(LOW_HEIGHT)) {
@@ -74,7 +74,7 @@ public class MountainService {
                 .name(mountain.getName())
                 .height(mountain.getHeight())
                 .address(mountain.getAddress().getFullAddress())
-                .image(ImageUtil.toByteArray(mountain.getImageUrl()))
+                .imageUrl(mountain.getImageUrl())
                 .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                 .trails(mountain.getTrails()
                         .stream()
@@ -178,7 +178,7 @@ public class MountainService {
                         .name(mountain.getName())
                         .height(mountain.getHeight())
                         .address(mountain.getAddress().getFullAddress())
-                        .image(ImageUtil.toByteArray(mountain.getImageUrl()))
+                        .imageUrl(mountain.getImageUrl())
                         .isHot(isHotMountain(mountainRepository.findIsHot(), mountain.getId()))
                         .build())
                 .collect(Collectors.toList());
@@ -187,5 +187,39 @@ public class MountainService {
     private boolean isHotMountain(List<Mountain> hotMountains, int mountainId) {
         return hotMountains.stream()
                 .anyMatch(mountain -> mountain.getId() == mountainId);
+    }
+
+    public RecommendationListResponse getRecommendedTrails(int memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
+        List<Hiking> hikings = member.getHikings();
+        Trail trail = trailRepository.findById(hikings.get(hikings.size() - 1).getTrail().getId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
+        return RecommendationListResponse.builder()
+                .memberBased(member.getMemberBasedRecommendations()
+                        .stream()
+                        .map(MemberBasedRecommendation::getTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .lastVisitedTrailBased(trail.getLastVisitedTrailBasedRecommendations()
+                        .stream()
+                        .map(LastVisitedTrailBasedRecommendation::getRecommendedTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .surveyBased(member.getSurveyBasedRecommendations()
+                        .stream()
+                        .map(SurveyBasedRecommendation::getTrail)
+                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private RecommendationResponse getRecommendationResponse(Trail recommendedTrail) {
+        return RecommendationResponse.builder()
+                .trailId(recommendedTrail.getId())
+                .trailName(recommendedTrail.getName())
+                .mountainName(recommendedTrail.getMountain().getName())
+                .mountainImage(recommendedTrail.getMountain().getImageUrl())
+                .build();
     }
 }

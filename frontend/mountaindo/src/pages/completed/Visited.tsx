@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     backgroundColor: 'white',
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 15,
   },
 });

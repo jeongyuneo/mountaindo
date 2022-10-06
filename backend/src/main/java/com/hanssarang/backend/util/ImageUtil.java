@@ -2,17 +2,13 @@ package com.hanssarang.backend.util;
 
 import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.BadRequestException;
-import com.hanssarang.backend.common.exception.FileLoadException;
 import com.hanssarang.backend.common.exception.FileSaveException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.FAIL_TO_SAVE_FILE;
@@ -26,6 +22,7 @@ public class ImageUtil {
     private static final String IMAGE_JPG = "image/jpg";
     private static final String IMAGE_JPEG = "image/jpeg";
     private static final String IMAGE_PNG = "image/png";
+    private static final String IMAGE_REQUEST = "/images";
 
     public static String saveImage(MultipartFile multipartFile, String path) {
         validateContentType(multipartFile.getContentType());
@@ -35,25 +32,14 @@ public class ImageUtil {
         if (!imageFile.exists()) {
             imageFile.mkdir();
         }
-        imageUploadPath.append(File.separator).append(UUID.randomUUID()).append(POINT).append(extractExt(multipartFile.getContentType()));
-        String imageUrl = imageUploadPath.toString();
+        String imageFileName = UUID.randomUUID() + POINT + extractExt(multipartFile.getContentType());
+        imageUploadPath.append(File.separator).append(imageFileName);
         try {
-            multipartFile.transferTo(new File(imageUrl));
+            multipartFile.transferTo(new File(imageUploadPath.toString()));
         } catch (IOException e) {
             throw new FileSaveException(FAIL_TO_SAVE_FILE);
         }
-        return imageUrl;
-    }
-
-    public static byte[] toByteArray(String imageUrl) {
-        try {
-            InputStream imageFile = new FileInputStream(imageUrl);
-            byte[] imageBytes = IOUtils.toByteArray(imageFile);
-            imageFile.close();
-            return imageBytes;
-        } catch (IOException e) {
-            throw new FileLoadException(ErrorMessage.FAIL_TO_LOAD_IMAGE);
-        }
+        return IMAGE_REQUEST + File.separator + path + File.separator + imageFileName;
     }
 
     private static String extractExt(String contentType) {

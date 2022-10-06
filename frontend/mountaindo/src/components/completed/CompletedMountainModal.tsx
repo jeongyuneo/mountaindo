@@ -1,6 +1,5 @@
 import {
   faCloudArrowDown,
-  faShareFromSquare,
   faShareNodes,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -51,20 +50,39 @@ const CompletedMountainModal = ({
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.centeredView}>
+        <Pressable
+          style={styles.centeredView}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}>
           <View style={styles.modalView}>
-            <AppTextBold style={styles.modalText}>
-              {mountain.mountainName}
-            </AppTextBold>
-            <AppText style={styles.dateText}>{mountain.lastHikingDate}</AppText>
-            <AppText style={styles.addressText}>{mountain.address}</AppText>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <AppText style={styles.textStyle}>닫기</AppText>
-            </Pressable>
+            <View>
+              <AppTextBold style={styles.modalText}>
+                {mountain.mountainName}
+              </AppTextBold>
+              <View style={styles.textGroup}>
+                <AppTextBold style={styles.labelText}>주소</AppTextBold>
+                <AppText style={styles.dateText}>{mountain.address}</AppText>
+              </View>
+              <View style={styles.textGroup}>
+                <AppTextBold style={styles.labelText}>
+                  마지막 등산 날짜
+                </AppTextBold>
+                <AppText style={styles.dateText}>
+                  {mountain.lastHikingDate}
+                </AppText>
+              </View>
+              <View style={styles.textGroup}>
+                <AppTextBold style={styles.labelText}>
+                  마지막 방문 코스
+                </AppTextBold>
+                <AppText style={styles.dateText}>
+                  {mountain.lastHikingTrailName}
+                </AppText>
+              </View>
+            </View>
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   ) : (
@@ -129,7 +147,7 @@ const CompletedMountainModal = ({
                 </View>
                 <View style={styles.textItem}>
                   <AppTextBold style={styles.text}>
-                    {trails.accumulatedHeight} km
+                    {trails.accumulatedHeight} m
                   </AppTextBold>
                   <AppText style={styles.label}>총 고도</AppText>
                 </View>
@@ -154,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    width: 270,
+    width: 300,
     height: 350,
     shadowColor: '#000',
     shadowOffset: {
@@ -170,8 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    width: 200,
-    height: 200,
+    width: 250,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -180,30 +197,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    marginTop: 10,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    textAlign: 'center',
+    flexWrap: 'wrap',
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontSize: 18,
   },
   mountainImage: {
     width: '100%',
     height: 150,
+    resizeMode: 'contain',
   },
   textContainer: {
     flexDirection: 'row',
@@ -211,14 +215,14 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   textItem: {
-    marginHorizontal: 5,
+    marginHorizontal: 10,
     alignItems: 'center',
   },
   text: {
-    fontSize: 15,
+    fontSize: 13,
   },
   label: {
-    fontSize: 10,
+    fontSize: 9,
   },
   shareButton: {
     alignSelf: 'flex-end',
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 13,
-    marginVertical: 5,
+    marginBottom: 10,
   },
   titleView: {
     flexDirection: 'row',
@@ -246,6 +250,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginHorizontal: 5,
+  },
+  textGroup: {},
+  labelText: {
+    fontSize: 13,
+    marginBottom: 3,
   },
 });
 

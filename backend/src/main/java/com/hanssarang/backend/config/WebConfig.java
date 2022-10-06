@@ -12,6 +12,7 @@ import static com.hanssarang.backend.common.domain.Message.AUTHORIZATION;
 public class WebConfig implements WebMvcConfigurer {
 
     private static final String API_SPECIFICATION = "/docs/**";
+    private static final String IMAGE_REQUEST = "/images/**";
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -26,6 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
         interceptorRegistry.addInterceptor(new JwtAuthInterceptor())
-                .excludePathPatterns(API_SPECIFICATION);
+                .excludePathPatterns(API_SPECIFICATION, IMAGE_REQUEST);
     }
 }

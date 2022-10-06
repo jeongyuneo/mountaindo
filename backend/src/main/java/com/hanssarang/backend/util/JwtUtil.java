@@ -33,10 +33,6 @@ public class JwtUtil {
         return (int) getAllClaims(getActualToken(token)).get("id");
     }
 
-    public static void validate(String token) {
-        getAllClaims(getActualToken(token));
-    }
-
     private static String createToken(Claims claims) {
         return Jwts.builder()
                 .setSubject(JWT_HEADER)

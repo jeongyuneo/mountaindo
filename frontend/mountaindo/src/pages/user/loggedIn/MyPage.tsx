@@ -28,6 +28,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppText from '../../../components/AppText';
 import AppTextBold from '../../../components/AppTextBold';
+import Config from 'react-native-config';
 
 // Navigation 사용
 type MyPageScreenProps = NativeStackScreenProps<LoggedInParamList, '유저'>;
@@ -35,6 +36,7 @@ function MyPage({navigation}: MyPageScreenProps) {
   const dispatch = useAppDispatch();
   const [photo, setPhoto] = useState(''); //이미지 접근을 위한 State
   const [profileImage, setProfileImage] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   //로그아웃 버튼 클릭시 로그인창으로 화면전환
   const loggedout = () => {
     Alert.alert(
@@ -55,11 +57,6 @@ function MyPage({navigation}: MyPageScreenProps) {
       ],
       {cancelable: true},
     );
-  };
-
-  // 이미지 변환
-  const getImageSource = (source: any) => {
-    return `data:image/jpeg;base64,${source}`;
   };
 
   const [user, setUser] = useState({
@@ -90,9 +87,9 @@ function MyPage({navigation}: MyPageScreenProps) {
         phone: res.payload?.phone,
       });
 
-      setProfileImage(getImageSource(res.payload?.profileImage));
+      setImageUrl(res.payload?.imageUrl);
     });
-  }, [user.nickname, photo, user.si, user.phone, profileImage]);
+  }, [user.nickname, photo, user.si, user.phone, profileImage, imageUrl]);
 
   // 이미지 불러오기
   const showPicker = async () => {
@@ -210,7 +207,10 @@ function MyPage({navigation}: MyPageScreenProps) {
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
             {profileImage !== null ? (
-              <Image source={{uri: profileImage}} style={styles.userImg} />
+              <Image
+                source={{uri: `${Config.REACT_APP_BE_HOST}${imageUrl}`}}
+                style={styles.userImg}
+              />
             ) : (
               <Image
                 source={require('../../../assets/user.png')}

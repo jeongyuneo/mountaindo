@@ -6,7 +6,6 @@ import com.hanssarang.backend.hiking.controller.dto.RankingListResponse;
 import com.hanssarang.backend.hiking.controller.dto.RankingResponse;
 import com.hanssarang.backend.member.domain.Member;
 import com.hanssarang.backend.member.domain.MemberRepository;
-import com.hanssarang.backend.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +66,7 @@ public class RankingService {
                     rankings.add(getRankingResponse(ranking, currentMember));
                 });
         return RankingListResponse.builder()
-                .image(ImageUtil.toByteArray(member.getImageUrl()))
+                .imageUrl(member.getImageUrl())
                 .ranking(myRanking)
                 .nickname(member.getNickname())
                 .accumulatedHeight(member.getAccumulatedHeight())
@@ -89,7 +88,7 @@ public class RankingService {
         return RankingResponse.builder()
                 .ranking(ranking)
                 .nickname(member.getNickname())
-                .image(ImageUtil.toByteArray(member.getImageUrl()))
+                .imageUrl(member.getImageUrl())
                 .accumulatedHeight(member.getAccumulatedHeight())
                 .build();
     }

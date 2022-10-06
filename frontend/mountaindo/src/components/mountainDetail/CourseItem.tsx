@@ -1,5 +1,7 @@
+import {faStar} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
-import {View, StyleSheet, Image, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable} from 'react-native';
 import {getTrailDetail} from '../../slices/mountainSlice/mountain';
 import {useAppDispatch} from '../../store';
 import AppText from '../AppText';
@@ -47,13 +49,24 @@ function CourseItem({
         onPress={() => {
           dispatchTrailDetail(trailId);
         }}>
-        <AppText style={styles.trailText}>{name}</AppText>
-        <Image
-          source={require('../../assets/gyeryongTrailCourse.jpg')}
-          style={styles.imageSrc}
-        />
-        <AppText style={styles.levelText}>난이도: {level}</AppText>
-        <AppText style={styles.levelText}>길이: {length}</AppText>
+        <View style={styles.contentWrapper}>
+          {level === '상' ? (
+            <View>
+              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+            </View>
+          ) : level === '중' ? (
+            <View>
+              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+              <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+            </View>
+          ) : (
+            <FontAwesomeIcon icon={faStar} style={styles.iconStar} />
+          )}
+          <AppText style={styles.trailText}>{name}</AppText>
+          <AppText style={styles.levelText}>{length}km</AppText>
+        </View>
       </Pressable>
     </View>
   );
@@ -61,16 +74,27 @@ function CourseItem({
 
 const styles = StyleSheet.create({
   courseItemWrapper: {
-    marginTop: 10,
-    marginHorizontal: 10,
+    elevation: 5,
     alignItems: 'center',
+    height: 50,
+    justifyContent: 'center',
+    borderBottomWidth: 0.1,
+    backgroundColor: '#faf9f2',
+  },
+  contentWrapper: {
+    flexDirection: 'row',
   },
   trailText: {
-    fontSize: 12,
+    fontSize: 14,
+    marginHorizontal: 30,
+    color: 'grey',
   },
   imageSrc: {
     width: 90,
     height: 80,
+  },
+  iconStar: {
+    color: '#f5e642',
   },
   levelText: {
     fontSize: 12,

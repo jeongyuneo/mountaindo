@@ -5,29 +5,26 @@ import AppText from '../AppText';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 interface Props {
+  mountainId: number;
   address: string;
   height: number;
   hot: boolean;
-  imageUrl: string;
-  mountainId: number;
+  imageUrl: any;
   name: string;
 }
 
 function MountainListItem({
+  mountainId,
   address,
   height,
   hot,
   imageUrl,
-  mountainId,
   name,
 }: Props) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.imageContentWrapper}>
-        <Image
-          source={require('../../assets/gyeryongMountain.jpg')}
-          style={styles.image}
-        />
+        <Image source={imageUrl} style={styles.image} />
         <View style={styles.contentWrapper}>
           <View style={styles.nameIconWrapper}>
             <AppText style={styles.nameText}>{name}</AppText>

@@ -1,15 +1,18 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useIsFocused} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Dimensions,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
   TextInput,
   View,
 } from 'react-native';
+import Config from 'react-native-config';
 import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
@@ -65,6 +68,7 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             setModalVisible(!modalVisible);
           } else {
             setIsTrailList(false);
+            setModalVisible(!modalVisible);
           }
         }
       })
@@ -136,6 +140,10 @@ function FindMountain({navigation}: FindMountainScreenProps) {
             {`오늘 \n등산할 산을 \n검색해주세요`}
           </AppTextBold>
           <View>
+            <Image
+              source={require('../../assets/search_logo.png')}
+              style={styles.image}
+            />
             <TextInput
               style={styles.searchInput}
               onChangeText={onChangeSearchInput}
@@ -202,7 +210,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 30,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   searchInput: {
     borderColor: 'grey',
@@ -210,6 +218,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 15,
     width: 300,
+    position: 'relative',
   },
   chooseText: {
     marginLeft: 5,
@@ -224,6 +233,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 20,
+    width: 300,
   },
   mountainText: {
     marginLeft: 5,
@@ -235,6 +245,17 @@ const styles = StyleSheet.create({
   text: {
     marginVertical: 5,
     fontSize: 15,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  image: {
+    width: 130,
+    height: 130,
+    position: 'absolute',
+    top: -110,
+    right: 0,
   },
 });
 
