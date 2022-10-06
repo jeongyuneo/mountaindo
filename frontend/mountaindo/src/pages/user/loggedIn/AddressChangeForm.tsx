@@ -1,6 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useCallback, useState} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, View} from 'react-native';
 import {LoggedInParamList} from '../../../../AppInner';
 import AppTextBold from '../../../components/AppTextBold';
 import LocationPicker from '../../../components/user/LocationPicker';
@@ -45,7 +45,7 @@ function AddressChangeForm({navigation, route}: AddressChangeFormScreenProps) {
     });
 
     navigation.navigate('유저');
-    return console.log('알림', '주소 변경에 성공하였습니다. ');
+    return Alert.alert('알림', '주소 변경에 성공하였습니다. ');
   }, [navigation, selectedCity, selectedCity2, route.params]);
 
   // 선택된 도시의 값이 없음이거나 null일 경우 버튼 활성화 처리

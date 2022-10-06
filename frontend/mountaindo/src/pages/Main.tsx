@@ -72,18 +72,6 @@ function Main({navigation}: MainInScreenProps) {
       .catch(err => {
         console.log();
       });
-  }, []);
-
-  // 만약 전체 랭킹과 내 랭킹의 정보가 아직 들어오지 않았다면 재렌더링
-  useEffect(() => {
-    if (!myRanking?.ranking || !rankingList || rankingList.length < 1) {
-      return;
-    }
-  }, [myRanking?.ranking, rankingList]);
-
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
     dispatch(getRecommendTrailList(''))
       .then(res => {
         if (res.meta.requestStatus === 'fulfilled') {
@@ -95,7 +83,20 @@ function Main({navigation}: MainInScreenProps) {
       .catch(err => {
         console.log(err);
       });
-  }, [isFocused, lastVisitedTrailBased, memberBased, surveyBased]);
+  }, []);
+
+  // 만약 전체 랭킹과 내 랭킹의 정보가 아직 들어오지 않았다면 재렌더링
+  useEffect(() => {
+    if (!myRanking?.ranking || !rankingList || rankingList.length < 1) {
+      return;
+    }
+  }, [myRanking?.ranking, rankingList]);
+
+  const isFocused = useIsFocused();
+
+  // useEffect(() => {
+
+  // }, [lastVisitedTrailBased]);
 
   // 산 상세 API 요청 보내기
   const dispatchMountainDetail = (mountainId: number) => {
