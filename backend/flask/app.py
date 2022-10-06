@@ -9,9 +9,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
 
-db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='mountaindo_db', db='mountaindo', charset='utf8')
-curs = db.cursor()
-
 trail_dict = {}
 level_mapping = {'상': 3, '중': 2, '하': 1}
 
@@ -56,6 +53,10 @@ def recommend(trail_id, K):
 
 @app.route('/recommendation/member-based', methods=['GET'])
 def recommend_based_similar_member():
+    db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='mountaindo_db', db='mountaindo',
+                         charset='utf8')
+    curs = db.cursor()
+
     curs.execute("select count(*) from member")
     member_count = curs.fetchone()[0]
 
@@ -83,11 +84,15 @@ def recommend_based_similar_member():
                 "insert into member_based_recommendation(created_date, is_active, member_id, trail_id) values (%s, 1, %s, %s)",
                 (datetime.now(), member_id, trail_id))
     db.commit()
+    db.close()
     return 'OK', 200
 
 
 @app.route('/recommendation/visited-trail-based/<trail_id>', methods=['GET'])
 def recommend_based_visited_trail(trail_id):
+    db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='mountaindo_db', db='mountaindo',
+                         charset='utf8')
+
     trail_id = int(trail_id)
     # 등산 코스 데이터프레임
     trail = pd.read_sql(
@@ -108,6 +113,7 @@ def recommend_based_visited_trail(trail_id):
     # trail과 비슷한 등산코스 id 10개씩 출력
     recommended_trail_ids = recommend(trail_id, 10)
     db.commit()
+    db.close()
     return jsonify(recommended_trail_ids), 200
 
 
@@ -116,6 +122,9 @@ def recommend_based_survey(member_id):
     level = request.args.get('level', type=int)
     preferred_mountain_location = request.args.get('preferred_mountain_location', type=int)
     preferred_hiking_time = request.args.get('preferred_hiking_time', type=int)
+
+    db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='mountaindo_db', db='mountaindo',
+                         charset='utf8')
 
     trail = pd.read_sql("select trail_id, level, going_up_time, going_down_time from trail", db)
     trail['level'] = trail['level'].map(level_mapping)
@@ -129,6 +138,7 @@ def recommend_based_survey(member_id):
 
     # ### 지역 설문
 
+    curs = db.cursor()
     if preferred_mountain_location == 2:
         # 해당 회원의 주소 가져오기
         curs.execute("select si from member where member_id=%s", member_id)
@@ -168,6 +178,7 @@ def recommend_based_survey(member_id):
             'insert into survey_based_recommendation(created_date, is_active, member_id, trail_id) values (%s, 1, %s, %s)',
             (datetime.now(), member_id, trail_id[0]))
     db.commit()
+    db.close()
     return 'OK', 200
 
 
