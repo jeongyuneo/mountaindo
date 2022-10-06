@@ -57,7 +57,6 @@ export type LoggedInParamList = {
   NicknameChangeForm: any;
   PhoneNumberChangeForm: any;
   유저: any;
-  MountainDetail: any;
   CourseDetail: any;
   기록: any;
   AddressChangeForm: any;
