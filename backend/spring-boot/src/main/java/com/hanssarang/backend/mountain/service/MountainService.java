@@ -191,7 +191,7 @@ public class MountainService {
         List<RecommendationResponse> memberBased = null;
         List<RecommendationResponse> lastVisitedTrailBased = null;
         List<RecommendationResponse> surveyBased = null;
-        if (member.isCompletedSurvey()) {
+        if (hikings.size() > 0) {
             Trail trail = trailRepository.findById(hikings.get(hikings.size() - 1).getTrail().getId())
                     .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
             memberBased = member.getMemberBasedRecommendations()
