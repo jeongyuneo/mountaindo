@@ -206,9 +206,9 @@ function MyPage({navigation}: MyPageScreenProps) {
       <View style={styles.containerUp}>
         <View style={styles.containerDown}>
           <View style={styles.userInfo}>
-            {profileImage !== null ? (
+            {imageUrl ? (
               <Image
-                source={{uri: `${Config.REACT_APP_BE_HOST}${imageUrl}`}}
+                source={{uri: Config.REACT_APP_BE_HOST + imageUrl}}
                 style={styles.userImg}
               />
             ) : (

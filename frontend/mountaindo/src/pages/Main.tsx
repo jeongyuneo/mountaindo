@@ -164,12 +164,6 @@ function Main({navigation}: MainInScreenProps) {
               />
             </View>
           )}
-          <Pressable
-            onPress={() => {
-              dispatchMountainDetail(12);
-            }}>
-            <AppText>test</AppText>
-          </Pressable>
           {surveyBased.length > 0 && (
             <View>
               <AppTextBold style={styles.easyTitle}>

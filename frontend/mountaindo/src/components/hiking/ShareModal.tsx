@@ -11,7 +11,6 @@ import AppText from '../AppText';
 interface Props {
   modalVisible: boolean;
   setModalVisible: any;
-  kakaoShare: any;
   onCapture: any;
   onSave: any;
   getPhotoUri: any;
@@ -22,7 +21,6 @@ interface Props {
 const ShareModal = ({
   modalVisible,
   setModalVisible,
-  kakaoShare,
   onCapture,
   onSave,
   moveToTrackingEnd,

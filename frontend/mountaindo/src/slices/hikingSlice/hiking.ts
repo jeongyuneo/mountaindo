@@ -3,7 +3,7 @@ import axiosService from '../../store/axiosService';
 
 // 등산 기록 저장
 export const endHiking = createAsyncThunk(
-  'userSlice/endHiking',
+  'hikingSlice/endHiking',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.post(
@@ -17,9 +17,33 @@ export const endHiking = createAsyncThunk(
   },
 );
 
+// 등산 기록 저장 - 이미지
+export const endHikingImage = createAsyncThunk(
+  'hikingSlice/endHikingImage',
+  async (args: any, {rejectWithValue}) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', args.file);
+
+      const response = await axiosService.post(
+        `/api/v1/hikings/image/${args.hikingId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response);
+    }
+  },
+);
+
 // 산 검색
 export const searchMountain = createAsyncThunk(
-  'userSlice/searchMountain',
+  'hikingSlice/searchMountain',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
@@ -34,7 +58,7 @@ export const searchMountain = createAsyncThunk(
 
 // 산 상세 조회
 export const mountainDetail = createAsyncThunk(
-  'userSlice/mountainDetail',
+  'hikingSlice/mountainDetail',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
@@ -49,7 +73,7 @@ export const mountainDetail = createAsyncThunk(
 
 // 완등한 산 목록 조회
 export const completedMountainList = createAsyncThunk(
-  'userSlice/completedMountainList',
+  'hikingSlice/completedMountainList',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get('/api/v1/hikings/2');
@@ -62,7 +86,7 @@ export const completedMountainList = createAsyncThunk(
 
 // 방문한 등산 코스 목록 조회
 export const visitedTrailList = createAsyncThunk(
-  'userSlice/visitedTrailList',
+  'hikingSlice/visitedTrailList',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get('/api/v1/hikings');
@@ -75,7 +99,7 @@ export const visitedTrailList = createAsyncThunk(
 
 // 방문한 등산 코스 상세 조회
 export const visitedTrailDetail = createAsyncThunk(
-  'userSlice/visitedTrailDetail',
+  'hikingSlice/visitedTrailDetail',
   async (args: any, {rejectWithValue}) => {
     try {
       const response = await axiosService.get(
@@ -137,6 +161,12 @@ const hikingSlice = createSlice({
       })
       .addCase(visitedTrailDetail.rejected, (state, {payload}) => {
         console.log('visitedTrailDetail Rejected ==>', payload);
+      })
+      .addCase(endHikingImage.fulfilled, (state, {payload}) => {
+        console.log('endHikingImage Fulfilled ==> ', payload);
+      })
+      .addCase(endHikingImage.rejected, (state, {payload}) => {
+        console.log('endHikingImage Rejected ==>', payload);
       });
   },
 });
