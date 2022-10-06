@@ -1,6 +1,13 @@
 // React
 import React, {useEffect, useState} from 'react';
-import {Alert, Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 // Component
@@ -17,6 +24,10 @@ import {
   getRecommendTrailList,
 } from '../slices/mountainSlice/mountain';
 import {useIsFocused} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store/reducer';
+import {LoadingAnimationC} from '../components/completed/LoadingAnimation';
+import AppText from '../components/AppText';
 
 // 랭킹의 타입 설정
 export type Rankings = {
@@ -45,6 +56,8 @@ function Main({navigation}: MainInScreenProps) {
   const [surveyBased, setSurveyBased] = useState<RecommendType[] | []>([]);
 
   const dispatch = useAppDispatch();
+
+  const isPending = useSelector((state: RootState) => state.mountain.isPending);
 
   const goAllRank = () => {
     setIsModalVisible(!isModalVisible);
@@ -110,69 +123,79 @@ function Main({navigation}: MainInScreenProps) {
 
   return (
     <View style={styles.containerMain}>
-      <ScrollView>
-        <MainModal
-          isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
-          goAllRank={goAllRank}
-          rankingList={rankingList}
-          myRanking={myRanking}
-        />
-        <View style={styles.photoContainer}>
-          <Photo />
-        </View>
-
-        <View style={styles.suggestionContainer}>
-          <View style={styles.rankList}>
-            <RankList goAllRank={goAllRank} rankingList={rankingList} />
+      {isPending ? (
+        <LoadingAnimationC />
+      ) : (
+        <ScrollView>
+          <MainModal
+            isModalVisible={isModalVisible}
+            setIsModalVisible={setIsModalVisible}
+            goAllRank={goAllRank}
+            rankingList={rankingList}
+            myRanking={myRanking}
+          />
+          <View style={styles.photoContainer}>
+            <Photo />
           </View>
 
-          {lastVisitedTrailBased.length > 0 && (
-            <View style={styles.mountainList}>
-              <AppTextBold style={styles.easyTitle}>
-                최근 방문한 산과 비슷한 등산 코스
-              </AppTextBold>
-              <EasyMountain
-                lastVisitedTrailBased={lastVisitedTrailBased}
-                recommend={'lastVisitedTrailBased'}
-                dispatchMountainDetail={dispatchMountainDetail}
-              />
+          <View style={styles.suggestionContainer}>
+            <View style={styles.rankList}>
+              <RankList goAllRank={goAllRank} rankingList={rankingList} />
             </View>
-          )}
-          {memberBased.length > 0 && (
-            <View>
-              <AppTextBold style={styles.easyTitle}>
-                나와 비슷한 사용자들이 많이 방문한 코스
-              </AppTextBold>
-              <EasyMountain
-                memberBased={memberBased}
-                recommend={'memberBased'}
-                dispatchMountainDetail={dispatchMountainDetail}
-              />
-            </View>
-          )}
-          {surveyBased.length > 0 && (
-            <View>
-              <AppTextBold style={styles.easyTitle}>
-                이런 코스에 방문해보는건 어떠세요?
-              </AppTextBold>
-              <EasyMountain
-                surveyBased={surveyBased}
-                recommend={'surveyBased'}
-                dispatchMountainDetail={dispatchMountainDetail}
-              />
-            </View>
-          )}
-          {lastVisitedTrailBased.length < 1 &&
-            memberBased.length < 1 &&
-            surveyBased.length < 1 && (
-              <View style={styles.container}>
-                <AppTextBold>추천 목록을 불러오지 못했습니다.</AppTextBold>
-                <AppTextBold>다시 시도해주세요!</AppTextBold>
+
+            {lastVisitedTrailBased.length > 0 && (
+              <View style={styles.mountainList}>
+                <AppTextBold style={styles.easyTitle}>
+                  최근 방문한 산과 비슷한 등산 코스
+                </AppTextBold>
+                <EasyMountain
+                  lastVisitedTrailBased={lastVisitedTrailBased}
+                  recommend={'lastVisitedTrailBased'}
+                  dispatchMountainDetail={dispatchMountainDetail}
+                />
               </View>
             )}
-        </View>
-      </ScrollView>
+            {memberBased.length > 0 && (
+              <View>
+                <AppTextBold style={styles.easyTitle}>
+                  나와 비슷한 사용자들이 많이 방문한 코스
+                </AppTextBold>
+                <EasyMountain
+                  memberBased={memberBased}
+                  recommend={'memberBased'}
+                  dispatchMountainDetail={dispatchMountainDetail}
+                />
+              </View>
+            )}
+            <Pressable
+              onPress={() => {
+                dispatchMountainDetail(12);
+              }}>
+              <AppText>test</AppText>
+            </Pressable>
+            {surveyBased.length > 0 && (
+              <View>
+                <AppTextBold style={styles.easyTitle}>
+                  이런 코스에 방문해보는건 어떠세요?
+                </AppTextBold>
+                <EasyMountain
+                  surveyBased={surveyBased}
+                  recommend={'surveyBased'}
+                  dispatchMountainDetail={dispatchMountainDetail}
+                />
+              </View>
+            )}
+            {lastVisitedTrailBased.length < 1 &&
+              memberBased.length < 1 &&
+              surveyBased.length < 1 && (
+                <View style={styles.container}>
+                  <AppTextBold>추천 목록을 불러오지 못했습니다.</AppTextBold>
+                  <AppTextBold>다시 시도해주세요!</AppTextBold>
+                </View>
+              )}
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 }

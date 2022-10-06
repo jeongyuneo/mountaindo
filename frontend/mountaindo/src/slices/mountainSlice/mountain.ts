@@ -5,6 +5,7 @@ const initialState = {
   page: 0,
   standard: 'name',
   location: '전체',
+  isPending: false,
 };
 
 // 산 전체 목록 가져오기 API (이름순, 인기순, 고도 높은 순, 고도 낮은 순)
@@ -149,11 +150,17 @@ const mountainSlice = createSlice({
       .addCase(getTrailDetail.rejected, (state, {payload}) => {
         console.log('getTrailDetailRejected ==>', payload);
       })
+      .addCase(getRecommendTrailList.pending, (state, {payload}) => {
+        console.log('getRecommendTrailListPending ==> ', payload);
+        state.isPending = true;
+      })
       .addCase(getRecommendTrailList.fulfilled, (state, {payload}) => {
         console.log('getRecommendTrailListFulfilled ==> ', payload);
+        state.isPending = false;
       })
       .addCase(getRecommendTrailList.rejected, (state, {payload}) => {
         console.log('getRecommendTrailListRejected ==>', payload);
+        state.isPending = false;
       });
   },
 });
