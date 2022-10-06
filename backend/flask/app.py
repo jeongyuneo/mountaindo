@@ -9,7 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
 
-db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='root', db='mountaindo', charset='utf8')
+db = pymysql.connect(host='j7b201.p.ssafy.io', user='root', password='mountaindo_db', db='mountaindo', charset='utf8')
 curs = db.cursor()
 
 trail_dict = {}
