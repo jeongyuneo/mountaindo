@@ -3,7 +3,10 @@ package com.hanssarang.backend.mountain.service;
 import com.hanssarang.backend.common.domain.ErrorMessage;
 import com.hanssarang.backend.common.exception.NotFoundException;
 import com.hanssarang.backend.hiking.domain.Hiking;
-import com.hanssarang.backend.member.domain.*;
+import com.hanssarang.backend.member.domain.Member;
+import com.hanssarang.backend.member.domain.MemberBasedRecommendation;
+import com.hanssarang.backend.member.domain.MemberRepository;
+import com.hanssarang.backend.member.domain.SurveyBasedRecommendation;
 import com.hanssarang.backend.mountain.controller.dto.*;
 import com.hanssarang.backend.mountain.domain.Mountain;
 import com.hanssarang.backend.mountain.domain.MountainRepository;
@@ -15,9 +18,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_MOUNTAIN;
@@ -27,6 +37,7 @@ import static com.hanssarang.backend.common.domain.ErrorMessage.NOT_FOUND_TRAIL;
 @Service
 public class MountainService {
 
+    private static final Pattern PARENTHESES = Pattern.compile("[\\[\\]]");
     private static final int MOUNTAIN_LIST_RESPONSE_SIZE = 10;
     private static final String NAME = "name";
     private static final String HEIGHT = "height";
@@ -34,6 +45,7 @@ public class MountainService {
     private static final String LOW_HEIGHT = "low-height";
     private static final String POPULARITY = "popularity";
     private static final String ALL_AREA = "전체";
+    private static final String DELETE = "";
 
     private final MountainRepository mountainRepository;
     private final TrailRepository trailRepository;
@@ -195,22 +207,49 @@ public class MountainService {
         List<Hiking> hikings = member.getHikings();
         Trail trail = trailRepository.findById(hikings.get(hikings.size() - 1).getTrail().getId())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_TRAIL));
+
+        List<RecommendationResponse> memberBased = null;
+        List<RecommendationResponse> lastVisitedTrailBased = null;
+        List<RecommendationResponse> surveyBased = null;
+        if (member.isCompletedSurvey()) {
+            memberBased = member.getMemberBasedRecommendations()
+                    .stream()
+                    .map(MemberBasedRecommendation::getTrail)
+                    .map(this::getRecommendationResponse)
+                    .collect(Collectors.toList());
+
+            try {
+                URL url = new URL("https://j7b201.p.ssafy.io/recommendation/visited-trail-based/" + trail.getId());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setDoOutput(true);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                String[] recommendedTrailIds = PARENTHESES.matcher(bufferedReader.readLine()).replaceAll(DELETE).split(",");
+                lastVisitedTrailBased = Arrays.stream(recommendedTrailIds)
+                        .mapToInt(Integer::parseInt)
+                        .mapToObj(recommendedTrailId -> trailRepository.findById(recommendedTrailId)
+                                .orElseThrow(() -> new NotFoundException(NOT_FOUND_TRAIL)))
+                        .map(this::getRecommendationResponse)
+                        .collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new NotFoundException(ErrorMessage.FAIL_TO_GET_TRAILS);
+            }
+        } else {
+            surveyBased = member.getSurveyBasedRecommendations()
+                    .stream()
+                    .map(SurveyBasedRecommendation::getTrail)
+                    .map(this::getRecommendationResponse)
+                    .collect(Collectors.toList());
+        }
+        return getRecommendationListResponse(memberBased, lastVisitedTrailBased, surveyBased);
+    }
+
+    private RecommendationListResponse getRecommendationListResponse(List<RecommendationResponse> memberBased, List<RecommendationResponse> lastVisitedTrailBased, List<RecommendationResponse> surveyBased) {
         return RecommendationListResponse.builder()
-                .memberBased(member.getMemberBasedRecommendations()
-                        .stream()
-                        .map(MemberBasedRecommendation::getTrail)
-                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
-                        .collect(Collectors.toList()))
-                .lastVisitedTrailBased(trail.getLastVisitedTrailBasedRecommendations()
-                        .stream()
-                        .map(LastVisitedTrailBasedRecommendation::getRecommendedTrail)
-                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
-                        .collect(Collectors.toList()))
-                .surveyBased(member.getSurveyBasedRecommendations()
-                        .stream()
-                        .map(SurveyBasedRecommendation::getTrail)
-                        .map(recommendedTrail -> getRecommendationResponse(recommendedTrail))
-                        .collect(Collectors.toList()))
+                .memberBased(memberBased)
+                .lastVisitedTrailBased(lastVisitedTrailBased)
+                .surveyBased(surveyBased)
                 .build();
     }
 
