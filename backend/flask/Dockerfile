@@ -12,6 +12,8 @@ RUN pip3 install pymysql
 
 RUN pip3 install sklearn
 
+RUN pip3 install cryptography
+
 WORKDIR /app
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
