@@ -57,7 +57,9 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
   return (
     <ScrollView style={styles.container}>
       <ImageBackground
-        source={require('../../assets/gyeryongMountain.jpg')}
+        source={{
+          uri: 'https://j7b201.p.ssafy.io' + sentData.mountainDetail.imageUrl,
+        }}
         style={styles.backgroundImg}>
         <WeatherForecast
           location={sentData.mountainDetail.address.split(' ')[0]}

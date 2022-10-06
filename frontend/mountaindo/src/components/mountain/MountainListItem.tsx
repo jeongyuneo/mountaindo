@@ -24,7 +24,10 @@ function MountainListItem({
   return (
     <View style={styles.wrapper}>
       <View style={styles.imageContentWrapper}>
-        <Image source={imageUrl} style={styles.image} />
+        <Image
+          source={{uri: 'https://j7b201.p.ssafy.io' + imageUrl}}
+          style={styles.image}
+        />
         <View style={styles.contentWrapper}>
           <View style={styles.nameIconWrapper}>
             <AppText style={styles.nameText}>{name}</AppText>
