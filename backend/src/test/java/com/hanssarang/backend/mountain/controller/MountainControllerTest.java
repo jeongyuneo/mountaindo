@@ -66,7 +66,7 @@ class MountainControllerTest extends ApiDocument {
     void setUp() {
         List<RecommendationResponse> recommendationResponses = IntStream.range(0, 3)
                 .mapToObj(n -> RecommendationResponse.builder()
-                        .trailId(ID)
+                        .mountainId(ID)
                         .trailName(TRAIL_NAME)
                         .mountainName(NAME)
                         .mountainImage(IMAGE_URL)
