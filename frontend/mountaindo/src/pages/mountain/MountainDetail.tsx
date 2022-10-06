@@ -3,6 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ScrollView, ImageBackground} from 'react-native';
+import Config from 'react-native-config';
 import {LoggedInParamList} from '../../../AppInner';
 import AppText from '../../components/AppText';
 import AppTextBold from '../../components/AppTextBold';
@@ -58,7 +59,7 @@ function MountainDetail({navigation, route}: MountainDetailScreenProps) {
     <ScrollView style={styles.container}>
       <ImageBackground
         source={{
-          uri: 'https://j7b201.p.ssafy.io' + sentData.mountainDetail.imageUrl,
+          uri: Config.REACT_APP_BE_HOST + sentData.mountainDetail.imageUrl,
         }}
         style={styles.backgroundImg}>
         <WeatherForecast

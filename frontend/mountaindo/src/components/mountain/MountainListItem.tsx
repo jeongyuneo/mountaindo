@@ -3,6 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import {faFire} from '@fortawesome/free-solid-svg-icons';
 import AppText from '../AppText';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import Config from 'react-native-config';
 
 interface Props {
   mountainId: number;
@@ -25,7 +26,7 @@ function MountainListItem({
     <View style={styles.wrapper}>
       <View style={styles.imageContentWrapper}>
         <Image
-          source={{uri: 'https://j7b201.p.ssafy.io' + imageUrl}}
+          source={{uri: Config.REACT_APP_BE_HOST + imageUrl}}
           style={styles.image}
         />
         <View style={styles.contentWrapper}>
