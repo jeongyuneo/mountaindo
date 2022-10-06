@@ -12,7 +12,11 @@ import Photo from '../components/main/Photo';
 import {useAppDispatch} from '../store';
 import {totalRanking} from '../slices/rankingSlice/ranking';
 import AppTextBold from '../components/AppTextBold';
-import {getRecommendTrailList} from '../slices/mountainSlice/mountain';
+import {
+  getMountainDetail,
+  getRecommendTrailList,
+} from '../slices/mountainSlice/mountain';
+import {useIsFocused} from '@react-navigation/native';
 
 // 랭킹의 타입 설정
 export type Rankings = {
@@ -26,6 +30,7 @@ export type RecommendType = {
   trailName: string;
   mountainName: string;
   mountainImage: string;
+  mountainId: number;
 };
 
 type MainInScreenProps = NativeStackScreenProps<LoggedInParamList, '홈'>;
@@ -72,6 +77,8 @@ function Main({navigation}: MainInScreenProps) {
     }
   }, [myRanking?.ranking, rankingList]);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     dispatch(getRecommendTrailList(''))
       .then(res => {
@@ -84,7 +91,22 @@ function Main({navigation}: MainInScreenProps) {
       .catch(err => {
         console.log(err);
       });
-  });
+  }, [isFocused, lastVisitedTrailBased, memberBased, surveyBased]);
+
+  // 산 상세 API 요청 보내기
+  const dispatchMountainDetail = (mountainId: number) => {
+    dispatch(getMountainDetail({mountainId: mountainId}))
+      .then(res => {
+        if (res.meta.requestStatus === 'fulfilled') {
+          navigation.navigate('MountainDetail', {
+            mountainDetail: res.payload,
+          });
+        }
+      })
+      .catch((err: any) => {
+        console.log('MOUNTAIN_DETAIL', err);
+      });
+  };
 
   return (
     <View style={styles.containerMain}>
@@ -113,6 +135,7 @@ function Main({navigation}: MainInScreenProps) {
               <EasyMountain
                 lastVisitedTrailBased={lastVisitedTrailBased}
                 recommend={'lastVisitedTrailBased'}
+                dispatchMountainDetail={dispatchMountainDetail}
               />
             </View>
           )}
@@ -124,6 +147,7 @@ function Main({navigation}: MainInScreenProps) {
               <EasyMountain
                 memberBased={memberBased}
                 recommend={'memberBased'}
+                dispatchMountainDetail={dispatchMountainDetail}
               />
             </View>
           )}
@@ -135,6 +159,7 @@ function Main({navigation}: MainInScreenProps) {
               <EasyMountain
                 surveyBased={surveyBased}
                 recommend={'surveyBased'}
+                dispatchMountainDetail={dispatchMountainDetail}
               />
             </View>
           )}

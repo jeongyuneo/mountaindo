@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, Image} from 'react-native';
+import {View, StyleSheet, ScrollView, Image, Pressable} from 'react-native';
 import Config from 'react-native-config';
 import {RecommendType} from '../../pages/Main';
 import AppText from '../AppText';
@@ -10,6 +10,7 @@ interface Props {
   lastVisitedTrailBased?: RecommendType[];
   memberBased?: RecommendType[];
   surveyBased?: RecommendType[];
+  dispatchMountainDetail: any;
 }
 
 function EasyMountain({
@@ -17,6 +18,7 @@ function EasyMountain({
   lastVisitedTrailBased,
   memberBased,
   surveyBased,
+  dispatchMountainDetail,
 }: Props) {
   return (
     <View>
@@ -25,7 +27,9 @@ function EasyMountain({
           !!lastVisitedTrailBased &&
           lastVisitedTrailBased?.length > 0 &&
           lastVisitedTrailBased.map((item, index) => (
-            <View key={index}>
+            <Pressable
+              onPress={dispatchMountainDetail(item.mountainId)}
+              key={index}>
               <AppTextBold style={styles.mountainCourse}>
                 {item.trailName}
               </AppTextBold>
@@ -38,13 +42,15 @@ function EasyMountain({
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
-            </View>
+            </Pressable>
           ))}
         {recommend === 'memberBased' &&
           !!memberBased &&
           memberBased?.length > 0 &&
           memberBased.map((item, index) => (
-            <View key={index}>
+            <Pressable
+              onPress={dispatchMountainDetail(item.mountainId)}
+              key={index}>
               <AppTextBold style={styles.mountainCourse}>
                 {item.trailName}
               </AppTextBold>
@@ -57,13 +63,15 @@ function EasyMountain({
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
-            </View>
+            </Pressable>
           ))}
         {recommend === 'surveyBased' &&
           !!surveyBased &&
           surveyBased?.length > 0 &&
           surveyBased.map((item, index) => (
-            <View key={index}>
+            <Pressable
+              onPress={dispatchMountainDetail(item.mountainId)}
+              key={index}>
               <AppTextBold style={styles.mountainCourse}>
                 {item.trailName}
               </AppTextBold>
@@ -76,7 +84,7 @@ function EasyMountain({
               <AppText style={styles.mountainTitle}>
                 {item.mountainName}
               </AppText>
-            </View>
+            </Pressable>
           ))}
       </ScrollView>
     </View>
