@@ -17,7 +17,7 @@ public class JwtUtil {
 
     private static final String JWT_HEADER = "Authorization";
     private static final String SECRET = "ssafy second semester second project - mountaindo";
-    private static final long TOKEN_EXPIRE_TIME = 60 * 60 * 1000L;
+    private static final long TOKEN_EXPIRE_TIME = 60 * 60 * 10 * 1000L;
     private static final String AUTHORIZATION_TYPE = "Bearer";
     private static final String DELIMITER = " ";
     private static final int TOKEN = 1;
