@@ -56,6 +56,7 @@ public class HikingControllerTest extends ApiDocument {
     private List<HikingListResponse> hikingListResponses;
     private List<CompletedHikingListResponse> completedHikingListResponses;
     private HikingResponse hikingResponse;
+    private HikingIdResponse hikingIdResponse;
 
     @MockBean
     private HikingService hikingService;
@@ -80,6 +81,7 @@ public class HikingControllerTest extends ApiDocument {
                         .useTime(USE_TIME)
                         .level(LEVEL)
                         .mountainName(MOUNTAIN_NAME)
+                        .imageUrl(IMAGE_URL)
                         .build())
                 .collect(Collectors.toList());
         completedHikingListResponses = IntStream.range(0, 3)
@@ -100,6 +102,9 @@ public class HikingControllerTest extends ApiDocument {
                 .useTime(USE_TIME)
                 .imageUrl(IMAGE_URL)
                 .accumulatedHeight(ACCUMULATED_HEIGHT)
+                .build();
+        hikingIdResponse = HikingIdResponse.builder()
+                .hikingId(ID)
                 .build();
     }
 
@@ -173,7 +178,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingSuccess() throws Exception {
         // given
-        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
+        willReturn(hikingIdResponse).given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
