@@ -27,8 +27,7 @@ import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -175,7 +174,7 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingSuccess() throws Exception {
         // given
-        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
+        willDoNothing().given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
@@ -186,11 +185,33 @@ public class HikingControllerTest extends ApiDocument {
     @Test
     void createHikingFail() throws Exception {
         // given
-        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_HIKING.getMessage())).given(hikingService).createHiking(anyInt(), any(HikingRequest.class), any(MultipartFile.class));
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_HIKING.getMessage())).given(hikingService).createHiking(anyInt(), any(HikingRequest.class));
         // when
         ResultActions resultActions = 등산기록_저장_요청(hikingRequest);
         // then
         등산기록_저장_실패(resultActions, new Message(ErrorMessage.FAIL_TO_CREATE_HIKING));
+    }
+
+    @DisplayName("등산 기록 이미지 저장 - 성공")
+    @Test
+    void createHikingImageSuccess() throws Exception {
+        // given
+        willDoNothing().given(hikingService).createImage(anyInt(), anyInt(), any(MultipartFile.class));
+        // when
+        ResultActions resultActions = 등산기록_이미지_저장_요청(ID);
+        // then
+        등산기록_이미지_저장_성공(resultActions);
+    }
+
+    @DisplayName("등산 기록 이미지 저장 - 실패")
+    @Test
+    void createHikingImageFail() throws Exception {
+        // given
+        willThrow(new UnexpectedRollbackException(ErrorMessage.FAIL_TO_CREATE_HIKING_IMAGE.getMessage())).given(hikingService).createImage(anyInt(), anyInt(), any(MultipartFile.class));
+        // when
+        ResultActions resultActions = 등산기록_이미지_저장_요청(ID);
+        // then
+        등산기록_이미지_저장_실패(resultActions, new Message(ErrorMessage.FAIL_TO_CREATE_HIKING_IMAGE));
     }
 
     private ResultActions 등산목록_조회_요청() throws Exception {
@@ -251,11 +272,10 @@ public class HikingControllerTest extends ApiDocument {
     }
 
     private ResultActions 등산기록_저장_요청(HikingRequest hikingRequest) throws Exception {
-        return mockMvc.perform(multipart("/api/v1/hikings")
-                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
-                .file(new MockMultipartFile("hikingRequest", "", "application/json", toJson(hikingRequest).getBytes()))
+        return mockMvc.perform(post("/api/v1/hikings")
                 .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
-                .contentType(MediaType.MULTIPART_FORM_DATA));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(hikingRequest)));
     }
 
     private void 등산기록_저장_성공(ResultActions resultActions) throws Exception {
@@ -269,5 +289,25 @@ public class HikingControllerTest extends ApiDocument {
                 .andExpect(content().json(toJson(message)))
                 .andDo(print())
                 .andDo(toDocument("create-hiking-fail"));
+    }
+
+    private ResultActions 등산기록_이미지_저장_요청(int hikingId) throws Exception {
+        return mockMvc.perform(multipart("/api/v1/hikings/image/" + hikingId)
+                .file(new MockMultipartFile("file", "image.png", "image/png", "{image data}".getBytes()))
+                .header(AUTHORIZATION, BEARER + ACCESS_TOKEN)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+    }
+
+    private void 등산기록_이미지_저장_성공(ResultActions resultActions) throws Exception {
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(toDocument("create-hiking-image-success"));
+    }
+
+    private void 등산기록_이미지_저장_실패(ResultActions resultActions, Message message) throws Exception {
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(content().json(toJson(message)))
+                .andDo(print())
+                .andDo(toDocument("create-hiking-image-fail"));
     }
 }

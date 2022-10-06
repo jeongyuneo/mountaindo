@@ -36,7 +36,6 @@ public class Hiking extends BaseEntity {
     @NotNull
     private String path;
 
-    @NotNull
     private String imageUrl;
 
     @NotNull
@@ -51,5 +50,9 @@ public class Hiking extends BaseEntity {
 
     public void addMember(Member member) {
         this.member = member;
+    }
+
+    public void createImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

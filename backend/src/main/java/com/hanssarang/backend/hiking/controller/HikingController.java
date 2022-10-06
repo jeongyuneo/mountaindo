@@ -1,9 +1,6 @@
 package com.hanssarang.backend.hiking.controller;
 
-import com.hanssarang.backend.hiking.controller.dto.CompletedHikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingListResponse;
-import com.hanssarang.backend.hiking.controller.dto.HikingRequest;
-import com.hanssarang.backend.hiking.controller.dto.HikingResponse;
+import com.hanssarang.backend.hiking.controller.dto.*;
 import com.hanssarang.backend.hiking.service.HikingService;
 import com.hanssarang.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +38,14 @@ public class HikingController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestPart HikingRequest hikingRequest, @RequestPart("file") MultipartFile multipartFile) {
-        hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest, multipartFile);
+    public ResponseEntity<HikingIdResponse> createHiking(@RequestHeader(AUTHORIZATION) String token, @RequestBody HikingRequest hikingRequest) {
+        return ResponseEntity.ok()
+                .body(hikingService.createHiking(JwtUtil.getMemberId(token), hikingRequest));
+    }
+
+    @PostMapping("/image/{hikingId}")
+    public ResponseEntity<Void> createImage(@RequestHeader(AUTHORIZATION) String token, @PathVariable int hikingId, @RequestParam("file") MultipartFile multipartFile) {
+        hikingService.createImage(JwtUtil.getMemberId(token), hikingId, multipartFile);
         return ResponseEntity.ok().build();
     }
 }
