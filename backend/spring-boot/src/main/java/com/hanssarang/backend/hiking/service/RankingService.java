@@ -48,7 +48,7 @@ public class RankingService {
                 .collect(Collectors.toList());
         int myRanking = getMyRanking(memberId, members);
         Member member = members.get(myRanking - 1);
-        return getRankingListResponse(members, myRanking, member);
+        return getRankingListResponseOfMountain(members, myRanking, member, mountainId);
     }
 
     @Transactional(readOnly = true)
@@ -70,6 +70,22 @@ public class RankingService {
                 .ranking(myRanking)
                 .nickname(member.getNickname())
                 .accumulatedHeight(member.getAccumulatedHeight())
+                .rankings(rankings)
+                .build();
+    }
+
+    private RankingListResponse getRankingListResponseOfMountain(List<Member> members, int myRanking, Member member, int mountainId) {
+        List<RankingResponse> rankings = new ArrayList<>();
+        IntStream.range(1, members.size())
+                .forEach(ranking -> {
+                    Member currentMember = members.get(ranking - 1);
+                    rankings.add(getRankingResponse(ranking, currentMember));
+                });
+        return RankingListResponse.builder()
+                .imageUrl(member.getImageUrl())
+                .ranking(myRanking)
+                .nickname(member.getNickname())
+                .accumulatedHeight(member.getAccumulatedHeightInMountain(mountainId))
                 .rankings(rankings)
                 .build();
     }
