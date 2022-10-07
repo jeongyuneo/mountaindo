@@ -134,42 +134,48 @@ const CompletedMountainModal = ({
                   />
                 </Pressable>
               </View>
-              <ViewShot
-                ref={captureRef}
-                options={{format: 'jpg', quality: 0.9}}>
-                <Image
-                  source={{uri: Config.REACT_APP_BE_HOST + trails.imageUrl}}
-                  style={styles.mountainImage}
-                />
-              </ViewShot>
-              <View style={styles.titleView}>
-                <AppTextBold style={styles.trailName}>
-                  {trails.trailName}
-                </AppTextBold>
-                <AppText style={styles.mountainName}>
-                  {trails.mountainName}
-                </AppText>
-              </View>
-              <AppText style={styles.mountainName}>{trails.address}</AppText>
-              <View style={styles.textContainer}>
-                <View style={styles.textItem}>
-                  <AppTextBold style={styles.text}>
-                    {trails.distance} km
-                  </AppTextBold>
-                  <AppText style={styles.label}>총 거리</AppText>
-                </View>
-                <View style={styles.textItem}>
-                  <AppTextBold style={styles.text}>
-                    {trails.useTime}
-                  </AppTextBold>
-                  <AppText style={styles.label}>소요 시간</AppText>
-                </View>
-                <View style={styles.textItem}>
-                  <AppTextBold style={styles.text}>
-                    {trails.accumulatedHeight} m
-                  </AppTextBold>
-                  <AppText style={styles.label}>총 고도</AppText>
-                </View>
+              <View>
+                <ViewShot
+                  ref={captureRef}
+                  options={{format: 'jpg', quality: 0.9}}>
+                  <View style={styles.viewShotContainer}>
+                    <Image
+                      source={{uri: Config.REACT_APP_BE_HOST + trails.imageUrl}}
+                      style={styles.mountainImage}
+                    />
+                    <View style={styles.titleView}>
+                      <AppTextBold style={styles.trailName}>
+                        {trails.trailName}
+                      </AppTextBold>
+                      <AppText style={styles.mountainName}>
+                        {trails.mountainName}
+                      </AppText>
+                    </View>
+                    <AppText style={styles.mountainName}>
+                      {trails.address}
+                    </AppText>
+                    <View style={styles.textContainer}>
+                      <View style={styles.textItem}>
+                        <AppTextBold style={styles.text}>
+                          {trails.distance} km
+                        </AppTextBold>
+                        <AppText style={styles.label}>총 거리</AppText>
+                      </View>
+                      <View style={styles.textItem}>
+                        <AppTextBold style={styles.text}>
+                          {trails.useTime}
+                        </AppTextBold>
+                        <AppText style={styles.label}>소요 시간</AppText>
+                      </View>
+                      <View style={styles.textItem}>
+                        <AppTextBold style={styles.text}>
+                          {trails.accumulatedHeight} m
+                        </AppTextBold>
+                        <AppText style={styles.label}>총 고도</AppText>
+                      </View>
+                    </View>
+                  </View>
+                </ViewShot>
               </View>
             </View>
           </Pressable>
@@ -227,6 +233,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     resizeMode: 'contain',
+    backgroundColor: 'white',
   },
   textContainer: {
     flexDirection: 'row',
@@ -274,6 +281,9 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 13,
     marginBottom: 3,
+  },
+  viewShotContainer: {
+    backgroundColor: 'white',
   },
 });
 

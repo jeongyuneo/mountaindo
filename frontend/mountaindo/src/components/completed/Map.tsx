@@ -1,5 +1,3 @@
-import {faFlag} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useRef} from 'react';
 import {StyleSheet} from 'react-native';
 import NaverMapView, {LayerGroup, Marker} from 'react-native-nmap';
@@ -56,12 +54,12 @@ function Map({
               longitude: item.latitude,
             }}
             key={index}
-            width={15}
-            height={15}
+            width={16}
+            height={16}
             anchor={{x: 0.5, y: 0.5}}
-            caption={{text: item.mountainName}}>
-            <FontAwesomeIcon icon={faFlag} size={25} color={'#57d696'} />
-          </Marker>
+            caption={{text: item.mountainName}}
+            image={require('../../assets/marker.png')}
+          />
         ))}
     </NaverMapView>
   );
