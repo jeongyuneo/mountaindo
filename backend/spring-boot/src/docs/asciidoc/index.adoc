@@ -1,0 +1,704 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+= MountainDo Api Specification
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:author: MountainDo
+:email: https://mountaindo.ssafy.io
+
+== Common Responses
+=== Common Status Codes
+```java
+# 성공
+status code: 200
+```
+
+=== Common Exceptions
+
+```java
+# 클라이언트 입력 예외
+status code: 400
+
+# 인증 예외
+status code: 401
+
+# NotFound 예외
+status code: 404
+
+# 서버 내부 예외
+status code: 500
+```
+
+== 기능
+
+=== 회원 관련 기능
+==== 회원가입
+----
+/api/v1/members
+----
+===== 성공
+.request
+include::{snippets}/signup-success/http-request.adoc[]
+
+.response
+include::{snippets}/signup-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/signup-fail/http-request.adoc[]
+
+.response
+include::{snippets}/signup-fail/http-response.adoc[]
+
+==== 이메일 중복체크
+----
+/api/v1/members/email
+----
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|email
+|String
+|이메일
+|===
+
+===== 성공
+.request
+include::{snippets}/check-email-success/http-request.adoc[]
+
+.response
+include::{snippets}/check-email-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/check-email-fail/http-request.adoc[]
+
+.response
+include::{snippets}/check-email-fail/http-response.adoc[]
+
+==== 닉네임 중복체크
+----
+/api/v1/members/nickname
+----
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|nickname
+|String
+|닉네임
+|===
+
+===== 성공
+.request
+include::{snippets}/check-nickname-success/http-request.adoc[]
+
+.response
+include::{snippets}/check-nickname-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/check-nickname-fail/http-request.adoc[]
+
+.response
+include::{snippets}/check-nickname-fail/http-response.adoc[]
+
+==== 사전설문 저장
+----
+/api/v1/members/survey
+----
+
+===== 성공
+.request
+include::{snippets}/create-survey-success/http-request.adoc[]
+
+.response
+include::{snippets}/create-survey-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/create-survey-fail/http-request.adoc[]
+
+.response
+include::{snippets}/create-survey-fail/http-response.adoc[]
+
+==== 아이디 찾기
+----
+/api/v1/members/email
+----
+
+===== 성공
+.request
+include::{snippets}/get-email-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-email-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-email-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-email-fail/http-response.adoc[]
+
+==== 비밀번호 재설정
+----
+/api/v1/members/password
+----
+
+===== 성공
+.request
+include::{snippets}/update-password-success/http-request.adoc[]
+
+.response
+include::{snippets}/update-password-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/update-password-fail/http-request.adoc[]
+
+.response
+include::{snippets}/update-password-fail/http-response.adoc[]
+
+==== 로그인
+----
+/api/v1/members/login
+----
+
+===== 성공
+.request
+include::{snippets}/login-success/http-request.adoc[]
+
+.response
+include::{snippets}/login-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/login-fail/http-request.adoc[]
+
+.response
+include::{snippets}/login-fail/http-response.adoc[]
+
+==== 회원정보 조회
+----
+/api/v1/members
+----
+
+===== 성공
+.request
+include::{snippets}/get-member-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-member-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-member-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-member-fail/http-response.adoc[]
+
+==== 회원정보 수정
+----
+/api/v1/members/update
+----
+
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|updateRequest
+|application/json
+|수정할 회원 정보
+
+|===
+
+===== 성공
+.request
+include::{snippets}/update-member-success/http-request.adoc[]
+
+.response
+include::{snippets}/update-member-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/update-member-fail/http-request.adoc[]
+
+.response
+include::{snippets}/update-member-fail/http-response.adoc[]
+
+==== 회원 프로필 사진 수정
+----
+/api/v1/members/update/image
+----
+
+[cols="2,2,3"]
+|===
+|Field |Type |Description
+
+|file
+|multipart
+|프로필 이미지
+|===
+
+===== 성공
+.request
+include::{snippets}/update-image-success/http-request.adoc[]
+
+.response
+include::{snippets}/update-image-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/update-image-fail/http-request.adoc[]
+
+.response
+include::{snippets}/update-image-fail/http-response.adoc[]
+
+==== 회원정보 비밀번호 수정
+----
+/api/v1/members/mypage/password
+----
+
+===== 성공
+.request
+include::{snippets}/update-password-in-mypage-success/http-request.adoc[]
+
+.response
+include::{snippets}/update-password-in-mypage-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/update-password-in-mypage-fail/http-request.adoc[]
+
+.response
+include::{snippets}/update-password-in-mypage-fail/http-response.adoc[]
+
+==== 회원탈퇴
+----
+/api/v1/members
+----
+
+===== 성공
+.request
+include::{snippets}/delete-member-success/http-request.adoc[]
+
+.response
+include::{snippets}/delete-member-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/delete-member-fail/http-request.adoc[]
+
+.response
+include::{snippets}/delete-member-fail/http-response.adoc[]
+
+=== 산/등산로 관련 기능
+==== 산 목록 조회
+----
+/api/v1/mountains/recommendation
+----
+
+===== 성공
+.request
+include::{snippets}/get-recommendations-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-recommendations-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-recommendations-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-recommendations-fail/http-response.adoc[]
+
+==== 산 목록 조회
+----
+/api/v1/mountains
+----
+
+[cols="1,1,4a"]
+|===
+|Parameter |Type |Description
+
+|sort
+|String
+|산 목록 정렬 방식 +
+name(이름순), popularity(인기순), high-height(고도 높은순), low-height(고도 낮은순)
+
+|si
+|String
+|시/도 +
+전체, 서울특별시, 부산광역시, 대구광역시, 인천광역시, 광주광역시, 대전광역시, 울산광역시, 세종특별자치시, 경기도, 강원도, 충청북도, 충청남도, 전라북도, 전라남도, 경상북도, 경상남도, 제주도
+
+|page
+|int
+|페이지 번호
+|===
+
+===== 성공
+.request
+include::{snippets}/get-mountains-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountains-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-mountains-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountains-fail/http-response.adoc[]
+
+==== 산 상세 조회
+----
+/api/v1/mountains
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|mountainId
+|int
+|산 아이디
+|===
+
+===== 성공
+.request
+include::{snippets}/get-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountain-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-mountain-fail/http-response.adoc[]
+
+==== 등산로 상세 조회
+----
+/api/v1/mountains/trail
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|trailId
+|int
+|등산로 아이디
+|===
+
+===== 성공
+.request
+include::{snippets}/get-trail-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-trail-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-trail-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-trail-fail/http-response.adoc[]
+
+==== 산 검색
+----
+/api/v1/mountains/search/1
+----
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|keyword
+|String
+|검색 키워드
+
+|sort
+|String
+|산 목록 정렬 방식 +
+name(이름순), popularity(인기순), high-height(고도 높은순), low-height(고도 낮은순)
+
+|si
+|String
+|시/도 +
+전체, 서울특별시, 부산광역시, 대구광역시, 인천광역시, 광주광역시, 대전광역시, 울산광역시, 세종특별자치시, 경기도, 강원도, 충청북도, 충청남도, 전라북도, 전라남도, 경상북도, 경상남도, 제주도
+|===
+
+
+===== 성공
+.request
+include::{snippets}/search-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-mountain-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/search-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-mountain-fail/http-response.adoc[]
+
+==== 등산로 검색
+----
+/api/v1/mountains/search/2
+----
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|keyword
+|String
+|검색 키워드
+
+|sort
+|String
+|산 목록 정렬 방식 +
+name(이름순), popularity(인기순), high-height(고도 높은순), low-height(고도 낮은순)
+
+|si
+|String
+|시/도 +
+전체, 서울특별시, 부산광역시, 대구광역시, 인천광역시, 광주광역시, 대전광역시, 울산광역시, 세종특별자치시, 경기도, 강원도, 충청북도, 충청남도, 전라북도, 전라남도, 경상북도, 경상남도, 제주도
+|===
+
+===== 성공
+.request
+include::{snippets}/search-trail-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-trail-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/search-trail-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-trail-fail/http-response.adoc[]
+
+=== 등산 관련 기능
+==== 등산 목록 조회
+----
+/api/v1/hikings
+----
+
+===== 성공
+.request
+include::{snippets}/get-hikings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-fail/http-response.adoc[]
+
+==== 등산 목록 조회
+----
+/api/v1/hikings
+----
+
+===== 성공
+.request
+include::{snippets}/get-hikings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hikings-fail/http-response.adoc[]
+
+==== 등산 상세 조회
+----
+/api/v1/hikings/1
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|hikingId
+|int
+|등산 기록 아이디
+|===
+
+===== 성공
+.request
+include::{snippets}/get-hiking-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-hiking-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-hiking-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-hiking-fail/http-response.adoc[]
+
+==== 완등 목록 조회
+----
+/api/v1/hikings/2
+----
+
+===== 성공
+.request
+include::{snippets}/get-completed-hikings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-completed-hikings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-completed-hikings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-completed-hikings-fail/http-response.adoc[]
+
+==== 등산 기록 저장
+----
+/api/v1/hikings
+----
+
+===== 성공
+.request
+include::{snippets}/create-hiking-success/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/create-hiking-fail/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-fail/http-response.adoc[]
+
+==== 등산 기록 이미지 저장
+----
+/api/v1/hikings/image
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|hikingId
+|int
+|등산 기록 아아디
+|===
+
+===== 성공
+.request
+include::{snippets}/create-hiking-image-success/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-image-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/create-hiking-image-fail/http-request.adoc[]
+
+.response
+include::{snippets}/create-hiking-image-fail/http-response.adoc[]
+
+=== 랭킹 관련 기능
+==== 전체 랭킹 조회
+----
+/api/v1/rankings
+----
+
+===== 성공
+.request
+include::{snippets}/get-rankings-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-rankings-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-fail/http-response.adoc[]
+
+==== 전체 랭킹 내 사용자 검색
+----
+/api/v1/rankings/1
+----
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|keyword
+|String
+|검색 키워드
+|===
+
+===== 성공
+.request
+include::{snippets}/search-ranking-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-success/http-response.adoc[]
+
+===== 실패
+.request
+include::{snippets}/search-ranking-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-fail/http-response.adoc[]
+
+==== 산 랭킹 조회
+----
+/api/v1/rankings/2
+----
+
+===== 성공
+.request
+include::{snippets}/get-rankings-of-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-of-mountain-success/http-response.adoc[]
+===== 실패
+.request
+include::{snippets}/get-rankings-of-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/get-rankings-of-mountain-fail/http-response.adoc[]
+
+==== 산 랭킹 내 사용자 검색
+
+----
+/api/v1/rankings/3
+----
+
+[cols="2,2,3"]
+|===
+|Path Variable |Type |Description
+
+|mountainId
+|int
+|산 아이디
+|===
+
+[cols="2,2,3"]
+|===
+|Parameter |Type |Description
+
+|keyword
+|String
+|검색 키워드
+|===
+
+===== 성공
+.request
+include::{snippets}/search-ranking-of-mountain-success/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-of-mountain-success/http-response.adoc[]
+
+===== 실패
+.request
+include::{snippets}/search-ranking-of-mountain-fail/http-request.adoc[]
+
+.response
+include::{snippets}/search-ranking-of-mountain-fail/http-response.adoc[]
