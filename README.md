@@ -98,6 +98,7 @@
   ![KakaoTalk_Video_2022-10-07-10-09-53](https://user-images.githubusercontent.com/62989828/194450149-8df405ca-9567-459b-8fbc-a0d2805111bb.gif)
 
 - 등산 기록
+
   ![KakaoTalk_Video_2022-10-07-10-15-18](https://user-images.githubusercontent.com/62989828/194450170-502767b3-2789-4bea-9353-f7baa83727e7.gif)
 
     - 저장된 이미지
@@ -105,6 +106,7 @@
       ![Untitled](https://user-images.githubusercontent.com/62989828/194451016-37c740cf-a68e-4b0e-b296-b38a7a66c667.png)
 
 - 랭킹 서비스
+
   ![KakaoTalk_Video_2022-10-07-10-16-21](https://user-images.githubusercontent.com/62989828/194450173-2608cec1-5c7c-479f-a6c2-7e627872541b.gif)
 
 - 회원가입
