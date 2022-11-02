@@ -113,6 +113,12 @@ public class HikingService {
                 .build();
     }
 
+    public void createImage(int memberId, int hikingId, MultipartFile multipartFile) {
+        Hiking hiking = findHiking(memberId, hikingId);
+        hiking.createImage(ImageUtil.saveImage(multipartFile, HIKING));
+        hikingRepository.save(hiking);
+    }
+
     private Member findMember(int memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.NOT_FOUND_MEMBER));
@@ -131,11 +137,5 @@ public class HikingService {
     private boolean isCompleted(String path, PathResponse endPoint) {
         return PathUtil.find(path)
                 .isCompleted(path, endPoint.getLatitude(), endPoint.getLongitude());
-    }
-
-    public void createImage(int memberId, int hikingId, MultipartFile multipartFile) {
-        Hiking hiking = findHiking(memberId, hikingId);
-        hiking.createImage(ImageUtil.saveImage(multipartFile, HIKING));
-        hikingRepository.save(hiking);
     }
 }
