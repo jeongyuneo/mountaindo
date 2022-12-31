@@ -70,13 +70,10 @@ public enum PathUtil {
     }
 
     public static String toLineStringForm(List<PathResponse> path) {
-        return LINESTRING.type
-                + PATH_DELIMITER
-                + OPENING_PARENTHESIS
-                + path.stream()
+        return LINESTRING.type + PATH_DELIMITER + OPENING_PARENTHESIS + path
+                .stream()
                 .map(point -> point.getLatitude() + PATH_DELIMITER + point.getLongitude())
-                .collect(Collectors.joining(COORDINATE_DELIMITER))
-                + CLOSING_PARENTHESIS;
+                .collect(Collectors.joining(COORDINATE_DELIMITER)) + CLOSING_PARENTHESIS;
     }
 
     protected boolean isInEndPoint(String path, double latitude2, double longitude2) {
