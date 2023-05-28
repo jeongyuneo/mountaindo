@@ -21,6 +21,9 @@ public class ApiDocument {
     @Autowired
     protected MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     protected OperationRequestPreprocessor getDocumentRequest() {
         return preprocessRequest(
                 modifyUris()
@@ -40,7 +43,6 @@ public class ApiDocument {
 
     protected String toJson(Object object) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             return objectMapper.writeValueAsString(object);
